@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import studentProfileRouter from "./routes/studentProfile.js";
+import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 
 const app = express();
 const port = 8080;
