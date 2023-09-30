@@ -4,7 +4,7 @@ import StudentProfileController from "../controllers/studentProfileController.js
 const router = Router();
 const studentProfileController = new StudentProfileController();
 
-router.get("/pingcheck", authorize(), (_, res) => {
+router.get("/pingcheck", (_, res) => {
     res.status(200).json({ message: "pong" });
 });
 
