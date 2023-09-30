@@ -8,7 +8,18 @@ router.get("/pingcheck", (_, res) => {
     res.status(200).json({ message: "pong" });
 });
 
-router.post("/", authorize(), (req, res) => {
+router.get("/", (_, res) => {
+  studentProfileController
+    .getStudentProfile()
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(404).json(err);
+    });
+});
+
+router.post("/", (req, res) => { //authorize()
     if (!req.body) {
       res.status(400).send({
         message: "Content can not be empty!",
@@ -25,7 +36,7 @@ router.post("/", authorize(), (req, res) => {
       });
   });
 
-  router.delete("/:studentId", authorize(), (req, res) => {
+  router.delete("/:studentId", (req, res) => { // authorize()
     studentProfileController
       .deleteStudentProfile(req.params.studentId)
       .then((response) => {

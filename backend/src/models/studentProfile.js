@@ -1,17 +1,28 @@
 // Database con.query() for studentProfile table
 
-export class studentProfile {
+export class StudentProfile {
+    getStudentProfile(result) {
+    con.query(`CALL load_student_profile()`, (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+      } else {
+        result(null, res[0]);
+      }
+    });
+  }
+
     insertStudentProfile(newStudentProfile, result) {
         con.query(
           "CALL save_student_profile(?, ?, ?, ?, ?, ?, ?)",
           [
             newStudentProfile.student_id,
-            newStudentProfile.first_name,
-            newStudentProfile.last_name,
-            newStudentProfile.birthday,
+            newStudentProfile.f_name,
+            newStudentProfile.l_name,
+            newStudentProfile.dob,
             newStudentProfile.accomodations,
             newStudentProfile.neurodivergent, // possible boolean field along with others?
-            newStudentProfile.fk_parent_id,
+            newStudentProfile.fk_guardian_id,
           ],
           function (error, results) {
             if (error) {
