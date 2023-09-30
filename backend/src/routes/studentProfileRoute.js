@@ -3,7 +3,7 @@ const router = Router();
 
 
 router.get("/pingcheck", (_, res) => {
-    res.status(200).json({ message: "pong" });
+  res.status(200).json({ message: "pong" });
 });
 
 
