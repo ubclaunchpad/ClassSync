@@ -1,38 +1,28 @@
-//const sgMail = require("@sendgrid/mail");
-import sgMail from "@sendgrid/mail";
-import dotenv from "dotenv";
-dotenv.config();
+const express = require("express");
+// const User = require("../models/User");
+const sgMail = require("@sendgrid/mail");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./configs/config.env" });
 
-//docs found at https://github.com/sendgrid/sendgrid-nodejs/tree/main/packages/mail
-const sendEmail = async (req, res) => {
-  console.log("API key: ",process.env.SENDGRID_API_KEY)
+// Download the helper library from https://www.twilio.com/docs/node/install
+// Set environment variables for your credentials
+// Read more at http://twil.io/secure
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, authToken);
+
+
+export const senEmail = async (req, res) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const emailBody = req.body.message;
   const destination = req.body.destination;
   const subject = req.body.subject;
   try {
     const msg = {
-      to: destination,
-      from: process.env.VERIFIED_SENDER,
+      to: destination, // Change to your recipient
+      from: "...", // Change to your verified sender
       subject: subject,
       text: emailBody,
     };
-    if (!msg.to || msg.to.trim() === "") {
-      throw new Error("Recipient (to) is empty or not provided.");
-    }
-
-    // if (!msg.from || msg.from.trim() === "") {
-    //   throw new Error("Sender (from) is empty or not provided.");
-    // }
-
-    if (!msg.subject || msg.subject.trim() === "") {
-      throw new Error("Subject is empty or not provided.");
-    }
-
-    if (!msg.text || msg.text.trim() === "") {
-      throw new Error("Email body (text) is empty or not provided.");
-    }
-
     const result = await sgMail
       .send(msg)
       .then((res) => {
@@ -48,5 +38,3 @@ const sendEmail = async (req, res) => {
     return res.json({ success: false, message: err.message });
   }
 };
-
-export default sendEmail;
