@@ -12,7 +12,7 @@ CREATE TABLE `appointments` (
 	student_id VARCHAR(50) NOT NULL,
 	tutor_id VARCHAR(50) NOT NULL,
 	course_id VARCHAR(50) NOT NULL,
-    appointment_type ENUM('trial', 'class') NOT NULL,
+    duration INT NOT NULL,
     appointment_date DATETIME NOT NULL,
 	PRIMARY KEY (appointment_id),
 	FOREIGN KEY (student_id) REFERENCES students(student_id),
