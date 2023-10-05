@@ -47,4 +47,11 @@ BEGIN
 END$$
 
 
+CREATE PROCEDURE `deleteAppointment`  (
+    IN id INT
+)
+BEGIN
+    DELETE FROM appointments WHERE appointment_id = id;
+END $$
+
 DELIMITER ;
