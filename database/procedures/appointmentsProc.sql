@@ -26,4 +26,25 @@ BEGIN
     );
 END$$
 
+
+
+CREATE PROCEDURE `updateAppointment` (
+    IN `_appointment_id` INT,
+    IN `_student_id` VARCHAR(50),
+    IN `_tutor_id` VARCHAR(50),
+    IN `_course_id` VARCHAR(50),
+    IN `_duration` INT,
+    IN `_appointment_start` DATETIME
+) 
+BEGIN
+    UPDATE `appointments` SET
+        `student_id` = _student_id,
+        `tutor_id` = _tutor_id,
+        `course_id` = _course_id,
+        `duration` = _duration,
+        `appointment_start` = _appointment_start
+    WHERE `appointment_id` = _appointment_id;
+END$$
+
+
 DELIMITER ;
