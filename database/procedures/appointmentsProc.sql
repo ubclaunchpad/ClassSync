@@ -1,3 +1,5 @@
+USE 'classsync'
+
 DROP PROCEDURE IF EXISTS `addAppointment`;
 
 DELIMITER $$
