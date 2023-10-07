@@ -1,5 +1,9 @@
-const sendEmail = require("..controllers/sendEmail")
+import { Router } from "express";
+import sendEmail from "../controllers/volunteerEmailController.js"
+const router = Router();
 
 
 
-router.get("/send-email",sendEmail );
+router.post("/send-email",sendEmail );
+
+export default router;

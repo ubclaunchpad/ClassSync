@@ -1,25 +1,18 @@
-const express = require("express");
-// const User = require("../models/User");
-const sgMail = require("@sendgrid/mail");
-const dotenv = require("dotenv");
+//const sgMail = require("@sendgrid/mail");
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv'
 dotenv.config({ path: "./configs/config.env" });
 
-// Download the helper library from https://www.twilio.com/docs/node/install
-// Set environment variables for your credentials
-// Read more at http://twil.io/secure
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, authToken);
-
-
-export const senEmail = async (req, res) => {
+//docs found at https://github.com/sendgrid/sendgrid-nodejs/tree/main/packages/mail
+ const sendEmail = async (req, res) => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const emailBody = req.body.message;
   const destination = req.body.destination;
   const subject = req.body.subject;
   try {
     const msg = {
-      to: destination, // Change to your recipient
-      from: "...", // Change to your verified sender
+      to: destination,
+      from: process.env.VERIFIED_SENDER,
       subject: subject,
       text: emailBody,
     };
@@ -38,3 +31,5 @@ export const senEmail = async (req, res) => {
     return res.json({ success: false, message: err.message });
   }
 };
+
+export default sendEmail
