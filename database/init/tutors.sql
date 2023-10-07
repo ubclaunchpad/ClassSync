@@ -11,7 +11,6 @@ CREATE TABLE "tutors" (
     f_name VARCHAR(50) NOT NULL,
     l_name VARCHAR(50) NOT NULL,
     bio VARCHAR(500) NULL,
-    is_activated BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
