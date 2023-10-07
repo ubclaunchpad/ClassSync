@@ -1,10 +1,11 @@
 //const sgMail = require("@sendgrid/mail");
-import sgMail from '@sendgrid/mail';
-import dotenv from 'dotenv'
-dotenv.config({ path: "./configs/config.env" });
+import sgMail from "@sendgrid/mail";
+import dotenv from "dotenv";
+dotenv.config();
 
 //docs found at https://github.com/sendgrid/sendgrid-nodejs/tree/main/packages/mail
- const sendEmail = async (req, res) => {
+const sendEmail = async (req, res) => {
+  console.log("API key: ",process.env.SENDGRID_API_KEY)
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const emailBody = req.body.message;
   const destination = req.body.destination;
@@ -16,6 +17,22 @@ dotenv.config({ path: "./configs/config.env" });
       subject: subject,
       text: emailBody,
     };
+    if (!msg.to || msg.to.trim() === "") {
+      throw new Error("Recipient (to) is empty or not provided.");
+    }
+
+    // if (!msg.from || msg.from.trim() === "") {
+    //   throw new Error("Sender (from) is empty or not provided.");
+    // }
+
+    if (!msg.subject || msg.subject.trim() === "") {
+      throw new Error("Subject is empty or not provided.");
+    }
+
+    if (!msg.text || msg.text.trim() === "") {
+      throw new Error("Email body (text) is empty or not provided.");
+    }
+
     const result = await sgMail
       .send(msg)
       .then((res) => {
@@ -32,4 +49,4 @@ dotenv.config({ path: "./configs/config.env" });
   }
 };
 
-export default sendEmail
+export default sendEmail;
