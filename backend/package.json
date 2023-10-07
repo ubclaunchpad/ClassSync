@@ -9,7 +9,6 @@
     "private": true,
     "scripts": {
         "start": "node index.js",
-        "build": "npm run build",
         "test": "jest"
     },
     "dependencies": {
