@@ -12,7 +12,6 @@ END IF;
 CREATE TABLE "users" (
     user_id SERIAL NOT NULL PRIMARY KEY,
     role userEnum NOT NULL,
-    username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL
 );
 
