@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 
+import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
 
 const app = express();
 const port = 8080;
@@ -20,7 +21,7 @@ app.use("/tutor", tutorRegistrationRouter);
 
 
 app.use("/student-profile", studentProfileRouter);
-
+app.use("/communication",volunteerEmailRoute);
 app.listen(port, () => {
     console.log(`Labby backend listening on port ${port}`);
 });
