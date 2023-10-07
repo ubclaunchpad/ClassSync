@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS "users";
 CREATE OR REPLACE PROCEDURE createUsers()
 
 LANGUAGE plpgsql 
