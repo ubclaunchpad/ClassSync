@@ -1,24 +1,21 @@
-USE 'classsync'
 
-DROP PROCEDURE IF EXISTS `addAppointment`;
-
-DELIMITER $$
-
-
-CREATE PROCEDURE `addAppointment` (
-    IN `_student_id` VARCHAR(50),
-    IN `_tutor_id` VARCHAR(50),
-    IN `_course_id` VARCHAR(50),
-    IN `_appointment_start` DATETIME,
-    IN `_duration` INT,
+-- Procedure to add an appointment.
+CREATE OR REPLACE PROCEDURE add_appointment(
+    _student_id VARCHAR(50),
+    _tutor_id VARCHAR(50),
+    _course_id VARCHAR(50),
+    _appointment_start TIMESTAMP,
+    _duration INT
 )
-BEGIN 
-    INSERT INTO `appointments` (
-        `student_id`,
-        `tutor_id`,
-        `course_id`,
-        `appointment_start`,
-        `duration`
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO appointments (
+        student_id,
+        tutor_id,
+        course_id,
+        appointment_start,
+        duration
     ) VALUES (
         _student_id,
         _tutor_id,
@@ -26,112 +23,94 @@ BEGIN
         _appointment_start,
         _duration
     );
-END$$
+END;
+$$;
 
-
-
-CREATE PROCEDURE `updateAppointment` (
-    IN `_appointment_id` INT,
-    IN `_student_id` VARCHAR(50),
-    IN `_tutor_id` VARCHAR(50),
-    IN `_course_id` VARCHAR(50),
-    IN `_appointment_start` DATETIME,
-    IN `_duration` INT,
-) 
-BEGIN
-    UPDATE `appointments` SET
-        `student_id` = _student_id,
-        `tutor_id` = _tutor_id,
-        `course_id` = _course_id,
-        `appointment_start` = _appointment_start
-        `duration` = _duration
-    WHERE `appointment_id` = _appointment_id;
-END$$
-
-
-CREATE PROCEDURE `deleteAppointment`  (
-    IN id INT
+-- Procedure to update an appointment.
+CREATE OR REPLACE PROCEDURE update_appointment(
+    _appointment_id INT,
+    _student_id VARCHAR(50),
+    _tutor_id VARCHAR(50),
+    _course_id VARCHAR(50),
+    _appointment_start TIMESTAMP,
+    _duration INT
 )
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    DELETE FROM appointments WHERE appointment_id = id;
-END $$
+    UPDATE appointments
+    SET
+        student_id = _student_id,
+        tutor_id = _tutor_id,
+        course_id = _course_id,
+        appointment_start = _appointment_start,
+        duration = _duration
+    WHERE appointment_id = _appointment_id;
+END;
+$$;
 
-
-
-CREATE PROCEDURE `getAppointmentsByTutor` (
-    IN tutor_id VARCHAR(50)
-) 
-BEGIN
-    SELECT * FROM appointments WHERE tutor_id = tutor_id;
-END$$
-
-CREATE PROCEDURE `getAppointmentsBYStudent` (
-    IN student_id VARCHAR(50)
+-- Procedure to delete an appointment.
+CREATE OR REPLACE PROCEDURE delete_appointment(
+    _id INT
 )
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * FROM appointments WHERE student_id = student_id;
-END$$
+    DELETE FROM appointments
+    WHERE appointment_id = _id;
+END;
+$$;
 
-CREATE PROCEDURE `getAppointmentsByCourse` (
-    IN course_id VARCHAR(50)
+-- Procedure to get appointments by tutor.
+CREATE OR REPLACE PROCEDURE get_appointments_by_tutor(
+    _tutor_id VARCHAR(50)
 )
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * FROM appointments WHERE course_id = course_id;
-END$$
+    SELECT * FROM appointments WHERE tutor_id = _tutor_id;
+END;
+$$;
 
-CREATE PROCEDURE `getAppointmentsInWeek` (
-    IN startdate DATETIME,
-    IN enddate DATETIME
+-- Procedure to get appointments by student.
+CREATE OR REPLACE PROCEDURE get_appointments_by_student(
+    _student_id VARCHAR(50)
 )
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * FROM appointments WHERE appointment_start BETWEEN startdate AND enddate;
-END$$
+    SELECT * FROM appointments WHERE student_id = _student_id;
+END;
+$$;
 
-CREATE PROCEDURE `getAllAppointments` ()
+-- Procedure to get appointments by course.
+CREATE OR REPLACE PROCEDURE get_appointments_by_course(
+    _course_id VARCHAR(50)
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT * FROM appointments WHERE course_id = _course_id;
+END;
+$$;
+
+-- Procedure to get appointments within a date range.
+CREATE OR REPLACE PROCEDURE get_appointments_in_week(
+    _startdate TIMESTAMP,
+    _enddate TIMESTAMP
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT * FROM appointments WHERE appointment_start BETWEEN _startdate AND _enddate;
+END;
+$$;
+
+-- Procedure to get all appointments.
+CREATE OR REPLACE PROCEDURE get_all_appointments()
+LANGUAGE plpgsql
+AS $$
 BEGIN
     SELECT * FROM appointments;
-END$$
-CREATE PROCEDURE `deleteAppointment`  (
-    IN id INT
-)
-BEGIN
-    DELETE FROM appointments WHERE appointment_id = id;
-END $$
-
-
-CREATE PROCEDURE `getAppointmentsByTutor` (
-    IN tutor_id VARCHAR(50)
-) 
-BEGIN
-    SELECT * FROM appointments WHERE tutor_id = tutor_id;
-END$$
-
-CREATE PROCEDURE `getAppointmentsByStudent` (
-    IN student_id VARCHAR(50)
-)
-BEGIN
-    SELECT * FROM appointments WHERE student_id = student_id;
-END$$
-
-CREATE PROCEDURE `getAppointmentsByCourse` (
-    IN course_id VARCHAR(50)
-)
-BEGIN
-    SELECT * FROM appointments WHERE course_id = course_id;
-END$$
-
-CREATE PROCEDURE `getAppointmentsInWeek` (
-    IN startdate DATETIME,
-    IN enddate DATETIME
-)
-BEGIN
-    SELECT * FROM appointments WHERE appointment_start BETWEEN startdate AND enddate;
-END$$
-
-CREATE PROCEDURE `getAllAppointments` ()
-BEGIN
-    SELECT * FROM appointments;
-END$$
-
-
-DELIMITER ;
+END;
+$$;

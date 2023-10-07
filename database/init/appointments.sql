@@ -13,6 +13,7 @@ CREATE TABLE appointments (
 	course_id INTEGER NOT NULL,
     appointment_start TIMESTAMP NOT NULL,
     duration INT NOT NULL,
+        -- Requires unique constraint on the key being referenced
 	FOREIGN KEY (student_id) REFERENCES students(student_id),
     -- change FK it to tutors table - this is a working example from users table
     -- Requires unique constraint on the key being referenced
