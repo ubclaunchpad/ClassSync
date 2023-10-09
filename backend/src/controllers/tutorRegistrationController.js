@@ -22,7 +22,7 @@ export default class tutorRegistrationController {
 
     updateBio(userID, bio) {
         // update bio for user
-        // bio consists of first name, last name, date of birth, about me, profile picture
+        // bio consists of first name, last name, max_hours, about me, profile picture
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
             tutor.updateBio(userId, bio).then((result) => {
