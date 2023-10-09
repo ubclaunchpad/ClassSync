@@ -8,7 +8,7 @@ return (
   <div className="App">
     <BrowserRouter>
       <Routes>  
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/addStudent" element={<AddStudent />} />
       </Routes>
     </BrowserRouter>
