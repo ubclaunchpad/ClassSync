@@ -13,6 +13,7 @@ CREATE TABLE "tutors" (
     bio VARCHAR(500) NULL,
     start_date DATE NOT NULL,
     end_date DATE NULL, 
+    max_hours INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
