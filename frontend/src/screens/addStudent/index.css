@@ -1,0 +1,38 @@
+.add-student-page{
+    display: flex;
+    flex-direction: column;
+  }
+  
+.column {
+float: left;
+}
+
+.left {
+    width: 20%;
+}
+
+.right {
+    width: 20%;
+}
+
+.middle {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 600px) {
+.column {
+    width: 100%;
+}
+}
+
+.student-info-container {
+    height: 20rem;
+    margin: 0 .5rem;
+    margin-top: .5rem;
+    border-radius: 15px;
+    border-width: 3px; /* Increase border width for more emphasis */
+    border-style: solid; /* Use solid border style */
+    border-color: #B3DEFC;
+}
