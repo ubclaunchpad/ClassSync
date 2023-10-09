@@ -1,5 +1,6 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
+import UserForm from "../../components/UserForm";
 import "./index.css";
 
 const Login = () => {
@@ -7,7 +8,9 @@ const Login = () => {
     <div className="screen-container">
       <Header />
       <Banner />
-      <div className="form-container"> </div>
+      <div className="content-container">
+        <UserForm />
+      </div>
     </div>
   );
 };
