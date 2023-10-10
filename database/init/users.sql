@@ -12,7 +12,8 @@ END IF;
 CREATE TABLE "users" (
     user_id SERIAL NOT NULL PRIMARY KEY,
     role userEnum NOT NULL,
-    email VARCHAR(50) NOT NULL
+    email VARCHAR(50) NOT NULL,
+    hashed_password VARCHAR(255)
 );
 
 END;
