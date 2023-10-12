@@ -5,12 +5,15 @@ const UserForm = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+  });
 
   console.log(errors);
 
-  // TODO: Incomplete
+  // console.log(watch());
   return (
     <div className="user-form-container">
       <h4 className="form-title">Sign Up</h4>
@@ -25,36 +28,65 @@ const UserForm = () => {
           <input
             type="text"
             className="input"
-            {...register("email", { required: "Email is required!" })}
+            {...register("email", {
+              required: "Email is required!",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            })}
           />
+          {errors?.email?.message && <p>{errors.email.message}</p>}
         </div>
         <div className="input-container">
           <h5 className="input-title">Password</h5>
           <input
             type="text"
             className="input"
-            {...register("password", {
+            {...register("password.initPassword", {
               required: "Password is required!",
               minLength: {
                 value: 8,
                 message: "Password must be at least 8 characters",
               },
+              validate: {
+                equalPassword: (value) => {
+                  return (
+                    value === getValues("password.confirmPassword") ||
+                    "Passwords must match!"
+                  );
+                },
+              },
             })}
           />
+          {errors?.password?.initPassword?.message && (
+            <p>{errors.password.initPassword.message}</p>
+          )}
         </div>
         <div className="input-container">
           <h5 className="input-title">Confirm Password</h5>
           <input
             type="text"
             className="input"
-            {...register("confirmPassword", {
-              required: "Confirm password is required!",
+            {...register("password.confirmPassword", {
+              required: "Password is required!",
               minLength: {
                 value: 8,
-                message: "Confirm password must be at least 8 characters",
+                message: "Password must be at least 8 characters",
+              },
+              validate: {
+                equalPassword: (value) => {
+                  return (
+                    value === getValues("password.initPassword") ||
+                    "Passwords must match!"
+                  );
+                },
               },
             })}
           />
+          {errors?.password?.confirmPassword?.message && (
+            <p>{errors.password.confirmPassword.message}</p>
+          )}
         </div>
         <button type="submit" className="submit-button">
           Confirm Email
