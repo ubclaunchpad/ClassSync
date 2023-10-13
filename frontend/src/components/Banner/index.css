@@ -1,5 +1,42 @@
 .banner-container {
   width: 100%;
-  height: 18vh;
+  height: 20vh;
   background-color: #103da2;
+  position: relative;
+  color: white;
+  display: flex; 
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
 }
+
+.left-shape {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 80%;
+}
+
+.right-shape {
+  position: absolute;
+  top: 0;
+  right: 3%;
+  height: 100%;
+}
+
+.code-buddy {
+  position: absolute;
+  top: 0;
+  left: 3%;
+  height: 100%;
+}
+
+.banner-text-container {
+  text-align: left;
+  width: 55%;
+  line-height: 5px;
+}
+
+.banner-title {
+  font-weight: 700;
+}
+

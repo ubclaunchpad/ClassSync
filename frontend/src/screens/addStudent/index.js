@@ -12,7 +12,9 @@ const AddStudent = () => {
   return (
     <div className="page-container"> 
             <Header />
-            <Banner />
+            <Banner 
+                smallText="Parent Dashboard"
+                mainText="Welcome Back, Insert Name!"/>
         <div class="main-row">
             <div class="column left">
                 <div class="left-header">
