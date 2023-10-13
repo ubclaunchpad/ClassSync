@@ -8,6 +8,7 @@
     box-shadow: none;
     width: 9rem;
     padding-left: 10px;
+    max-width: 100%;
   }
 
 

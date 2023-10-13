@@ -99,6 +99,7 @@ float: left;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
+    max-width: 100%;
 }
 
 .right-buttons {
