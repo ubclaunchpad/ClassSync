@@ -6,6 +6,7 @@ const UserForm = () => {
     register,
     handleSubmit,
     getValues,
+    trigger,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
@@ -13,7 +14,6 @@ const UserForm = () => {
 
   console.log(errors);
 
-  // console.log(watch());
   return (
     <div className="user-form-container">
       <h4 className="form-title">Sign Up</h4>
@@ -36,18 +36,23 @@ const UserForm = () => {
               },
             })}
           />
-          {errors?.email?.message && <p>{errors.email.message}</p>}
+          <p className="error-message">
+            {errors?.email?.message && errors.email.message}
+          </p>
         </div>
         <div className="input-container">
           <h5 className="input-title">Password</h5>
           <input
             type="text"
             className="input"
+            onInput={() => {
+              trigger();
+            }}
             {...register("password.initPassword", {
               required: "Password is required!",
               minLength: {
                 value: 8,
-                message: "Password must be at least 8 characters",
+                message: "Password must be at least 8 characters!",
               },
               validate: {
                 equalPassword: (value) => {
@@ -59,20 +64,24 @@ const UserForm = () => {
               },
             })}
           />
-          {errors?.password?.initPassword?.message && (
-            <p>{errors.password.initPassword.message}</p>
-          )}
+          <p className="error-message">
+            {errors?.password?.initPassword?.message &&
+              errors.password.initPassword.message}
+          </p>
         </div>
         <div className="input-container">
           <h5 className="input-title">Confirm Password</h5>
           <input
             type="text"
             className="input"
+            onInput={() => {
+              trigger();
+            }}
             {...register("password.confirmPassword", {
               required: "Password is required!",
               minLength: {
                 value: 8,
-                message: "Password must be at least 8 characters",
+                message: "Password must be at least 8 characters!",
               },
               validate: {
                 equalPassword: (value) => {
@@ -84,9 +93,10 @@ const UserForm = () => {
               },
             })}
           />
-          {errors?.password?.confirmPassword?.message && (
-            <p>{errors.password.confirmPassword.message}</p>
-          )}
+          <p className="error-message">
+            {errors?.password?.confirmPassword?.message &&
+              errors.password.confirmPassword.message}
+          </p>
         </div>
         <button type="submit" className="submit-button">
           Confirm Email
