@@ -12,22 +12,25 @@ export default function AddTutor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const req = await fetch("/endpoint", {
-        body: JSON.stringify({
-          message:
-            "You've been invited to volunteer for The C.O.D.E Initiative",
-          destination: email,
-          subject: "Testing",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
+      const res = await fetch(
+        "http://localhost:8080/communication/send-email",
+        {
+          body: JSON.stringify({
+            message:
+              "You've been invited to volunteer for The C.O.D.E Initiative",
+            destination: email,
+            subject: "Testing",
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+        }
+      );
+      console.log(res.body);
     } catch (error) {
       console.log(error);
     }
-    console.log("email sent");
   };
   return (
     <div className="screen-container">
