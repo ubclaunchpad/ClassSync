@@ -10,7 +10,7 @@ import "./index.css";
 
 const AddStudent = () => {
   return (
-    <div className="add-student-page"> 
+    <div className="page-container"> 
             <Header />
             <Banner />
         <div class="main-row">
