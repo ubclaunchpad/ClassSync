@@ -1,7 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 .add-student-page{
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
   }
+
+h2 {
+    font-size: 1.4rem;
+}
   
 .column {
 float: left;
@@ -9,8 +17,10 @@ float: left;
 
 .left {
     width: 20%;
-    height: 80vh;
+    box-sizing: border-box;
+    height: 100vh;
     background-color: #00B0F1;
+    padding: .7rem 1rem;
 }
 
 .right {
@@ -23,7 +33,7 @@ float: left;
     flex-direction: column;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 750px) {
 .column {
     width: 100%;
 }
@@ -47,9 +57,9 @@ float: left;
     background-color: #B3DEFC;
     border: none;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 15px;
     height: 1.5rem;
-    width: 11rem;
+    padding: 0 .8rem;
 }
 
 .student-info-container {
@@ -61,50 +71,9 @@ float: left;
     border-width: 3px; 
     border-style: solid; 
     border-color: #B3DEFC;
+    min-height: 200px;
 }
 
-.student-info-form {
-    display: flex;
-    flex-direction: column; /* Stack labels and input rows vertically */
-}
-
-.input-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    margin-right: 25%; /* create space on right*/
-}
-
-.input-row label {
-    text-align: left;
-    font-weight: bold;
-    flex: 0 0 calc(50% - 7%); /* Two inputs per row with spacing */  
-}
-
-.input-row label input {
-    width: 100%;
-    height: 2.5rem;
-    border-radius: 10px;
-    border-width: 3px; 
-    border-style: solid; 
-    border-color: #B3DEFC;
-    margin-top: .25rem;
-}
-
-input[type="submit"] {
-    align-self: flex-end;
-    width: 15rem;
-    height: 2rem;
-    border-radius: 10px;
-    margin-top: 2.5rem;
-    margin-bottom: .5rem;
-    background-color: #B3DEFC;
-    border: none;
-    font-weight: bold;
-    color: #103DA2;
-    font-size: .9rem;
-    cursor: pointer;
-}
 
 .line {
     background: linear-gradient(to right, #103DA2 60%, #00B0F1 40%);
@@ -113,12 +82,44 @@ input[type="submit"] {
 }
 
 .right-container {
+    box-sizing: border-box;
+    padding: 0 1rem;
     color: white;
     background-color: #103DA2;
     height: 15rem;
     margin: 0 .5rem;
     margin-top: .5rem;
     border-radius: 15px;
-    padding: .25rem 2rem;
     border: none;
+}
+
+.left-header,
+.right-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.right-buttons {
+    display: flex;
+    gap: .15rem; /* Adjust the spacing as needed */
+}
+
+.header-button-round {
+    color: #103DA2;
+    background-color: #B3DEFC;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.bagImage {
+    height: 1rem;
+}
+
+.shop-courses {
+    padding-right: 2.5rem;
 }

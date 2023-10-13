@@ -1,5 +1,10 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
+import SearchBar from "../../components/SearchBar";
+import AddStudentForm from "../../components/AddStudentForm";
+import Plus from "../../assets/plus.png";
+import Notification from "../../assets/notifications.png"
+import Bag from "../../assets/bag.png"
 
 import "./index.css";
 
@@ -10,7 +15,13 @@ const AddStudent = () => {
             <Banner />
         <div class="main-row">
             <div class="column left">
-                <h2>Column 1</h2>
+                <div class="left-header">
+                    <button class="header-button">Upcoming Classes</button>
+                    <div class="right-buttons">
+                        <button class="header-button-round"><img className="plusImage" src={Plus} alt="Plus" /></button>
+                        <button class="header-button-round"><img className="notificationsImage" src={Notification} alt="Notification" /></button>
+                    </div>
+                    </div>
             </div>
             <div class="column middle">
                 <div className="student-info-container">
@@ -18,44 +29,25 @@ const AddStudent = () => {
                     <h2 className="add-student-header">Add a Student</h2>
                     <button class="header-button">+ Add a New Student</button>
                 </div>
-                <form className="student-info-form">
-                    <div className="input-row">
-                        <label>
-                            First Name
-                            <input type="text" />
-                        </label>
-                        <label>
-                            Date of Birth
-                            <input type="text" />
-                        </label>
-                    </div>
-                    <div className="input-row">
-                        <label>
-                            Last Name
-                            <input type="text" />
-                        </label>
-                        <label>
-                            Student ID
-                            <input type="text" />
-                        </label>
-                    </div>
-                    <input type="submit" value="Confirm Student" />
-                </form>
+                <AddStudentForm />
                 <hr className="line"></hr>
                 </div>
                 <div className="student-info-container">
-                <h2>Column 2</h2>
                 </div>
             </div>
             <div class="column right">
                 <div className="right-container">
-                    <h2>Column 3</h2>
+                    <div class="right-header">
+                        <p className="shop-classes">Shop for Courses</p>
+                        <img className="bagImage" src={Bag} alt="Bag" />
+                    </div>
+                    <div className="shop-courses">
+                        <SearchBar />
+                    </div>
                 </div>
                 <div className="right-container">
-                    <h2>Column 3</h2>
                 </div>
                 <div className="right-container">
-                    <h2>Column 3</h2>
                 </div>
             </div>
         </div>
