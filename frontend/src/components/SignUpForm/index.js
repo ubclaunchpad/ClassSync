@@ -15,20 +15,20 @@ const SignUpForm = () => {
   console.log(errors);
 
   return (
-    <div className="user-form-container">
-      <h4 className="form-title">Sign Up</h4>
+    <div className="signup-form-container">
+      <h4 className="signup-form-title">Sign Up</h4>
       <form
-        className="input-form"
+        className="signup-input-form"
         onSubmit={handleSubmit((data) => {
           console.log("Submitting sign up form!");
           console.log(data);
         })}
       >
-        <div className="input-container">
-          <h5 className="input-title">Email</h5>
+        <div className="signup-input-container">
+          <h5 className="signup-input-title">Email</h5>
           <input
             type="text"
-            className="input"
+            className="signup-input"
             {...register("email", {
               required: "Email is required!",
               pattern: {
@@ -37,15 +37,15 @@ const SignUpForm = () => {
               },
             })}
           />
-          <p className="error-message">
+          <p className="signup-error-message">
             {errors?.email?.message && errors.email.message}
           </p>
         </div>
-        <div className="input-container">
-          <h5 className="input-title">Password</h5>
+        <div className="signup-input-container">
+          <h5 className="signup-input-title">Password</h5>
           <input
             type="text"
-            className="input"
+            className="signup-input"
             onInput={() => {
               trigger();
             }}
@@ -65,16 +65,16 @@ const SignUpForm = () => {
               },
             })}
           />
-          <p className="error-message">
+          <p className="signup-error-message">
             {errors?.password?.initPassword?.message &&
               errors.password.initPassword.message}
           </p>
         </div>
-        <div className="input-container">
-          <h5 className="input-title">Confirm Password</h5>
+        <div className="signup-input-container">
+          <h5 className="signup-input-title">Confirm Password</h5>
           <input
             type="text"
-            className="input"
+            className="signup-input"
             onInput={() => {
               trigger();
             }}
@@ -94,12 +94,12 @@ const SignUpForm = () => {
               },
             })}
           />
-          <p className="error-message">
+          <p className="signup-error-message">
             {errors?.password?.confirmPassword?.message &&
               errors.password.confirmPassword.message}
           </p>
         </div>
-        <button type="submit" className="submit-button">
+        <button type="submit" className="signup-submit-button">
           Confirm Email
         </button>
       </form>

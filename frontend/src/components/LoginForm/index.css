@@ -1,4 +1,4 @@
-.user-form-container {
+.login-form-container {
   width: 30%;
   height: 50%;
   display: flex;
@@ -11,21 +11,22 @@
   color: #103da2;
 }
 
-.form-title {
+.login-form-title {
   font-weight: 700;
   font-size: 2rem;
   margin: 0 0 1rem 0;
 }
 
-.input-form {
+.login-input-form {
   width: 100%;
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: 0.75rem;
+  margin: 0;
 }
 
-.input-container {
+.login-input-container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -33,13 +34,13 @@
   flex: 2;
 }
 
-.input-title {
+.login-input-title {
   width: auto;
   font-size: 1rem;
   margin: 0 0 0.25rem 0;
 }
 
-.input {
+.login-input {
   width: 100%;
   height: 30%;
   padding: 0.5rem;
@@ -50,7 +51,7 @@
   box-sizing: border-box;
 }
 
-.checkbox-container {
+.login-checkbox-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -58,17 +59,17 @@
   gap: 0.25rem;
 }
 
-.checkbox {
+.login-checkbox {
   border: none;
   box-shadow: none;
 }
 
-.checkbox-container label {
+.login-checkbox-container label {
   font-weight: 700;
   font-size: 1rem;
 }
 
-.submit-button {
+.login-submit-button {
   padding: 0.25rem 0 0.25rem 0;
   border: 0.125rem solid #b3defc;
   border-radius: 0.5rem;
@@ -80,7 +81,7 @@
   background-color: #b3defc;
 }
 
-.error-message {
+.login-error-message {
   height: 0.75rem;
   margin: 0;
   font-size: 0.75rem;
