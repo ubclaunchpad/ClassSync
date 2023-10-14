@@ -42,8 +42,104 @@
 
 .main-content {
   width: 60%;
+  padding: 0.6rem;
+}
+
+.students {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1rem;
+  border-radius: 0.9375rem;
+  border: 3px solid var(--Light-Blue, #B3DEFC);
+}
+
+.students-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.students-title {
+  color: #103DA2;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.add-student {
+  display: flex;
+  flex-direction: row;
+  padding: 0.15rem 0.25rem;
+  align-items: center;
+  justify-content: center;
+  background-color: #B3DEFC;
+  border-radius: 0.9375rem;
+}
+
+.add-student-text {
+  color: #103DA2;
+  font-size: 0.75rem;
+  font-weight: 600; 
+  margin-right: 0.25rem;
+}
+
+.all-students {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  overflow-x: scroll;
+  padding-bottom: 1rem;
+}
+
+
+.all-students::-webkit-scrollbar {
+  height: 0.5rem;
+}
+
+.all-students::-webkit-scrollbar-track {
+  background: #00B0F1;
+  border-radius: 100vw;
+}
+
+.all-students::-webkit-scrollbar-thumb {
+  background: #103DA2;
+  border-radius: 100vw;
 }
 
 .right-bar {
   width: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+}
+
+.right-bar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-radius: 0.9375rem;
+  background: #103DA2;
+  padding: 0.6rem 1.25rem;
+  justify-content: start;
+
+  /* Delete after */
+  height: 10rem;
+}
+
+.right-bar-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  color: #FFF;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.course-search {
+  width: 80%;
+  background-color: #B3DEFC;
+  border-radius: 0.9375rem;
+  border: none;
 }
