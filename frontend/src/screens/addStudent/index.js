@@ -1,6 +1,5 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
-import UserForm from "../../components/UserForm";
 import "./index.css";
 
 const AddStudent = () => {

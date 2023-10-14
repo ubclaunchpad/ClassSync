@@ -1,7 +1,7 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
 
-const UserForm = () => {
+const SignUpForm = () => {
   const {
     register,
     handleSubmit,
@@ -106,4 +106,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default SignUpForm;
