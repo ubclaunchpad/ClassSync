@@ -10,6 +10,7 @@
     "scripts": {
         "start": "nodemon --exec babel-node index.js",
         "build": "npm run build",
+        "start": "node index.js",
         "test": "jest"
     },
     "dependencies": {
