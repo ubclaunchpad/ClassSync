@@ -8,9 +8,6 @@ const Login = () => {
     <div className="screen-container">
       <Header />
       <Banner />
-      <div className="content-container">
-        <UserForm />
-      </div>
     </div>
   );
 };
