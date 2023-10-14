@@ -20,6 +20,7 @@ const SignUpForm = () => {
       <form
         className="input-form"
         onSubmit={handleSubmit((data) => {
+          console.log("Submitting sign up form!");
           console.log(data);
         })}
       >

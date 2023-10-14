@@ -5,7 +5,6 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    trigger,
     formState: { errors },
   } = useForm({
     mode: "onBlur",
@@ -19,6 +18,7 @@ const LoginForm = () => {
       <form
         className="input-form"
         onSubmit={handleSubmit((data) => {
+          console.log("Submitting login form!");
           console.log(data);
         })}
       >
@@ -44,9 +44,6 @@ const LoginForm = () => {
           <input
             type="text"
             className="input"
-            onInput={() => {
-              trigger();
-            }}
             {...register("password", {
               required: "Password is required!",
             })}
