@@ -27,10 +27,7 @@ const AddStudent = () => {
             </div>
             <div class="column middle">
                 <div className="student-info-container">
-                <div class="header-row">
-                    <h2 className="add-student-header">Add a Student</h2>
-                    <button class="header-button">+ Add a New Student</button>
-                </div>
+            
                 <AddStudentForm />
                 <hr className="line"></hr>
                 </div>

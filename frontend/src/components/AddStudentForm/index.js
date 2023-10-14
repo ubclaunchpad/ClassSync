@@ -3,6 +3,10 @@ import "./index.css";
 const AddStudentForm = () => {
   return (
     <form className="student-info-form">
+        <div class="header-row">
+                    <h2 className="add-student-header">Add a Student</h2>
+                    <button class="header-button">+ Add a New Student</button>
+                </div>
         <div className="input-row">
             <label>
                 First Name
