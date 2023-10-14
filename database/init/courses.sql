@@ -5,7 +5,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
 
-CREATE TYPE course_difficulty AS ENUM  ('Easy', 'Medium', 'Hard')
+CREATE TYPE course_difficulty AS ENUM  ('Beginner', 'Intermediate', 'Advanced')
 
 CREATE TABLE "courses" (
     course_id SERIAL NOT NULL PRIMARY KEY,
