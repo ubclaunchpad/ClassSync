@@ -10,6 +10,28 @@ const RegisterTutor = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
+    const createAccount = async () => {
+        try {
+            const response = await fetch(url + '/tutor/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log('User account created:', responseData);
+
+            } else {
+                const errorData = await response.json();
+                console.error('User details failed to update:', errorData);
+            }
+        } catch (error) {
+            console.error('Failed to save', error);
+        }
+    };
 
     return (
         <TutorDashboardLayout>
