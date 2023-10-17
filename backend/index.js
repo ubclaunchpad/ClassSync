@@ -20,7 +20,7 @@ app.use("/tutor", tutorRegistrationRouter);
 
 
 app.listen(port, () => {
-    console.log(`Labby backend listening on port ${port}`);
+    console.log(`ClassSync backend listening on port ${port}`);
 });
 
 
