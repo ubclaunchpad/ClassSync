@@ -13,6 +13,27 @@ const TutorInfo = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
+    const saveTutorInfo = async () => {
+        try {
+            const response = await fetch(url + '/tutor/bio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, bio: { firstName, lastName, university, about, maxHours, offerings } })
+            });
+
+            if (response.status === 200) {
+                const responseData = await response.json();
+                console.log('User details Updated:', responseData);
+            } else {
+                const errorData = await response.json();
+                console.error('User details failed to update:', errorData);
+            }
+        } catch (error) {
+            console.error('Failed to save', error);
+        }
+    };
 
     return (
         <TutorDashboardLayout>
@@ -71,7 +92,7 @@ const TutorInfo = () => {
                         </div>
                     </div>
 
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" onClick={saveTutorInfo} />
                 </form>
             </div >
 
