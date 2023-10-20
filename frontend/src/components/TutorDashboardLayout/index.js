@@ -32,19 +32,6 @@ export const TutorDashboardLayout = (props) => {
           </div>
         </div>
         <div class="column middle">{props.children}</div>
-        {/* <div class="column right">
-          <div className="right-container">
-            <div class="right-header">
-              <p className="shop-classes">Shop for Courses</p>
-              <img className="bagImage" src={Bag} alt="Bag" />
-            </div>
-            <div className="shop-courses">
-              <SearchBar />
-            </div>
-          </div>
-          <div className="right-container"></div>
-          <div className="right-container"></div>
-        </div> */}
       </div>
     </div>
   );
