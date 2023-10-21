@@ -8,9 +8,10 @@ router.get("/pingcheck", (_, res) => {
 });
 
 router.post("/create", (req, res) => {
-    const { userID } = req.body.userID;
-    const { password } = req.body.password;
-    tutor.createAccount(userID, password).then(() => {
+    const email = req.body.email;
+    const password = req.body.password;
+    // console.log(email, password)
+    tutor.createAccount(email, password).then(() => {
         res.status(200);
     }).catch((err) => {
         res.status(500).send("Account failed to activate");
@@ -27,10 +28,11 @@ router.post("/password", (req, res) => {
 });
 
 router.post("/bio", (req, res) => {
-    const { userID } = req.body.userID;
-    const { bio } = req.body.bio;
+    const email = req.body.email;
+    const bio = req.body.bio;
+    console.log(email, bio)
 
-    tutor.updateBio(userID, bio).then((result) => {
+    tutor.updateBio(email, bio).then((result) => {
         res.status(200);
     });
 });
