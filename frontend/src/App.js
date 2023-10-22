@@ -3,6 +3,8 @@ import Login from "./screens/login";
 import AddStudent from "./screens/addStudent";
 import TutorRegistration from "./screens/tutorRegistration";
 import './App.css';
+import TutorInfo from "./screens/tutorInfo";
+import RegisterTutor from "./screens/registerTutor";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/addStudent" element={<AddStudent />} />
           <Route path="/tutorRegistration" element={<TutorRegistration />} />
+          <Route path="/tutorinfo" element={<TutorInfo />} />
+          <Route path="/registerTutor" element={<RegisterTutor />} />
         </Routes>
       </BrowserRouter>
     </div>
