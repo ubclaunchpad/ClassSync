@@ -9,7 +9,7 @@ export class tutorRegistration {
         // set password for user
     }
 
-    updateBio(userID, bio) {
+    updateBio(email, bio) {
         // update bio for user
         // bio consists of first name, last name, date of birth, about me, profile picture
     }
