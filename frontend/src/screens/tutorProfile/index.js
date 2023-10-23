@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./index.css"; // Import the CSS file for styling
 import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
 
-const TutorInfo = () => {
+const TutorProfile = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState(''); // TODO: Get email from login
@@ -100,4 +100,4 @@ const TutorInfo = () => {
     );
 };
 
-export default TutorInfo;
+export default TutorProfile;
