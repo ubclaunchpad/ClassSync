@@ -3,7 +3,7 @@ import Login from "./screens/login";
 import AddStudent from "./screens/addStudent";
 import TutorRegistration from "./screens/tutorRegistration";
 import './App.css';
-import TutorInfo from "./screens/tutorInfo";
+import TutorProfile from "./screens/tutorProfile";
 import RegisterTutor from "./screens/registerTutor";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/addStudent" element={<AddStudent />} />
           <Route path="/tutorRegistration" element={<TutorRegistration />} />
-          <Route path="/tutorinfo" element={<TutorInfo />} />
+          <Route path="/tutorProfile" element={<TutorProfile />} />
           <Route path="/registerTutor" element={<RegisterTutor />} />
         </Routes>
       </BrowserRouter>
