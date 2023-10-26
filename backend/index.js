@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 
 
@@ -19,7 +18,6 @@ app.get("/", (_, res) => {
 app.use("/tutor", tutorRegistrationRouter);
 
 
-app.use("/student-profile", studentProfileRouter);
 
 app.listen(port, () => {
     console.log(`Labby backend listening on port ${port}`);
