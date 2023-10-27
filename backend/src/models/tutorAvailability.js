@@ -1,5 +1,5 @@
 export class tutorAvailability {
-    createAvailabilityPattern(userID, availability) {
+    createAvailabilityPattern(availability) {
 
     }
 
