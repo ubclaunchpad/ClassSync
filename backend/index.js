@@ -8,7 +8,7 @@ const app = express();
 const port = 8080;
 
 import pkg from 'pg';
-const { Client } = pkg;
+const { Pool } = pkg;
 
 dotenv.config();
 
@@ -23,7 +23,7 @@ const dbConfig = {
     }
 };
 
-const pgClient = new Client(dbConfig);
+const pgClient = new Pool(dbConfig);
 
 pgClient.connect(function (err) {
     if (err) throw err;
@@ -43,7 +43,8 @@ app.use("/tutor", tutorRegistrationRouter);
 
 
 app.listen(port, () => {
-    console.log(`Labby backend listening on port ${port}`);
+    console.log(`ClassSync backend listening on port ${port}`);
 });
 
 
+export { pgClient }
