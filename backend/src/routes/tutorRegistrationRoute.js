@@ -1,5 +1,6 @@
 import { Router } from "express";
 import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
+import tutorAvailabilityRouter from "./tutorAvailabilityRoute.js"
 const router = Router();
 const tutor = new tutorRegistrationController();
 
@@ -53,7 +54,7 @@ router.delete("/offerings", (req, res) => {
     });
 });
 
-
+router.use("/availability", tutorAvailabilityRouter)
 
 
 

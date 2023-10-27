@@ -2,14 +2,13 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 
 const app = express();
 const port = 8080;
 
 import pkg from 'pg';
-const { Client } = pkg;
+const { Pool } = pkg;
 
 dotenv.config();
 
@@ -24,7 +23,7 @@ const dbConfig = {
     }
 };
 
-const pgClient = new Client(dbConfig);
+const pgClient = new Pool(dbConfig);
 
 pgClient.connect(function (err) {
     if (err) throw err;
@@ -42,10 +41,10 @@ app.get("/", (_, res) => {
 app.use("/tutor", tutorRegistrationRouter);
 
 
-app.use("/student-profile", studentProfileRouter);
 
 app.listen(port, () => {
-    console.log(`Labby backend listening on port ${port}`);
+    console.log(`ClassSync backend listening on port ${port}`);
 });
 
 
+export { pgClient }
