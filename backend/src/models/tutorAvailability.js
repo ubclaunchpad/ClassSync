@@ -7,7 +7,7 @@ export class tutorAvailability {
         try {
             return new Promise((resolve, reject) => {
                 con.query(
-                    'CALL insertNewPattern($1)',
+                    'CALL insertNewPattern(?)',
                     [availability],
                     (error, results) => {
                         if (error) {
@@ -37,7 +37,7 @@ export class tutorAvailability {
             const promises = weeks.map((week) => {
                 return new Promise((resolve, reject) => {
                     con.query(
-                        'CALL upsertTutorAvailability($1, $2, $3)',
+                        'CALL upsertTutorAvailability(?, ?, ?)',
                         [userID, week, patternID],
                         (error, results) => {
                             if (error) {
@@ -58,4 +58,27 @@ export class tutorAvailability {
         }
     }
 
+    async getTutorAvailability(availability, startDate) {
+        const client = await pgPool.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL getAvailabilitiesByTutor(?, ?)',
+                    [tutorId, startDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve(results);
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+
+    }
 }
