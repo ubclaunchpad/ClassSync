@@ -45,7 +45,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE updateTutorAvailabilityByTutorAndDate(
+CREATE OR REPLACE PROCEDURE upsertTutorAvailability(
     _tutor_id VARCHAR(50),
     _start_date TIMESTAMP,
     _new_pattern_id INT
@@ -53,9 +53,21 @@ CREATE OR REPLACE PROCEDURE updateTutorAvailabilityByTutorAndDate(
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    UPDATE tutor_availability
-    SET pattern_id = _new_pattern_id
-    WHERE tutor_id = _tutor_id AND start_date = _start_date;
+    -- Check if a row with the specified tutor_id and start_date exists
+    IF EXISTS (
+        SELECT 1
+        FROM tutor_availability
+        WHERE tutor_id = _tutor_id AND start_date = _start_date
+    ) THEN
+        -- If the row exists, perform an UPDATE
+        UPDATE tutor_availability
+        SET pattern_id = _new_pattern_id
+        WHERE tutor_id = _tutor_id AND start_date = _start_date;
+    ELSE
+        -- If the row does not exist, perform an INSERT
+        INSERT INTO tutor_availability (tutor_id, start_date, pattern_id)
+        VALUES (_tutor_id, _start_date, _new_pattern_id);
+    END IF;
 END;
 $$;
 
