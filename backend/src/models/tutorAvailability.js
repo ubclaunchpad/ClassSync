@@ -58,7 +58,7 @@ export class tutorAvailability {
         }
     }
 
-    async getTutorAvailability(availability, startDate) {
+    async getTutorAvailability(tutorId, startDate) {
         const client = await pgPool.connect();
         try {
             return new Promise((resolve, reject) => {
