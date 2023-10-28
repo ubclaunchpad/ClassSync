@@ -1,20 +1,16 @@
 import { tutorAvailability } from "../models/tutorAvailability.js";
-export default class tutorRegistrationController {
+export default class tutorAvailabilityController {
 
     setAvailability(userId, weeks, availability) {
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorAvailability();
-            tutor.createAvailabilityPattern(availability).then((patternID) => {
-                for (let week of weeks) {
-                    tutor.setAvailability(userId, week, patternID).then((result) => {
-                        resolve(result);
-                    }).catch((err) => { reject(err); });
-                }
+        const tutor = new tutorAvailability();
 
-            })
+        return tutor.createAvailabilityPattern(availability)
+            .then((patternID) => {
+                return tutor.setAvailability(userId, weeks, patternID)
 
-        });
+            });
     }
+
 
 
 
