@@ -8,6 +8,15 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
+router.get("/", (req, res) => {
+    const userID = req.body.userID;
+    tutor.getAvailability(userID).then((availability) => {
+        res.status(200).send(availability);
+    }).catch((err) => {
+        res.status(500).send("Availability not found");
+    })
+});
+
 router.post("/", (req, res) => {
     const userID = req.body.userID;
     const weeks = req.body.weeks;
