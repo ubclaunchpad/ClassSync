@@ -7,14 +7,14 @@ BEGIN
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id;
 END;
 
-CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50))
+CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50), startdate)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     SELECT ta.tutor_id, ta.start_date, ap.times
     FROM tutor_availability ta
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id
-    WHERE ta.tutor_id = _tutor_id;
+    WHERE ta.tutor_id = _tutor_id and ta.start_date >= startdate;
 END;
 $$;
 
