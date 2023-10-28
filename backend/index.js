@@ -28,7 +28,7 @@ await pgPool.connect()
     .then(client => {
         console.log("Test Connection Open");
         client.release();
-        console.log("Test Connection closed")
+        console.log("Test Connection Closed")
     })
     .catch(err => {
         console.error("Error connecting to the PostgreSQL database:", err);
