@@ -31,7 +31,7 @@ export class tutorAvailability {
     }
 
     async setAvailabilityForWeeks(userID, weeks, patternID) {
-        const client = await pgClient.connect();
+        const client = await pgPool.connect();
 
         try {
             const promises = weeks.map((week) => {
