@@ -23,12 +23,17 @@ const dbConfig = {
     }
 };
 
-const pgClient = new Pool(dbConfig);
+const pgPool = new Pool(dbConfig);
+await pgPool.connect()
+    .then(client => {
+        console.log("Test Connection Open");
+        client.release();
+        console.log("Test Connection Closed")
+    })
+    .catch(err => {
+        console.error("Error connecting to the PostgreSQL database:", err);
+    });
 
-pgClient.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,4 +52,4 @@ app.listen(port, () => {
 });
 
 
-export { pgClient }
+export { pgPool }
