@@ -43,6 +43,7 @@ app.get("/", (_, res) => {
     res.send("Hello ClassSync!");
 });
 
+app.use("/student-profile", studentProfileRouter);
 app.use("/tutor", tutorRegistrationRouter);
 
 
