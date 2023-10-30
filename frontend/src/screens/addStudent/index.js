@@ -1,14 +1,23 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
-import UserForm from "../../components/UserForm";
-import "./index.css";
+import SearchBar from "../../components/SearchBar";
+import AddStudentForm from "../../components/AddStudentForm";
+import Plus from "../../assets/plus.png";
+import Notification from "../../assets/notifications.png";
+import Bag from "../../assets/bag.png";
 
-const AddStudent = () => {
+import "./index.css";
+import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
+
+const AddStudent = (props) => {
   return (
-    <div className="screen-container">
-      <Header />
-      <Banner />
-    </div>
+    <ParentDashboardLayout>
+      <div className="student-info-container">
+        <AddStudentForm />
+        <hr className="line"></hr>
+      </div>
+      <div className="student-info-container"></div>
+    </ParentDashboardLayout>
   );
 };
 
