@@ -14,7 +14,7 @@ BEGIN
     SELECT ta.tutor_id, ta.start_date, ap.times
     FROM tutor_availability ta
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id
-    WHERE ta.tutor_id = _tutor_id and ta.start_date >= startdate;
+    WHERE ta.tutor_id = _tutor_id and ta.start_date >= startdate and ta.at_capacity = false;
 END;
 $$;
 
@@ -28,7 +28,7 @@ BEGIN
     SELECT ta.tutor_id, ta.start_date, ap.times
     FROM tutor_availability ta
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id
-    WHERE ta.start_date >= _start_date AND ta.start_date <= _end_date;
+    WHERE ta.start_date >= _start_date AND ta.start_date <= _end_date and ta.at_capacity = false;
 END;
 $$;
 
@@ -71,15 +71,14 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE deleteTutorAvailabilityByDateRange(
+CREATE OR REPLACE PROCEDURE deleteTutorAvailabilityByWeek(
     _start_date TIMESTAMP,
-    _end_date TIMESTAMP
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
     DELETE FROM tutor_availability
-    WHERE start_date >= _start_date AND start_date <= _end_date;
+    WHERE start_date = _start_date;
 END;
 $$;
 
