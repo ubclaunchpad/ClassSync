@@ -23,6 +23,31 @@ BEGIN
         _appointment_start,
         _duration
     );
+
+--- Check if tutor's max hours for that week have been reached if they have, then set at capacity to true
+    -- Get the tutor's max hours
+    DECLARE max_hours INT;
+    SELECT max_hours INTO max_hours FROM tutors WHERE tutor_id = _tutor_id;
+
+    -- Get the tutor's start date for the week
+    DECLARE start_date TIMESTAMP;
+    SELECT start_date INTO start_date FROM tutor_availability WHERE tutor_id = _tutor_id and startDate <= _appointment_start and endDate >= _appointment_start;
+
+    -- Get the tutor's end date for the week
+    DECLARE end_date TIMESTAMP;
+    SELECT end_date INTO end_date FROM tutor_availability WHERE tutor_id = _tutor_id and startDate <= _appointment_start and endDate >= _appointment_start;
+
+    -- Get the tutor's current hours for the week
+    DECLARE current_hours INT;
+    SELECT SUM(duration) INTO current_hours FROM appointments WHERE tutor_id = _tutor_id and appointment_start >= start_date and appointment_start <= end_date;
+
+    -- If the tutor's current hours for the week are greater than or equal to the max hours, set at_capacity to true
+    IF current_hours >= max_hours THEN
+        UPDATE tutor_availability SET at_capacity = true WHERE tutor_id = _tutor_id and startDate = start_date;
+    END IF;
+
+
+
 END;
 $$;
 
