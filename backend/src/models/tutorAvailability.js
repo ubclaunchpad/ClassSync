@@ -81,4 +81,27 @@ export class tutorAvailability {
         }
 
     }
+
+    async deleteAvailability(tutorId, startDate, endDate) {
+        const client = await pgPool.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL deleteTutorAvailabilityByWeek(?, ?, ?)',
+                    [tutorId, startDate, endDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+    }
 }
