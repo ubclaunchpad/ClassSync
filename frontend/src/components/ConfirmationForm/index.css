@@ -1,35 +1,34 @@
 .confirmation-form-container {
   width: 30%;
   height: 50%;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: flex-start;
-  padding: 2rem;
   border: 0.0625rem solid #00b0f1;
   border-radius: 1rem;
   color: #103da2;
-}
-
-.confirmation-form-title {
-  font-weight: 700;
-  font-size: 2rem;
-  margin: 0;
 }
 
 .confirmation-form-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  flex: 1;
   font-size: 1rem;
   font-weight: 700;
   text-align: left;
-  margin-top: 1rem;
-  gap: 1rem;
 }
 
-.confirmation-form-info p {
+.confirmation-form-title {
   margin: 0;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.confirmation-form-info > p {
+  margin: 1rem 0 0 0;
 }
 
 .confirmation-resend-message {
@@ -38,6 +37,11 @@
   justify-content: flex-start;
   align-items: center;
   color: #103da2;
+  margin-top: 1rem;
+}
+
+.confirmation-resend-message > p {
+  margin: 0;
 }
 
 .confirmation-resend-message u {
@@ -51,51 +55,65 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
   flex: 1;
-  gap: 0.75rem;
-  margin: 3rem 0 0 0;
+  margin-top: 2rem;
 }
 
 .confirmation-input-container {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
-  flex: 2;
+  flex: 3;
 }
 
 .confirmation-input-title {
   width: auto;
+  margin: 0 0 0.5rem 0;
   font-size: 1rem;
-  margin: 0 0 0.25rem 0;
 }
 
-.confirmation-input {
+.confirmation-input-parent {
   width: 100%;
-  height: 30%;
-  padding: 0.5rem;
-  border: 0.125rem solid #b3defc;
-  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: 0.5rem;
   flex: 1;
+}
+
+.confirmation-input-child {
+  height: 100%;
+  width: calc((100% - 2 * 0.5rem) / 6);
+  flex-shrink: 1;
+  border: 0.125rem solid #00b0f1;
+  border-radius: 0.5rem;
+  text-align: center;
   font-family: "Open Sans";
-  box-sizing: border-box;
+  font-size: 2rem;
+  color: #103da2;
 }
 
 .confirmation-submit-button {
-  padding: 0.25rem 0 0.25rem 0;
+  padding: 0.5rem 0 0.5rem 0;
   border: 0.125rem solid #b3defc;
   border-radius: 0.5rem;
-  flex: 1;
   font-family: "Open Sans";
-  color: #103da2;
-  font-weight: 700;
   font-size: 1rem;
+  font-weight: 700;
   background-color: #b3defc;
+  color: #103da2;
+  flex: 1;
 }
 
 .confirmation-error-message {
   height: 0.75rem;
-  margin: 0;
+  margin: 0.25rem 0 0 0;
   font-size: 0.75rem;
   color: red;
 }
@@ -107,4 +125,17 @@
 
 .confirmation-resend-message button:hover {
   cursor: pointer;
+}
+
+/* Remove arrows from number input */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

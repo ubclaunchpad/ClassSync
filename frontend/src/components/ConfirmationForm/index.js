@@ -1,22 +1,28 @@
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import useVerificationHook from "./useVerificationHook";
 import "./index.css";
 
 const ConfirmationForm = () => {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    trigger,
-    formState: { errors },
-  } = useForm({
-    mode: "onBlur",
-  });
+  const { code, inputStates, inputClass, handleChange, handleKeyDown } =
+    useVerificationHook(6);
 
-  console.log(errors);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (code !== null) {
+      // TODO: Need to verify after checking code is 6 digits!
+      console.log(`code: ${code}`);
+      setError(null);
+    } else {
+      setError("Please enter a valid code!");
+    }
+  };
+
   return (
     <div className="confirmation-form-container">
-      <h4 className="confirmation-form-title">Confirm your email</h4>
       <div className="confirmation-form-info">
+        <h4 className="confirmation-form-title">Confirm your email</h4>
         <p>Please enter the 6-digit verification code we sent to your email</p>
 
         <div className="confirmation-resend-message">
@@ -27,29 +33,26 @@ const ConfirmationForm = () => {
         </div>
       </div>
 
-      <form
-        className="confirmation-input-form"
-        onSubmit={handleSubmit((data) => {
-          console.log("Submitting confirmation form!");
-          console.log(data);
-        })}
-      >
+      <form className="confirmation-input-form" onSubmit={handleSubmit}>
         <div className="confirmation-input-container">
           <h5 className="confirmation-input-title">Verification Code</h5>
-          {/* <input
-            type="text"
-            className="confirmation-input"
-            {...register("email", {
-              required: "Email is required!",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
+
+          <div className="confirmation-input-parent">
+            {inputStates.map((state, index) => {
+              return (
+                <input
+                  key={index}
+                  type="text"
+                  value={state.digit}
+                  className={inputClass}
+                  maxLength="1"
+                  onChange={(e) => handleChange(e, index)}
+                  onKeyDown={handleKeyDown}
+                />
+              );
             })}
-          /> */}
-          {/* <p className="confirmation-error-message">
-            {errors?.email?.message && errors.email.message}
-          </p> */}
+          </div>
+          <p className="confirmation-error-message">{error}</p>
         </div>
         <button type="submit" className="confirmation-submit-button">
           Confirm Email
