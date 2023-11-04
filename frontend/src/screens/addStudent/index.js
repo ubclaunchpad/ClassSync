@@ -1,5 +1,6 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
+import "./index.css";
 import SearchBar from "../../components/SearchBar";
 import AddStudentForm from "../../components/AddStudentForm";
 import Plus from "../../assets/plus.png";
