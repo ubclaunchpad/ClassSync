@@ -1,14 +1,11 @@
 import Header from "../../components/Header";
 import Banner from "../../components/Banner";
-<<<<<<< HEAD
 import "./index.css";
-=======
 import SearchBar from "../../components/SearchBar";
 import AddStudentForm from "../../components/AddStudentForm";
 import Plus from "../../assets/plus.png";
 import Notification from "../../assets/notifications.png";
 import Bag from "../../assets/bag.png";
->>>>>>> origin/main
 
 import "./index.css";
 import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
