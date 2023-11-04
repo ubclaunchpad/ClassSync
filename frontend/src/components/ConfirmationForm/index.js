@@ -19,6 +19,10 @@ const ConfirmationForm = () => {
     }
   };
 
+  const handleResendCode = () => {
+    console.log("Resend code button clicked!")
+  }
+
   return (
     <div className="confirmation-form-container">
       <div className="confirmation-form-info">
@@ -27,7 +31,7 @@ const ConfirmationForm = () => {
 
         <div className="confirmation-resend-message">
           <p>Didn't get an email?</p>
-          <button>
+          <button onClick={handleResendCode}>
             <u>Resend code</u>
           </button>
         </div>
