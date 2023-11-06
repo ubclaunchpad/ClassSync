@@ -1,4 +1,5 @@
 // Database con.query() for studentProfile table
+import con from "../config/database.js";
 
 export class StudentProfile {
     getStudentProfile(result) {

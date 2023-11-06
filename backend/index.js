@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
+import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 
 const app = express();
 const port = 8080;
