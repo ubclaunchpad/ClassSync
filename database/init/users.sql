@@ -6,13 +6,13 @@ AS $$
 
 BEGIN
 IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname='userEnum') 
-THEN CREATE TYPE userEnum AS ENUM ('admin', 'user', 'guardian');
+THEN CREATE TYPE userEnum AS ENUM ('admin', 'tutor', 'guardian');
 END IF;
 
 CREATE TABLE "users" (
     user_id SERIAL NOT NULL PRIMARY KEY,
     role userEnum NOT NULL,
-    email VARCHAR(50) NOT NULL
+    email VARCHAR(50) NOT NULL UNIQUE,
 );
 
 END;

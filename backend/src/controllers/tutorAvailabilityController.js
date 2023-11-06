@@ -6,7 +6,6 @@ export default class tutorAvailabilityController {
     }
 
     setAvailability(userId, weeks, availability) {
-
         return this.tutor.createAvailabilityPattern(availability)
             .then((patternID) => {
                 return tutor.setAvailabilityForWeeks(userId, weeks, patternID)
@@ -16,12 +15,7 @@ export default class tutorAvailabilityController {
 
     getAvailability(userID) {
         const today = new Date();
-        const currentDayOfWeek = today.getDay();
-        const daysToSubtract = (currentDayOfWeek - dayOfWeek + 7) % 7;
-
-        const pastMonday = new Date(today);
-        pastMonday.setDate(today.getDate() - daysToSubtract);
-        return this.tutor.getTutorAvailability(userID, pastMonday).then((availability) => {
+        return this.tutor.getTutorAvailability(userID, today).then((availability) => {
             resolve(availability);
         }
         ).catch((err) => {
@@ -29,7 +23,13 @@ export default class tutorAvailabilityController {
         });
     }
 
-
+    deleteAvailability(userID, startDate, endDate) {
+        return tutor.deleteAvailability(userID, startDate, endDate).then((result) => {
+            resolve(result);
+        }).catch((err) => {
+            reject(err);
+        });
+    }
 
 
 }

@@ -1,11 +1,12 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
 export default class tutorRegistrationController {
 
+
     createAccount(userId, password) {
         // create account for tutor
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
-            tutor.createAccount(userId, password).then((result) => {
+            tutor.createAccount(userId).then((result) => {
                 resolve(result);
             }).catch((err) => { reject(err); });
         });
@@ -26,36 +27,54 @@ export default class tutorRegistrationController {
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
             tutor.updateBio(email, bio).then((result) => {
+                return this.updateOfferings(email, bio.offerings).then((result) => {
+                    resolve(result);
+                }).catch((err) => { reject(err); });
+            }).catch((err) => { reject(err); });
+        });
+    }
+
+
+    getBio(email) {
+        return new Promise((resolve, reject) => {
+            const tutor = new tutorRegistration();
+            tutor.getBio(email).then((result1) => {
+                return this.getOfferings(email).then((result2) => {
+                    result1.offerings = result2;
+                    resolve(result1);
+                }).catch((err) => { reject(err); });
+            });
+        }).catch((err) => { reject(err); });
+    }
+
+    getOfferings(userID) {
+        return new Promise((resolve, reject) => {
+            const tutor = new tutorRegistration();
+            tutor.getOfferings(userID).then((result) => {
                 resolve(result);
             }).catch((err) => { reject(err); });
         });
     }
 
-    addOfferings(userID, offerings) {
+    updateOfferings(userID, offerings) {
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
-            Promise.all(offerings.map(offering => tutor.addOffering(userID, offering)))
-                .then(results => {
-                    resolve(results);
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
+            // delete all offerings
+            return new Promise((resolve, reject) => {
+                tutor.deleteAllOfferings(userID).then((result) => {
+                    return new Promise((resolve, reject) => {
+                        // add all offerings
+                        tutor.addOfferings(userID, offerings).then((result) => {
+                            resolve(result);
+                        }).catch((err) => { reject(err); });
+
+                    }).catch((err) => { reject(err); });
+                }).catch((err) => { reject(err); });
+            });
+        })
     }
 
-    deleteOfferings(userID, offerings) {
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            Promise.all(offerings.map(offering => tutor.deleteOffering(userID, offering)))
-                .then(results => {
-                    resolve(results);
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    }
+
 
 
 }
