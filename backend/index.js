@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
 import studentProfileRouter from "./src/routes/studentProfileRoute.js";
+import appointmentRoute from "./src/routes/appointmentRoute.js"
 
 const app = express();
 const port = 8080;
@@ -50,6 +51,7 @@ app.use("/tutor", tutorRegistrationRouter);
 
 app.use("/student-profile", studentProfileRouter);
 app.use("/communication",volunteerEmailRoute);
+app.use("/schedules",appointmentRoute);
 app.listen(port, () => {
     console.log(`ClassSync backend listening on port ${port}`);
 });
