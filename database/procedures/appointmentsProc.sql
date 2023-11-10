@@ -50,6 +50,26 @@ BEGIN
 
 END;
 $$;
+-- Procedure to check if the guardian if booking for their student.
+CREATE OR REPLACE PROCEDURE check_student_guardian(
+    _student_id INT,
+    _guardian_id INT,
+    OUT is_matching_guardian BOOLEAN
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Check if the guardian ID matches the guardian ID of the specified student
+    SELECT TRUE INTO is_matching_guardian
+    FROM students
+    WHERE student_id = _student_id AND guardian_id = _guardian_id;
+
+    -- If there is no match, set is_matching_guardian to FALSE
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        is_matching_guardian := FALSE;
+END;
+$$;
 
 -- Procedure to update an appointment.
 CREATE OR REPLACE PROCEDURE update_appointment(
