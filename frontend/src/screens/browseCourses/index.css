@@ -1,0 +1,41 @@
+.coursePage {
+  height: 100vh;
+  display: flex;
+}
+
+.coursePageContent {
+  padding-left: 50px;
+  padding-right: 50px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.courseCells {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Align to the left */
+}
+
+.coursePageTitle {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: left;
+  padding-top: 50px;
+  padding-bottom: 40px;
+  color: #103da2;
+}
+
+.courseCells > div {
+  width: calc(25% - 10px); 
+  margin-right: 10px; 
+  margin-bottom: 10px; 
+}
+
+/* Media query to adjust spacing for smaller screens */
+@media screen and (max-width: 767px) {
+  .courseCells > div {
+    width: calc(50% - 10px); 
+  }
+}
+
+
