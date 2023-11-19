@@ -13,7 +13,7 @@ CREATE TABLE registrations (
 	course_id INTEGER NOT NULL,
     session_id INTEGER NOT NULL,
     registration_date DATE NOT NULL,
-    FOREIGN KEY (guardian_id) REFERENCES guardians(guadian_id), 
+    FOREIGN KEY (guardian_id) REFERENCES guardians(guardian_id), 
 	FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );

@@ -6,7 +6,7 @@ AS $$
 BEGIN
 
 CREATE TABLE "tutors" (
-    tutor_id varchar(50) NOT NULL PRIMARY KEY,
+    tutor_id SERIAL NOT NULL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     f_name VARCHAR(50) NOT NULL,
     l_name VARCHAR(50) NOT NULL,
@@ -14,8 +14,7 @@ CREATE TABLE "tutors" (
     startDate DATE NOT NULL,
     endDate DATE NULL, 
     max_hours INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-    FOREIGN KEY (tutor_id) REFERENCES users(email)
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
 );
 
 END;
