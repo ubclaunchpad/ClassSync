@@ -11,6 +11,18 @@ BEGIN
 END;
 END;
 
+-- Get all tutors by course_id
+CREATE OR REPLACE PROCEDURE getTutorsByCourse(
+    _course_id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT * FROM tutor_offerings
+    WHERE course_id = _course_id;
+END;
+END;
+
 -- Insert an offering by tutor_id and course_id
 CREATE OR REPLACE PROCEDURE insertOffering(
     _tutor_id VARCHAR(50),
