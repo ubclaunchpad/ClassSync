@@ -1,9 +1,9 @@
 // Database con.query() for studentProfile table
-import con from "../config/database.js";
+//import con from "../config/database.js";
 
 export class StudentProfile {
-    getStudentProfile(result) {
-    con.query(`CALL load_student_profile()`, (err, res) => {
+    getStudentProfiles(result) {
+    con.query("CALL loadStudentProfiles()", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -15,14 +15,12 @@ export class StudentProfile {
 
     insertStudentProfile(newStudentProfile, result) {
         con.query(
-          "CALL save_student_profile(?, ?, ?, ?, ?, ?, ?)",
+          "CALL insertStudent(?, ?, ?, ?, ?)",
           [
-            newStudentProfile.student_id,
             newStudentProfile.f_name,
             newStudentProfile.l_name,
             newStudentProfile.dob,
             newStudentProfile.accomodations,
-            newStudentProfile.neurodivergent, // possible boolean field along with others?
             newStudentProfile.fk_guardian_id,
           ],
           function (error, results) {

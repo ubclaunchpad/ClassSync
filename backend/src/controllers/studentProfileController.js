@@ -3,11 +3,11 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
-    getStudentProfile() {
+    getStudentProfile(id) {
         return new Promise((resolve, reject) => {
           const studentProfileModel = new StudentProfile();
     
-          studentProfileModel.getStudentProfile((err, result) => {
+          studentProfileModel.getStudentProfile(id, (err, result) => {
             if (err) {
               reject({ error: err });
             }
