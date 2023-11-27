@@ -4,13 +4,14 @@ import bcrypt from "bcrypt";
  * Hashes a password to be saved in the database
  * @param {*} password
  */
-const hashPassword = (password) => {
+export const hashPassword = (password) => {
     const saltRounds = 14;
-    bcrypt
+    return bcrypt
         .hash(password, saltRounds)
         .then((hash) => {
             // save in db with username
             // NO NEED TO SAVE SALT -- bcrypt figures it out along w the hash when comparing
+            return hash;
         })
         .catch((err) => {
             console.log(err);
@@ -23,8 +24,8 @@ const hashPassword = (password) => {
  * @param {*} hash - Hashed password stored in DB
  * @returns {boolean} - Indicates if given password matches stored password
  */
-const comparePassword = (givenPassword, hash) => {
-    bcrypt
+export const comparePassword = (givenPassword, hash) => {
+    return bcrypt
         .compare(givenPassword, hash)
         .then((result) => {
             return result;
