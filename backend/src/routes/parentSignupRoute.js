@@ -9,7 +9,6 @@ router.get("/pingcheck", (_, res) => {
 
 
 router.post("/signup", (req, res) => {
-    console.log(req.query)
     const email = req.query.email;
     const password = req.query.password;
 
@@ -25,7 +24,6 @@ router.post("/signup", (req, res) => {
 router.post("/login", (req, res) => {
     const email = req.query.email;
     const password = req.query.password;
-
 
     return parent.login(email, password).then((_email) => {
         res.status(200).json({ email: "Login successful for" + email });
