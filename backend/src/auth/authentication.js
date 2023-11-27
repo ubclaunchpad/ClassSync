@@ -5,16 +5,16 @@ import bcrypt from "bcrypt";
  * @param {*} password
  */
 const hashPassword = (password) => {
-  const saltRounds = 14;
-  bcrypt
-    .hash(password, saltRounds)
-    .then((hash) => {
-      // save in db with username
-      // NO NEED TO SAVE SALT -- bcrypt figures it out along w the hash when comparing
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    const saltRounds = 14;
+    bcrypt
+        .hash(password, saltRounds)
+        .then((hash) => {
+            // save in db with username
+            // NO NEED TO SAVE SALT -- bcrypt figures it out along w the hash when comparing
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 /**
@@ -24,12 +24,12 @@ const hashPassword = (password) => {
  * @returns {boolean} - Indicates if given password matches stored password
  */
 const comparePassword = (givenPassword, hash) => {
-  bcrypt
-    .compare(givenPassword, hash)
-    .then((result) => {
-      return result;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    bcrypt
+        .compare(givenPassword, hash)
+        .then((result) => {
+            return result;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
