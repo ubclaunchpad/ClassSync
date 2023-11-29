@@ -7,8 +7,8 @@ export default class parentAuth {
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL insertguardianuser($1, $2, $3)',
-                    [email, hashPassword, null],
+                    'CALL insertUser($1, $2, $3, $4)',
+                    [email, hashPassword, 'guardian', null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
