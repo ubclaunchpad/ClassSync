@@ -26,7 +26,7 @@ router.post("/login", (req, res) => {
     const password = req.query.password;
 
     return parent.login(email, password).then((_email) => {
-        res.status(200).json({ email: "Login successful for" + email });
+        res.status(200).json({ email: "Login successful for " + email });
     }).catch((err) => {
         console.log(err);
         res.status(500).send("Login failed");
