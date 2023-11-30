@@ -19,6 +19,18 @@ router.post("/signup", (req, res) => {
     });
 });
 
+router.post("/login", (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
+
+    return tutor.login(email, password).then((_email) => {
+        res.status(200).json({ email: "Login successful for " + email });
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send("Login failed");
+    });
+});
+
 router.post("/password", (req, res) => {
     const { newPassword } = req.body.password;
     const { userID } = req.body.userID;
