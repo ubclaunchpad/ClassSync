@@ -8,9 +8,9 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
-router.post("/create", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+router.post("/signup", (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
     // console.log(email, password)
     tutor.createAccount(email, password).then(() => {
         res.status(200);
