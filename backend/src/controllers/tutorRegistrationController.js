@@ -1,9 +1,25 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
 export default class tutorRegistrationController {
 
+    constructor() {
 
-    createAccount(userId, password) {
-        // create account for tutor
+        this.tutor = new tutorRegistration();
+    }
+
+
+    async signup(email, password) {
+        const hashedPassword = await hashPassword(password);
+        return new Promise((resolve, reject) => {
+            return this.tutor.createAccount(email, hashedPassword).then((id) => {
+                resolve(id);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+
+
+    }
+    login(email, password) {
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
             tutor.createAccount(userId).then((result) => {
