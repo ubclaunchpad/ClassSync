@@ -12,8 +12,8 @@ router.post("/signup", (req, res) => {
     const email = req.query.email;
     const password = req.query.password;
     // console.log(email, password)
-    tutor.createAccount(email, password).then(() => {
-        res.status(200);
+    return tutor.signup(email, password).then((id) => {
+        res.status(200).json({ id: id });
     }).catch((err) => {
         res.status(500).send("Account failed to activate");
     });
