@@ -1,4 +1,4 @@
-import { pgPool } from '../../index.js';
+import pgPool  from '../../index.js';
 
 
 export class tutorAvailability {

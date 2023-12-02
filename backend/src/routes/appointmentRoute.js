@@ -1,10 +1,10 @@
 import { Router } from "express";
-import bookAppointment from "../controllers/appointmentController.js"
-import updateAppointment from "../controllers/appointmentController.js"
+import appointmentControllers from "../controllers/appointmentController.js"
+
 const router = Router();
 
 
 
-router.put("/updated-appointment",updateAppointment );
+router.put("/updated-appointment",appointmentControllers.updateAppointment );
 
 export default router;

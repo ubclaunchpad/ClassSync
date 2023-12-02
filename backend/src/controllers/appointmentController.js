@@ -1,6 +1,6 @@
-import { pgPool } from '../../index.js';
+import pgPool  from '../../index.js';
 
-export const bookAppointment = async (req, res) => {
+const bookAppointment = async (req, res) => {
     const client = await pgPool.connect();
     const newAppointment = req.body.appointment;
     const guardian_id = req?.user?.id
@@ -41,14 +41,11 @@ export const bookAppointment = async (req, res) => {
     } catch (error) {
         return res.status(400).json({ error: error.message, success: false });
     }
-    finally {
-        client.release();
-    }
 
 
 }
 
-export const updateAppointment = async (req, res) => {
+const updateAppointment = async (req, res) => {
     const client = await pgPool.connect();
     const updatedAppointment = req.body.appointment;
     const guardian_id = req?.user?.id
@@ -87,3 +84,5 @@ export const updateAppointment = async (req, res) => {
     }
 }
 
+
+export default {updateAppointment,bookAppointment}
