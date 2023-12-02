@@ -2,27 +2,62 @@ import { pgPool } from '../../index.js';
 
 
 export class tutorRegistration {
-    async createAccount(tutorId) {
+    async createAccount(email, hashPassword) {
         const client = await pgPool.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL insertTutorUser($1)',
-                    [tutorId],
+                    'CALL insertUser($1, $2, $3, $4)',
+                    [email, hashPassword, 'tutor', null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
                             reject(error);
                         } else {
-                            resolve();
+                            const user_id = results.rows[0].id;  // Retrieve user_id from results
+                            resolve(user_id);  // Resolve with the returned user_id
                         }
                     }
                 );
             });
-        } finally {
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            client.release();
+        }
+
+    }
+
+    async getPassword(email) {
+        const client = await pgPool.connect();
+        let role = 'tutor'
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'CALL getUserByEmailAndRole($1, $2, $3)',
+                    [email, role, null],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            const hashedPassword = results.rows[0].password;  // Retrieve hashed password from results
+                            resolve(hashedPassword);  // Resolve with the hashed password
+                        }
+                    }
+                );
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+        finally {
             client.release();
         }
     }
+
+
 
     async deleteAllOfferings(userID) {
         const client = await pgPool.connect();

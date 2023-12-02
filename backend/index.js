@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
-import studentProfileRouter from "./src/routes/studentProfileRoute.js";
+import parentSignupRoute from "./src/routes/parentSignupRoute.js"
 
 const app = express();
 const port = 8080;
@@ -46,10 +46,10 @@ app.get("/", (_, res) => {
 });
 
 app.use("/tutor", tutorRegistrationRouter);
+app.use("/parent", parentSignupRoute)
 
 
-app.use("/student-profile", studentProfileRouter);
-app.use("/communication",volunteerEmailRoute);
+app.use("/communication", volunteerEmailRoute);
 app.listen(port, () => {
     console.log(`ClassSync backend listening on port ${port}`);
 });
