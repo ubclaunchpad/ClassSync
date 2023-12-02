@@ -2,13 +2,13 @@ import { pgPool } from '../../index.js';
 
 
 export class tutorRegistration {
-    async createAccount(tutorId) {
+    async createAccount(email, hashPassword) {
         const client = await pgPool.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL insertTutorUser($1)',
-                    [tutorId],
+                    'CALL insertUser($1, $2, $3, $4)',
+                    [email, hashPassword, 'tutor', null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
