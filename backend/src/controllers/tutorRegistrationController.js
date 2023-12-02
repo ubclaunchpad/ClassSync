@@ -22,10 +22,28 @@ export default class tutorRegistrationController {
     login(email, password) {
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
-            tutor.createAccount(userId).then((result) => {
-                resolve(result);
-            }).catch((err) => { reject(err); });
+            return tutor.getPassword(email).then((hashedPassword) => {
+                if (email) {
+
+
+                    return comparePassword(password, hashedPassword).then((result) => {
+
+                        if (result) {
+                            resolve(email);
+                        }
+                        else {
+                            reject("Incorrect password");
+                        }
+
+                    })
+                }
+            })
+                .catch((err) => {
+                    reject(err);
+                });
+
         });
+
     }
     updatePassword(userID, newPassword) {
         // set password for user
