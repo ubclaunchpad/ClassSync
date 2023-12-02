@@ -1,4 +1,5 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
+import { hashPassword, comparePassword } from "../auth/authentication.js"
 export default class tutorRegistrationController {
 
     constructor() {
