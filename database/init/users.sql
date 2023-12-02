@@ -13,6 +13,7 @@ CREATE TABLE "users" (
     user_id SERIAL NOT NULL PRIMARY KEY,
     role userEnum NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
+    hashedPassword VARCHAR(100) NOT NULL,
 );
 
 END;

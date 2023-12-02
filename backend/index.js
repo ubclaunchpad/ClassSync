@@ -4,8 +4,11 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
+
 //import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import appointmentRoute from "./src/routes/appointmentRoute.js"
+import parentSignupRoute from "./src/routes/parentSignupRoute.js"
+
 
 const app = express();
 const port = 8080;
@@ -47,6 +50,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/tutor", tutorRegistrationRouter);
+app.use("/parent", parentSignupRoute)
 
 
 //app.use("/student-profile", studentProfileRouter);
