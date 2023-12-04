@@ -7,14 +7,14 @@ BEGIN
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id;
 END;
 
-CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50))
+CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50), startdate)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     SELECT ta.tutor_id, ta.start_date, ap.times
     FROM tutor_availability ta
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id
-    WHERE ta.tutor_id = _tutor_id;
+    WHERE ta.tutor_id = _tutor_id and ta.start_date >= startdate and ta.at_capacity = false;
 END;
 $$;
 
@@ -28,7 +28,7 @@ BEGIN
     SELECT ta.tutor_id, ta.start_date, ap.times
     FROM tutor_availability ta
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id
-    WHERE ta.start_date >= _start_date AND ta.start_date <= _end_date;
+    WHERE ta.start_date >= _start_date AND ta.start_date <= _end_date and ta.at_capacity = false;
 END;
 $$;
 
@@ -45,7 +45,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE updateTutorAvailabilityByTutorAndDate(
+CREATE OR REPLACE PROCEDURE upsertTutorAvailability(
     _tutor_id VARCHAR(50),
     _start_date TIMESTAMP,
     _new_pattern_id INT
@@ -53,13 +53,26 @@ CREATE OR REPLACE PROCEDURE updateTutorAvailabilityByTutorAndDate(
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    UPDATE tutor_availability
-    SET pattern_id = _new_pattern_id
-    WHERE tutor_id = _tutor_id AND start_date = _start_date;
+    -- Check if a row with the specified tutor_id and start_date exists
+    IF EXISTS (
+        SELECT 1
+        FROM tutor_availability
+        WHERE tutor_id = _tutor_id AND start_date = _start_date
+    ) THEN
+        -- If the row exists, perform an UPDATE
+        UPDATE tutor_availability
+        SET pattern_id = _new_pattern_id
+        WHERE tutor_id = _tutor_id AND start_date = _start_date;
+    ELSE
+        -- If the row does not exist, perform an INSERT
+        INSERT INTO tutor_availability (tutor_id, start_date, pattern_id)
+        VALUES (_tutor_id, _start_date, _new_pattern_id);
+    END IF;
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE deleteTutorAvailabilityByDateRange(
+CREATE OR REPLACE PROCEDURE deleteTutorAvailabilityByWeek(
+    _tutor_id VARCHAR(50),
     _start_date TIMESTAMP,
     _end_date TIMESTAMP
 )
@@ -67,7 +80,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     DELETE FROM tutor_availability
-    WHERE start_date >= _start_date AND start_date <= _end_date;
+    WHERE _tutor_id = tutor_id startDate = _start_date and endDate = _end_date;
 END;
 $$;
 

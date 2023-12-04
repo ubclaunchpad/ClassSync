@@ -11,11 +11,12 @@ CREATE TABLE "tutors" (
     f_name VARCHAR(50) NOT NULL,
     l_name VARCHAR(50) NOT NULL,
     bio VARCHAR(500) NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NULL, 
+    startDate DATE NOT NULL,
+    endDate DATE NULL, 
     max_hours INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
 );
 
 END;
 $$;
+

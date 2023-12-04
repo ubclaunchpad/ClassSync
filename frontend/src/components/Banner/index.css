@@ -9,9 +9,11 @@ img {
   background-color: #103da2;
   position: relative;
   color: white;
-  display: flex; 
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
   max-height: 200px;
 }
 
@@ -59,25 +61,25 @@ img {
   .banner-text-container {
     padding-left: 25vw;
   }
+}
+
+@media screen and (max-width: 1150px) {
+  .code-buddy {
+    left: 0;
+    margin-left: 0;
   }
 
-  @media screen and (max-width: 1150px) {
-    .code-buddy {
-      left: 0;
-      margin-left: 0;
-    }
+  .left-shape {
+    height: 0;
+  }
 
-    .left-shape {
-      height: 0;
-    }
+  .right-shape {
+    right: 0;
+    margin-right: 0.5rem;
+  }
 
-    .right-shape {
-      right: 0;
-      margin-right: 0.5rem;
-    }
-
-    .banner-text-container {
-      margin-left: 18vw;
-      width: 60%;
-    }
-    }
+  .banner-text-container {
+    margin-left: 18vw;
+    width: 60%;
+  }
+}

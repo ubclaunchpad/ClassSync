@@ -1,27 +1,30 @@
 .student-info-form {
     display: flex;
-    flex-direction: column; /* Stack labels and input rows vertically */
+    flex-direction: column;
+    /* Stack labels and input rows vertically */
 }
 
 .input-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
-    margin-right: 25%; /* create space on right*/
+    margin-right: 25%;
+    /* create space on right*/
 }
 
 .input-row label {
     text-align: left;
     font-weight: bold;
-    flex: 0 0 calc(50% - 7%); /* Two inputs per row with spacing */  
+    flex: 0 0 calc(50% - 7%);
+    /* Two inputs per row with spacing */
 }
 
 .input-row label input {
     width: 100%;
     height: 2.5rem;
     border-radius: 10px;
-    border-width: 2px; 
-    border-style: solid; 
+    border-width: 2px;
+    border-style: solid;
     border-color: #B3DEFC;
     margin-top: .25rem;
 }

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
+import tutorAvailabilityRouter from "./tutorAvailabilityRoute.js"
 const router = Router();
 const tutor = new tutorRegistrationController();
 
@@ -7,13 +8,26 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
-router.post("/create", (req, res) => {
-    const { userID } = req.body.userID;
-    const { password } = req.body.password;
-    tutor.createAccount(userID, password).then(() => {
-        res.status(200);
+router.post("/signup", (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
+    // console.log(email, password)
+    return tutor.signup(email, password).then((id) => {
+        res.status(200).json({ id: id });
     }).catch((err) => {
         res.status(500).send("Account failed to activate");
+    });
+});
+
+router.post("/login", (req, res) => {
+    const email = req.query.email;
+    const password = req.query.password;
+
+    return tutor.login(email, password).then((_email) => {
+        res.status(200).json({ email: "Login successful for " + email });
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send("Login failed");
     });
 });
 
@@ -27,10 +41,11 @@ router.post("/password", (req, res) => {
 });
 
 router.post("/bio", (req, res) => {
-    const { userID } = req.body.userID;
-    const { bio } = req.body.bio;
+    const email = req.body.email;
+    const bio = req.body.bio;
+    console.log(email, bio)
 
-    tutor.updateBio(userID, bio).then((result) => {
+    tutor.updateBio(email, bio).then((result) => {
         res.status(200);
     });
 });
@@ -53,7 +68,7 @@ router.delete("/offerings", (req, res) => {
     });
 });
 
-
+router.use("/availability", tutorAvailabilityRouter)
 
 
 
