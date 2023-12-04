@@ -2,9 +2,14 @@
 import { admin } from "../models/admin.js";
 export default class adminController {
     getAvailability(userID) {
-        return new Promise((res, rej) => {
-            const adm = new admin()
-            adm.getAvailabilitiesByTutor(userID).then(r => resolve(r)).catch(e => reject(e))
-        })
+        return new Promise((resolve, reject) => {
+            const admin_ = new admin()
+            return admin_.getAvailabilityById(userID).then((res) =>
+                resolve(res))
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
     }
 }

@@ -1,15 +1,19 @@
 export class admin {
     getAvailabilityById(id, result) {
-        //get the availability of tutor by id
-        con.query(`CALL getAvailabilitiesByTutor(?)`, [id], (err, res) => {
-            if (err) {
-                console.log("error: ", err);
-                result(err, null);
-            } else {
-                result(null, res[0]);
-            }
-        });
+        return new Promise((resolve, reject) => {
+            //get the availability of tutor by id
+            con.query(`CALL getAvailabilitiesByTutor(?)`, [id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res[0]);
+
+                }
+            });
+        })
     }
+
 
     getAllFutureAvailability(result) {
         //get the availability in the future
@@ -33,9 +37,9 @@ export class admin {
                 var ids = res[0].map(function (item) {
                     return item.id;
                 });
-                
+
                 availabilities = [];
-                
+
                 ids.forEach(id => {
                     availabilities.push(con.query(`CALL getAvailabilitiesByTutor(?)`, [id], (err, res) => {
                         if (err) {
@@ -46,7 +50,7 @@ export class admin {
                         }
                     }));
                 });
-                
+
                 result(null, availabilities);
             }
         });

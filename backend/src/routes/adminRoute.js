@@ -8,5 +8,10 @@ router.get("/pingcheck", (_, res) => {
 });
 
 router.get("/:id/availability", (req, res) => {
-    admin.getAvailability(req.params.id).then(r => res.status(200).json(r)).catch(e=>res.status(e.status).json(e))
+    return admin.getAvailability(req.params.id).then((result) =>
+        res.status(200).json(result)
+    ).catch((err) => {
+        console.log(err);
+        res.status(500).send("Get availability failed");
+    });
 })
