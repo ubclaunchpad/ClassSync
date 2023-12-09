@@ -72,13 +72,15 @@ END;
 $$;
 
 CREATE OR REPLACE PROCEDURE deleteTutorAvailabilityByWeek(
+    _tutor_id VARCHAR(50),
     _start_date TIMESTAMP,
+    _end_date TIMESTAMP
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
     DELETE FROM tutor_availability
-    WHERE start_date = _start_date;
+    WHERE _tutor_id = tutor_id startDate = _start_date and endDate = _end_date;
 END;
 $$;
 

@@ -29,4 +29,16 @@ router.post("/", (req, res) => {
     });
 });
 
+router.delete("/", (req, res) => {
+    const userID = req.body.userID;
+    const startDate = req.body.startDate;
+    const endDate = req.body.endDate;
+
+    tutor.deleteAvailability(userID, startDate, endDate).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).send("Availability not deleted");
+    });
+})
+
 export default router;

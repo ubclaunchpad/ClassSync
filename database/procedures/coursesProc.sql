@@ -1,5 +1,5 @@
--- create new procedure to add a student
-CREATE OR REPLACE PROCEDURE addStudent(
+-- create new procedure to add a course
+CREATE OR REPLACE PROCEDURE addCourse(
     _course_name VARCHAR(50),    
     _course_difficulty course_difficulty,
     _course_description VARCHAR(255)
