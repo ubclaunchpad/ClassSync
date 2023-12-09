@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
+import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
 import parentSignupRoute from "./src/routes/parentSignupRoute.js"
 import adminAuthRouter from "./src/routes/adminAuthRoute.js"
@@ -47,6 +48,7 @@ app.get("/", (_, res) => {
     res.send("Hello ClassSync!");
 });
 
+app.use("/student-profile", studentProfileRouter);
 app.use("/tutor", tutorRegistrationRouter);
 app.use("/parent", parentSignupRoute)
 app.use("/admin", adminAuthRouter)
@@ -58,4 +60,4 @@ app.listen(port, () => {
 });
 
 
-export { pgPool }
+export default pgPool;

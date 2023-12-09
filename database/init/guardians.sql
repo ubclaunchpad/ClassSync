@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS "guardians" (
     user_id INTEGER NOT NULL,
     f_name VARCHAR(50) NOT NULL,
     l_name VARCHAR(50) NOT NULL,
-    heard_from VARCHAR(50) NOT NULL,
-    referred_by VARCHAR(50) NOT NULL,
+    heard_from VARCHAR(50),
+    referred_by VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
