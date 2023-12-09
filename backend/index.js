@@ -4,8 +4,12 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
+
+//import studentProfileRouter from "./src/routes/studentProfileRoute.js";
+import appointmentRoute from "./src/routes/appointmentRoute.js"
 import parentSignupRoute from "./src/routes/parentSignupRoute.js"
 import adminAuthRouter from "./src/routes/adminAuthRoute.js"
+
 
 const app = express();
 const port = 8080;
@@ -52,10 +56,12 @@ app.use("/parent", parentSignupRoute)
 app.use("/admin", adminAuthRouter)
 
 
-app.use("/communication", volunteerEmailRoute);
+//app.use("/student-profile", studentProfileRouter);
+app.use("/communication",volunteerEmailRoute);
+app.use("/schedules",appointmentRoute);
 app.listen(port, () => {
     console.log(`ClassSync backend listening on port ${port}`);
 });
 
 
-export { pgPool }
+export default  pgPool ;
