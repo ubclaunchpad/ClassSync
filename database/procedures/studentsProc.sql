@@ -29,3 +29,35 @@ BEGIN
     WHERE student_id = _student_id;
 END;
 $$;
+
+CREATE OR REPLACE PROCEDURE deleteStudent (
+    _id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+DELETE FROM students WHERE student_id = _id;
+
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE updateStudentFName(_id INTEGER, _f_name VARCHAR(50))
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    UPDATE students
+    SET f_name = _f_name
+    WHERE student_id = _id;
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE deleteStudent (
+    _id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+DELETE FROM students WHERE student_id = _id;
+
+END;
+$$;

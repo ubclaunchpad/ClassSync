@@ -1,27 +1,30 @@
 // Database con.query() for studentProfile table
 //import con from "../config/database.js";
 
+import con from "../../index.js";
+
 export class StudentProfile {
     getStudentProfiles(result) {
-    con.query("CALL loadStudentProfiles()", (err, res) => {
+    con.query("SELECT * FROM loadStudentProfiles()", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
       } else {
-        result(null, res[0]);
+        console.log(res.rows);
+        result(null, res.rows); 
       }
     });
   }
 
     insertStudentProfile(newStudentProfile, result) {
         con.query(
-          "CALL insertStudent(?, ?, ?, ?, ?)",
+          "CALL insertStudent($1, $2, $3, $4, $5)",
           [
-            newStudentProfile.f_name,
-            newStudentProfile.l_name,
-            newStudentProfile.dob,
+            newStudentProfile.first_name,
+            newStudentProfile.last_name,
+            newStudentProfile.birthday,
             newStudentProfile.accomodations,
-            newStudentProfile.fk_guardian_id,
+            newStudentProfile.fk_parent_id,
           ],
           function (error, results) {
             if (error) {
@@ -37,7 +40,7 @@ export class StudentProfile {
       }
     
       deleteStudentProfile(id, result) {
-        con.query(`CALL delete_student_profile(?)`, [id], (err, res) => {
+        con.query(`CALL deleteStudent($1)`, [id], (err, res) => {
           if (err) {
             console.log("error: ", err);
             result(err, null);

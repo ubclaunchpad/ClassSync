@@ -54,4 +54,4 @@ app.listen(port, () => {
 });
 
 
-export { pgPool }
+export default pgPool;
