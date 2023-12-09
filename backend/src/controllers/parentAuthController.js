@@ -1,5 +1,6 @@
 import { hashPassword, comparePassword } from "../auth/authentication.js";
 import parentAuth from "../models/parentAuth.js";
+import jwt from "jsonwebtoken";
 
 export default class parentAuthController {
   constructor() {
@@ -28,7 +29,23 @@ export default class parentAuthController {
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
-                resolve({ email: email, role: "guardian" });
+                const token = jwt.sign(
+                  {
+                    email: email,
+                    role: "guardian",
+                  },
+                  process.env.JWT_SECRET,
+                  {
+                    expiresIn: "6h",
+                    algorithm: "HS256",
+                  }
+                );
+
+                resolve({
+                  email: email,
+                  role: "guardian",
+                  token: token,
+                });
               } else {
                 reject("Incorrect password");
               }

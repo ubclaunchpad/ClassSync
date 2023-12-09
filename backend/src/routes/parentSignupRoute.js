@@ -23,13 +23,18 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  const email = req.query.email;
-  const password = req.query.password;
+  console.log("PARENT LOGIN REQUEST");
+  const email = req.body.email;
+  const password = req.body.password;
 
   return parent
     .login(email, password)
-    .then((_email) => {
-      res.status(200).json(_email);
+    .then((response) => {
+      res.status(200).json({
+        email: response.email,
+        role: response.role,
+        token: response.token,
+      });
     })
     .catch((err) => {
       console.log(err);
