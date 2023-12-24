@@ -1,9 +1,8 @@
-import { pgPool } from '../../index.js';
-
+import con from "../../index.js";
 
 export class tutorRegistration {
     async createAccount(email, hashPassword) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(

@@ -1,9 +1,9 @@
-import { pgPool } from '../../index.js';
+import con from '../../index.js';
 
 export default class adminAuth {
 
     async createUser(email, hashPassword) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
