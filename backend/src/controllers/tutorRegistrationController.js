@@ -1,10 +1,22 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
 import { hashPassword, comparePassword } from "../auth/authentication.js"
+import { courses } from "../models/courses.js";
 export default class tutorRegistrationController {
 
     constructor() {
 
         this.tutor = new tutorRegistration();
+        this.course = new courses();
+    }
+
+    async getAllOfferings() {
+        return new Promise((resolve, reject) => {
+            return this.course.getAllOfferings().then((result) => {
+                resolve(result);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
     }
 
 
