@@ -63,7 +63,7 @@ const LoginForm = () => {
         <div className="login-input-container">
           <h5 className="login-input-title">Password</h5>
           <input
-            type="text"
+            type="password"
             className="login-input"
             {...register("password", {
               required: "Password is required!",
