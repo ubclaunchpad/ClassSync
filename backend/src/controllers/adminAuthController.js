@@ -8,10 +8,10 @@ export default class adminAuthController {
 
     }
 
-    async signup(email, password) {
+    async signup(email, password, fname, lname) {
         const hashedPassword = await hashPassword(password);
         return new Promise((resolve, reject) => {
-            return this.admin.createUser(email, hashedPassword).then((id) => {
+            return this.admin.createUser(email, hashedPassword, fname, lname).then((id) => {
                 resolve(id);
             }).catch((err) => {
                 reject(err);
