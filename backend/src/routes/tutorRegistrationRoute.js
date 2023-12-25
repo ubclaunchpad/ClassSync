@@ -9,8 +9,8 @@ router.get("/pingcheck", (_, res) => {
 });
 
 router.post("/signup", (req, res) => {
-    const email = req.query.email;
-    const password = req.query.password;
+    const email = req.body.email;
+    const password = req.body.password;
     // console.log(email, password)
     return tutor.signup(email, password).then((id) => {
         res.status(200).json({ id: id });
@@ -59,6 +59,13 @@ router.post("/offerings", (req, res) => {
     })
 });
 
+
+router.get("/offerings", (req, res) => {
+
+    return tutor.getAllOfferings().then((result) => {
+        res.status(200).json(result);
+    });
+});
 router.delete("/offerings", (req, res) => {
     const { userID } = req.body.userID;
     const { offerings } = req.body.offerings;
