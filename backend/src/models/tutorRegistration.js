@@ -1,13 +1,13 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
-    async createAccount(email, hashPassword) {
+    async createAccount(email, hashPassword, fname, lname) {
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL insertUser($1, $2, $3, $4)',
-                    [email, hashPassword, 'tutor', null],
+                    'CALL insertUser($1, $2, $3, $4, $5, $6)',
+                    [email, hashPassword, 'tutor', fname, lname, null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);

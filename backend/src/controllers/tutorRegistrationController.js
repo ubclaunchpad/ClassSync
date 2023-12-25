@@ -20,10 +20,10 @@ export default class tutorRegistrationController {
     }
 
 
-    async signup(email, password) {
+    async signup(email, password, fname, lname) {
         const hashedPassword = await hashPassword(password);
         return new Promise((resolve, reject) => {
-            return this.tutor.createAccount(email, hashedPassword).then((id) => {
+            return this.tutor.createAccount(email, hashedPassword, fname, lname).then((id) => {
                 resolve(id);
             }).catch((err) => {
                 reject(err);

@@ -11,8 +11,11 @@ router.get("/pingcheck", (_, res) => {
 router.post("/signup", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    const fname = req.body.fname;
+    const lname = req.body.lname;
+
     // console.log(email, password)
-    return tutor.signup(email, password).then((id) => {
+    return tutor.signup(email, password, fname, lname).then((id) => {
         res.status(200).json({ id: id });
     }).catch((err) => {
         res.status(500).send("Account failed to activate");
