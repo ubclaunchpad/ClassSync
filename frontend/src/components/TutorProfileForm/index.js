@@ -135,6 +135,7 @@ const TutorProfileForm = () => {
                             isMulti
                             options={options}
                             styles={customStyles}
+                            className='basic-multi-select'
                         />
 
                     </label>

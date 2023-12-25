@@ -4,8 +4,11 @@ import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
 import TutorProfileForm from '../../components/TutorProfileForm';
 
 const TutorProfile = () => {
+    // get name from local storage
+    const name = localStorage.getItem('fname');
+
     return (
-        <TutorDashboardLayout>
+        <TutorDashboardLayout name={name}>
             <div className='tutor-info-container'>
                 <TutorProfileForm />
             </div >
