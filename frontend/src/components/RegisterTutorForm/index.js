@@ -10,19 +10,27 @@ const RegisterTutorForm = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    const createAccount = async () => {
+    const createAccount = async (e) => {
+        e.preventDefault(); // Prevent the default form submission behavior
+
         try {
-            const response = await fetch(url + '/tutor/create', {
+            console.log('Creating account' + email + password);
+            const response = await fetch(url + '/tutor/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             });
 
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log('User account created:', responseData);
+                window.location.href = "/tutorProfile";
+
 
             } else {
                 const errorData = await response.json();
@@ -64,7 +72,7 @@ const RegisterTutorForm = () => {
                 </label>
 
             </div>
-            <input type="submit" value="Continue" onClick={createAccount} />
+            <input type="submit" value="Continue" onClick={(e) => createAccount(e)} />
         </form>
 
     );
