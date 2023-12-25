@@ -20,8 +20,8 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-    const email = req.query.email;
-    const password = req.query.password;
+    const email = req.body.email;
+    const password = req.body.password;
 
     return tutor.login(email, password).then((_email) => {
         res.status(200).json({ email: "Login successful for " + email });
