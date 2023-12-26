@@ -18,7 +18,7 @@ router.post("/signup", (req, res) => {
     return tutor.signup(email, password, fname, lname).then((id) => {
         res.status(200).json({ id: id });
     }).catch((err) => {
-        res.status(500).send("Account failed to activate");
+        res.status(500).send({ error: err.detail });
     });
 });
 
@@ -44,12 +44,13 @@ router.post("/password", (req, res) => {
 });
 
 router.post("/bio", (req, res) => {
-    const email = req.body.email;
+    const user_id = req.body.user_id;
     const bio = req.body.bio;
-    console.log(email, bio)
 
-    tutor.updateBio(email, bio).then((result) => {
+    tutor.updateBio(user_id, bio).then((result) => {
         res.status(200);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
     });
 });
 

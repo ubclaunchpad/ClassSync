@@ -68,13 +68,13 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateBio(email, bio) {
+    updateBio(user_id, bio) {
         // update bio for user
         // bio consists of first name, last name, max_hours, about me, profile picture
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
-            tutor.updateBio(email, bio).then((result) => {
-                return this.updateOfferings(email, bio.offerings).then((result) => {
+            tutor.updateBio(user_id, bio).then((result) => {
+                return this.updateOfferings(user_id, bio.offerings).then((result) => {
                     resolve(result);
                 }).catch((err) => { reject(err); });
             }).catch((err) => { reject(err); });
