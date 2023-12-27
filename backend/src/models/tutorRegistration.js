@@ -29,7 +29,7 @@ export class tutorRegistration {
     }
 
     async getPassword(email) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         let role = 'tutor'
         try {
             return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ export class tutorRegistration {
 
 
     async deleteAllOfferings(userID) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
@@ -81,7 +81,7 @@ export class tutorRegistration {
     }
 
     async addOfferings(userID, offerings) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             const promises = offerings.map((offering) => {
                 return new Promise((resolve, reject) => {
@@ -107,7 +107,7 @@ export class tutorRegistration {
     }
 
     async getOfferings(email) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
@@ -129,7 +129,7 @@ export class tutorRegistration {
     }
 
     async updateBio(email, bio) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
