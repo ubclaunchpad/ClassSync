@@ -5,13 +5,15 @@ import Notification from "../../assets/notifications.png";
 
 import "./index.css";
 
-export const TutorDashboardLayout = (props) => {
+export const TutorDashboardLayout = ({ name, ...props }) => {
+  let displayName = name !== undefined ? " Back, " + name : "";
   return (
+
     <div className="page-container">
       <Header />
       <Banner
         smallText="Tutor Dashboard"
-        mainText="Welcome Back, Insert Name!"
+        mainText={`Welcome${displayName}!`}
       />
       <div class="main-row">
         <div class="column left">
