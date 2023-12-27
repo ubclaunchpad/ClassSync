@@ -3,16 +3,32 @@ import "./index.css"; // Import the CSS file for styling
 import Select from 'react-select';
 
 const TutorProfileForm = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState(''); // TODO: Get email from login
     const [about, setAbout] = useState('');
     const [maxHours, setMaxHours] = useState('');
     const [offerings, setOfferings] = useState('');
     const [university, setUniversity] = useState('');
+    const [selectedOptions, setSelectedOptions] = useState([]);
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
 
+    const closestFutureDate = (inputDate) => {
+        // Parse the input date
+        const date = new Date(inputDate);
+
+        // Define the valid target months
+        const targetMonths = [3 /* April */, 7 /* August */, 11 /* December */];
+
+        // Find the closest future date
+        let closestDate = new Date(date);
+        while (!targetMonths.includes(closestDate.getMonth())) {
+            closestDate.setMonth(closestDate.getMonth() + 1);
+        }
+
+        // Set the day to the last day of the month
+        closestDate.setMonth(closestDate.getMonth() + 1, 0);
+
+        return closestDate;
+    }
     let options = [];
     const loadCourses = async () => {
         console.log('Loading courses');
@@ -54,26 +70,38 @@ const TutorProfileForm = () => {
     const saveTutorInfo = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         console.log('Saving tutor info');
+        let currentDate = new Date();
+        let date = currentDate.getDate();
+        let month = currentDate.getMonth() + 1; // getMonth() returns a zero-based value (where zero indicates the first month)
+        let year = currentDate.getFullYear();
+
+        let dateString = `${month}/${date}/${year}`;
+        console.log(selectedOptions)
         try {
             const response = await fetch(url + '/tutor/bio', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: email, bio: { firstName, lastName, university, about, maxHours } })
+                body: JSON.stringify({
+                    user_id: 22,
+                    bio: {
+                        university: university,
+                        about: about,
+                        maxHours: maxHours,
+                        startdate: dateString,
+                        enddate: closestFutureDate(Date.now()).toDateString(),
+                        offerings: selectedOptions
+
+                    }
+                })
             })
 
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log('User details Updated:', responseData);
 
-                const offeringsResponse = await fetch(url + '/tutor/offerings', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userID: responseData.id, offerings: offerings })
-                });
+
             } else {
                 const errorData = await response.json();
                 console.error('User details failed to update:', errorData);
@@ -89,17 +117,7 @@ const TutorProfileForm = () => {
             <div class="header-row">
                 <h2 className="add-student-header">Create Your Profile</h2>
             </div>
-            <div className="input-row">
-                <label className="input-label">
-                    First Name
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                </label>
-                <label className="input-label">
-                    Last Name
-                    <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                </label>
 
-            </div>
             <div className="input-row">
 
 
@@ -136,6 +154,10 @@ const TutorProfileForm = () => {
                             options={options}
                             styles={customStyles}
                             className='basic-multi-select'
+                            onChange={(selected) => {
+                                const selectedValues = selected ? selected.map(option => option.value) : [];
+                                setSelectedOptions(selectedValues);
+                            }}
                         />
 
                     </label>
