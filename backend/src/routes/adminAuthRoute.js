@@ -4,32 +4,41 @@ const router = Router();
 const admin = new adminAuthController();
 
 router.get("/pingcheck", (_, res) => {
-    res.send("pong");
+  res.send("pong");
 });
 
-
 router.post("/signup", (req, res) => {
-    const email = req.query.email;
-    const password = req.query.password;
+  const email = req.query.email;
+  const password = req.query.password;
 
-
-    return admin.signup(email, password).then((id) => {
-        res.status(200).json({ id: id });
-    }).catch((err) => {
-        console.log(err);
-        res.status(500).send("Signup failed");
+  return admin
+    .signup(email, password)
+    .then((id) => {
+      res.status(200).json({ id: id });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Signup failed");
     });
 });
 
 router.post("/login", (req, res) => {
-    const email = req.query.email;
-    const password = req.query.password;
+  console.log("ADMIN LOGIN REQUEST");
+  const email = req.body.email;
+  const password = req.body.password;
 
-    return admin.login(email, password).then((_email) => {
-        res.status(200).json({ email: "Login successful for " + email });
-    }).catch((err) => {
-        console.log(err);
-        res.status(500).send("Login failed");
+  return admin
+    .login(email, password)
+    .then((response) => {
+      res.status(200).json({
+        email: response.email,
+        role: response.role,
+        token: response.token,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Login failed");
     });
 });
 export default router;
