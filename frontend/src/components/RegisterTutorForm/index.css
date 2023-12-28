@@ -12,6 +12,13 @@
     /* create space on right*/
 }
 
+.signup-error-message {
+    height: 0.75rem;
+    margin: 0;
+    font-size: 0.75rem;
+    color: red;
+}
+
 .input-column {
     display: flex;
     flex-direction: column;
@@ -62,6 +69,7 @@ input[type="submit"] {
     border-radius: 15px;
     margin-top: 2.5rem;
     margin-bottom: .5rem;
+    margin-right: 14rem;
     background-color: #B3DEFC;
     border: none;
     font-weight: bold;

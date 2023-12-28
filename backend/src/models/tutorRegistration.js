@@ -1,13 +1,13 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
-    async createAccount(email, hashPassword) {
+    async createAccount(email, hashPassword, fname, lname) {
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL insertUser($1, $2, $3, $4)',
-                    [email, hashPassword, 'tutor', null],
+                    'CALL insertUser($1, $2, $3, $4, $5, $6)',
+                    ['tutor', email, hashPassword, fname, lname, null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
@@ -86,8 +86,8 @@ export class tutorRegistration {
             const promises = offerings.map((offering) => {
                 return new Promise((resolve, reject) => {
                     client.query(
-                        'CALL insertOffering($1, $2)',
-                        [userID, offering.courseID],
+                        'CALL insert_offering($1, $2)',
+                        [userID, offering],
                         (error, results) => {
                             if (error) {
                                 console.error('Error:', error);
@@ -128,13 +128,14 @@ export class tutorRegistration {
         }
     }
 
-    async updateBio(email, bio) {
+    async updateBio(user_id, bio) {
+        console.log(user_id, bio);
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL upsertTutor($1, $2, $3, $4, $5, $6, $7)',
-                    [email, bio.firstName, bio.lastName, bio.aboutMe, bio.startDate, bio.endDate, bio.maxHours],
+                    'CALL upsert_tutor($1, $2, $3, $4, $5, $6)',
+                    [user_id, bio.about, bio.university, bio.maxHours, bio.startdate, bio.enddate],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);

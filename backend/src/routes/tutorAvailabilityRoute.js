@@ -8,6 +8,16 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
+router.get("/dates", (req, res) => {
+
+
+    tutor.getDates(22).then((dates) => {
+        res.status(200).send(dates);
+    }).catch((err) => {
+        res.status(500).send({ error: "Dates not found ", err });
+    })
+});
+
 router.get("/", (req, res) => {
     const userID = req.body.userID;
     tutor.getAvailability(userID).then((availability) => {
@@ -20,12 +30,16 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
     const userID = req.body.userID;
     const weeks = req.body.weeks;
+    // const weeks = req.body.weeks;
     const availability = req.body.availability;
+    console.log(req.body);
 
-    tutor.setAvailability(userID, weeks, availability).then(() => {
-        res.status(200);
+    return tutor.setAvailability(userID, weeks, availability).then((result) => {
+        console.log("Availability added")
+        res.status(200).send({ id: result });
     }).catch((err) => {
-        res.status(500).send("Availability not added");
+        console.log("Availability not added")
+        res.status(500).send({ error: "Availability not added" + err });
     });
 });
 

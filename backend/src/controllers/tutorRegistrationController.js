@@ -20,10 +20,10 @@ export default class tutorRegistrationController {
     }
 
 
-    async signup(email, password) {
+    async signup(email, password, fname, lname) {
         const hashedPassword = await hashPassword(password);
         return new Promise((resolve, reject) => {
-            return this.tutor.createAccount(email, hashedPassword).then((id) => {
+            return this.tutor.createAccount(email, hashedPassword, fname, lname).then((id) => {
                 resolve(id);
             }).catch((err) => {
                 reject(err);
@@ -68,13 +68,13 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateBio(email, bio) {
+    updateBio(user_id, bio) {
         // update bio for user
         // bio consists of first name, last name, max_hours, about me, profile picture
         return new Promise((resolve, reject) => {
             const tutor = new tutorRegistration();
-            tutor.updateBio(email, bio).then((result) => {
-                return this.updateOfferings(email, bio.offerings).then((result) => {
+            tutor.updateBio(user_id, bio).then((result) => {
+                return this.updateOfferings(user_id, bio.offerings).then((result) => {
                     resolve(result);
                 }).catch((err) => { reject(err); });
             }).catch((err) => { reject(err); });

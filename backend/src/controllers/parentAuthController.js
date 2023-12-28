@@ -3,20 +3,20 @@ import parentAuth from "../models/parentAuth.js";
 import jwt from "jsonwebtoken";
 
 export default class parentAuthController {
-  constructor() {
-    this.parent = new parentAuth();
-  }
 
-  async signup(email, password) {
-    const hashedPassword = await hashPassword(password);
-    return new Promise((resolve, reject) => {
-      return this.parent
-        .createUser(email, hashedPassword)
-        .then((id) => {
-          resolve(id);
-        })
-        .catch((err) => {
-          reject(err);
+    constructor() {
+        this.parent = new parentAuth();
+
+    }
+
+    async signup(email, password, fname, lname) {
+        const hashedPassword = await hashPassword(password);
+        return new Promise((resolve, reject) => {
+            return this.parent.createUser(email, hashedPassword, fname, lname).then((id) => {
+                resolve(id);
+            }).catch((err) => {
+                reject(err);
+            });
         });
     });
   }

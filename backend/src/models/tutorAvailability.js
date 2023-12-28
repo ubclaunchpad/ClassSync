@@ -1,27 +1,58 @@
-import pgPool from '../../index.js';
+import con from "../../index.js";
 
 
 export class tutorAvailability {
-    async createAvailabilityPattern(availability) {
-        const client = await pgPool.connect();
+
+    async getDates(userID) {
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 con.query(
-                    'CALL insertNewPattern(?)',
-                    [availability],
+                    'SELECT * FROM get_tutor_dates($1);',
+                    [userID],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
-                            reject(error)
+                            reject(error);
+                        } else {
+                            console.log("Results ", results);
+                            resolve(results.rows[0]);
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+    }
+    async createAvailabilityPattern(availability) {
+        const client = await con.connect();
+        console.log("Creating availability pattern")
+        // const avail = "ARRAY[ROW(ARRAY['8:00', '8:30']::character varying[])::public.\"TimesArr\", ROW(ARRAY['9:00', '9:30']::character varying[])::public.\"TimesArr\"]";
+        // const avail = { 0: ["8:00", "8:30"], 1: ["9:00", "9:30"], 2: [], 3: [], 4: [], 5: [], 6: [] };
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL insert_availability_pattern($1, $2)',
+                    [availability, null],
+                    (error, results) => {
+                        console.log("Results ", results);
+                        console.log("Error ", error);
+                        if (error) {
+                            console.error('throwing error:', error);
+                            reject(error);
                             // Handle the error
                         } else {
                             // Access the pattern_id from the results
-                            const patternId = results[0][0];
+                            console.log("Inside results");
+                            const patternId = results.rows[0].id;
                             console.log('Pattern ID:', patternId);
                             resolve(patternId);
                         }
                     }
                 );
+
             });
 
         } finally {
@@ -31,14 +62,16 @@ export class tutorAvailability {
     }
 
     async setAvailabilityForWeeks(userID, weeks, patternID) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
+        const weeksParsed = JSON.parse(weeks);
 
         try {
-            const promises = weeks.map((week) => {
+            const promises = weeksParsed.map((week) => {
                 return new Promise((resolve, reject) => {
+                    console.log(week.start_date, week.end_date);
                     con.query(
-                        'CALL upsertTutorAvailability(?, ?, ?)',
-                        [userID, week, patternID],
+                        'CALL insert_tutor_availability($1, $2, $3, $4)',
+                        [userID, week.start_date, week.end_date, patternID],
                         (error, results) => {
                             if (error) {
                                 console.error('Error:', error);
@@ -58,8 +91,32 @@ export class tutorAvailability {
         }
     }
 
+    async updateAvailability(userID, start_date, pattern_id, at_capacity) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL update_tutor_availability(?, ?, ?, ?)',
+                    [userID, start_date, pattern_id, at_capacity],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+
+        }
+    }
+
     async getTutorAvailability(tutorId, startDate) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 con.query(
@@ -83,7 +140,7 @@ export class tutorAvailability {
     }
 
     async deleteAvailability(tutorId, startDate, endDate) {
-        const client = await pgPool.connect();
+        const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 con.query(
