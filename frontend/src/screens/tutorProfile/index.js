@@ -5,7 +5,7 @@ import TutorProfileForm from '../../components/TutorProfileForm';
 
 const TutorProfile = () => {
     // get name from local storage
-    const name = localStorage.getItem('fname');
+    const name = localStorage.getItem('fname') !== undefined ? localStorage.getItem('fname') : "";
 
     return (
         <TutorDashboardLayout name={name}>
