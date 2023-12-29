@@ -7,6 +7,9 @@ const TutorProfile = () => {
     // get name from local storage
     const name = localStorage.getItem('fname') !== undefined ? localStorage.getItem('fname') : "";
 
+
+
+
     return (
         <TutorDashboardLayout name={name}>
             <div className='tutor-info-container'>
