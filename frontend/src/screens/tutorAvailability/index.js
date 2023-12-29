@@ -81,6 +81,7 @@ export default function Profile() {
                 2: scheduleByDay[2],
                 3: scheduleByDay[3],
                 4: scheduleByDay[4],
+                5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
             const response = await fetch("http://localhost:8080/tutor/availability", {

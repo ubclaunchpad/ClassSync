@@ -65,7 +65,7 @@ const RegisterTutorForm = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log('User account created:', responseData);
-                window.location.href = "/tutorProfile";
+                window.location.href = "/tutor/login";
             } else {
                 const errorData = await response.json();
                 setFormError('Account failed to create', errorData.error);
