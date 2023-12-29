@@ -1,6 +1,7 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
 import { hashPassword, comparePassword } from "../auth/authentication.js"
 import { courses } from "../models/courses.js";
+import jwt from "jsonwebtoken";
 export default class tutorRegistrationController {
 
     constructor() {
@@ -9,6 +10,28 @@ export default class tutorRegistrationController {
         this.course = new courses();
     }
 
+
+    async getTutorOfferings(userID) {
+
+        return new Promise((resolve, reject) => {
+            return this.tutor.getTutorOfferings(userID).then((result) => {
+                console.log("Result ", result);
+                resolve(result);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+    async getProfile(userID) {
+
+        return new Promise((resolve, reject) => {
+            return this.tutor.getProfile(userID).then((result) => {
+                resolve(result);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
     async getAllOfferings() {
         return new Promise((resolve, reject) => {
             return this.course.getAllOfferings().then((result) => {
@@ -32,31 +55,48 @@ export default class tutorRegistrationController {
 
 
     }
-    login(email, password) {
+    async login(email, password) {
         return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            return tutor.getPassword(email).then((hashedPassword) => {
-                if (email) {
+            return this.tutor
+                .getPassword(email)
+                .then((res) => {
+                    console.log("Res ", res)
+                    const hashedPassword = res.hashedPassword;
+                    const userId = res.user_id;
+                    if (email) {
+                        return comparePassword(password, hashedPassword).then((result) => {
+                            if (result) {
+                                const token = jwt.sign(
+                                    {
+                                        email: email,
+                                        role: "tutor",
+                                    },
+                                    process.env.JWT_SECRET,
+                                    {
+                                        expiresIn: "6h",
+                                        algorithm: "HS256",
+                                    }
+                                );
 
+                                console.log("Printing token: " + token)
 
-                    return comparePassword(password, hashedPassword).then((result) => {
+                                resolve({
+                                    email: email,
+                                    role: "tutor",
+                                    userId: userId,
+                                    token: token,
 
-                        if (result) {
-                            resolve(email);
-                        }
-                        else {
-                            reject("Incorrect password");
-                        }
-
-                    })
-                }
-            })
+                                });
+                            } else {
+                                reject("Incorrect password");
+                            }
+                        });
+                    }
+                })
                 .catch((err) => {
                     reject(err);
                 });
-
         });
-
     }
     updatePassword(userID, newPassword) {
         // set password for user

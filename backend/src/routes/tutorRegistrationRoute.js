@@ -26,8 +26,9 @@ router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    return tutor.login(email, password).then((_email) => {
-        res.status(200).json({ email: "Login successful for " + email });
+    return tutor.login(email, password).then((result) => {
+        console.log("Result ", result);
+        res.status(200).send(result);
     }).catch((err) => {
         console.log(err);
         res.status(500).send("Login failed");
@@ -41,6 +42,27 @@ router.post("/password", (req, res) => {
     tutor.updatePassword(userID, newPassword).then((result) => {
         res.status(200);
     });
+});
+
+router.get("/profile", (req, res) => {
+    const userID = req.query.id;
+
+
+    tutor.getProfile(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
+
+router.get("/offering", (req, res) => {
+    const userID = req.query.id;
+    return tutor.getTutorOfferings(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    }
+    );
 });
 
 router.post("/bio", (req, res) => {

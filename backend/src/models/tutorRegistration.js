@@ -1,6 +1,59 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
+
+    async getTutorOfferings(userID) {
+        console.log("User ID ", userID);
+
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'SELECT * FROM get_tutor_offerings($1)',
+                    [userID],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log(results);
+                            const resultsArray = results.rows.map(row => row.get_tutor_offerings);
+                            resolve(resultsArray); // [5, 4]                        }
+                        }
+
+                    });
+            });
+        } finally {
+            client.release();
+        }
+    }
+
+    async getProfile(userID) {
+        const client = await con.connect();
+        try {
+            console.log("User ID ", userID);
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'SELECT * FROM get_profile($1)',
+                    [userID],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+
+                            console.log(results);
+                            console.log(results.rows[0]);
+                            resolve(results.rows[0]);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+
     async createAccount(email, hashPassword, fname, lname) {
         const client = await con.connect();
         try {
@@ -34,15 +87,19 @@ export class tutorRegistration {
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL getUserByEmailAndRole($1, $2, $3)',
-                    [email, role, null],
+                    'CALL getAccountByEmailAndRole($1, $2, $3, $4)',
+                    [email, role, null, null],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
                             reject(error);
                         } else {
                             const hashedPassword = results.rows[0].password;  // Retrieve hashed password from results
-                            resolve(hashedPassword);  // Resolve with the hashed password
+                            const user_id = results.rows[0]._user_id;  // Retrieve user_id from results
+                            resolve({
+                                hashedPassword: hashedPassword,
+                                user_id: user_id
+                            });  // Resolve with the hashed password
                         }
                     }
                 );
