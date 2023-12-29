@@ -4,20 +4,19 @@ import jwt from "jsonwebtoken";
 import sendEmail from "./volunteerEmailController.js";
 
 export default class adminAuthController {
-    constructor() {
-        this.admin = new adminAuth();
+  constructor() {
+    this.admin = new adminAuth();
 
-    }
+  }
 
-    async signup(email, password, fname, lname) {
-        const hashedPassword = await hashPassword(password);
-        return new Promise((resolve, reject) => {
-            return this.admin.createUser(email, hashedPassword, fname, lname).then((id) => {
-                resolve(id);
-            }).catch((err) => {
-                reject(err);
-            });
-        });
+  async signup(email, password, fname, lname) {
+    const hashedPassword = await hashPassword(password);
+    return new Promise((resolve, reject) => {
+      return this.admin.createUser(email, hashedPassword, fname, lname).then((id) => {
+        resolve(id);
+      }).catch((err) => {
+        reject(err);
+      });
     });
   }
 
