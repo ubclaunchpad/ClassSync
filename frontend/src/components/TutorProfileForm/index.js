@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./index.css"; // Import the CSS file for styling
 import Select from 'react-select';
+import axios from 'axios';
 
-const TutorProfileForm = () => {
-    const [about, setAbout] = useState('');
-    const [maxHours, setMaxHours] = useState('');
-    const [offerings, setOfferings] = useState('');
-    const [university, setUniversity] = useState('');
-    const [selectedOptions, setSelectedOptions] = useState([]);
+
+const TutorProfileForm = (props) => {
+    console.log("props ", props)
+    const [about, setAbout] = useState(props.about);
+    const [maxHours, setMaxHours] = useState(props.maxHours);
+    const [university, setUniversity] = useState(props.university);
+    const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
+    const [courses, setCourses] = useState(props.offerings);
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
+
+    console.log("Courses ", courses)
+    console.log("Options ", props.offerings)
+    const id = localStorage.getItem('userID');
+
+
+
+
+
 
 
     const closestFutureDate = (inputDate) => {
@@ -29,36 +41,8 @@ const TutorProfileForm = () => {
 
         return closestDate;
     }
-    let options = [];
-    const loadCourses = async () => {
-        console.log('Loading courses');
 
-        try {
-            const response = await fetch(url + '/tutor/offerings', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
 
-            if (response.status === 200) {
-                const responseData = await response.json();
-                responseData.forEach((course) => {
-                    options.push({
-                        value: course.course_id,
-                        label: course.course_difficulty + ' ' + course.course_name,
-                        color: course.color
-                    });
-                    console.log('Courses loaded:', responseData);
-
-                })
-            }
-        } catch (error) {
-            console.error('Failed to load courses', error);
-        }
-    }
-
-    loadCourses();
 
     const customStyles = {
         multiValue: (base, state) => {
@@ -76,44 +60,41 @@ const TutorProfileForm = () => {
         let year = currentDate.getFullYear();
 
         let dateString = `${month}/${date}/${year}`;
-        console.log(selectedOptions)
-        try {
-            const response = await fetch(url + '/tutor/bio', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id: 22,
-                    bio: {
-                        university: university,
-                        about: about,
-                        maxHours: maxHours,
-                        startdate: dateString,
-                        enddate: closestFutureDate(Date.now()).toDateString(),
-                        offerings: selectedOptions
+        // console.log(selectedOptions)
 
-                    }
-                })
-            })
+        try {
+            const response = await axios.post(url + '/tutor/bio', {
+                user_id: id,
+                bio: {
+                    university: university,
+                    about: about,
+                    maxHours: maxHours,
+                    startdate: dateString,
+                    enddate: closestFutureDate(Date.now()).toDateString(),
+                    offerings: selectedOptions.map((option) => option.value)
+                }
+            });
+
+            console.log("Response ", response.status);
 
             if (response.status === 200) {
-                const responseData = await response.json();
-                console.log('User details Updated:', responseData);
-
-
+                console.log("User details updated");
+                // const responseData = response.data;
+                // console.log('User details Updated:', responseData);
+                window.location.href = "/tutor-availability";
             } else {
-                const errorData = await response.json();
-                console.error('User details failed to update:', errorData);
+                console.error('User details failed to update:', response.data);
             }
         } catch (error) {
             console.error('Failed to save', error);
         }
     };
 
+    const email = localStorage.getItem("email");
+
     return (
 
-        <form className="tutor-info-form">
+        <form className="tutor-info-form" onSubmit={(e) => saveTutorInfo(e)}>
             <div class="header-row">
                 <h2 className="add-student-header">Create Your Profile</h2>
             </div>
@@ -123,7 +104,7 @@ const TutorProfileForm = () => {
 
                 <label className="input-label">
                     Email
-                    <input type="text" value="test@email.com" disabled />                </label>
+                    <input type="text" value={email} disabled />                </label>
 
                 <label className="input-label">
                     University
@@ -138,6 +119,8 @@ const TutorProfileForm = () => {
                         className="bio-input"
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
+                        maxLength={1000}
+
                     ></textarea>
                 </label>
 
@@ -149,15 +132,14 @@ const TutorProfileForm = () => {
                     </label>
                     <label className="input-label">
                         Course Offerings
+                        {console.log("Selected Options ", selectedOptions)}
                         <Select
                             isMulti
-                            options={options}
+                            options={courses}
                             styles={customStyles}
                             className='basic-multi-select'
-                            onChange={(selected) => {
-                                const selectedValues = selected ? selected.map(option => option.value) : [];
-                                setSelectedOptions(selectedValues);
-                            }}
+                            value={selectedOptions}
+                            onChange={setSelectedOptions}
                         />
 
                     </label>
@@ -165,7 +147,7 @@ const TutorProfileForm = () => {
                 </div>
             </div>
 
-            <input type="submit" value="Submit" onClick={(e) => saveTutorInfo(e)} />
+            <input type="submit" value="Submit" />
         </form>
 
     );

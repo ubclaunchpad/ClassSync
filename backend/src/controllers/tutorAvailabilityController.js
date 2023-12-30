@@ -5,6 +5,26 @@ export default class tutorAvailabilityController {
         this.tutor = new tutorAvailability();
     }
 
+    async getSchedule(userID, startDate) {
+        return this.tutor.getSchedule(userID, startDate).then((availability) => {
+
+            return availability;
+        }
+        ).catch((err) => {
+            console.log("Error getting schedule ", err)
+            // reject(err);
+        });
+    }
+
+    async getRecurringAvailability(userID) {
+        return this.tutor.getRecurringAvailability(userID).then((availability) => {
+            return availability;
+        }).catch((err) => {
+            console.log("Error getting recurring availability ", err)
+            reject(err);
+        });
+    }
+
 
     getDates(userID) {
         return this.tutor.getDates(userID).then((dates) => {
@@ -15,30 +35,25 @@ export default class tutorAvailabilityController {
             // reject(err);
         });
     }
-    setAvailability(userID, weeks, availability) {
-        console.log("Setting availability")
+    async setAvailability(userID, weeks, availability, isRecurring) {
+        try {
+            console.log("Setting availability");
 
-        return this.tutor.createAvailabilityPattern(availability)
-            .then((patternID) => {
-                console.log("Setting availability")
-                console.log("Pattern ID: ", patternID);
-                console.log("Weeks: ", weeks)
-                console.log(JSON.parse(weeks).length)
+            const patternID = await this.tutor.createAvailabilityPattern(availability);
 
-                return new Promise((resolve, reject) => {
-                    this.tutor.setAvailabilityForWeeks(userID, weeks, patternID).then(() => {
-                        resolve();
-                    }
-                    ).catch((err) => {
-                        console.log("Error setting availability ", err)
-                        reject(err);
-                    });
+            console.log("Pattern ID: ", patternID);
+            console.log("Weeks: ", weeks);
+            console.log(JSON.parse(weeks).length);
 
+            await this.tutor.setAvailabilityForWeeks(userID, weeks, patternID);
 
-                }).catch((err) => {
-                    console.log("Error setting availability ", err)
-                });
-            });
+            if (isRecurring) {
+                await this.tutor.setRecurringAvailability(userID, patternID);
+            }
+        } catch (err) {
+            console.log("Error setting availability ", err);
+            throw err;
+        }
     }
 
     getAvailability(userID) {

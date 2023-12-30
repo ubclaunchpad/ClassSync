@@ -1,28 +1,107 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import Calendar from "../../components/Calendar/Calendar";
-import { set, startOfWeek, addWeeks, endOfWeek } from 'date-fns';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { format, startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, add } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-// import { Datepicker } from 'flowbite-react';
+import { da } from "date-fns/locale";
 
 
 
 
-export default function Profile() {
+export default function ScheduleSelector() {
     const [isLoading, setIsLoading] = useState(false);
     const [calendar, setCalendar] = useState([]);
     const [maxDate, setMaxDate] = useState(new Date());
     const { id } = useParams();
+    const userID = localStorage.getItem("userID");
+    const [isLoaded, setIsLoaded] = useState(false);
 
-    const [startDate, setStartDate] = useState(startOfWeek(new Date(id), { weekStartsOn: 0 }));
+    console.log("id = " + id);
+    const [year, month, day] = id.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    console.log("Date", date);
+
+    // const date = new Date(id);
+    const [startDate, setStartDate] = useState(startOfWeek(date, { weekStartsOn: 0 }));
+    console.log("Schedule Start ", startDate);
+    async function getAvailability() {
+        const response = await fetch(`http://localhost:8080/tutor/availability/schedule?userID=${userID}&startDate=${startDate.toISOString().split('T')[0]}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        let availability = await response.json();
+        console.log("Schedule Availability", availability);
+        let dates = convertAvailabilityToISOStrings(availability[0], startDate);
+        setCalendar(dates);
+        setIsLoaded(true);
+        // ...
+    }
+
+
+    const convertAvailabilityToISOStrings = (availability, start) => {
+        const result = [];
+        console.log("Availability is here ", availability);
+
+        // Get the start of the current week (Sunday)
+        let weekStart = start
+
+        console.log("Week Start", weekStart);
+        const availabilityArr = Object.values(availability);
+        console.log("Availability", availabilityArr.length);
+        let startDate;
+
+        for (let i = 0; i < availabilityArr.length; i++) {
+
+
+            startDate = addDays(weekStart, i);
+            console.log("Start date is ", startDate);
+            availabilityArr[i].forEach((time) => {
+                const [hours, minutes] = time.split(':');
+                const date = new Date(startDate);
+                date.setHours(hours, minutes);
+                result.push(date);
+            })
+        }
+
+        console.log("Result is for ", weekStart, result);
+        return result;
+
+
+    }
+
+    useEffect(() => {
+        setIsLoaded(false);
+        getAvailability();
+        console.log("Retrieving Availability for ", startDate)
+    }, [startDate]); // Empty dependency array means this effect runs once on mount
+
 
     const navigate = useNavigate();
 
-    // const startDate = startOfWeek(new Date(id), { weekStartsOn: 0 });
+
+    function getWeeks(startDate, maxDate) {
+        const weeks = [];
+
+        let currentWeekStart = startOfWeek(startDate, { weekStartsOn: 0 });
+
+        while (!isAfter(currentWeekStart, maxDate)) {
+            const currentWeekEnd = endOfWeek(currentWeekStart, { weekStartsOn: 0 });
+
+            weeks.push({
+                startDate: formatISO(currentWeekStart),
+                endDate: formatISO(currentWeekEnd)
+            });
+
+            currentWeekStart = addWeeks(currentWeekStart, 1);
+        }
+
+        return weeks;
+    }
+
+    console.log(getWeeks(new Date(new Date().getFullYear(), 0, 1), new Date(new Date().getFullYear(), 3, 1)));    // const startDate = startOfWeek(new Date(id), { weekStartsOn: 0 });
     console.log(startDate);
 
 
@@ -39,22 +118,20 @@ export default function Profile() {
     };
 
     const handleChange = (newDate) => {
+        console.log('New date:', newDate);
+
         // get start of week from this newDate
         const newDateStartOfWeek = startOfWeek(newDate, { weekStartsOn: 0 });
+        console.log('Start of week:', newDateStartOfWeek);
+
         setStartDate(newDateStartOfWeek);
+        console.log('Updated startDate:', startDate);
+
+        navigate(`/schedule/${newDateStartOfWeek.toISOString().split('T')[0]}`);
     }
 
-    async function handleSubmitCalendar(newSchedule, isRecurring) {
+    async function handleSubmitCalendar(newSchedule) {
         console.log("Submitting Availability")
-
-        if (isRecurring) {
-            console.log("Recurring");
-        } else {
-            console.log("Not recurring");
-            console.log(startDate)
-            const end_date = endOfWeek(startDate);
-            console.log(end_date)
-        }
 
 
         setIsLoading(true);
@@ -81,14 +158,17 @@ export default function Profile() {
                 2: scheduleByDay[2],
                 3: scheduleByDay[3],
                 4: scheduleByDay[4],
+                5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
             const response = await fetch("http://localhost:8080/tutor/availability", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: 1,
-                    start_date: startDate,
+                    userID: localStorage.getItem("userID"),
+                    isRecurring: false,
+                    weeks: JSON.stringify([{ "start_date": startDate, "end_date": endOfWeek(startDate) },
+                    ]),
 
                     availability: availability
                 })
@@ -104,6 +184,7 @@ export default function Profile() {
             setIsLoading(false);
         }
     }
+
     const today = new Date();
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
@@ -120,17 +201,17 @@ export default function Profile() {
         return await response.json();
     }
 
-    // let maxDate;
 
-    getDates()
-        .then(dates => {
-            setMaxDate(new Date(dates.end_date));
-            console.log("Max Date", maxDate);
-        })
-        .catch(error => console.error('There was an error!', error));
+    useEffect(() => {
+        getDates()
+            .then(dates => {
+                let date = new Date(dates.end_date);
 
-
-
+                setMaxDate(date);
+                console.log("Max Date", maxDate);
+            })
+            .catch(error => console.error('There was an error!', error));
+    }, []); // Empty dependency array means this effect runs once on mount
 
 
 
@@ -141,16 +222,17 @@ export default function Profile() {
                 {console.log("id = " + startDate)}
                 <button onClick={navigateToPreviousWeek}>Previous Week</button>
                 <button onClick={navigateToNextWeek}>Next Week</button>
-                {/* <DatePicker value={startDate} /> */}
                 <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
                 <div className="Calendar" style={{ width: '100vw', height: '100vh', marginLeft: '-20px' }}>
-                    <Calendar
-                        calendar={calendar}
-                        handleSubmitCalendar={handleSubmitCalendar}
-                        start_date={startDate}
-                        isRecurring={false}
-                        dateFormat="ddd DD MMM"
-                    />
+                    {isLoaded && (
+                        <Calendar
+                            calendar={calendar}
+                            handleSubmitCalendar={handleSubmitCalendar}
+                            start_date={startDate}
+                            isRecurring={false}
+                            dateFormat="ddd DD MMM"
+                        />
+                    )}
                 </div>
             </div>
         </LocalizationProvider >

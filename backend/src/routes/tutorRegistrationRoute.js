@@ -26,8 +26,9 @@ router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    return tutor.login(email, password).then((_email) => {
-        res.status(200).json({ email: "Login successful for " + email });
+    return tutor.login(email, password).then((result) => {
+        console.log("Result ", result);
+        res.status(200).send(result);
     }).catch((err) => {
         console.log(err);
         res.status(500).send("Login failed");
@@ -43,16 +44,40 @@ router.post("/password", (req, res) => {
     });
 });
 
-router.post("/bio", (req, res) => {
-    const user_id = req.body.user_id;
-    const bio = req.body.bio;
+router.get("/profile", (req, res) => {
+    const userID = req.query.id;
 
-    tutor.updateBio(user_id, bio).then((result) => {
-        res.status(200);
+
+    tutor.getProfile(userID).then((result) => {
+        res.status(200).json(result);
     }).catch((err) => {
         res.status(500).send({ error: err.detail });
     });
 });
+
+router.get("/offering", (req, res) => {
+    const userID = req.query.id;
+    return tutor.getTutorOfferings(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    }
+    );
+});
+
+router.post("/bio", async (req, res) => {
+    const user_id = req.body.user_id;
+    const bio = req.body.bio;
+
+    try {
+        await tutor.updateBio(user_id, bio);
+        res.status(200).send({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.detail || "Internal Server Error" });
+    }
+});
+
 
 router.post("/offerings", (req, res) => {
     const { userID } = req.body.userID;

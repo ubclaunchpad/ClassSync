@@ -1,6 +1,7 @@
 import { tutorRegistration } from "../models/tutorRegistration.js";
 import { hashPassword, comparePassword } from "../auth/authentication.js"
 import { courses } from "../models/courses.js";
+import jwt from "jsonwebtoken";
 export default class tutorRegistrationController {
 
     constructor() {
@@ -9,6 +10,28 @@ export default class tutorRegistrationController {
         this.course = new courses();
     }
 
+
+    async getTutorOfferings(userID) {
+
+        return new Promise((resolve, reject) => {
+            return this.tutor.getTutorOfferings(userID).then((result) => {
+                console.log("Result ", result);
+                resolve(result);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+    async getProfile(userID) {
+
+        return new Promise((resolve, reject) => {
+            return this.tutor.getProfile(userID).then((result) => {
+                resolve(result);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
     async getAllOfferings() {
         return new Promise((resolve, reject) => {
             return this.course.getAllOfferings().then((result) => {
@@ -32,31 +55,48 @@ export default class tutorRegistrationController {
 
 
     }
-    login(email, password) {
+    async login(email, password) {
         return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            return tutor.getPassword(email).then((hashedPassword) => {
-                if (email) {
+            return this.tutor
+                .getPassword(email)
+                .then((res) => {
+                    console.log("Res ", res)
+                    const hashedPassword = res.hashedPassword;
+                    const userId = res.user_id;
+                    if (email) {
+                        return comparePassword(password, hashedPassword).then((result) => {
+                            if (result) {
+                                const token = jwt.sign(
+                                    {
+                                        email: email,
+                                        role: "tutor",
+                                    },
+                                    process.env.JWT_SECRET,
+                                    {
+                                        expiresIn: "6h",
+                                        algorithm: "HS256",
+                                    }
+                                );
 
+                                console.log("Printing token: " + token)
 
-                    return comparePassword(password, hashedPassword).then((result) => {
+                                resolve({
+                                    email: email,
+                                    role: "tutor",
+                                    userId: userId,
+                                    token: token,
 
-                        if (result) {
-                            resolve(email);
-                        }
-                        else {
-                            reject("Incorrect password");
-                        }
-
-                    })
-                }
-            })
+                                });
+                            } else {
+                                reject("Incorrect password");
+                            }
+                        });
+                    }
+                })
                 .catch((err) => {
                     reject(err);
                 });
-
         });
-
     }
     updatePassword(userID, newPassword) {
         // set password for user
@@ -68,18 +108,7 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateBio(user_id, bio) {
-        // update bio for user
-        // bio consists of first name, last name, max_hours, about me, profile picture
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            tutor.updateBio(user_id, bio).then((result) => {
-                return this.updateOfferings(user_id, bio.offerings).then((result) => {
-                    resolve(result);
-                }).catch((err) => { reject(err); });
-            }).catch((err) => { reject(err); });
-        });
-    }
+
 
 
     getBio(email) {
@@ -103,25 +132,22 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateOfferings(userID, offerings) {
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            // delete all offerings
-            return new Promise((resolve, reject) => {
-                tutor.deleteAllOfferings(userID).then((result) => {
-                    return new Promise((resolve, reject) => {
-                        // add all offerings
-                        tutor.addOfferings(userID, offerings).then((result) => {
-                            resolve(result);
-                        }).catch((err) => { reject(err); });
+    updateBio(user_id, bio) {
+        const tutor = new tutorRegistration();
 
-                    }).catch((err) => { reject(err); });
-                }).catch((err) => { reject(err); });
-            });
-        })
+        return tutor.updateBio(user_id, bio)
+            .then(() => this.updateOfferings(user_id, bio.offerings))
+            .catch((err) => Promise.reject(err));
     }
 
+    updateOfferings(userID, offerings) {
+        const tutor = new tutorRegistration();
 
+        // Delete all offerings
+        return tutor.deleteAllOfferings(userID)
+            .then(() => tutor.addOfferings(userID, offerings))
+            .catch((err) => Promise.reject(err));
+    }
 
 
 }
