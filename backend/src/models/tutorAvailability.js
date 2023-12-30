@@ -3,6 +3,80 @@ import con from "../../index.js";
 
 export class tutorAvailability {
 
+    async getSchedule(userID, startDate) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_tutor_availability($1, $2)',
+                    [userID, startDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log("Got schedule ", results);
+                            resolve(results.rows[0].get_tutor_availability);
+                        }
+                    }
+                );
+            }
+            );
+        } finally {
+            client.release();
+        }
+    }
+
+    async getRecurringAvailability(userID) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_recurring_availability($1)',
+                    [userID],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log("Results ", results);
+                            resolve(results.rows[0].get_recurring_availability);
+                        }
+                    }
+                );
+            });
+
+        }
+        finally {
+            client.release();
+        }
+    }
+
+
+    async setRecurringAvailability(userID, patternID) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL insert_recurring_availability($1, $2)',
+                    [userID, patternID],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log("Inserted recurring availability")
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+    }
+
     async getDates(userID) {
         const client = await con.connect();
         try {
