@@ -8,6 +8,7 @@ import TutorProfile from "./screens/tutorProfile";
 import RegisterTutor from "./screens/registerTutor";
 import AddTutor from "./screens/addTutor";
 import ScheduleSelector from "./screens/tutorAvailability";
+import ScheduleSelectorRecurring from "./screens/recurringAvailability";
 import TutorLogin from "./screens/TutorLogin";
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
           <Route path="/tutor/login" element={<TutorLogin />} />
           <Route path="/registerTutor" element={<RegisterTutor />} />
           <Route path="/add-tutor" element={<AddTutor />} />
-          <Route path="/tutor-availability" element={<ScheduleSelector />} />
+          <Route path="/tutor/availability/recurring" element={<ScheduleSelectorRecurring />} />
           <Route path="/schedule/:id" element={<ScheduleSelector />} />
         </Routes>
       </BrowserRouter>
