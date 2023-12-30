@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 
-export default function Profile() {
+export default function ScheduleSelector() {
     const [isLoading, setIsLoading] = useState(false);
     const [calendar, setCalendar] = useState([]);
 
@@ -33,6 +33,7 @@ export default function Profile() {
                 2: scheduleByDay[2],
                 3: scheduleByDay[3],
                 4: scheduleByDay[4],
+                5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
             const response = await fetch("http://localhost:8080/tutor/availability", {
