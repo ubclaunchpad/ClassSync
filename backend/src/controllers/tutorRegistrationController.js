@@ -108,18 +108,7 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateBio(user_id, bio) {
-        // update bio for user
-        // bio consists of first name, last name, max_hours, about me, profile picture
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            tutor.updateBio(user_id, bio).then((result) => {
-                return this.updateOfferings(user_id, bio.offerings).then((result) => {
-                    resolve(result);
-                }).catch((err) => { reject(err); });
-            }).catch((err) => { reject(err); });
-        });
-    }
+
 
 
     getBio(email) {
@@ -143,25 +132,22 @@ export default class tutorRegistrationController {
         });
     }
 
-    updateOfferings(userID, offerings) {
-        return new Promise((resolve, reject) => {
-            const tutor = new tutorRegistration();
-            // delete all offerings
-            return new Promise((resolve, reject) => {
-                tutor.deleteAllOfferings(userID).then((result) => {
-                    return new Promise((resolve, reject) => {
-                        // add all offerings
-                        tutor.addOfferings(userID, offerings).then((result) => {
-                            resolve(result);
-                        }).catch((err) => { reject(err); });
+    updateBio(user_id, bio) {
+        const tutor = new tutorRegistration();
 
-                    }).catch((err) => { reject(err); });
-                }).catch((err) => { reject(err); });
-            });
-        })
+        return tutor.updateBio(user_id, bio)
+            .then(() => this.updateOfferings(user_id, bio.offerings))
+            .catch((err) => Promise.reject(err));
     }
 
+    updateOfferings(userID, offerings) {
+        const tutor = new tutorRegistration();
 
+        // Delete all offerings
+        return tutor.deleteAllOfferings(userID)
+            .then(() => tutor.addOfferings(userID, offerings))
+            .catch((err) => Promise.reject(err));
+    }
 
 
 }
