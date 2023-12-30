@@ -65,16 +65,19 @@ router.get("/offering", (req, res) => {
     );
 });
 
-router.post("/bio", (req, res) => {
+router.post("/bio", async (req, res) => {
     const user_id = req.body.user_id;
     const bio = req.body.bio;
 
-    tutor.updateBio(user_id, bio).then((result) => {
-        res.status(200);
-    }).catch((err) => {
-        res.status(500).send({ error: err.detail });
-    });
+    try {
+        await tutor.updateBio(user_id, bio);
+        res.status(200).send({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.detail || "Internal Server Error" });
+    }
 });
+
 
 router.post("/offerings", (req, res) => {
     const { userID } = req.body.userID;

@@ -8,6 +8,19 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
+router.get("/schedule", (req, res) => {
+    const userID = req.query.userID;
+    const startDate = req.query.startDate;
+    console.log("Getting schedule for ", userID, " on ", startDate);
+
+    tutor.getSchedule(userID, startDate).then((availability) => {
+        console.log("Availability ", availability);
+        res.status(200).send(availability);
+    }).catch((err) => {
+        res.status(500).send("Availability not found");
+    })
+});
+
 router.get("/dates", (req, res) => {
 
 
@@ -27,14 +40,24 @@ router.get("/", (req, res) => {
     })
 });
 
+router.get("/recurring", (req, res) => {
+    const id = req.query.userID
+    tutor.getRecurringAvailability(id).then((availability) => {
+        res.status(200).send(availability);
+    }).catch((err) => {
+        res.status(500).send("Availability not found");
+    })
+});
+
 router.post("/", (req, res) => {
     const userID = req.body.userID;
     const weeks = req.body.weeks;
+    const isRecurring = req.body.isRecurring;
     // const weeks = req.body.weeks;
     const availability = req.body.availability;
     console.log(req.body);
 
-    return tutor.setAvailability(userID, weeks, availability).then((result) => {
+    return tutor.setAvailability(userID, weeks, availability, isRecurring).then((result) => {
         console.log("Availability added")
         res.status(200).send({ id: result });
     }).catch((err) => {
