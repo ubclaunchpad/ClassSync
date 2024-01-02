@@ -6,17 +6,19 @@ import sendEmail from "./volunteerEmailController.js";
 export default class adminAuthController {
   constructor() {
     this.admin = new adminAuth();
-
   }
 
   async signup(email, password, fname, lname) {
     const hashedPassword = await hashPassword(password);
     return new Promise((resolve, reject) => {
-      return this.admin.createUser(email, hashedPassword, fname, lname).then((id) => {
-        resolve(id);
-      }).catch((err) => {
-        reject(err);
-      });
+      return this.admin
+        .createUser(email, hashedPassword, fname, lname)
+        .then((id) => {
+          resolve(id);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 
@@ -24,7 +26,9 @@ export default class adminAuthController {
     return new Promise((resolve, reject) => {
       return this.admin
         .getPassword(email)
-        .then((hashedPassword) => {
+        .then((res) => {
+          const hashedPassword = res.hashedPassword;
+          const userId = res.user_id;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
@@ -43,6 +47,7 @@ export default class adminAuthController {
                 resolve({
                   email: email,
                   role: "admin",
+                  userId: userId,
                   token: token,
                 });
               } else {

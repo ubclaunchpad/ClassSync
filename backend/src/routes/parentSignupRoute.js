@@ -8,19 +8,19 @@ router.get("/pingcheck", (_, res) => {
 });
 
 router.post("/signup", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    const fname = req.body.fname;
-    const lname = req.body.lname;
+  const email = req.body.email;
+  const password = req.body.password;
+  const fname = req.body.fname;
+  const lname = req.body.lname;
 
-
-
-    return parent.signup(email, password, fname, lname).then((id) => {
-        res.status(200).json({ id: id });
-    }).catch((err) => {
-        console.log(err);
-        res.status(500).send("Signup failed");
-
+  return parent
+    .signup(email, password, fname, lname)
+    .then((id) => {
+      res.status(200).json({ id: id });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("Signup failed");
     });
 });
 
@@ -32,11 +32,7 @@ router.post("/login", (req, res) => {
   return parent
     .login(email, password)
     .then((response) => {
-      res.status(200).json({
-        email: response.email,
-        role: response.role,
-        token: response.token,
-      });
+      res.status(200).send(response);
     })
     .catch((err) => {
       console.log(err);

@@ -25,7 +25,9 @@ export default class parentAuthController {
     return new Promise((resolve, reject) => {
       return this.parent
         .getPassword(email)
-        .then((hashedPassword) => {
+        .then((res) => {
+          const hashedPassword = res.hashedPassword;
+          const userId = res.user_id;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
@@ -44,6 +46,7 @@ export default class parentAuthController {
                 resolve({
                   email: email,
                   role: "guardian",
+                  userId: userId,
                   token: token,
                 });
               } else {
