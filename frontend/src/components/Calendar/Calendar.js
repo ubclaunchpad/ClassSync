@@ -25,9 +25,16 @@ const Calendar = (props) => {
                 dateFormat={props.dateFormat}
                 startDate={props.start_date}
                 onChange={handleChange}
+                // selectedColor={"#103da2"}
+                // unselectedColor={"#B3DEFC"}
+                // hoveredColor={"#00B0F1"}
+                unselectedColor={"#e0e0e0"} // Light grey 
+                // unselectedColor={"#f6f4f4"}
                 selectedColor={"#103da2"}
-                unselectedColor={"#B3DEFC"}
                 hoveredColor={"#00B0F1"}
+
+
+
             />
             <input type="submit" value="Submit" onClick={() => props.handleSubmitCalendar(schedule, props.isRecurring)} />
         </>
