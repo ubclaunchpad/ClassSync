@@ -38,31 +38,36 @@ export const comparePassword = (givenPassword, hash) => {
 
 /**
  * Authorization middleware
- * @param {*} role
- * @returns
+ * @param {*} role - Either 'Admin', 'Guardian', or 'Tutor'
+ * @returns {function} - Express middleware functions
  */
 function authorize(role) {
   return [
     expressjwt({ secret: process.env.JWT_SECRET, algorithms: ["HS256"] }),
-    (err, req, res, next) => {
-      if (err.name === "UnauthorizedError") {
-        return res.status(401).json({ message: "Unauthorized Error" });
-      }
+    // Role authorization middleware
+    (req, res, next) => {
       if (
-        req.auth.role !== "Parent" &&
-        req.auth.role !== "Tutor" &&
-        req.auth.role !== "Admin"
+        req.auth.role !== "admin" &&
+        req.auth.role !== "guardian" &&
+        req.auth.role !== "tutor"
       ) {
         return res.status(401).json({ message: "Unauthorized User" });
       }
-      if (role === "Admin" && req.auth.role !== "Admin") {
+      if (role === "Admin" && req.auth.role !== "admin") {
         return res.status(401).json({ message: "Unauthorized Admin" });
       }
-      if (role === "Parent" && req.auth.role !== "Parent") {
-        return res.status(401).json({ message: "Unauthorized Parent" });
+      if (role === "Guardian" && req.auth.role !== "guardian") {
+        return res.status(401).json({ message: "Unauthorized Guardian" });
       }
-      if (role === "Tutor" && req.auth.role !== "Tutor") {
+      if (role === "Tutor" && req.auth.role !== "tutor") {
         return res.status(401).json({ message: "Unauthorized Tutor" });
+      }
+      next();
+    },
+    // Error middleware -- Called when expressjwt() throws an error
+    (err, req, res, next) => {
+      if (err.name === "UnauthorizedError") {
+        return res.status(401).json({ message: "Unauthorized Error" });
       }
       next();
     },
