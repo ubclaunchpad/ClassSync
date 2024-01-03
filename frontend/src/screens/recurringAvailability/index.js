@@ -3,6 +3,9 @@ import Calendar from "../../components/Calendar/Calendar";
 import { startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, set } from 'date-fns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import "./index.css"; // Import your custom styles
+import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
+import { textAlign } from "@mui/system";
 
 
 
@@ -171,20 +174,31 @@ export default function ScheduleSelectorRecurring() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TutorDashboardLayout
 
-            <div className="App">
-                <div className="Calendar" style={{ width: '100vw', height: '100vh', marginLeft: '-20px' }}>
-                    {isLoaded && (
-                        <Calendar
-                            calendar={calendar}
-                            handleSubmitCalendar={handleSubmitCalendar}
-                            start_date={startDate}
-                            isRecurring={true}
-                            dateFormat="ddd"
-                        />
-                    )}
+                rightColumnContent={
+                    <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
+                        <h3> Set Recurring Availability</h3>
+
+                        <p>Enhance your tutoring experience by setting recurring availability for your classes! Streamline your schedule and make it easy for students to book sessions with you regularly. </p>
+                        <p>Simply click and drag to select the days and times you are available for tutoring and click submit. </p>
+                        <p>You can always update your recurring availability or change your availability for a week if needed.</p>                    </div>
+                }>
+
+                <div className="App">
+                    <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
+                        {isLoaded && (
+                            <Calendar
+                                calendar={calendar}
+                                handleSubmitCalendar={handleSubmitCalendar}
+                                start_date={startDate}
+                                isRecurring={true}
+                                dateFormat="ddd"
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            </TutorDashboardLayout >
         </LocalizationProvider >
     );
 }
