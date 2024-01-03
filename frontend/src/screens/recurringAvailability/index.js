@@ -186,7 +186,7 @@ export default function ScheduleSelectorRecurring() {
                 }>
 
                 <div className="App">
-                    <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
+                    <div className="Calendar" style={{ width: '60vw', marginLeft: '-20px' }}>
                         {isLoaded && (
                             <Calendar
                                 calendar={calendar}

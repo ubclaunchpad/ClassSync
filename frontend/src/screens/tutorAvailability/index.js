@@ -5,7 +5,7 @@ import { format, startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { da } from "date-fns/locale";
+import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
 
 
 
@@ -217,24 +217,26 @@ export default function ScheduleSelector() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TutorDashboardLayout>
 
-            <div className="App">
-                {console.log("id = " + startDate)}
-                <button onClick={navigateToPreviousWeek}>Previous Week</button>
-                <button onClick={navigateToNextWeek}>Next Week</button>
-                <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
-                <div className="Calendar" style={{ width: '100vw', height: '100vh', marginLeft: '-20px' }}>
-                    {isLoaded && (
-                        <Calendar
-                            calendar={calendar}
-                            handleSubmitCalendar={handleSubmitCalendar}
-                            start_date={startDate}
-                            isRecurring={false}
-                            dateFormat="ddd DD MMM"
-                        />
-                    )}
+                <div className="App">
+                    {console.log("id = " + startDate)}
+                    <button onClick={navigateToPreviousWeek}>Previous Week</button>
+                    <button onClick={navigateToNextWeek}>Next Week</button>
+                    <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
+                    <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
+                        {isLoaded && (
+                            <Calendar
+                                calendar={calendar}
+                                handleSubmitCalendar={handleSubmitCalendar}
+                                start_date={startDate}
+                                isRecurring={false}
+                                dateFormat="ddd DD MMM"
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            </TutorDashboardLayout>
         </LocalizationProvider >
     );
 }
