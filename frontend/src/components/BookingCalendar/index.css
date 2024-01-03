@@ -1,0 +1,87 @@
+.rbc-event {
+    background-color: #103da2;
+
+
+}
+
+.rbc-today {
+    background-color: inherit;
+}
+
+.rbc-day-slot .available {
+    /* background-color: #DFFFD6; */
+    background-color: #42a042;
+    background-color: #a3e9b2;
+    background-color: #103da2;
+    background-color: #00b1f19b;
+    background-color: #89CFF0;
+    background-color: #bfefff;
+
+    /* Baby blue */
+    /* background-color: #6b8eae; */
+
+
+
+    /* Forest green */
+    /* background-color: #D6E5FF; */
+    /* Light blue */
+
+}
+
+
+
+.rbc-day-slot .unavailable {
+    background-color: #FFD6D6;
+    background-color: #f6f4f4;
+    background-color: #f6f4f4;
+    /* background-color: #e0e0e0; */
+}
+
+/* .rbc-day-slot .rbc-timeslot-group {
+    background-color: #ddd;
+} */
+
+/* .rbc-time-slot {
+    height: 20px;
+}
+ */
+
+
+.rbc-timeslot-group,
+.rbc-events-container {
+    max-height: 5vh;
+}
+
+.rbc-time-header-gutter,
+.rbc-time-gutter .rbc-time-slot {
+    padding-right: 10px;
+}
+
+.rbc-calendar {
+    max-height: fit-content;
+    max-width: 100vw;
+}
+
+.rbc-time-view,
+.rbc-toolbar,
+.rbc-events-container {
+    max-height: 70vh;
+    max-width: 60vw;
+}
+
+.rbc-events-container {
+    margin-right: 0px !important;
+}
+
+.rbc-day-slot,
+.rbc-header {
+    max-width: 150px;
+}
+
+.calendar-container {
+    /* display: flex; */
+    margin-right: 16px;
+    max-height: 75vh;
+    margin-top: 5px;
+    margin-left: 10px;
+}
