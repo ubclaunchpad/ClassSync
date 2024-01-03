@@ -33,11 +33,7 @@ router.post("/login", (req, res) => {
   return parent
     .login(email, password)
     .then((response) => {
-      res.status(200).json({
-        email: response.email,
-        role: response.role,
-        token: response.token,
-      });
+      res.status(200).send(response);
     })
     .catch((err) => {
       console.log(err);

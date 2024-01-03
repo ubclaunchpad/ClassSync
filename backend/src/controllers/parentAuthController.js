@@ -3,29 +3,31 @@ import parentAuth from "../models/parentAuth.js";
 import jwt from "jsonwebtoken";
 
 export default class parentAuthController {
-
   constructor() {
     this.parent = new parentAuth();
-
   }
 
   async signup(email, password, fname, lname) {
     const hashedPassword = await hashPassword(password);
     return new Promise((resolve, reject) => {
-      return this.parent.createUser(email, hashedPassword, fname, lname).then((id) => {
-        resolve(id);
-      }).catch((err) => {
-        reject(err);
-      });
+      return this.parent
+        .createUser(email, hashedPassword, fname, lname)
+        .then((id) => {
+          resolve(id);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
-
 
   login(email, password) {
     return new Promise((resolve, reject) => {
       return this.parent
         .getPassword(email)
-        .then((hashedPassword) => {
+        .then((res) => {
+          const hashedPassword = res.hashedPassword;
+          const userId = res.user_id;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
@@ -44,6 +46,7 @@ export default class parentAuthController {
                 resolve({
                   email: email,
                   role: "guardian",
+                  userId: userId,
                   token: token,
                 });
               } else {

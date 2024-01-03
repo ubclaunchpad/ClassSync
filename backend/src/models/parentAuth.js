@@ -32,15 +32,19 @@ export default class parentAuth {
     try {
       return new Promise((resolve, reject) => {
         client.query(
-          "CALL getUserByEmailAndRole($1, $2, $3)",
-          [email, role, null],
+          "CALL getAccountByEmailAndRole($1, $2, $3, $4)",
+          [email, role, null, null],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
               reject(error);
             } else {
               const hashedPassword = results.rows[0].password; // Retrieve hashed password from results
-              resolve(hashedPassword); // Resolve with the hashed password
+              const user_id = results.rows[0]._user_id;
+              resolve({
+                hashedPassword: hashedPassword,
+                user_id: user_id,
+              }); // Resolve with the hashed password
             }
           }
         );
