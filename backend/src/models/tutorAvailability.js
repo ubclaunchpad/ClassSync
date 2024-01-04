@@ -3,6 +3,27 @@ import con from "../../index.js";
 
 export class tutorAvailability {
 
+    async getAvailableTutors(startDate) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_available_tutors($1)',
+                    [startDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
     async getSchedule(userID, startDate) {
         const client = await con.connect();
         try {
