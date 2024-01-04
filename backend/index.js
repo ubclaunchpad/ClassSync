@@ -7,6 +7,7 @@ import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
 import parentSignupRoute from "./src/routes/parentSignupRoute.js"
 import adminAuthRouter from "./src/routes/adminAuthRoute.js"
+import bookingAvailabilityRoute from './src/routes/bookingAvailabilityRoute.js'
 
 const app = express();
 const port = 8080;
@@ -52,6 +53,7 @@ app.use("/student-profile", studentProfileRouter);
 app.use("/tutor", tutorRegistrationRouter);
 app.use("/parent", parentSignupRoute)
 app.use("/admin", adminAuthRouter)
+app.use("/availability", bookingAvailabilityRoute)
 
 
 app.use("/communication", volunteerEmailRoute);
