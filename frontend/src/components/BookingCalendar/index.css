@@ -69,6 +69,15 @@
     max-width: 60vw;
 }
 
+.rbc-event-label {
+    font-size: 60%
+}
+
+.rbc-event-content {
+    padding-top: 1px;
+    font-size: 70%;
+}
+
 .rbc-events-container {
     margin-right: 0px !important;
 }

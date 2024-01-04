@@ -5,8 +5,8 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import TutorProfile from "../../screens/tutorProfile";
 import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { startOfWeek } from "date-fns";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -14,9 +14,60 @@ const localizer = momentLocalizer(moment);
 export default function ReactBigCalendar() {
     const [eventsData, setEventsData] = useState(events);
     const [selectedSlot, setSelectedSlot] = useState(null);
+    const [startDate, setStartDate] = useState(startOfWeek(new Date()));
+    const [isLoaded, setIsLoaded] = useState(false)
+    const [openSlots, setOpenSlots] = useState({})
+    const [availablePeople, setAvailablePeople] = useState([])
+    const [availabilityHashmap, setAvailabilityHashmap] = useState({});
+    const [tutorIDs, setTutorIDS] = useState({})
+
 
     const [forceRender, setForceRerender] = useState(false);
 
+
+    const loadData = async () => {
+        console.log("Loading data for ", startDate.toISOString().split('T')[0]);
+        const url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}`;
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            let openSlots = {}
+            Object.entries(data.availabilityHashmap).forEach(([day, slots]) => {
+                openSlots[day] = Object.keys(slots);
+            });
+
+            console.log("Available Slots By Day", openSlots)
+            console.log("Slots ", openSlots[3])
+            console.log(data.availabilityHashmap)
+            setAvailabilityHashmap(data.availabilityHashmap);
+            console.log("hashmap", availabilityHashmap)
+            setOpenSlots(openSlots)
+            console.log(data);
+
+            tutorIdNameMap = data.tutorIdNameMap
+            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
+            setTutorIDS(tutorOptions)
+            setIsLoaded(true)
+
+
+            // Use the data here
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+        }
+    }
+    useEffect(() => {
+        // This code will run whenever `startDate` changes
+        console.log('Start date has changed:', startDate);
+        setIsLoaded(false)
+        loadData()
+    }, [startDate]); // Add `startDate` as a dependency
 
     useEffect(() => {
         const handleResize = () => {
@@ -32,6 +83,7 @@ export default function ReactBigCalendar() {
     const handleSelect = ({ start }) => {
         const end = moment(start).add(1, "hour").toDate();
 
+
         // Convert the start date to the format used in availableSlotsByDay.
         const startTime = moment(start).format("HH:mm");
         const nextTimeSlot = moment(start).add(30, "minutes").format("HH:mm");
@@ -39,12 +91,26 @@ export default function ReactBigCalendar() {
         // Get the day of the week of the start date.
         const dayOfWeek = moment(start).day();
 
+
+        // setTutorIDS(tutorIDs)
+        //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
+
+        // })
+        // console.log(filteredTutorIdNameMap)
+        const overlaps = eventsData.some(event =>
+            (start < event.end && end > event.start)
+        );
         // Check if the start time and the next time slot are in the array for the day of the week.
-        const isSlotAvailable = availableSlotsByDay[dayOfWeek].includes(startTime) &&
-            availableSlotsByDay[dayOfWeek].includes(nextTimeSlot);
+        const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps;
 
         if (isSlotAvailable) {
             setSelectedSlot({ start, end });
+
+            const ids = availabilityHashmap[dayOfWeek][startTime];
+
+
+            const selected = tutorIDs.filter(item => ids.includes(Number(item.value)));
+            setAvailablePeople(selected)
         } else {
             setSelectedSlot(null);
             console.log("This slot is not available.");
@@ -57,7 +123,7 @@ export default function ReactBigCalendar() {
                 {
                     start: selectedSlot.start,
                     end: selectedSlot.end,
-                    title: `Booked by ${person}`,
+                    title: `Intermediate Python`,
                 },
             ]);
         }
@@ -79,16 +145,18 @@ export default function ReactBigCalendar() {
         const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
         const timeFormat = "HH:mm";
         const currentTimeSlot = moment(date).format(timeFormat);
+        const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
 
-        // Check if the current time slot is in the array of availabilities for the specific day
-        if (!availableSlotsByDay[dayOfWeek].includes(currentTimeSlot)) {
+        if (openSlots[dayOfWeek] && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
             return {
-                className: "unavailable",
+                className: "available",
             };
+        } else {
+            return {
+                className: "unavailable"
+            }
+
         }
-        return {
-            className: "available",
-        };
     };
 
     return (
@@ -97,7 +165,7 @@ export default function ReactBigCalendar() {
                 <div className="modal-container">
                     <Modal
                         selectedSlot={selectedSlot.start.toString()}
-                        availablePeople={["John Doe", "Jane Smith", "Alice Johnson", "Bob Williams", "Charlie Brown", "Diana Davis", "Ethan Miller", "Fiona Wilson", "George Thomas"]} onBook={handleBook}
+                        availablePeople={availablePeople} onBook={handleBook}
                         onClose={() => setSelectedSlot(null)}
                     />
                 </div>
@@ -105,23 +173,27 @@ export default function ReactBigCalendar() {
         >
             <div className="calendar-container"
             >
-                <Calendar
-                    key={forceRender}
-                    views={["week"]}
-                    selectable
-                    localizer={localizer}
-                    defaultDate={new Date()}
-                    defaultView="week"
-                    events={eventsData}
-                    min={new Date(2020, 1, 0, 7, 0, 0)}
-                    max={new Date(2020, 1, 0, 19, 0, 0)}
-                    style={{ height: "75vh", width: "90vw" }}
-                    onSelectEvent={(event) => alert(`Event: ${event.title}`)}
-                    onSelectSlot={handleSelect}
-                    slotPropGetter={slotPropGetter}
-                    dayLayoutAlgorithm="no-overlap"
-
-                />
+                {isLoaded && (
+                    <Calendar
+                        key={startDate}
+                        views={["week"]}
+                        selectable
+                        localizer={localizer}
+                        defaultDate={startDate}
+                        defaultView="week"
+                        events={eventsData}
+                        min={new Date(2020, 1, 0, 7, 0, 0)}
+                        max={new Date(2020, 1, 0, 19, 0, 0)}
+                        style={{ height: "75vh", width: "90vw" }}
+                        onSelectEvent={(event) => alert(`Event: ${event.title}`)}
+                        onSelectSlot={handleSelect}
+                        slotPropGetter={slotPropGetter}
+                        onNavigate={(date) => {
+                            setSelectedSlot(null)
+                            setStartDate(startOfWeek(date))
+                        }}
+                    />
+                )}
             </div>
 
         </TutorDashboardLayout>
