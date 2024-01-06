@@ -4,6 +4,33 @@ export default class tutorAvailabilityController {
     constructor() {
         this.tutor = new tutorAvailability();
     }
+
+    async deleteBooking(booking_id) {
+        return this.tutor.deleteBooking(booking_id).then((result) => {
+            return result;
+        }
+        ).catch((err) => {
+            console.log("Error getting schedule ", err)
+        });
+    }
+
+    async getBookings(enrollment_id) {
+        return this.tutor.getBookings(enrollment_id).then((bookings) => {
+
+            return bookings;
+        }
+        ).catch((err) => {
+            console.log("Error getting schedule ", err)
+        });
+    }
+
+    async insertBooking(booking) {
+        return this.tutor.insertBooking(booking).then((result) => {
+            return result;
+        }).catch((err) => {
+            throw (err);
+        });
+    }
     async getAvailableTutors(startDate) {
         return this.tutor.getAvailableTutors(startDate).then((availabilityData) => {
 

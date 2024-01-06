@@ -16,4 +16,38 @@ router.get("/", (req, res) => {
         });
 });
 
+
+router.post("/", (req, res) => {
+    return tutor.insertBooking(req.body.booking)
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
+
+router.delete("/booking", (req, res) => {
+    return tutor.deleteBooking(req.query.id)
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
+
+
+router.get("/bookings", (req, res) => {
+    return tutor.getBookings(req.query.id)
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
 export default router;

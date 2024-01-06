@@ -3,6 +3,74 @@ import con from "../../index.js";
 
 export class tutorAvailability {
 
+    async deleteBooking(booking_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL public.delete_booking($1)',
+                    [booking_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+        }
+        finally {
+            client.release();
+        }
+    }
+
+    async getBookings(enrollment_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT public.get_enrollment_bookings($1)',
+                    [enrollment_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve(results.rows[0].get_enrollment_bookings);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+
+    async insertBooking(booking) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT public.insert_booking($1, $2, $3, $4)',
+                    [booking.enrollment_id, booking.session_duration, booking.tutor_id, booking.start_time],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve(results.rows[0].insert_booking);
+                        }
+                    }
+                );
+            });
+        }
+        finally {
+            client.release();
+        }
+    }
+
     async getAvailableTutors(startDate) {
         const client = await con.connect();
         try {
