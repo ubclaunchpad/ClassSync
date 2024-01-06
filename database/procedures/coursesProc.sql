@@ -53,3 +53,15 @@ BEGIN
 END;
 $$;
 
+-- Get course names by course_id 
+CREATE OR REPLACE PROCEDURE getCourseById(
+    _course_id INTEGER
+
+)
+LANGUAGE plpgsql
+AS $$ 
+BEGIN 
+    SELECT * FROM courses
+    WHERE course_id = _course_id;
+END; 
+$$; 

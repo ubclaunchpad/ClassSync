@@ -48,3 +48,16 @@ BEGIN
     WHERE tutor_id = _tutor_id;
 END;
 END;
+
+-- Get courses by tutor_id
+CREATE OR REPLACE PROCEDURE getCoursesByTutor(
+    _tutor_id VARCHAR(50)
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN  
+    SELECT course_id FROM tutor_offerings
+    WHERE tutor_id = _tutor_id; 
+END; 
+$$; 
+

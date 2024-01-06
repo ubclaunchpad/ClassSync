@@ -1,0 +1,121 @@
+.tutor-profile__view {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 900px;
+  margin-top: 40px;
+}
+
+.tutor-profile__overview {
+  margin-top: 50px;
+  display: flex;
+  /* align-items: center; */
+}
+
+.p-avatar-image {
+  border-radius: 10px;
+}
+
+.tutor-profile__avatar {
+  width: 170px;
+  height: 170px;
+  border-radius: 50px;
+}
+
+.tutor-overview__details {
+  padding-top: 25px;
+  margin-left: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tutor-overview__name {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.tutor-overview__description {
+  font-size: 16px;
+}
+
+.tutor__courses__container {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+}
+.tutor__languages__container {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.tutor-overview__text {
+  font-size: 12px;
+  margin-left: 15px;
+}
+
+.tutor-profile__tab-view {
+  margin-top: 40px;
+  width: 700px;
+}
+.tutor-profile__about-me {
+  text-align: left;
+  margin-top: 5px;
+  width: 700px;
+}
+.tutor-profile__courses {
+  text-align: left;
+  margin-top: 5px;
+}
+.tutor-profile__footer {
+  height: 200px;
+}
+
+.tab-panel {
+  width: 800px;
+}
+
+.tutor-profile__review {
+  margin-top: 10px;
+  width: 700px;
+}
+
+.tutor-profile__review__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.tutor-profile__review__header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.tutor-profile__user-name {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  margin-top: 5px;
+}
+
+.tutor-profile__review__date {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #808080;
+  margin-top: 5px;
+}
+
+.tutor-profile__review__details {
+  margin-top: 15px;
+  margin-left: 3px;
+}
+.tutor-profile__review__comment {
+  margin-top: 15px;
+  text-align: left;
+  line-height: 1.5rem;
+}

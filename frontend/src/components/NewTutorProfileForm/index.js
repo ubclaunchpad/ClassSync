@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "./index.css"; // Import the CSS file for styling
+import "./NewTutorProfileForm.css"; // Import the CSS file for styling]
+import { useForm, SubmitHandler } from "react-hook-form";
+
 import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
 
 const TutorProfileForm = () => {
@@ -10,8 +12,17 @@ const TutorProfileForm = () => {
   const [maxHours, setMaxHours] = useState("");
   const [offerings, setOfferings] = useState("");
   const [university, setUniversity] = useState("");
+  // Use React hook forms now
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
 
   const url = "http://localhost:8080"; // Replace with your actual API endpoint
+
+  const onSubmit = (data) => console.log(data);
 
   const saveTutorInfo = async () => {
     try {
@@ -38,7 +49,7 @@ const TutorProfileForm = () => {
   };
 
   return (
-    <form className="tutor-info-form">
+    <form onSubmit={handleSubmit(onSubmit)} className="tutor-info-form">
       <div class="header-row">
         <h2 className="add-student-header">Create Your Profile</h2>
       </div>
