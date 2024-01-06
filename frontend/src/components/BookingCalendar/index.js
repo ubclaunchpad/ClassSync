@@ -20,14 +20,17 @@ export default function ReactBigCalendar() {
     const [availablePeople, setAvailablePeople] = useState([])
     const [availabilityHashmap, setAvailabilityHashmap] = useState({});
     const [tutorIDs, setTutorIDS] = useState({})
+    const [title, setTitle] = useState("")
+    const [bookingError, setBookingError] = useState(null);
 
 
     const [forceRender, setForceRerender] = useState(false);
 
 
+
     const loadData = async () => {
         console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        const url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}`;
+        let url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}`;
 
         try {
             const response = await fetch(url);
@@ -43,6 +46,44 @@ export default function ReactBigCalendar() {
                 openSlots[day] = Object.keys(slots);
             });
 
+            url = "http://localhost:8080/availability/bookings?id=1"
+            const bookingsResponse = await fetch(url);
+            const bookingsData = await bookingsResponse.json();
+            console.log("Bookings Data", bookingsData)
+            console.log(bookingsData.title)
+            setTitle(bookingsData.title)
+            console.log("Title is ", title)
+
+
+
+            console.log("Date ")
+            console.log(new Date(bookingsData.bookings[0].start_time))
+
+            console.log("Events Data", eventsData)
+
+            let events = []
+
+            bookingsData.bookings.forEach(booking => {
+                console.log("Booking is ", booking)
+
+                const end = moment(booking.start_time).add(booking.session_duration, "minute").toDate();
+                console.log(end)
+
+                events.push({
+                    start: new Date(booking.start_time),
+                    end: end,
+                    title: bookingsData.title,
+                    id: booking.booking_id
+                })
+            })
+
+            console.log("Event is ", events)
+            setEventsData(events);
+
+            console.log("Events Data", eventsData)
+
+
+            console.log("Bookings", bookingsData)
             console.log("Available Slots By Day", openSlots)
             console.log("Slots ", openSlots[3])
             console.log(data.availabilityHashmap)
@@ -51,10 +92,11 @@ export default function ReactBigCalendar() {
             setOpenSlots(openSlots)
             console.log(data);
 
-            tutorIdNameMap = data.tutorIdNameMap
             const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
             setTutorIDS(tutorOptions)
             setIsLoaded(true)
+
+
 
 
             // Use the data here
@@ -67,6 +109,7 @@ export default function ReactBigCalendar() {
         console.log('Start date has changed:', startDate);
         setIsLoaded(false)
         loadData()
+
     }, [startDate]); // Add `startDate` as a dependency
 
     useEffect(() => {
@@ -81,6 +124,7 @@ export default function ReactBigCalendar() {
         };
     }, []);
     const handleSelect = ({ start }) => {
+        setBookingError(null); // Clear the error when selecting a new slot
         const end = moment(start).add(1, "hour").toDate();
 
 
@@ -116,16 +160,95 @@ export default function ReactBigCalendar() {
             console.log("This slot is not available.");
         }
     };
-    const handleBook = (person) => {
+
+    const deleteEvent = async (event) => {
+
+        const response = await fetch(`http://localhost:8080/availability/booking?id=${event.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            console.log("Deleted booking");
+            setEventsData(eventsData.filter(item => item.id !== event.id));
+        } else {
+            setBookingError("Failed to delete session")
+        }
+
+    }
+
+
+    const handleBook = async (id) => {
         if (selectedSlot) {
-            setEventsData([
-                ...eventsData,
-                {
-                    start: selectedSlot.start,
-                    end: selectedSlot.end,
-                    title: `Intermediate Python`,
+
+            const response = await fetch('http://localhost:8080/availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-            ]);
+                body: JSON.stringify({
+                    booking: {
+                        enrollment_id: 1,
+                        tutor_id: id.value,
+                        session_duration: 60,
+                        start_time: selectedSlot.start
+                    }
+                }),
+            });
+
+            const data = await response.json();
+            console.log('Success:', data);
+            // console.log('Success:', data[0].insert_booking);
+
+
+
+
+
+            if (response.status === 200) {
+                // let events = []
+                // const newEvents = data.map(booking => {
+                //     const bookingSlot = booking.insert_booking;
+                //     console.log("Booking is ", bookingSlot);
+
+                //     const end = moment(bookingSlot[4]).add(bookingSlot[2], "minute").toDate();
+                //     console.log(end);
+
+                //     return {
+                //         start: new Date(bookingSlot[4]),
+                //         end: end,
+                //         title: title,
+                //     };
+                // });
+                // console.log("New Events ", newEvents);
+                console.log("Events Data ", eventsData);
+                // setUpdatedEvents(true)
+                setEventsData([
+                    ...eventsData,
+                    {
+                        start: selectedSlot.start,
+                        end: selectedSlot.end,
+                        title: title,
+                        id: data
+                    },
+                ]);
+
+                console.log("Events Data is ", eventsData)
+
+                // console.log("Added Events ", newEvents)
+                // setEventsData([...eventsData, ...newEvents]);
+            } else {
+                console.log("Error adding booking");
+                setBookingError('Booking failed: You have exceeded the maximum limit of 5 bookings.');
+                console.log(data);
+
+            }
+
+
+
+
+
         }
         setSelectedSlot(null);
     };
@@ -159,33 +282,66 @@ export default function ReactBigCalendar() {
         }
     };
 
+    const EventComponent = ({ event }) => (
+        <div className="rbc-event" style={{ position: 'relative' }}>
+            <div className="event-content">
+                {event.title}
+            </div>
+            <button className="delete-button" style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: '#ff6347', // Tomato color
+                color: 'white', // White text
+                border: 'none', // Remove border
+                borderRadius: '5px', // Rounded corners
+                padding: '10px 20px', // Padding
+                fontSize: '1em', // Text size
+                cursor: 'pointer' // Cursor style on hover
+            }} onClick={() => deleteEvent(event)}>
+                Delete
+            </button>
+        </div>
+    );
+
     return (
         <TutorDashboardLayout
-            rightColumnContent={selectedSlot != null && (
-                <div className="modal-container">
-                    <Modal
-                        selectedSlot={selectedSlot.start.toString()}
-                        availablePeople={availablePeople} onBook={handleBook}
-                        onClose={() => setSelectedSlot(null)}
-                    />
-                </div>
-            )}
+            rightColumnContent={
+                bookingError ? (
+                    <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
+                ) : (
+                    selectedSlot != null && (
+                        <div className="modal-container">
+                            <Modal
+                                selectedSlot={selectedSlot.start.toString()}
+                                availablePeople={availablePeople} onBook={handleBook}
+                                onClose={() => {
+                                    setSelectedSlot(null);
+                                    setBookingError(null); // Clear the error when closing the modal
+                                }}
+                            />
+                        </div>
+                    )
+                )
+            }
         >
             <div className="calendar-container"
             >
                 {isLoaded && (
                     <Calendar
-                        key={startDate}
+                        key={eventsData}
                         views={["week"]}
                         selectable
                         localizer={localizer}
                         defaultDate={startDate}
                         defaultView="week"
+                        components={{ event: EventComponent }}
                         events={eventsData}
                         min={new Date(2020, 1, 0, 7, 0, 0)}
                         max={new Date(2020, 1, 0, 19, 0, 0)}
                         style={{ height: "75vh", width: "90vw" }}
-                        onSelectEvent={(event) => alert(`Event: ${event.title}`)}
+                        onSelectEvent={deleteEvent}
                         onSelectSlot={handleSelect}
                         slotPropGetter={slotPropGetter}
                         onNavigate={(date) => {
