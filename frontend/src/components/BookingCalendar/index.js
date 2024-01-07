@@ -6,7 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
 import { TutorDashboardLayout } from "../TutorDashboardLayout";
-import { startOfWeek } from "date-fns";
+import { endOfWeek, startOfWeek } from "date-fns";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -57,7 +57,7 @@ export default function ReactBigCalendar() {
 
 
             console.log("Date ")
-            console.log(new Date(bookingsData.bookings[0].start_time))
+            // console.log(new Date(bookingsData.bookings[0].start_time))
 
             console.log("Events Data", eventsData)
 
@@ -73,7 +73,8 @@ export default function ReactBigCalendar() {
                     start: new Date(booking.start_time),
                     end: end,
                     title: bookingsData.title,
-                    id: booking.booking_id
+                    id: booking.booking_id,
+                    tutor_id: booking.tutor_id
                 })
             })
 
@@ -173,6 +174,37 @@ export default function ReactBigCalendar() {
         if (response.ok) {
             console.log("Deleted booking");
             setEventsData(eventsData.filter(item => item.id !== event.id));
+
+            const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
+            const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
+            const times = [selectedTime, thirtyMinsLater];
+
+            let body = JSON.stringify({
+                tutor_id: event.tutor_id,
+                start_date: startDate.toISOString().split('T')[0],
+                end_date: endOfWeek(startDate).toISOString().split('T')[0],
+                day: event.start.getDay(),
+                times: times
+            });
+
+            console.log("Body is ", body)
+
+            let url = "http://localhost:8080/availability/add"
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: body
+            });
+
+            if (response.ok) {
+                console.log("Added availability");
+            } else {
+
+                console.log("Error adding availability");
+            }
+
+
         } else {
             setBookingError("Failed to delete session")
         }
@@ -230,14 +262,44 @@ export default function ReactBigCalendar() {
                         start: selectedSlot.start,
                         end: selectedSlot.end,
                         title: title,
-                        id: data
+                        id: data,
+                        tutor_id: id.value
                     },
                 ]);
 
+                const selectedTime = selectedSlot.start.toTimeString().split(' ')[0].substring(0, 5);
+                const thirtyMinsLater = new Date(selectedSlot.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
+                const times = [selectedTime, thirtyMinsLater];
+
+                let body = JSON.stringify({
+                    tutor_id: id.value,
+                    start_date: startDate.toISOString().split('T')[0],
+                    end_date: endOfWeek(startDate).toISOString().split('T')[0],
+                    day: selectedSlot.start.getDay(),
+                    times: times
+                });
+
+                let url = "http://localhost:8080/availability/remove"
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: body
+                });
+
+                if (response.ok) {
+                    console.log("Removed availability");
+                } else {
+
+                    console.log("Error removing availability");
+                }
+
+
+
+                console.log("Body is ", body)
+
+
                 console.log("Events Data is ", eventsData)
 
-                // console.log("Added Events ", newEvents)
-                // setEventsData([...eventsData, ...newEvents]);
             } else {
                 console.log("Error adding booking");
                 setBookingError('Booking failed: You have exceeded the maximum limit of 5 bookings.');
