@@ -46,6 +46,8 @@ export default class tutorAvailabilityController {
                     }
                     tutorIdNameMap[tutorData.tutor_id] = tutorData.tutor_name;
 
+                    timeSlots.sort(); // Sort the time slots in ascending order
+
 
                     for (let i = 0; i < timeSlots.length - 1; i++) {
                         // Check if the current time slot and the next one are consecutive
@@ -109,6 +111,24 @@ export default class tutorAvailabilityController {
             return dates;
         }).catch((err) => {
             console.log("Error getting dates ", err)
+            // reject(err);
+        });
+    }
+
+    async removeAvailability(userID, startDate, endDate, day, times) {
+        return this.tutor.removeAvailability(userID, startDate, endDate, day, times).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error removing availability ", err)
+            // reject(err);
+        });
+    }
+
+    async addSlots(userID, startDate, endDate, day, times) {
+        return this.tutor.addSlots(userID, startDate, endDate, day, times).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error adding slots ", err)
             // reject(err);
         });
     }

@@ -222,6 +222,54 @@ export class tutorAvailability {
             client.release();
         }
 
+
+
+    }
+
+    async addSlots(tutorId, startDate, endDate, day, times) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL add_slots($1, $2, $3, $4, $5)',
+                    [tutorId, startDate, endDate, day, times],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeAvailability(tutorId, startDate, endDate, day, times) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL remove_slots($1, $2, $3, $4, $5)',
+                    [tutorId, startDate, endDate, day, times],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
     }
 
     async setAvailabilityForWeeks(userID, weeks, patternID) {
