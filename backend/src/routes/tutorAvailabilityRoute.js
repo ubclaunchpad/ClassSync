@@ -24,7 +24,8 @@ router.get("/schedule", (req, res) => {
 router.get("/dates", (req, res) => {
 
 
-    tutor.getDates(22).then((dates) => {
+
+    tutor.getDates(req.query.id).then((dates) => {
         res.status(200).send(dates);
     }).catch((err) => {
         res.status(500).send({ error: "Dates not found ", err });
