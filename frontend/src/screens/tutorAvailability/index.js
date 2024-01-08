@@ -213,6 +213,27 @@ export default function ScheduleSelector() {
             .catch(error => console.error('There was an error!', error));
     }, []); // Empty dependency array means this effect runs once on mount
 
+    const clearAvailability = async () => {
+        console.log("Clearing Availability")
+
+        let url = `http://localhost:8080/availability/clear`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tutor_id: localStorage.getItem("userID"),
+                start_date: startDate,
+            })
+        });
+
+        if (response.ok) {
+            console.log("Availability cleared");
+
+
+            getAvailability();
+        }
+    }
+
     const resetAvailability = async () => {
         console.log("Resetting Availability")
 
@@ -237,7 +258,7 @@ export default function ScheduleSelector() {
 
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} >
             <TutorDashboardLayout>
 
                 <div className="App">
@@ -245,10 +266,12 @@ export default function ScheduleSelector() {
                     <button onClick={navigateToPreviousWeek}>Previous Week</button>
                     <button onClick={navigateToNextWeek}>Next Week</button>
                     <button onClick={resetAvailability}>Reset to Recurring</button>
+                    <button onClick={clearAvailability}>Clear Availability</button>
                     <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
                     <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
                         {isLoaded && (
                             <Calendar
+                                key={calendar}
                                 calendar={calendar}
                                 handleSubmitCalendar={handleSubmitCalendar}
                                 start_date={startDate}
