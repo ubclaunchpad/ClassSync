@@ -97,7 +97,7 @@ export default function ScheduleSelectorRecurring() {
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
     async function getDates() {
-        const response = await fetch("http://localhost:8080/tutor/availability/dates", {
+        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem("userID")}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
