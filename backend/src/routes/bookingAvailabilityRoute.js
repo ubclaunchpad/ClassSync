@@ -53,6 +53,17 @@ router.post("/remove", (req, res) => {
         });
 });
 
+router.post("/reset", (req, res) => {
+    return tutor.resetAvailability(req.body.tutor_id, req.body.start_date, req.body.end_date)
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
+
 router.post("/add", (req, res) => {
     return tutor.addSlots(req.body.tutor_id, req.body.start_date, req.body.end_date,
         req.body.day, req.body.times)

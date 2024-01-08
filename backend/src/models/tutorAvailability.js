@@ -226,6 +226,29 @@ export class tutorAvailability {
 
     }
 
+    async resetAvailability(userID, startDate, endDate) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL set_tutor_availability($1, $2, $3)',
+                    [userID, startDate, endDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
+    }
     async addSlots(tutorId, startDate, endDate, day, times) {
         const client = await con.connect();
         try {

@@ -104,6 +104,14 @@ export default class tutorAvailabilityController {
         });
     }
 
+    async resetAvailability(userID, startDate, endDate) {
+        return this.tutor.resetAvailability(userID, startDate, endDate).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error resetting availability ", err)
+            // reject(err);
+        });
+    }
 
     getDates(userID) {
         return this.tutor.getDates(userID).then((dates) => {
