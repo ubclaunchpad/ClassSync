@@ -104,6 +104,15 @@ export default class tutorAvailabilityController {
         });
     }
 
+    async clearAvailability(userID, startDate) {
+        return this.tutor.clearAvailability(userID, startDate).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error clearing availability ", err)
+            // reject(err);
+        });
+    }
+
     async resetAvailability(userID, startDate, endDate) {
         return this.tutor.resetAvailability(userID, startDate, endDate).then((result) => {
             return result;

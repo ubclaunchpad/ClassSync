@@ -53,6 +53,18 @@ router.post("/remove", (req, res) => {
         });
 });
 
+
+router.post("/clear", (req, res) => {
+    return tutor.clearAvailability(req.body.tutor_id, req.body.start_date)
+
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
 router.post("/reset", (req, res) => {
     return tutor.resetAvailability(req.body.tutor_id, req.body.start_date, req.body.end_date)
         .then((availability) => {

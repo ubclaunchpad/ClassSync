@@ -226,6 +226,30 @@ export class tutorAvailability {
 
     }
 
+    async clearAvailability(userID, startDate) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL clear_availability($1, $2)',
+                    [userID, startDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+
+                            resolve();
+                        }
+                    }
+                );
+            });
+
+        }
+        finally {
+            client.release();
+        }
+    }
     async resetAvailability(userID, startDate, endDate) {
         const client = await con.connect();
         try {
