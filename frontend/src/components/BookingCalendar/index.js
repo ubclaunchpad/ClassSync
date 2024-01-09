@@ -199,6 +199,7 @@ export default function ReactBigCalendar() {
 
             if (response.ok) {
                 console.log("Added availability");
+                loadData()
             } else {
 
                 console.log("Error adding availability");
@@ -288,6 +289,7 @@ export default function ReactBigCalendar() {
 
                 if (response.ok) {
                     console.log("Removed availability");
+                    loadData()
                 } else {
 
                     console.log("Error removing availability");
@@ -392,7 +394,7 @@ export default function ReactBigCalendar() {
             >
                 {isLoaded && (
                     <Calendar
-                        key={eventsData}
+                        key={eventsData + availabilityHashmap}
                         views={["week"]}
                         selectable
                         localizer={localizer}
