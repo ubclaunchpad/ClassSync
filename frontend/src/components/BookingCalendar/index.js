@@ -30,7 +30,7 @@ export default function ReactBigCalendar() {
 
     const loadData = async () => {
         console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        let url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}`;
+        let url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}&course_id=1`;
 
         try {
             const response = await fetch(url);
