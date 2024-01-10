@@ -71,13 +71,13 @@ export class tutorAvailability {
         }
     }
 
-    async getAvailableTutors(startDate) {
+    async getAvailableTutors(startDate, course_id) {
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 con.query(
-                    'SELECT * FROM get_available_tutors($1)',
-                    [startDate],
+                    'SELECT * FROM get_available_tutors($1, $2)',
+                    [startDate, course_id],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
@@ -224,6 +224,31 @@ export class tutorAvailability {
 
 
 
+    }
+
+    async getAppointmentsByTutor(tutorId, startDate) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_appointments_by_tutor($1, $2)',
+                    [tutorId, startDate],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+
+                            console.log("Got appointments ", results);
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+
+        } finally {
+            client.release();
+        }
     }
 
     async clearAvailability(userID, startDate) {

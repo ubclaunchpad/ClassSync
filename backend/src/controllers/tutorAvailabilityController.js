@@ -5,6 +5,14 @@ export default class tutorAvailabilityController {
         this.tutor = new tutorAvailability();
     }
 
+
+    async getAppointmentsByTutor(tutor_id, date) {
+        return this.tutor.getAppointmentsByTutor(tutor_id, date).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
     async deleteBooking(booking_id) {
         return this.tutor.deleteBooking(booking_id).then((result) => {
             return result;
@@ -31,8 +39,8 @@ export default class tutorAvailabilityController {
             throw (err);
         });
     }
-    async getAvailableTutors(startDate) {
-        return this.tutor.getAvailableTutors(startDate).then((availabilityData) => {
+    async getAvailableTutors(startDate, course_id) {
+        return this.tutor.getAvailableTutors(startDate, course_id).then((availabilityData) => {
 
             let availabilityHashmap = {};
             let tutorIdNameMap = {}

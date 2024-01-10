@@ -5,8 +5,7 @@ const router = Router();
 const tutor = new tutorAvailabilityController();
 
 router.get("/", (req, res) => {
-    console.log(req.query.date)
-    return tutor.getAvailableTutors(req.query.date)
+    return tutor.getAvailableTutors(req.query.date, req.query.course_id)
         .then((availability) => {
             res.status(200).json(availability);
         })
@@ -15,6 +14,7 @@ router.get("/", (req, res) => {
             res.status(500).json({ error: "An error occurred while fetching available tutors." });
         });
 });
+
 
 
 router.post("/", (req, res) => {
@@ -99,4 +99,6 @@ router.get("/bookings", (req, res) => {
             res.status(500).json(err);
         });
 });
+
+
 export default router;
