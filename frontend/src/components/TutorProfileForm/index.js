@@ -79,9 +79,7 @@ const TutorProfileForm = (props) => {
 
             if (response.status === 200) {
                 console.log("User details updated");
-                // const responseData = response.data;
-                // console.log('User details Updated:', responseData);
-                window.location.href = "/tutor-availability";
+                window.location.href = "/tutor/availability/recurring";
             } else {
                 console.error('User details failed to update:', response.data);
             }

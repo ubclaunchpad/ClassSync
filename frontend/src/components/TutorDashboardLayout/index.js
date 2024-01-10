@@ -2,10 +2,11 @@ import Header from "../Header";
 import Banner from "../Banner";
 import Plus from "../../assets/plus.png";
 import Notification from "../../assets/notifications.png";
+import Logout from "../../assets/logout.png";
 
 import "./index.css";
 
-export const TutorDashboardLayout = ({ name, ...props }) => {
+export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => {
   let displayName = name !== undefined ? " Back, " + name : "";
   return (
 
@@ -30,10 +31,25 @@ export const TutorDashboardLayout = ({ name, ...props }) => {
                   alt="Notification"
                 />
               </button>
+
+              <button
+                class="header-button-round"
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.href = '/tutor/login';
+                }}
+              >
+                <img src={Logout} alt="Logout" />
+              </button>
             </div>
           </div>
         </div>
+
         <div class="column middle">{props.children}</div>
+
+        {rightColumnContent && (
+          <div class="column right">{rightColumnContent}</div>
+        )}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ const TutorProfile = () => {
     const name = localStorage.getItem('fname') || "";
     const url = "http://localhost:8080";
 
-    const [maxHours, setMaxHours] = useState(0);
+    const [maxHours, setMaxHours] = useState();
     const [university, setUniversity] = useState('');
     const [about, setAbout] = useState('');
     const [courses, setCourses] = useState([]);
@@ -17,16 +17,6 @@ const TutorProfile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const id = localStorage.getItem('userID');
-
-                // Fetch profile data
-                const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
-                const profileData = await profileResponse.json();
-
-                setMaxHours(profileData.max_hours);
-                setUniversity(profileData.university);
-                setAbout(profileData.bio);
-
                 // Fetch courses data
                 const coursesResponse = await fetch(`${url}/tutor/offerings`);
                 const coursesData = await coursesResponse.json();
@@ -39,6 +29,18 @@ const TutorProfile = () => {
                 }));
 
                 setCourses(options);
+                const id = localStorage.getItem('userID');
+
+                // Fetch profile data
+                const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
+                const profileData = await profileResponse.json();
+                console.log("Profile Data", profileData);
+
+                setMaxHours(profileData.max_hours);
+                setUniversity(profileData.university);
+                setAbout(profileData.bio);
+
+
 
                 // Fetch offerings data
                 const offeringsResponse = await fetch(`${url}/tutor/offering?id=${id}`);
@@ -48,10 +50,12 @@ const TutorProfile = () => {
                 const filteredOptions = options.filter(option => offeringsData.includes(option.value));
                 setSelectedOptions(filteredOptions);
 
-                setDataLoaded(true);
             } catch (error) {
                 console.error('Failed to fetch data', error);
+
             }
+            setDataLoaded(true);
+
         };
 
         fetchData();

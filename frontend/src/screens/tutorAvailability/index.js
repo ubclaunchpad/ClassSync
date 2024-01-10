@@ -5,7 +5,7 @@ import { format, startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { da } from "date-fns/locale";
+import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
 
 
 
@@ -189,7 +189,7 @@ export default function ScheduleSelector() {
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
     async function getDates() {
-        const response = await fetch("http://localhost:8080/tutor/availability/dates", {
+        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem(userID)}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -213,28 +213,75 @@ export default function ScheduleSelector() {
             .catch(error => console.error('There was an error!', error));
     }, []); // Empty dependency array means this effect runs once on mount
 
+    const clearAvailability = async () => {
+        console.log("Clearing Availability")
+
+        let url = `http://localhost:8080/availability/clear`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tutor_id: localStorage.getItem("userID"),
+                start_date: startDate,
+            })
+        });
+
+        if (response.ok) {
+            console.log("Availability cleared");
+
+
+            getAvailability();
+        }
+    }
+
+    const resetAvailability = async () => {
+        console.log("Resetting Availability")
+
+        let url = `http://localhost:8080/availability/reset`;
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                tutor_id: localStorage.getItem("userID"),
+                start_date: startDate,
+                end_date: endOfWeek(startDate)
+            })
+        });
+
+
+        if (response.ok) {
+            console.log("Availability reset");
+            getAvailability();
+        }
+    }
 
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} >
+            <TutorDashboardLayout>
 
-            <div className="App">
-                {console.log("id = " + startDate)}
-                <button onClick={navigateToPreviousWeek}>Previous Week</button>
-                <button onClick={navigateToNextWeek}>Next Week</button>
-                <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
-                <div className="Calendar" style={{ width: '100vw', height: '100vh', marginLeft: '-20px' }}>
-                    {isLoaded && (
-                        <Calendar
-                            calendar={calendar}
-                            handleSubmitCalendar={handleSubmitCalendar}
-                            start_date={startDate}
-                            isRecurring={false}
-                            dateFormat="ddd DD MMM"
-                        />
-                    )}
+                <div className="App">
+                    {console.log("id = " + startDate)}
+                    <button onClick={navigateToPreviousWeek}>Previous Week</button>
+                    <button onClick={navigateToNextWeek}>Next Week</button>
+                    <button onClick={resetAvailability}>Reset to Recurring</button>
+                    <button onClick={clearAvailability}>Clear Availability</button>
+                    <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
+                    <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
+                        {isLoaded && (
+                            <Calendar
+                                key={calendar}
+                                calendar={calendar}
+                                handleSubmitCalendar={handleSubmitCalendar}
+                                start_date={startDate}
+                                isRecurring={false}
+                                dateFormat="ddd DD MMM"
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            </TutorDashboardLayout>
         </LocalizationProvider >
     );
 }
