@@ -12,12 +12,9 @@ export const ParentDashboardLayout = (props) => {
     return (
         <div className="page-container">
             <Header />
-            <Banner
-                smallText="Parent Dashboard"
-                mainText="Welcome Back, Insert Name!"
-            />
             <div class="main-row">
-                <div class="column left">
+
+                <div class="column left-span">
                     <div class="left-header">
                         <button class="header-button">Upcoming Classes</button>
                         <div class="right-buttons">
@@ -34,19 +31,31 @@ export const ParentDashboardLayout = (props) => {
                         </div>
                     </div>
                 </div>
-                <div class="column middle">{props.children}</div>
-                <div class="column right">
-                    <div className="right-container">
-                        <div class="right-header">
-                            <p className="shop-classes">Shop for Courses</p>
-                            <img className="bagImage" src={Bag} alt="Bag" />
+                <div>
+                <div class="column middle-right">
+                    <Banner
+                        smallText="Parent Dashboard"
+                        mainText="Welcome Back, Insert Name!"
+                    />
+                    <div className="inner-row">
+                        <div className="column inner-left">
+                            {props.children}
                         </div>
-                        <div className="shop-courses">
-                            <SearchBar />
+                        <div className="column inner-right">
+                            <div className="right-container">
+                                <div class="right-header">
+                                    <p className="shop-classes">Shop for Courses</p>
+                                    <img className="bagImage" src={Bag} alt="Bag" />
+                                </div>
+                                <div className="shop-courses">
+                                    <SearchBar />
+                                </div>
+                            </div>
+                            <div className="right-container"></div>
+                            <div className="right-container"></div>
                         </div>
                     </div>
-                    <div className="right-container"></div>
-                    <div className="right-container"></div>
+                </div>
                 </div>
             </div>
         </div>

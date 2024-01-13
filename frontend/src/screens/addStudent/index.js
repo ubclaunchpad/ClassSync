@@ -17,7 +17,7 @@ const AddStudent = (props) => {
                 mainText="Welcome Back, Insert Name!"
             />
             <div class="main-row">
-                <div class="column left">
+                <div class="column left-student">
                 </div>
                 <div class="column middle">
                 <div className="student-info-container">
