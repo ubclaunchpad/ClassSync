@@ -33,8 +33,8 @@ export default class parentAuthController {
               if (result) {
                 const token = jwt.sign(
                   {
-                    email: email,
                     role: "guardian",
+                    userId: userId,
                   },
                   process.env.JWT_SECRET,
                   {
@@ -44,9 +44,6 @@ export default class parentAuthController {
                 );
 
                 resolve({
-                  email: email,
-                  role: "guardian",
-                  userId: userId,
                   token: token,
                 });
               } else {

@@ -31,8 +31,6 @@ const LoginForm = () => {
       }
     );
 
-    localStorage.setItem("email", response.data.email);
-    localStorage.setItem("role", response.data.role);
     localStorage.setItem("token", response.data.token);
   };
 
