@@ -33,8 +33,33 @@ export default function ReactBigCalendar() {
 
     const loadData = async () => {
         console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        let url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}&course_id=1`;
 
+
+
+        let url = `http://localhost:8080/tutor/courses?course_id=1`
+
+        const tutors = await fetch(url);
+        const tutorsData = await tutors.json();
+        // console.log("Course Data", courseData)
+
+        const tutorsOptions = tutorsData.map(course => ({
+            value: course.tutor_id,
+            label: course.tutor_name
+        }));
+
+
+        setFilterOptions(tutorsOptions)
+
+        let tutorIds = selectedTutors.map(tutor => tutor.value).join(',');
+        if (tutorIds === "") {
+            tutorIds = tutorsOptions.map(option => option.value).join(',');
+        }
+        console.log("Tutor ids ", tutorIds);
+
+
+
+        url = `http://localhost:8080/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
+        console.log("URL is ", url)
         try {
             const response = await fetch(url);
 
@@ -57,19 +82,7 @@ export default function ReactBigCalendar() {
             setTitle(bookingsData.title)
             console.log("Title is ", title)
 
-            url = `http://localhost:8080/tutor/courses?course_id=1`
 
-            const tutors = await fetch(url);
-            const tutorsData = await tutors.json();
-            // console.log("Course Data", courseData)
-
-            const tutorsOptions = tutorsData.map(course => ({
-                value: course.tutor_id,
-                label: course.tutor_name
-            }));
-
-
-            setFilterOptions(tutorsOptions)
 
 
 
@@ -362,6 +375,12 @@ export default function ReactBigCalendar() {
 
         }
     };
+
+    useEffect(() => {
+        loadData()
+        console.log("Updated Availability")
+    }, [selectedTutors]);
+
 
     const EventComponent = ({ event }) => (
         <div className="rbc-event" style={{ position: 'relative' }}>
