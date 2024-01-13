@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+.student-info-container {
+    color: #103da2;
+    margin: 0 0.5rem;
+    margin-top: 0.5rem;
+    border-radius: 15px;
+    padding: 0.25rem 2rem;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #b3defc;
+    min-height: 200px;
+}
+
+.header-button {
+    color: #103DA2;
+    background-color: #B3DEFC;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    height: 1.5rem;
+    padding: 0 .8rem;
+}

@@ -14,6 +14,13 @@ const LoginForm = () => {
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
     console.log("Submitting login form!");
+    console.log(
+      `{
+        email: ${formData.email},
+        password: ${formData.password},
+        API URL: ${process.env.REACT_APP_API_URL}
+      }`
+    )
 
     const data = {
       email: formData.email,
@@ -22,7 +29,7 @@ const LoginForm = () => {
 
     // For parent login
     const response = await axios.post(
-      process.env.REACT_APP_API_URL + "/parent/login",
+      "http://localhost:8080" + "/parent/login",
       JSON.stringify(data),
       {
         headers: {
