@@ -7,6 +7,7 @@ import Modal from "../BookingModal";
 import "./index.css";
 import { TutorDashboardLayout } from "../TutorDashboardLayout";
 import { endOfWeek, startOfWeek } from "date-fns";
+import Select from "react-select";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -22,6 +23,8 @@ export default function ReactBigCalendar() {
     const [tutorIDs, setTutorIDS] = useState({})
     const [title, setTitle] = useState("")
     const [bookingError, setBookingError] = useState(null);
+    const [selectedTutors, setSelectedTutors] = useState([]);
+    const [filterOptions, setFilterOptions] = useState([]);
 
 
     const [forceRender, setForceRerender] = useState(false);
@@ -30,8 +33,33 @@ export default function ReactBigCalendar() {
 
     const loadData = async () => {
         console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        let url = `http://localhost:8080/availability?date=${startDate.toISOString().split('T')[0]}&course_id=1`;
 
+
+
+        let url = `http://localhost:8080/tutor/courses?course_id=1`
+
+        const tutors = await fetch(url);
+        const tutorsData = await tutors.json();
+        // console.log("Course Data", courseData)
+
+        const tutorsOptions = tutorsData.map(course => ({
+            value: course.tutor_id,
+            label: course.tutor_name
+        }));
+
+
+        setFilterOptions(tutorsOptions)
+
+        let tutorIds = selectedTutors.map(tutor => tutor.value).join(',');
+        if (tutorIds === "") {
+            tutorIds = tutorsOptions.map(option => option.value).join(',');
+        }
+        console.log("Tutor ids ", tutorIds);
+
+
+
+        url = `http://localhost:8080/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
+        console.log("URL is ", url)
         try {
             const response = await fetch(url);
 
@@ -53,6 +81,8 @@ export default function ReactBigCalendar() {
             console.log(bookingsData.title)
             setTitle(bookingsData.title)
             console.log("Title is ", title)
+
+
 
 
 
@@ -346,6 +376,12 @@ export default function ReactBigCalendar() {
         }
     };
 
+    useEffect(() => {
+        loadData()
+        console.log("Updated Availability")
+    }, [selectedTutors]);
+
+
     const EventComponent = ({ event }) => (
         <div className="rbc-event" style={{ position: 'relative' }}>
             <div className="event-content">
@@ -368,6 +404,18 @@ export default function ReactBigCalendar() {
             </button>
         </div>
     );
+    const tutors = [
+        { id: '1', firstName: 'John', lastName: 'Doe' },
+        { id: '2', firstName: 'Jane', lastName: 'Doe' },
+        { id: '3', firstName: 'Bob', lastName: 'Smith' },
+        { id: '4', firstName: 'Alice', lastName: 'Johnson' },
+        { id: '5', firstName: 'Charlie', lastName: 'Brown' },
+    ];
+
+    const tutorOptions = tutors.map(tutor => ({
+        value: tutor.id,
+        label: `${tutor.firstName} ${tutor.lastName}`
+    }));
 
     return (
         <TutorDashboardLayout
@@ -389,30 +437,59 @@ export default function ReactBigCalendar() {
                     )
                 )
             }
+
         >
             <div className="calendar-container"
             >
                 {isLoaded && (
-                    <Calendar
-                        key={eventsData + availabilityHashmap}
-                        views={["week"]}
-                        selectable
-                        localizer={localizer}
-                        defaultDate={startDate}
-                        defaultView="week"
-                        components={{ event: EventComponent }}
-                        events={eventsData}
-                        min={new Date(2020, 1, 0, 7, 0, 0)}
-                        max={new Date(2020, 1, 0, 19, 0, 0)}
-                        style={{ height: "75vh", width: "90vw" }}
-                        onSelectEvent={deleteEvent}
-                        onSelectSlot={handleSelect}
-                        slotPropGetter={slotPropGetter}
-                        onNavigate={(date) => {
-                            setSelectedSlot(null)
-                            setStartDate(startOfWeek(date))
-                        }}
-                    />
+                    <div width="100vw">
+                        <Select
+                            value={selectedTutors}
+                            onChange={setSelectedTutors}
+                            options={filterOptions}
+                            isSearchable
+                            isMulti
+                            placeholder="Filter by tutor..."
+                            styles={{
+                                container: (provided) => ({
+                                    ...provided,
+                                    width: '90%',
+                                    paddingBottom: '10px',
+                                }),
+                                menu: (provided) => ({
+                                    ...provided,
+                                    width: '40%',
+                                    marginLeft: `${selectedTutors.length * 10}%`
+                                }),
+                                multiValue: (styles) => {
+                                    return {
+                                        ...styles,
+                                        backgroundColor: `hsla(200, 100%, 80%, 1)` // Change 200 to any value between 0 and 360
+                                    };
+                                },
+                            }}
+                        />
+                        <Calendar
+                            key={eventsData + availabilityHashmap}
+                            views={["week"]}
+                            selectable
+                            localizer={localizer}
+                            defaultDate={startDate}
+                            defaultView="week"
+                            components={{ event: EventComponent }}
+                            events={eventsData}
+                            min={new Date(2020, 1, 0, 7, 0, 0)}
+                            max={new Date(2020, 1, 0, 19, 0, 0)}
+                            style={{ height: "75vh", width: "90vw" }}
+                            onSelectEvent={deleteEvent}
+                            onSelectSlot={handleSelect}
+                            slotPropGetter={slotPropGetter}
+                            onNavigate={(date) => {
+                                setSelectedSlot(null)
+                                setStartDate(startOfWeek(date))
+                            }}
+                        />
+                    </div>
                 )}
             </div>
 

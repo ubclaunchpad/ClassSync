@@ -71,6 +71,57 @@ export class tutorAvailability {
         }
     }
 
+    async getTutorByCourse(course_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_tutors_for_course($1)',
+                    [course_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+
+    async getSelectedTutorsAvailability(start_date, tutorIds) {
+        const client = await con.connect();
+        console.log("Getting availability");
+        console.log(start_date, tutorIds);
+
+        let date = '12-31-2023'
+        let tutor_array = [1, 2, 3]
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_tutors_availability($1, $2)',
+                    [start_date, tutorIds],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log("Got availability ", results);
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+
+    }
     async getAvailableTutors(startDate, course_id) {
         const client = await con.connect();
         try {
