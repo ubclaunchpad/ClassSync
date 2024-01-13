@@ -7,7 +7,7 @@ BEGIN
     INNER JOIN availability_patterns ap ON ta.pattern_id = ap.pattern_id;
 END;
 
-CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50), startdate)
+CREATE OR REPLACE PROCEDURE getAvailabilitiesByTutor(_tutor_id varchar(50), startdate date)
 LANGUAGE plpgsql
 AS $$
 BEGIN

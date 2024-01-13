@@ -2,13 +2,14 @@
 CREATE OR REPLACE PROCEDURE addCourse(
     _course_name VARCHAR(50),    
     _course_difficulty course_difficulty,
-    _course_description VARCHAR(255)
+    _course_description VARCHAR(255),
+    _course_color VARCHAR(7)
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    INSERT INTO courses (course_name, course_difficulty, course_description)
-    VALUES (_course_name, _course_difficulty, _course_description);
+    INSERT INTO courses (course_name, course_difficulty, course_description, course_color)
+    VALUES (_course_name, _course_difficulty, _course_description, _course_color);
 END;
 $$;
 
@@ -45,13 +46,8 @@ END;
 $$;
 
 -- create new procedure to get all courses
-CREATE OR REPLACE PROCEDURE getCourses()
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    SELECT * FROM courses;
-END;
-$$;
+CREATE OR REPLACE FUNCTION getCourses() RETURNS SETOF courses LANGUAGE plpgsql AS $$ BEGIN RETURN QUERY SELECT * FROM courses; END; $$;
+
 
 -- Get course names by course_id 
 CREATE OR REPLACE PROCEDURE getCourseById(

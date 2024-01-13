@@ -25,6 +25,7 @@ const TutorProfileForm = () => {
           bio: { firstName, lastName, university, about, maxHours, offerings },
         }),
       });
+
       if (response.status === 200) {
         const responseData = await response.json();
         console.log("User details Updated:", responseData);

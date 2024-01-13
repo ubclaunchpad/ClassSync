@@ -55,6 +55,25 @@
     margin-top: .25rem;
 }
 
+.basic-multi-select {
+    width: 100%;
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #B3DEFC;
+}
+
+
+.input-row label select {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #B3DEFC;
+    margin-top: .25rem;
+}
+
 input[type="submit"] {
     align-self: flex-end;
     width: 12rem;

@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-.page-container{
+.page-container {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
-  }
+}
 
 h2 {
     font-size: 1.4rem;
 }
-  
+
 .column {
-float: left;
+    float: left;
 }
 
 .left {
@@ -28,15 +28,17 @@ float: left;
 }
 
 .middle {
-    width: 66%;
+    width: 64%;
     display: flex;
     flex-direction: column;
 }
 
+
+
 @media screen and (max-width: 750px) {
-.column {
-    width: 100%;
-}
+    .column {
+        width: 100%;
+    }
 }
 
 .header-row {
@@ -68,8 +70,8 @@ float: left;
     margin-top: .5rem;
     border-radius: 15px;
     padding: .25rem 2rem;
-    border-width: 3px; 
-    border-style: solid; 
+    border-width: 3px;
+    border-style: solid;
     border-color: #B3DEFC;
     min-height: 200px;
 }
@@ -104,7 +106,8 @@ float: left;
 
 .right-buttons {
     display: flex;
-    gap: .15rem; /* Adjust the spacing as needed */
+    gap: .15rem;
+    /* Adjust the spacing as needed */
 }
 
 .header-button-round {

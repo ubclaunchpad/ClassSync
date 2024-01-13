@@ -1,4 +1,5 @@
 import "./index.css";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
@@ -10,17 +11,37 @@ const LoginForm = () => {
     mode: "onBlur",
   });
 
-  console.log(errors);
+  const handleUserSubmit = async (formData) => {
+    // Data will contain email (string), password (string), remember-me (boolean)
+    console.log("Submitting login form!");
+
+    const data = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    // For parent login
+    const response = await axios.post(
+      process.env.REACT_APP_API_URL + "/parent/login",
+      JSON.stringify(data),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    localStorage.setItem("email", response.data.email);
+    localStorage.setItem("role", response.data.role);
+    localStorage.setItem("token", response.data.token);
+  };
 
   return (
     <div className="login-form-container">
       <h4 className="login-form-title">Login</h4>
       <form
         className="login-input-form"
-        onSubmit={handleSubmit((data) => {
-          console.log("Submitting login form!");
-          console.log(data);
-        })}
+        onSubmit={handleSubmit(handleUserSubmit)}
       >
         <div className="login-input-container">
           <h5 className="login-input-title">Email</h5>
@@ -42,7 +63,7 @@ const LoginForm = () => {
         <div className="login-input-container">
           <h5 className="login-input-title">Password</h5>
           <input
-            type="text"
+            type="password"
             className="login-input"
             {...register("password", {
               required: "Password is required!",

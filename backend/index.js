@@ -3,14 +3,19 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
-import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js";
 import studentProfileRouter from "./src/routes/studentProfileRoute.js";
+import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js";
+import parentSignupRoute from "./src/routes/parentSignupRoute.js";
+import adminAuthRouter from "./src/routes/adminAuthRoute.js";
+import bookingAvailabilityRoute from "./src/routes/bookingAvailabilityRoute.js";
+import defaultRouter from "./src/routes/defaultRoute.js";
 import tutorProfileRouter from "./src/routes/tutorProfileRouter.js";
 
 const app = express();
 const port = 8080;
 
 import pkg from "pg";
+import adminAuth from "./src/models/adminAuth.js";
 const { Pool } = pkg;
 
 dotenv.config();
@@ -47,10 +52,13 @@ app.get("/", (_, res) => {
 });
 
 app.use("/tutor", tutorRegistrationRouter);
+app.use("/parent", parentSignupRoute);
+app.use("/admin", adminAuthRouter);
+app.use("/availability", bookingAvailabilityRoute);
 
-app.use("/student-profile", studentProfileRouter);
 app.use("/communication", volunteerEmailRoute);
 app.use("/tutor-profile", tutorProfileRouter);
+app.use("/", defaultRouter);
 app.listen(port, () => {
   console.log(`ClassSync backend listening on port ${port}`);
 });

@@ -8,14 +8,30 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
-router.post("/create", (req, res) => {
+router.post("/signup", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    const fname = req.body.fname;
+    const lname = req.body.lname;
+
     // console.log(email, password)
-    tutor.createAccount(email, password).then(() => {
-        res.status(200);
+    return tutor.signup(email, password, fname, lname).then((id) => {
+        res.status(200).json({ id: id });
     }).catch((err) => {
-        res.status(500).send("Account failed to activate");
+        res.status(500).send({ error: err.detail });
+    });
+});
+
+router.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    return tutor.login(email, password).then((result) => {
+        console.log("Result ", result);
+        res.status(200).send(result);
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send("Login failed");
     });
 });
 
@@ -28,15 +44,40 @@ router.post("/password", (req, res) => {
     });
 });
 
-router.post("/bio", (req, res) => {
-    const email = req.body.email;
-    const bio = req.body.bio;
-    console.log(email, bio)
+router.get("/profile", (req, res) => {
+    const userID = req.query.id;
 
-    tutor.updateBio(email, bio).then((result) => {
-        res.status(200);
+
+    tutor.getProfile(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
     });
 });
+
+router.get("/offering", (req, res) => {
+    const userID = req.query.id;
+    return tutor.getTutorOfferings(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    }
+    );
+});
+
+router.post("/bio", async (req, res) => {
+    const user_id = req.body.user_id;
+    const bio = req.body.bio;
+
+    try {
+        await tutor.updateBio(user_id, bio);
+        res.status(200).send({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: err.detail || "Internal Server Error" });
+    }
+});
+
 
 router.post("/offerings", (req, res) => {
     const { userID } = req.body.userID;
@@ -47,6 +88,13 @@ router.post("/offerings", (req, res) => {
     })
 });
 
+
+router.get("/offerings", (req, res) => {
+
+    return tutor.getAllOfferings().then((result) => {
+        res.status(200).json(result);
+    });
+});
 router.delete("/offerings", (req, res) => {
     const { userID } = req.body.userID;
     const { offerings } = req.body.offerings;
