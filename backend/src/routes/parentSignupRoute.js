@@ -42,7 +42,7 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/testing-auth-middleware", authorize("Guardian"), (req, res) => {
-  console.log("TESTING AUTH MIDDLEWARE");
+  console.log("TESTING GUARDIAN AUTH MIDDLEWARE");
 
   /*
     FOR FUTURE REFERENCE:

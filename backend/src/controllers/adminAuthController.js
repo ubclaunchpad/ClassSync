@@ -34,8 +34,8 @@ export default class adminAuthController {
               if (result) {
                 const token = jwt.sign(
                   {
-                    email: email,
                     role: "admin",
+                    userId: userId,
                   },
                   process.env.JWT_SECRET,
                   {
@@ -45,9 +45,6 @@ export default class adminAuthController {
                 );
 
                 resolve({
-                  email: email,
-                  role: "admin",
-                  userId: userId,
                   token: token,
                 });
               } else {
