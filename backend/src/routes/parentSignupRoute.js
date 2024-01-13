@@ -41,10 +41,19 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.post("/testing-auth-middleware", authorize("Tutor"), (req, res) => {
-  console.log("TESTING AUTH MIDDLEWARE");
+router.post("/testing-auth-middleware", authorize("Guardian"), (req, res) => {
+  console.log("TESTING GUARDIAN AUTH MIDDLEWARE");
 
-  res.status(200).send(`Authorized with ${email} and ${password}`);
+  /*
+    FOR FUTURE REFERENCE:
+    -> When using authorize middleware, we can use req.auth to get content from token
+  */
+
+  res
+    .status(200)
+    .send(
+      `Authorized ${req.body.email} with user ID: ${req.auth.userId} and role: ${req.auth.role}`
+    );
 });
 
 export default router;
