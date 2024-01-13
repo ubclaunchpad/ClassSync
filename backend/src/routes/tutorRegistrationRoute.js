@@ -40,7 +40,7 @@ router.get("/select", (req, res) => {
 
     const startDate = req.query.start_date;
 
-    const tutorIdsArray = tutor_ids ? tutor_ids.split(',').map(Number) : [];
+    const tutorIdsArray = tutor_ids !== "" ? tutor_ids.split(',').map(Number) : [];
 
     console.log("Tutor ids ", tutorIdsArray);
 
