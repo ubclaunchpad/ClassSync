@@ -404,8 +404,8 @@ export class tutorAvailability {
                 return new Promise((resolve, reject) => {
                     console.log(week.start_date, week.end_date);
                     con.query(
-                        'CALL insert_tutor_availability($1, $2, $3, $4)',
-                        [userID, week.start_date, week.end_date, patternID],
+                        'CALL insert_tutor_availability($1, $2, $3, $4, $5)',
+                        [userID, week.start_date, week.end_date, patternID, true],
                         (error, results) => {
                             if (error) {
                                 console.error('Error:', error);

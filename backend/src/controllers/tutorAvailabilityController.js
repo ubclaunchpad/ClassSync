@@ -120,7 +120,10 @@ export default class tutorAvailabilityController {
                     }
                     tutorIdNameMap[tutorData.tutor_id] = tutorData.tutor_name;
 
-                    timeSlots.sort(); // Sort the time slots in ascending order
+                    if (timeSlots !== null) {
+                        timeSlots.sort(); // Sort the time slots in ascending order
+
+                    }
 
 
                     for (let i = 0; i < timeSlots.length - 1; i++) {

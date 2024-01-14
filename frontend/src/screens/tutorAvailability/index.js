@@ -55,16 +55,16 @@ export default function ScheduleSelector() {
         let startDate;
 
         for (let i = 0; i < availabilityArr.length; i++) {
-
-
             startDate = addDays(weekStart, i);
             console.log("Start date is ", startDate);
-            availabilityArr[i].forEach((time) => {
-                const [hours, minutes] = time.split(':');
-                const date = new Date(startDate);
-                date.setHours(hours, minutes);
-                result.push(date);
-            })
+            if (availabilityArr[i]) {
+                availabilityArr[i].forEach((time) => {
+                    const [hours, minutes] = time.split(':');
+                    const date = new Date(startDate);
+                    date.setHours(hours, minutes);
+                    result.push(date);
+                });
+            }
         }
 
         console.log("Result is for ", weekStart, result);

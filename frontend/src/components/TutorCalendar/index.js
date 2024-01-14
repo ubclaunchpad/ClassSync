@@ -52,6 +52,7 @@ export default function ReactBigCalendar() {
             const filteredData = {};
 
             Object.entries(data[0]).forEach(([day, slots]) => {
+                if (!slots) return; // If there are no slots for the day, skip it
                 slots.sort(); // Ensure the slots are sorted in ascending order
                 filteredData[day] = slots.filter((slot, index) => {
                     const nextSlot = slots[index + 1];
