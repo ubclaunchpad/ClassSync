@@ -101,24 +101,26 @@ const Course = (props) => {
 
             <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
                 <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h2>
-                <button
-                    style={{
-                        display: 'block',
-                        width: '200px',
-                        height: '50px',
-                        margin: '20px auto',
-                        backgroundColor: '#007BFF',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        fontSize: '16px',
-                        fontFamily: 'Arial, sans-serif',
-                    }}
-                    onClick={() => window.location.href = `/appointment/${props.id}`}
-                >
-                    Book a class
-                </button>
+                {lessons.length < 5 && (
+                    <button
+                        style={{
+                            display: 'block',
+                            width: '200px',
+                            height: '50px',
+                            margin: '20px auto',
+                            backgroundColor: '#007BFF',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            fontFamily: 'Arial, sans-serif',
+                        }}
+                        onClick={() => window.location.href = `/appointment/${props.id}`}
+                    >
+                        Book a class
+                    </button>
+                )}
                 <table style={{
                     width: '100%',
                     marginTop: '10px',
