@@ -16,6 +16,18 @@ router.get("/students", (_, res) => {
         });
 });
 
+router.get("/student/:id/courses", (req, res) => {
+    const id = req.params.id;
+    student
+        .getStudentCourses(id)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(404).json(err);
+        });
+});
+
 router.get("/bookings", (req, res) => {
     const student_id = req.query.student_id;
     const course_id = req.query.course_id;

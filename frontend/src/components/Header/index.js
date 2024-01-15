@@ -15,7 +15,6 @@ const Header = () => {
           <li><NavLink to="/tutor/availability/recurring">Availability</NavLink></li>
           <li><NavLink to="/schedule/12-31-2023">Schedule</NavLink></li>
           <li><NavLink to="/tutor/appointments">Appointments</NavLink></li>
-          <li><NavLink to="/appointment">Parent Book Appointment</NavLink></li>
           {/* Add more links as needed */}
         </ul>
       </nav>
