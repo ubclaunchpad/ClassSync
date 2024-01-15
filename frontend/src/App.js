@@ -13,6 +13,7 @@ import TutorLogin from "./screens/TutorLogin";
 import AppointmentCalendar from "./screens/booking";
 import TutorCalendar from "./screens/tutorBookings";
 import StudentDashboard from "./screens/studentDashboard";
+import Registrations from "./screens/registrations";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route path="/appointment/:id" element={<AppointmentCalendar />} />
           <Route path="/tutor/appointments" element={<TutorCalendar />} />
           <Route path="/student/:id" element={<StudentDashboard />} />
+          <Route path="/registrations" element={<Registrations />} />
+
         </Routes>
       </BrowserRouter>
     </div>
