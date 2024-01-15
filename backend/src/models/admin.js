@@ -1,3 +1,5 @@
+import con from "../../index.js";
+
 export class admin {
     getAvailabilityById(id, result) {
         return new Promise((resolve, reject) => {
@@ -12,6 +14,48 @@ export class admin {
                 }
             });
         })
+    }
+
+    async updatePaymentStatus(id, status) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'CALL update_payment_status($1, $2)',
+                    [id, status],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+    async getRegistrations() {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                con.query(
+                    'SELECT * FROM get_registrations()',
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
     }
 
 
