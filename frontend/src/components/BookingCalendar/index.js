@@ -426,24 +426,30 @@ export default function ReactBigCalendar() {
                 bookingError ? (
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
                 ) : (
-                    selectedSlot != null && (
+                    selectedSlot != null ? (
                         <div className="modal-container">
                             <Modal
                                 selectedSlot={selectedSlot.start.toString()}
-                                availablePeople={availablePeople} onBook={handleBook}
+                                availablePeople={availablePeople}
+                                onBook={handleBook}
                                 onClose={() => {
                                     setSelectedSlot(null);
                                     setBookingError(null); // Clear the error when closing the modal
                                 }}
                             />
                         </div>
+                    ) : (
+                        <div style={{ textAlign: 'left', marginTop: '85px', marginRight: '15px' }}>
+                            <h3 style={{ fontSize: '24px', color: '#333' }}>Booking a Class</h3>
+                            <p style={{ fontSize: '16px', color: '#333', marginTop: '20px' }}>
+                                To book a class, please select an available slot from the calendar. After selecting a slot, you will be able to choose from a list of available tutors to book your class with.
+                            </p>
+                        </div>
                     )
                 )
             }
-
         >
-            <div className="calendar-container"
-            >
+            <div className="calendar-container">
                 {isLoaded && (
                     <div width="100vw">
                         <Select
@@ -495,7 +501,6 @@ export default function ReactBigCalendar() {
                     </div>
                 )}
             </div>
-
         </TutorDashboardLayout>
-    );
+    )
 }
