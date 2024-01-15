@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import events from "./events";
@@ -26,6 +27,8 @@ export default function ReactBigCalendar() {
     const [selectedTutors, setSelectedTutors] = useState([]);
     const [filterOptions, setFilterOptions] = useState([]);
 
+
+    const { id } = useParams();
 
     const [forceRender, setForceRerender] = useState(false);
 
@@ -74,7 +77,7 @@ export default function ReactBigCalendar() {
                 openSlots[day] = Object.keys(slots);
             });
 
-            url = "http://localhost:8080/availability/bookings?id=1"
+            url = `http://localhost:8080/availability/bookings?id=${id}`
             const bookingsResponse = await fetch(url);
             const bookingsData = await bookingsResponse.json();
             console.log("Bookings Data", bookingsData)
