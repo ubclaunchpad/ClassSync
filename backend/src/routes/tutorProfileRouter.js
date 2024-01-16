@@ -1,7 +1,7 @@
 import { Router } from "express";
-import tutorProfileController from "../controllers/tutorProfileController";
+import TutorProfileController from "../controllers/tutorProfileController.js";
 const router = Router();
-const tutor = new tutorProfileController();
+const tutor = new TutorProfileController();
 
 // Gets a tutor's profile based on their tutorId
 router.get("/tutorProfile", (req, res) => {

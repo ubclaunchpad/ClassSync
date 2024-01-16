@@ -1,6 +1,6 @@
-import TutorProfile from "../models/tutorProfile";
+import TutorProfile from "../models/tutorProfile.js";
 
-export default class tutorProfileController {
+export default class TutorProfileController {
   getCoursesByTutorId(tutorId) {
     return new Promise((resolve, reject) => {
       const tutorProfile = new TutorProfile();
