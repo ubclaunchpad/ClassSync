@@ -1,13 +1,26 @@
 import { Router } from "express";
 import StudentProfileController from "../controllers/studentProfileController.js";
 import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
-
+import adminController from "../controllers/adminController.js";
 const router = Router();
 const student = new StudentProfileController();
+const admin = new adminController();
 
 router.get("/students", (_, res) => {
     student
         .getStudents()
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(404).json(err);
+        });
+});
+
+router.get("/student/:id/courses", (req, res) => {
+    const id = req.params.id;
+    student
+        .getStudentCourses(id)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -40,4 +53,28 @@ router.get("/appointments", (req, res) => {
             res.status(500).json(err);
         });
 });
+
+router.get("/registrations", (req, res) => {
+    return admin
+        .getRegistrations()
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
+}
+);
+
+router.put("/registrations/:id/:status", (req, res) => {
+    return admin
+        .updatePaymentStatus(req.params.id, req.params.status)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
+}
+);
 export default router;

@@ -3,6 +3,17 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
+  getStudentCourses(id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getStudentCourses(id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      // return err;
+    });
+  }
+
   getBookings(student_id, course_id) {
     const studentProfileModel = new StudentProfile();
     return studentProfileModel.getBookings(student_id, course_id).then((response) => {

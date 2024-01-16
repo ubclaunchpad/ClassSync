@@ -1,0 +1,27 @@
+/* custom-tabs.css */
+
+.custom-tabs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.custom-tab-item {
+    margin-right: 10px;
+    /* Adjust the spacing between tabs */
+}
+
+.custom-tab-link {
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid #ddd;
+    /* Bootstrap-like border color */
+    border-radius: 5px;
+    color: #333;
+}
+
+.custom-tab-link:hover {
+    background-color: #f8f9fa;
+    /* Bootstrap-like background color on hover */
+}
