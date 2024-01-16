@@ -20,8 +20,10 @@ const AdminLoginForm = () => {
       password: formData.password,
     };
 
+    const url = "http://localhost:8080"; // Replace with your actual API endpoint
+
     const response = await axios.post(
-      process.env.REACT_APP_API_URL + "/admin/login",
+      url + "/admin/login",
       JSON.stringify(data),
       {
         headers: {
@@ -31,6 +33,8 @@ const AdminLoginForm = () => {
     );
 
     localStorage.setItem("token", response.data.token);
+
+    window.location.href = "/registrations";
   };
 
   return (

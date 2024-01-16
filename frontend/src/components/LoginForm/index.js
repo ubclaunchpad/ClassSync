@@ -20,9 +20,11 @@ const LoginForm = () => {
       password: formData.password,
     };
 
+    const url = "http://localhost:8080"; // Replace with your actual API endpoint
+
     // For parent login
     const response = await axios.post(
-      process.env.REACT_APP_API_URL + "/parent/login",
+      url + "/parent/login",
       JSON.stringify(data),
       {
         headers: {
