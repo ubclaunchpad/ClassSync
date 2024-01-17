@@ -24,16 +24,13 @@ const TutorLoginForm = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    const response = await fetch(
-      url + "/tutor/login",
-      {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data)
-      }
-    );
+    const response = await fetch(url + "/tutor/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,6 +42,8 @@ const TutorLoginForm = () => {
     localStorage.setItem("role", result.role);
     localStorage.setItem("token", result.token);
     localStorage.setItem("userID", result.userId);
+    localStorage.setItem("firstName", result.firstName);
+    localStorage.setItem("lastName", result.lastName);
 
     window.location.href = "/tutorProfile";
   };

@@ -28,6 +28,8 @@ export default class parentAuthController {
         .then((res) => {
           const hashedPassword = res.hashedPassword;
           const userId = res.user_id;
+          const firstName = res.firstName;
+          const lastName = res.lastName;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
@@ -45,6 +47,8 @@ export default class parentAuthController {
 
                 resolve({
                   token: token,
+                  firstName: firstName,
+                  lastName: lastName,
                 });
               } else {
                 reject("Incorrect password");
