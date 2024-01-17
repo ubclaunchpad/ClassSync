@@ -66,6 +66,21 @@ router.get("/registrations", (req, res) => {
 }
 );
 
+router.post("/registrations", (req, res) => {
+    const student_id = req.body.student_id;
+    const course_id = req.body.course_id;
+    const registration_date = req.body.registration_date;
+    return student
+        .addEnrollment(student_id, course_id, registration_date)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json({ error: "This registration already exists" });
+        });
+}
+);
+
 router.put("/registrations/:id/:status", (req, res) => {
     return admin
         .updatePaymentStatus(req.params.id, req.params.status)

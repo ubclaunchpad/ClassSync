@@ -3,6 +3,18 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
+  addEnrollment(student_id, course_id, registration_date) {
+
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.addEnrollment(student_id, course_id, registration_date).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
   getStudentCourses(id) {
     const studentProfileModel = new StudentProfile();
     return studentProfileModel.getStudentCourses(id).then((response) => {

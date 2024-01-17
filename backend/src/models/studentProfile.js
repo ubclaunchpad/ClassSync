@@ -5,6 +5,27 @@ import con from "../../index.js";
 
 export class StudentProfile {
 
+  async addEnrollment(student_id, course_id, registration_date) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query("CALL insert_enrollment($1, $2, $3)",
+          [student_id, course_id, registration_date], (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log(results.rows);
+              resolve();
+            }
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
+    }
+  }
   async getStudentCourses(id) {
     const client = await con.connect();
     try {

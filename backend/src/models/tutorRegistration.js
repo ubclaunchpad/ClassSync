@@ -191,8 +191,8 @@ export class tutorRegistration {
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    'CALL upsert_tutor($1, $2, $3, $4, $5, $6)',
-                    [user_id, bio.about, bio.university, bio.maxHours, bio.startdate, bio.enddate],
+                    'CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7)',
+                    [user_id, bio.about, bio.university, bio.maxHours, bio.startdate, bio.enddate, bio.description],
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
