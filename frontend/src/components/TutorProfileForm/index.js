@@ -10,6 +10,7 @@ const TutorProfileForm = (props) => {
     const [maxHours, setMaxHours] = useState(props.maxHours);
     const [university, setUniversity] = useState(props.university);
     const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
+    const [description, setDescription] = useState(props.description);
     const [courses, setCourses] = useState(props.offerings);
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
@@ -70,6 +71,7 @@ const TutorProfileForm = (props) => {
                     about: about,
                     maxHours: maxHours,
                     startdate: dateString,
+                    description: description,
                     enddate: closestFutureDate(Date.now()).toDateString(),
                     offerings: selectedOptions.map((option) => option.value)
                 }
@@ -93,23 +95,26 @@ const TutorProfileForm = (props) => {
     return (
 
         <form className="tutor-info-form" onSubmit={(e) => saveTutorInfo(e)}>
-            <div class="header-row">
+            <div className="header-row">
                 <h2 className="add-student-header">Create Your Profile</h2>
             </div>
 
             <div className="input-row">
-
-
                 <label className="input-label">
                     Email
-                    <input type="text" value={email} disabled />                </label>
-
-                <label className="input-label">
-                    University
-                    <input type="text" value={university} onChange={(e) => setUniversity(e.target.value)} />
+                    <input type="text" value={email} disabled />
                 </label>
 
+                <label className="input-label">
+                    Program and University
+                    <input
+                        type="text"
+                        value={university}
+                        onChange={(e) => setUniversity(e.target.value)}
+                    />
+                </label>
             </div>
+
             <div className="input-row">
                 <label className="input-label">
                     About Me
@@ -118,35 +123,52 @@ const TutorProfileForm = (props) => {
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
                         maxLength={1000}
-
                     ></textarea>
                 </label>
 
                 <div className="input-column">
-
+                    <label className="input-label">
+                        Summary Description (Headline)
+                        <textarea
+                            className="description-input"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            style={{ minHeight: '2em' }}
+                        />
+                    </label>
                     <label className="input-label">
                         Maximum Hours Per Week
-                        <input type="number" value={maxHours} onChange={(e) => setMaxHours(e.target.value)} />
-                    </label>
-                    <label className="input-label">
-                        Course Offerings
-                        {console.log("Selected Options ", selectedOptions)}
-                        <Select
-                            isMulti
-                            options={courses}
-                            styles={customStyles}
-                            className='basic-multi-select'
-                            value={selectedOptions}
-                            onChange={setSelectedOptions}
+                        <input
+                            type="number"
+                            value={maxHours}
+                            onChange={(e) => setMaxHours(e.target.value)}
                         />
-
                     </label>
-
                 </div>
             </div>
 
+            <div className="input-row course-offerings">
+                <label className="input-label" style={{ width: '100%' }}>
+                    Course Offerings
+                </label>
+            </div>
+
+            <div className="input-row course-offerings" style={{ width: '80%' }}>
+                <Select
+                    isMulti
+                    options={courses}
+                    styles={customStyles}
+                    className="basic-multi-select"
+                    value={selectedOptions}
+                    onChange={setSelectedOptions}
+                />
+            </div>
+
+
             <input type="submit" value="Submit" />
         </form>
+
+
 
     );
 };
