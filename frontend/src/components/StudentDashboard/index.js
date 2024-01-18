@@ -100,7 +100,7 @@ const Course = (props) => {
         <div>
 
             <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-                <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h2>
+                <h3 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h3>
                 {lessons.length < 5 && (
                     <button
                         style={{
