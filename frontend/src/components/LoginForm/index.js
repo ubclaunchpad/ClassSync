@@ -21,17 +21,20 @@ const LoginForm = () => {
     };
 
     // For parent login
-    const response = await axios.post(
-      process.env.REACT_APP_API_URL + "/parent/login",
-      JSON.stringify(data),
+    const response = await fetch(
+      "http://localhost:8080/parent/login",
       {
+        method: 'POST', // Specify the method
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
       }
     );
+    const loginResponse = await response.json();
 
-    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("token", loginResponse.token);
+    // console.log("Token: ", response.data);
   };
 
   return (
