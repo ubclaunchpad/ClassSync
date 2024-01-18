@@ -38,7 +38,7 @@ const StudentDashboard = () => {
         <ParentDashboardLayout>
             <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
 
-                <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Courses</h2>
+                <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Registered Courses</h2>
                 <ul className="custom-tabs" style={{ listStyleType: 'none', padding: '0', display: 'flex', justifyContent: 'center' }}>
                     {courses.map(course => (
                         <li className="custom-tab-item" key={course.enrollment_id} style={{ margin: '0 10px' }}>
