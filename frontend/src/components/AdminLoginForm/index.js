@@ -31,13 +31,15 @@ const AdminLoginForm = () => {
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+    } else {
+      const data = await response.json();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("firstName", data.firstName);
+      localStorage.setItem("lastName", data.lastName);
+
+      window.location.href = "/registrations";
     }
-
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("firstName", response.data.firstName);
-    localStorage.setItem("lastName", response.data.lastName);
-
-    window.location.href = "/registrations";
   };
 
   return (
