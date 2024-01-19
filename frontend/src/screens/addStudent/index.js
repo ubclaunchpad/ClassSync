@@ -14,7 +14,7 @@ const AddStudent = (props) => {
             <Header />
             <Banner
                 smallText="Parent Dashboard"
-                mainText="Welcome Back, Insert Name!"
+                mainText="Welcome Back!"
             />
             <div class="main-row">
                 <div class="column left-student">
