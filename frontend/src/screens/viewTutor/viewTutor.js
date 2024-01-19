@@ -136,7 +136,7 @@ export const TutorView = () => {
         <div className="tutor-profile__tab-view">
           <TabView>
             <TabPanel className="tab-panel" header="About Me ">
-              {/* <p className="m-0 tutor-profile__about-me">
+              <p className="m-0 tutor-profile__about-me">
                 Hi there 👋 <br />
                 <br />
                 My name is Miki Okudera <br />
@@ -175,19 +175,15 @@ export const TutorView = () => {
                 guarantee you won't be disappointed! 😊
                 <br />
                 <br /> I really anticipate hearing from you soon! ✌️
-              </p> */}
-              <p className="m-0 tutor-profile__about-me">
+              </p>
+              {/* <p className="m-0 tutor-profile__about-me">
                 {" "}
                 {about ? about : sampleData.aboutMe}{" "}
-              </p>
+              </p> */}
             </TabPanel>
             <TabPanel className="tab-panel" header="My Courses">
-              {courses.map((course) => {
-                return (
-                  <div className="tutor-profile__courses">
-                    {course.difficulty} {course.courseName}
-                  </div>
-                );
+              {sampleData.courseNames.map((course) => {
+                return <div className="tutor-profile__courses">{course}</div>;
               })}
             </TabPanel>
             <TabPanel className="tab-panel" header="Reviews">
