@@ -13,7 +13,8 @@ import "./index.css";
 export const ParentDashboardLayout = (props) => {
     return (
         <div className="page-container">
-            <Header />
+            <Header
+            />
             <div class="main-row">
 
                 <div class="column left-span">
@@ -33,12 +34,12 @@ export const ParentDashboardLayout = (props) => {
                         </div>
                     </div>
                     <img className="profile-pic"
-                        src={ProfilePic}/>
+                        src={ProfilePic} />
                     <div className="table-of-contents">
                         <ul>
-                            <li><a href="#">Adam Bennett</a></li>
-                            <li><a href="#">Children</a></li>
-                            <li><a href="#">Courses</a></li>
+                            <li><a href="/parentDash">Adam Bennett</a></li>
+                            <li><a href="/parentDash">Children</a></li>
+                            <li><a href="/shop">Courses</a></li>
                             <li><a href="#">Tutors</a></li>
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Help</a></li>
@@ -46,30 +47,20 @@ export const ParentDashboardLayout = (props) => {
                     </div>
                 </div>
                 <div>
-                <div class="column middle-right">
-                    <Banner
-                        smallText="Parent Dashboard"
-                        mainText="Welcome Back!"
-                    />
-                    <div className="inner-row">
-                        <div className="column inner-left">
-                            {props.children}
-                        </div>
-                        <div className="column inner-right">
-                            <div className="right-container">
-                                <div class="right-header">
-                                    <p className="shop-classes">Shop for Courses</p>
-                                    <img className="bagImage" src={Bag} alt="Bag" />
-                                </div>
-                                <div className="shop-courses">
-                                    <SearchBar />
-                                </div>
+                    <div class="column middle-right">
+                        <Banner
+                            smallText="Parent Dashboard"
+                            mainText="Welcome Back!"
+                        />
+                        <div className="inner-row">
+                            <div className="column inner-left">
+                                {props.children}
                             </div>
-                            <div className="right-container"></div>
-                            <div className="right-container"></div>
+                            <div className="column inner-right">
+                                {props.rightColumnContent}
+                            </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
