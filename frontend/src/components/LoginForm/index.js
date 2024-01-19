@@ -23,15 +23,13 @@ const LoginForm = () => {
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
     // For parent login
-    const response = await axios.post(
-      url + "/parent/login",
-      JSON.stringify(data),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(url + "/parent/login", {
+      method: "POST", // Specify the method
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("firstName", response.data.firstName);

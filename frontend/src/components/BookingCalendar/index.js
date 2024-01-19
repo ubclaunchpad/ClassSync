@@ -6,9 +6,9 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
 import { endOfWeek, startOfWeek } from "date-fns";
 import Select from "react-select";
+import { ParentDashboardLayout } from "../ParentDashboardLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -421,7 +421,7 @@ export default function ReactBigCalendar() {
     }));
 
     return (
-        <TutorDashboardLayout
+        <ParentDashboardLayout
             rightColumnContent={
                 bookingError ? (
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
@@ -501,6 +501,6 @@ export default function ReactBigCalendar() {
                     </div>
                 )}
             </div>
-        </TutorDashboardLayout>
+        </ParentDashboardLayout>
     )
 }

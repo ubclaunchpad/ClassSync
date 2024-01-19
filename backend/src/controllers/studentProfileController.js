@@ -3,6 +3,29 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
+  getStudentsByGuardian(id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getStudentsByGuardian(id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      // return err;
+    });
+  }
+
+  addEnrollment(student_id, course_id, registration_date) {
+
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.addEnrollment(student_id, course_id, registration_date).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log("Error is -", err);
+      throw err;
+      // return err;
+    });
+  }
   getStudentCourses(id) {
     const studentProfileModel = new StudentProfile();
     return studentProfileModel.getStudentCourses(id).then((response) => {

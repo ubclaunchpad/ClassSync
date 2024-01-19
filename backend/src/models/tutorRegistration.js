@@ -185,7 +185,7 @@ export class tutorRegistration {
     try {
       return new Promise((resolve, reject) => {
         client.query(
-          "CALL upsert_tutor($1, $2, $3, $4, $5, $6)",
+          "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7)",
           [
             user_id,
             bio.about,
@@ -193,6 +193,7 @@ export class tutorRegistration {
             bio.maxHours,
             bio.startdate,
             bio.enddate,
+            bio.description,
           ],
           (error, results) => {
             if (error) {

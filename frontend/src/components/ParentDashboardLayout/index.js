@@ -5,16 +5,20 @@ import AddStudentForm from "../AddStudentForm";
 import Plus from "../../assets/plus.png";
 import Notification from "../../assets/notifications.png";
 import Bag from "../../assets/bag.png";
+import { NavLink } from "react-router-dom";
 
 import "./index.css";
 
 export const ParentDashboardLayout = (props) => {
     return (
         <div className="page-container">
-            <Header />
+            <Header nav={<ul className="navbar">
+                <li><NavLink to="/">Dashboard</NavLink></li>
+                <li><NavLink to="/shop">Shop Courses</NavLink></li>
+            </ul>} />
             <Banner
                 smallText="Parent Dashboard"
-                mainText="Welcome Back, Insert Name!"
+                mainText="Welcome Back!"
             />
             <div class="main-row">
                 <div class="column left">
@@ -36,17 +40,7 @@ export const ParentDashboardLayout = (props) => {
                 </div>
                 <div class="column middle">{props.children}</div>
                 <div class="column right">
-                    <div className="right-container">
-                        <div class="right-header">
-                            <p className="shop-classes">Shop for Courses</p>
-                            <img className="bagImage" src={Bag} alt="Bag" />
-                        </div>
-                        <div className="shop-courses">
-                            <SearchBar />
-                        </div>
-                    </div>
-                    <div className="right-container"></div>
-                    <div className="right-container"></div>
+                    {props.rightColumnContent}
                 </div>
             </div>
         </div>
