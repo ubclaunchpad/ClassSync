@@ -61,3 +61,4 @@ BEGIN
     WHERE course_id = _course_id;
 END; 
 $$; 
+

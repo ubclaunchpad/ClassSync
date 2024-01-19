@@ -4,10 +4,12 @@ const router = Router();
 const tutor = new TutorProfileController();
 
 // Gets a tutor's profile based on their tutorId
-router.get("/tutorProfile", (req, res) => {
-  const tutorId = req.body.tutorId;
+router.get("/courses", (req, res) => {
+  console.log("getting courses by tutorId");
+  const tutorId = req.query.userId;
+  console.log(tutorId);
   tutor
-    .getTutorProfile(tutorId)
+    .getCoursesByTutorId(tutorId)
     .then((profile) => {
       res.status(200).send(profile);
     })

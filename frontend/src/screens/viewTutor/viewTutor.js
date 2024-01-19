@@ -8,6 +8,8 @@ import { Divider } from "primereact/divider";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./viewTutor.css";
+import { useEffect, useState } from "react";
+const url = "http://localhost:8080";
 
 const sampleData = {
   firstName: "Miki",
@@ -15,7 +17,7 @@ const sampleData = {
   description: "Ex Facebook, Ex Google, Ex Husband, Tech-lead ",
   courses: "Teaches Python, Java",
   languages: "Speaks English (Native), Russian (Native), Japanese (C2)",
-  education: "Studies Computer Science, University Of Tokyo",
+  education: "Computer Science, University Of Tokyo",
   aboutMe: "",
   courseNames: [
     "Intro Into Python",
@@ -48,6 +50,43 @@ const sampleData = {
 };
 
 export const TutorView = () => {
+  const [university, setUniversity] = useState("");
+  const [description, setDescription] = useState("");
+  const [about, setAbout] = useState("");
+  const [courses, setCourses] = useState([]);
+  console.log(courses);
+
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const id = 46;
+        // Fetch courses data
+        const coursesResponse = await fetch(`${url}/tutor/offerings`);
+        const courses = await fetch(`${url}/tutorProfile/courses?userId=${id}`);
+        const coursesData = await courses.json();
+
+        setCourses(coursesData);
+        // const id = localStorage.getItem("userID");
+
+        // Fetch profile data
+        const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
+        const profileData = await profileResponse.json();
+        console.log("Profile Data", profileData);
+
+        setUniversity(profileData.university);
+        setAbout(profileData.bio);
+        setDescription(profileData.description);
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      }
+      setDataLoaded(true);
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run the effect only once after the initial render
+  console.log(courses);
   return (
     <div>
       <Banner smallText="Parent Dashboard" mainText="Hello, Richard!" />
@@ -66,7 +105,7 @@ export const TutorView = () => {
               {sampleData.firstName} {sampleData.lastName}
             </div>
             <div className="tutor-overview__description">
-              {sampleData.description}
+              {description ? description : sampleData.description}
             </div>
             <div className="tutor__courses__container">
               <img className="tutor-overview__icon" src="./book.svg" alt="g" />
@@ -89,7 +128,7 @@ export const TutorView = () => {
                 alt="g"
               />
               <span className="tutor-overview__text">
-                {sampleData.education}
+                Studies at {university ? university : sampleData.education}
               </span>
             </div>
           </div>
@@ -97,7 +136,7 @@ export const TutorView = () => {
         <div className="tutor-profile__tab-view">
           <TabView>
             <TabPanel className="tab-panel" header="About Me ">
-              <p className="m-0 tutor-profile__about-me">
+              {/* <p className="m-0 tutor-profile__about-me">
                 Hi there 👋 <br />
                 <br />
                 My name is Miki Okudera <br />
@@ -136,11 +175,19 @@ export const TutorView = () => {
                 guarantee you won't be disappointed! 😊
                 <br />
                 <br /> I really anticipate hearing from you soon! ✌️
+              </p> */}
+              <p className="m-0 tutor-profile__about-me">
+                {" "}
+                {about ? about : sampleData.aboutMe}{" "}
               </p>
             </TabPanel>
             <TabPanel className="tab-panel" header="My Courses">
-              {sampleData.courseNames.map((course) => {
-                return <div className="tutor-profile__courses">{course}</div>;
+              {courses.map((course) => {
+                return (
+                  <div className="tutor-profile__courses">
+                    {course.difficulty} {course.courseName}
+                  </div>
+                );
               })}
             </TabPanel>
             <TabPanel className="tab-panel" header="Reviews">

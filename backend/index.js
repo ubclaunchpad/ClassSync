@@ -51,16 +51,16 @@ app.get("/", (_, res) => {
   res.send("Hello ClassSync!");
 });
 
+app.use("/student-profile", studentProfileRouter);
 app.use("/tutor", tutorRegistrationRouter);
 app.use("/parent", parentSignupRoute);
 app.use("/admin", adminAuthRouter);
 app.use("/availability", bookingAvailabilityRoute);
-
+app.use("/tutorProfile", tutorProfileRouter);
 app.use("/communication", volunteerEmailRoute);
-app.use("/tutor-profile", tutorProfileRouter);
 app.use("/", defaultRouter);
 app.listen(port, () => {
   console.log(`ClassSync backend listening on port ${port}`);
 });
 
-export { pgPool };
+export default pgPool;
