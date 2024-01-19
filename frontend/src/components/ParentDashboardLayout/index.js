@@ -3,6 +3,7 @@ import Banner from "../Banner";
 import SearchBar from "../SearchBar";
 import AddStudentForm from "../AddStudentForm";
 import Plus from "../../assets/plus.png";
+import ProfilePic from "../../assets/parentProfile.png"
 import Notification from "../../assets/notifications.png";
 import Bag from "../../assets/bag.png";
 import { NavLink } from "react-router-dom";
@@ -30,6 +31,18 @@ export const ParentDashboardLayout = (props) => {
                                 />
                             </button>
                         </div>
+                    </div>
+                    <img className="profile-pic"
+                        src={ProfilePic}/>
+                    <div className="table-of-contents">
+                        <ul>
+                            <li><a href="#">Adam Bennett</a></li>
+                            <li><a href="#">Children</a></li>
+                            <li><a href="#">Courses</a></li>
+                            <li><a href="#">Tutors</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Help</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div>

@@ -132,3 +132,31 @@ h2 {
     display: flex;
     flex-direction: column;
 }
+
+.table-of-contents {
+    text-align: left; /* Left-align the text */
+    margin: 0 25px;
+}
+
+.table-of-contents ul {
+    list-style: none; /* Remove bullets */
+    padding: 0; /* Remove default padding */
+}
+
+.table-of-contents li {
+    margin: 0; /* Remove default margin */
+}
+
+.table-of-contents a {
+    text-decoration: none; /* Remove underline */
+    color: white; /* Set font color to white */
+    display: block; /* Make the entire list item clickable */
+    padding: 4px 0; /* Add some padding for better spacing */
+    font-weight: bold;
+}
+
+.profile-pic {
+    height: 100px;
+    text-align: left; /* Left-align the text */
+    margin: 30px 25px;
+}

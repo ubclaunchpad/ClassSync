@@ -20,11 +20,26 @@ const ParentDash = (props) => {
   return (
     <ParentDashboardLayout>
       <div className="student-info-container">
-        {/* <AddStudentForm /> */}
-        {/* <hr className="line"></hr> */}
-        <button class="header-button">
-          <a href="/addStudent" class="header-button">Add a New Student</a>
-        </button>
+        <div className="student-info-header">
+          <h2>Student (#)</h2>
+          <button class="header-button">
+            <a href="/addStudent" class="header-button">Add a New Student</a>
+          </button>
+        </div>
+        <div className="existing-students-row">
+            <div className="student-tile">
+              <div className="colour"></div>
+              Student 1
+            </div>
+            <div className="student-tile">
+              <div className="colour"></div>
+              Student 2
+            </div>
+            <div className="student-tile">
+              <div className="colour"></div>
+              Student 3
+            </div>
+          </div>
       </div>
       <div className="student-info-container">
         <div className="App">
