@@ -49,7 +49,7 @@ export const ParentDashboardLayout = (props) => {
                 <div class="column middle-right">
                     <Banner
                         smallText="Parent Dashboard"
-                        mainText="Welcome Back, Insert Name!"
+                        mainText="Welcome Back!"
                     />
                     <div className="inner-row">
                         <div className="column inner-left">
