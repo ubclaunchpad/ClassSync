@@ -28,13 +28,15 @@ export default class parentAuthController {
         .then((res) => {
           const hashedPassword = res.hashedPassword;
           const userId = res.user_id;
+          const firstName = res.firstName;
+          const lastName = res.lastName;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
                 const token = jwt.sign(
                   {
-                    email: email,
                     role: "guardian",
+                    userId: userId,
                   },
                   process.env.JWT_SECRET,
                   {
@@ -44,10 +46,9 @@ export default class parentAuthController {
                 );
 
                 resolve({
-                  email: email,
-                  role: "guardian",
-                  userId: userId,
                   token: token,
+                  firstName: firstName,
+                  lastName: lastName,
                 });
               } else {
                 reject("Incorrect password");

@@ -12,6 +12,11 @@
     /* create space on right*/
 }
 
+.input-row.course-offerings {
+    justify-content: space-between;
+    width: 100%;
+}
+
 .input-column {
     display: flex;
     flex-direction: column;
@@ -41,6 +46,7 @@
 .input-row label {
     text-align: left;
     font-weight: bold;
+    width: 100%;
     flex: 0 0 calc(50% - 7%);
     /* Two inputs per row with spacing */
 }
@@ -105,6 +111,18 @@ input[type="submit"] {
     width: 100%;
     min-width: 200px;
     height: 150px;
+    padding: 8px;
+    border: 2px solid #B3DEFC;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+    /* Allow vertical resizing */
+}
+
+.description-input {
+    width: 100%;
+    min-width: 200px;
+    height: 50px;
     padding: 8px;
     border: 2px solid #B3DEFC;
     border-radius: 10px;
