@@ -34,6 +34,7 @@
 }
 
 .student-tile {
+    cursor: pointer;
     border-style: solid;
     border-radius: 10px;
     border-color: rgb(160, 157, 157);

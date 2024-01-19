@@ -1,8 +1,16 @@
 import "./index.css";
+import { useNavigate } from "react-router-dom";
 
 const AddStudentForm = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        navigate("/parentDash");
+    }
+   
     return (
-        <form className="student-info-form">
+        <form className="student-info-form" onSubmit={handleSubmit}>
             <div class="header-row">
                 <h2 className="add-student-header">Add a Student</h2>
                 <button class="header-button">+ Add a New Student</button>
@@ -23,7 +31,7 @@ const AddStudentForm = () => {
                     <input type="text" />
                 </label>
                 <label>
-                    Student ID
+                    Accommodations
                     <input type="text" />
                 </label>
             </div>
