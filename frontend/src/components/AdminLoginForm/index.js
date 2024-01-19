@@ -1,5 +1,4 @@
 import "./index.css";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 
 const AdminLoginForm = () => {
@@ -22,15 +21,17 @@ const AdminLoginForm = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    const response = await axios.post(
-      url + "/admin/login",
-      JSON.stringify(data),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(url + "/admin/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("firstName", response.data.firstName);
