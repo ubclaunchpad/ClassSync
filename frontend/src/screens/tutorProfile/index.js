@@ -12,6 +12,7 @@ const TutorProfile = () => {
     const [about, setAbout] = useState('');
     const [courses, setCourses] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [description, setDescription] = useState('');
     const [dataLoaded, setDataLoaded] = useState(false);
 
     useEffect(() => {
@@ -39,6 +40,7 @@ const TutorProfile = () => {
                 setMaxHours(profileData.max_hours);
                 setUniversity(profileData.university);
                 setAbout(profileData.bio);
+                setDescription(profileData.description);
 
 
 
@@ -71,6 +73,7 @@ const TutorProfile = () => {
                             maxHours={maxHours}
                             university={university}
                             about={about}
+                            description={description}
                             selectedOptions={selectedOptions}
                         />
                     </div>

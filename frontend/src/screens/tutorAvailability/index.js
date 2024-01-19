@@ -6,6 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
+import "./index.css"; // Import your custom styles
 
 
 
@@ -54,16 +55,16 @@ export default function ScheduleSelector() {
         let startDate;
 
         for (let i = 0; i < availabilityArr.length; i++) {
-
-
             startDate = addDays(weekStart, i);
             console.log("Start date is ", startDate);
-            availabilityArr[i].forEach((time) => {
-                const [hours, minutes] = time.split(':');
-                const date = new Date(startDate);
-                date.setHours(hours, minutes);
-                result.push(date);
-            })
+            if (availabilityArr[i]) {
+                availabilityArr[i].forEach((time) => {
+                    const [hours, minutes] = time.split(':');
+                    const date = new Date(startDate);
+                    date.setHours(hours, minutes);
+                    result.push(date);
+                });
+            }
         }
 
         console.log("Result is for ", weekStart, result);
@@ -109,6 +110,13 @@ export default function ScheduleSelector() {
         const previousWeekStartDate = new Date(startDate.getTime() - 7 * 24 * 60 * 60 * 1000);
         setStartDate(previousWeekStartDate);
         navigate(`/schedule/${previousWeekStartDate.toISOString().split('T')[0]}`);
+    };
+
+    const navigateToToday = () => {
+        const today = new Date();
+        const todayStartDate = startOfWeek(today, { weekStartsOn: 0 });
+        setStartDate(todayStartDate);
+        navigate(`/schedule/${todayStartDate.toISOString().split('T')[0]}`);
     };
 
     const navigateToNextWeek = () => {
@@ -259,16 +267,38 @@ export default function ScheduleSelector() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns} >
-            <TutorDashboardLayout>
+            <TutorDashboardLayout
+
+                rightColumnContent={
+                    <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
+                        <h3> Set Weekly Availability</h3>
+
+                        <p>Need to adjust your schedule for a specific week? No problem! You can easily change your availability for any week. </p>
+                        <p>Just navigate to the week you want to change, then click and drag to select the new times you are available. When you're done, click the 'Submit' button to save your changes. </p>
+                        <p style={{ marginBottom: "-10px" }}>Remember, you can always reset to your recurring availability or clear your availability for a week if needed.</p>
+                    </div>
+                }
+            >
 
                 <div className="App">
                     {console.log("id = " + startDate)}
-                    <button onClick={navigateToPreviousWeek}>Previous Week</button>
-                    <button onClick={navigateToNextWeek}>Next Week</button>
-                    <button onClick={resetAvailability}>Reset to Recurring</button>
-                    <button onClick={clearAvailability}>Clear Availability</button>
-                    <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
-                    <div className="Calendar" style={{ width: '60vw', height: '100vh', marginLeft: '-20px' }}>
+                    <div className="main-container">
+                        <div className="button-group">
+                            <button className="theme-button" onClick={navigateToToday}>Today</button>
+                            <button className="img-btn" onClick={navigateToPreviousWeek}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg></button>
+                            <button className="img-btn" onClick={navigateToNextWeek}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg></button>
+                        </div>
+
+                        <div className="date-picker-container">
+                            <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
+                        </div>
+
+                        <div className="symbol-group">
+                            <button className="img-btn" onClick={resetAvailability}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" /></svg></button>
+                            <button className="img-btn" onClick={clearAvailability}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z" /></svg></button>
+                        </div>
+                    </div>
+                    <div className="Calendar" style={{ width: '60vw', marginLeft: '5px' }}>
                         {isLoaded && (
                             <Calendar
                                 key={calendar}
@@ -278,6 +308,8 @@ export default function ScheduleSelector() {
                                 isRecurring={false}
                                 dateFormat="ddd DD MMM"
                             />
+
+
                         )}
                     </div>
                 </div>

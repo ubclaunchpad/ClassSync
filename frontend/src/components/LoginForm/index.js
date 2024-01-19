@@ -1,5 +1,4 @@
 import "./index.css";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
@@ -27,20 +26,20 @@ const LoginForm = () => {
       password: formData.password,
     };
 
-    // For parent login
-    const response = await axios.post(
-      "http://localhost:8080" + "/parent/login",
-      JSON.stringify(data),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    localStorage.setItem("email", response.data.email);
-    localStorage.setItem("role", response.data.role);
+    // For parent login
+    const response = await fetch(url + "/parent/login", {
+      method: "POST", // Specify the method
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
     localStorage.setItem("token", response.data.token);
+    localStorage.setItem("firstName", response.data.firstName);
+    localStorage.setItem("lastName", response.data.lastName);
   };
 
   return (

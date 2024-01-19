@@ -1,6 +1,7 @@
 import { Router } from "express";
 import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
 import tutorAvailabilityRouter from "./tutorAvailabilityRoute.js"
+import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
 const router = Router();
 const tutor = new tutorRegistrationController();
 
@@ -21,6 +22,37 @@ router.post("/signup", (req, res) => {
         res.status(500).send({ error: err.detail });
     });
 });
+
+router.get("/courses", (req, res) => {
+    const tutor = new tutorAvailabilityController();
+    const course_id = req.query.course_id;
+    return tutor.getTutorByCourse(course_id).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
+
+router.get("/select", (req, res) => {
+
+    const tutor = new tutorAvailabilityController();
+    const tutor_ids = req.query.tutor_ids;
+
+    const startDate = req.query.start_date;
+
+    const tutorIdsArray = tutor_ids !== "" ? tutor_ids.split(',').map(Number) : [];
+
+    console.log("Tutor ids ", tutorIdsArray);
+
+    return tutor.getSelectedTutorsAvailability(startDate, tutorIdsArray).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
+
+
+
 
 router.post("/login", (req, res) => {
     const email = req.body.email;
