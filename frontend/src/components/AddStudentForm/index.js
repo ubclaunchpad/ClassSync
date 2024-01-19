@@ -25,7 +25,7 @@ const AddStudentForm = () => {
             l_name: formState.lname,
             dob: formState.dob,
             accommodations: formState.accommodations,
-            fk_guardian_id: 6 // TODO remove hardcoding
+            fk_guardian_id: 4 // TODO remove hardcoding
           };
         try {
           const res = await fetch(
