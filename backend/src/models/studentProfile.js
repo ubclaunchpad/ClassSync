@@ -65,7 +65,7 @@ export class StudentProfile {
         newStudentProfile.first_name,
         newStudentProfile.last_name,
         newStudentProfile.birthday,
-        newStudentProfile.accomodations,
+        newStudentProfile.accommodations,
         newStudentProfile.fk_parent_id,
       ],
       function (error, results) {
