@@ -1,5 +1,6 @@
 import { Router } from "express";
 import StudentProfileController from "../controllers/studentProfileController.js";
+import authorize from "../auth/authentication.js";
 
 const router = Router();
 const studentProfileController = new StudentProfileController();
@@ -19,7 +20,7 @@ router.get("/", (_, res) => {
     });
 });
 
-router.post("/", (req, res) => { //authorize()
+router.post("/", (req, res) => { 
     if (!req.body) {
       res.status(400).send({
         message: "Content can not be empty!",
