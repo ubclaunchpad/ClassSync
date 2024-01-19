@@ -1,4 +1,5 @@
 import { Router } from "express";
+import authorize from "../auth/authentication.js";
 import adminAuthController from "../controllers/adminAuthController.js";
 const router = Router();
 const admin = new adminAuthController();

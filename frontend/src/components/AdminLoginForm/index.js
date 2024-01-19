@@ -1,7 +1,7 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
 
-const TutorLoginForm = () => {
+const AdminLoginForm = () => {
   const {
     register,
     handleSubmit,
@@ -14,8 +14,6 @@ const TutorLoginForm = () => {
     // Data will contain email (string), password (string), remember-me (boolean)
     console.log("Submitting login form!");
 
-    console.log(formData);
-
     const data = {
       email: formData.email,
       password: formData.password,
@@ -23,7 +21,7 @@ const TutorLoginForm = () => {
 
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    const response = await fetch(url + "/tutor/login", {
+    const response = await fetch(url + "/admin/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,16 +33,11 @@ const TutorLoginForm = () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result = await response.json();
-    console.log(result);
-    localStorage.setItem("email", result.email);
-    localStorage.setItem("role", result.role);
-    localStorage.setItem("token", result.token);
-    localStorage.setItem("userID", result.userId);
-    localStorage.setItem("firstName", result.firstName);
-    localStorage.setItem("lastName", result.lastName);
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("firstName", response.data.firstName);
+    localStorage.setItem("lastName", response.data.lastName);
 
-    window.location.href = "/tutorProfile";
+    window.location.href = "/registrations";
   };
 
   return (
@@ -101,4 +94,4 @@ const TutorLoginForm = () => {
   );
 };
 
-export default TutorLoginForm;
+export default AdminLoginForm;
