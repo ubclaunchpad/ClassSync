@@ -157,46 +157,6 @@ export const TutorView = () => {
         <div className="tutor-profile__tab-view">
           <TabView>
             <TabPanel className="tab-panel" header="About Me ">
-              {/* <p className="m-0 tutor-profile__about-me">
-                Hi there 👋 <br />
-                <br />
-                My name is Miki Okudera <br />
-                <br /> I am a natural born teacher with a passion for the
-                intersection of UX/UI and programming. <br />
-                <br />I have 5 years of teaching experience in C#, .NET, SQL,
-                Java, C, C++, Python, Web Development, HTML, CSS, Bootstrap,
-                Excel, JavaScript, GIT, Computer Science. <br />
-                <br />I have also successfully prepared students for AP exams
-                and IGCSE O & A Level examinations 👨‍🎓👩‍🎓 <br />
-                <br />I have taught students of all ages and backgrounds,
-                ranging from young learners to adult professionals, and I am
-                experienced in adapting my teaching style to meet the unique
-                needs and goals of each individual
-                <br /> <br /> ✅ Clarified concepts 💡
-                <br />
-                <br /> ✅ Notes for every class 📒
-                <br />
-                <br /> ✅ Excercise Problem and Solution 📝
-                <br />
-                <br /> ✅ Time Plan for the subject 🕒
-                <br />
-                <br /> ✅ Teach kids and beginners 🚀 <br />
-                <br />
-                After a trial lesson, I will show exactly where you are lacking
-                in learning Computer Science, and how you can improve in the
-                near future. I will also provide you with my notes and practice
-                problems so you get better at understanding the subject📚.{" "}
-                <br />
-                <br />I can help you improve your Computer Science in a fast,
-                friendly, and easy way, most students improve after they
-                complete 6-12 lessons. <br />
-                <br />I understand that each student is unique and learns at his
-                or her own speed. It is my responsibility as a teacher to figure
-                out the best way to help you grow - give me an opportunity and I
-                guarantee you won't be disappointed! 😊
-                <br />
-                <br /> I really anticipate hearing from you soon! ✌️
-              </p> */}
               <p className="m-0 tutor-profile__about-me">
                 {" "}
                 {about ? about : sampleData.aboutMe}{" "}
