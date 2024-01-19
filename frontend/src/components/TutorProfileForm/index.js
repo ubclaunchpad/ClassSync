@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css"; // Import the CSS file for styling
-import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
+import Select from "react-select";
+import axios from "axios";
 
 const TutorProfileForm = (props) => {
   console.log("props ", props);
@@ -73,16 +74,17 @@ const TutorProfileForm = (props) => {
       console.log("Response ", response.status);
 
       if (response.status === 200) {
-        const responseData = await response.json();
-        console.log("User details Updated:", responseData);
+        console.log("User details updated");
+        window.location.href = "/tutor/availability/recurring";
       } else {
-        const errorData = await response.json();
-        console.error("User details failed to update:", errorData);
+        console.error("User details failed to update:", response.data);
       }
     } catch (error) {
       console.error("Failed to save", error);
     }
   };
+
+  const email = localStorage.getItem("email");
 
   return (
     <form className="tutor-info-form" onSubmit={(e) => saveTutorInfo(e)}>
