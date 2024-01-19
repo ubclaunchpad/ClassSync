@@ -1,4 +1,5 @@
 import { Router } from "express";
+import authorize from "../auth/authentication.js";
 import adminAuthController from "../controllers/adminAuthController.js";
 const router = Router();
 const admin = new adminAuthController();
@@ -39,4 +40,20 @@ router.post("/login", (req, res) => {
       res.status(500).send("Login failed");
     });
 });
+
+router.post("/testing-auth-middleware", authorize("Admin"), (req, res) => {
+  console.log("TESTING ADMIN AUTH MIDDLEWARE");
+
+  /*
+    FOR FUTURE REFERENCE:
+    -> When using authorize middleware, we can use req.auth to get content from token
+  */
+
+  res
+    .status(200)
+    .send(
+      `Authorized ${req.body.email} with user ID: ${req.auth.userId} and role: ${req.auth.role}`
+    );
+});
+
 export default router;

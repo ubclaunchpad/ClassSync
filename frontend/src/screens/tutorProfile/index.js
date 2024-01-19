@@ -12,6 +12,7 @@ const TutorProfile = () => {
   const [about, setAbout] = useState("");
   const [courses, setCourses] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [description, setDescription] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const TutorProfile = () => {
         setMaxHours(profileData.max_hours);
         setUniversity(profileData.university);
         setAbout(profileData.bio);
+        setDescription(profileData.description);
 
         // Fetch offerings data
         const offeringsResponse = await fetch(`${url}/tutor/offering?id=${id}`);
@@ -57,7 +59,6 @@ const TutorProfile = () => {
 
     fetchData();
   }, []); // Empty dependency array to run the effect only once after the initial render
-  console.log(selectedOptions);
 
   return (
     <React.Fragment>
@@ -69,6 +70,7 @@ const TutorProfile = () => {
               maxHours={maxHours}
               university={university}
               about={about}
+              description={description}
               selectedOptions={selectedOptions}
             />
           </div>

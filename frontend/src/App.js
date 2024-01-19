@@ -13,6 +13,10 @@ import TutorLogin from "./screens/TutorLogin";
 import AppointmentCalendar from "./screens/booking";
 import TutorCalendar from "./screens/tutorBookings";
 import { TutorView } from "./screens/viewTutor/viewTutor";
+import AdminLogin from "./screens/adminLogin";
+import StudentDashboard from "./screens/studentDashboard";
+import Registrations from "./screens/registrations";
+import ShopCourses from "./screens/shopCourses";
 
 function App() {
   return (
@@ -23,6 +27,7 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/addStudent" element={<AddStudent />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/tutorProfile" element={<TutorProfile />} />
           <Route path="/tutor/login" element={<TutorLogin />} />
           <Route path="/registerTutor" element={<RegisterTutor />} />
@@ -32,9 +37,12 @@ function App() {
             element={<ScheduleSelectorRecurring />}
           />
           <Route path="/schedule/:id" element={<ScheduleSelector />} />
-          <Route path="/appointment" element={<AppointmentCalendar />} />
+          <Route path="/appointment/:id" element={<AppointmentCalendar />} />
           <Route path="/tutor/appointments" element={<TutorCalendar />} />
           <Route path="/viewTutor" element={<TutorView />} />
+          <Route path="/student/:id" element={<StudentDashboard />} />
+          <Route path="/registrations" element={<Registrations />} />
+          <Route path="/shop" element={<ShopCourses />} />
         </Routes>
       </BrowserRouter>
     </div>

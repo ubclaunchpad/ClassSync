@@ -1,6 +1,7 @@
 import { Router } from "express";
 import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
 import tutorAvailabilityRouter from "./tutorAvailabilityRoute.js";
+import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
 const router = Router();
 const tutor = new tutorRegistrationController();
 

@@ -29,13 +29,15 @@ export default class adminAuthController {
         .then((res) => {
           const hashedPassword = res.hashedPassword;
           const userId = res.user_id;
+          const firstName = res.firstName;
+          const lastName = res.lastName;
           if (email) {
             return comparePassword(password, hashedPassword).then((result) => {
               if (result) {
                 const token = jwt.sign(
                   {
-                    email: email,
                     role: "admin",
+                    userId: userId,
                   },
                   process.env.JWT_SECRET,
                   {
@@ -45,10 +47,9 @@ export default class adminAuthController {
                 );
 
                 resolve({
-                  email: email,
-                  role: "admin",
-                  userId: userId,
                   token: token,
+                  firstName: firstName,
+                  lastName: lastName,
                 });
               } else {
                 reject("Incorrect password");

@@ -2,29 +2,75 @@ import React, { useState } from "react";
 import "./index.css"; // Import the CSS file for styling
 import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
 
-const TutorProfileForm = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState(""); // TODO: Get email from login
-  const [about, setAbout] = useState("");
-  const [maxHours, setMaxHours] = useState("");
-  const [offerings, setOfferings] = useState("");
-  const [university, setUniversity] = useState("");
-
+const TutorProfileForm = (props) => {
+  console.log("props ", props);
+  const [about, setAbout] = useState(props.about);
+  const [maxHours, setMaxHours] = useState(props.maxHours);
+  const [university, setUniversity] = useState(props.university);
+  const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
+  const [description, setDescription] = useState(props.description);
+  const [courses, setCourses] = useState(props.offerings);
   const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-  const saveTutorInfo = async () => {
+  console.log("Courses ", courses);
+  console.log("Options ", props.offerings);
+  const id = localStorage.getItem("userID");
+
+  const closestFutureDate = (inputDate) => {
+    // Parse the input date
+    const date = new Date(inputDate);
+
+    // Define the valid target months
+    const targetMonths = [3 /* April */, 7 /* August */, 11 /* December */];
+
+    // Find the closest future date
+    let closestDate = new Date(date);
+    while (!targetMonths.includes(closestDate.getMonth())) {
+      closestDate.setMonth(closestDate.getMonth() + 1);
+    }
+
+    // Set the day to the last day of the month
+    closestDate.setMonth(closestDate.getMonth() + 1, 0);
+
+    return closestDate;
+  };
+
+  const customStyles = {
+    multiValue: (base, state) => {
+      return {
+        ...base,
+        backgroundColor: "#" + state.data.color,
+        borderRadius: "20px",
+      };
+    },
+  };
+
+  const saveTutorInfo = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+    console.log("Saving tutor info");
+    let currentDate = new Date();
+    let date = currentDate.getDate();
+    let month = currentDate.getMonth() + 1; // getMonth() returns a zero-based value (where zero indicates the first month)
+    let year = currentDate.getFullYear();
+
+    let dateString = `${month}/${date}/${year}`;
+    // console.log(selectedOptions)
+
     try {
-      const response = await fetch(url + "/tutor/bio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(url + "/tutor/bio", {
+        user_id: id,
+        bio: {
+          university: university,
+          about: about,
+          maxHours: maxHours,
+          startdate: dateString,
+          description: description,
+          enddate: closestFutureDate(Date.now()).toDateString(),
+          offerings: selectedOptions.map((option) => option.value),
         },
-        body: JSON.stringify({
-          email,
-          bio: { firstName, lastName, university, about, maxHours, offerings },
-        }),
       });
+
+      console.log("Response ", response.status);
 
       if (response.status === 200) {
         const responseData = await response.json();
@@ -39,40 +85,19 @@ const TutorProfileForm = () => {
   };
 
   return (
-    <form className="tutor-info-form">
-      <div class="header-row">
+    <form className="tutor-info-form" onSubmit={(e) => saveTutorInfo(e)}>
+      <div className="header-row">
         <h2 className="add-student-header">Create Your Profile</h2>
       </div>
-      <div className="input-row">
-        <label className="input-label">
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </label>
-        <label className="input-label">
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </label>
-      </div>
+
       <div className="input-row">
         <label className="input-label">
           Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <input type="text" value={email} disabled />
         </label>
 
         <label className="input-label">
-          University
+          Program and University
           <input
             type="text"
             value={university}
@@ -80,6 +105,7 @@ const TutorProfileForm = () => {
           />
         </label>
       </div>
+
       <div className="input-row">
         <label className="input-label">
           About Me
@@ -87,9 +113,20 @@ const TutorProfileForm = () => {
             className="bio-input"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
+            maxLength={1000}
           ></textarea>
         </label>
+
         <div className="input-column">
+          <label className="input-label">
+            Summary Description (Headline)
+            <textarea
+              className="description-input"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              style={{ minHeight: "2em" }}
+            />
+          </label>
           <label className="input-label">
             Maximum Hours Per Week
             <input
@@ -98,18 +135,27 @@ const TutorProfileForm = () => {
               onChange={(e) => setMaxHours(e.target.value)}
             />
           </label>
-          <label className="input-label">
-            Course Offerings
-            <textarea
-              className="offerings"
-              value={offerings}
-              onChange={(e) => setOfferings(e.target.value)}
-            ></textarea>{" "}
-          </label>
         </div>
       </div>
 
-      <input type="submit" value="Submit" onClick={saveTutorInfo} />
+      <div className="input-row course-offerings">
+        <label className="input-label" style={{ width: "100%" }}>
+          Course Offerings
+        </label>
+      </div>
+
+      <div className="input-row course-offerings" style={{ width: "80%" }}>
+        <Select
+          isMulti
+          options={courses}
+          styles={customStyles}
+          className="basic-multi-select"
+          value={selectedOptions}
+          onChange={setSelectedOptions}
+        />
+      </div>
+
+      <input type="submit" value="Submit" />
     </form>
   );
 };
