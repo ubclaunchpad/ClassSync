@@ -83,7 +83,7 @@ export default class studentProfileController {
         first_name: req.body.f_name,
         last_name: req.body.l_name,
         birthday: req.body.dob,
-        accomodations: req.body.accomodations,
+        accommodations: req.body.accommodations,
         fk_parent_id: req.body.fk_guardian_id
       };
 

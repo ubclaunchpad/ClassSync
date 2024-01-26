@@ -1,5 +1,6 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const {
@@ -9,10 +10,18 @@ const LoginForm = () => {
   } = useForm({
     mode: "onBlur",
   });
+  const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
     console.log("Submitting login form!");
+    console.log(
+      `{
+        email: ${formData.email},
+        password: ${formData.password},
+        API URL: ${process.env.REACT_APP_API_URL}
+      }`
+    )
 
     const data = {
       email: formData.email,
@@ -30,9 +39,12 @@ const LoginForm = () => {
       body: JSON.stringify(data),
     });
 
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("firstName", response.data.firstName);
-    localStorage.setItem("lastName", response.data.lastName);
+    const res = await response.json();
+
+    localStorage.setItem("token", res.token);
+    localStorage.setItem("firstName", res.firstName);
+    localStorage.setItem("lastName", res.lastName);
+    navigate("/parentDash");
   };
 
   return (
