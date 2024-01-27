@@ -12,6 +12,7 @@ import ScheduleSelectorRecurring from "./screens/recurringAvailability";
 import TutorLogin from "./screens/TutorLogin";
 import AppointmentCalendar from "./screens/booking";
 import TutorCalendar from "./screens/tutorBookings";
+import AdminCalendar from "./screens/adminBooking";
 import AdminLogin from "./screens/adminLogin";
 import StudentDashboard from "./screens/studentDashboard";
 import Registrations from "./screens/registrations";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/schedule/:id" element={<ScheduleSelector />} />
           <Route path="/appointment/:id" element={<AppointmentCalendar />} />
           <Route path="/tutor/appointments" element={<TutorCalendar />} />
+          <Route path="/admin/appointments" element={<AdminCalendar />} />
           <Route path="/student/:id" element={<StudentDashboard />} />
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
