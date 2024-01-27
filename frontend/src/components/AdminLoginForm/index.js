@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { useForm } from "react-hook-form";
 
@@ -9,6 +10,7 @@ const AdminLoginForm = () => {
   } = useForm({
     mode: "onBlur",
   });
+  const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -38,7 +40,7 @@ const AdminLoginForm = () => {
       localStorage.setItem("firstName", data.firstName);
       localStorage.setItem("lastName", data.lastName);
 
-      window.location.href = "/registrations";
+      navigate("/registrations");
     }
   };
 
