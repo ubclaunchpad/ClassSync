@@ -54,13 +54,14 @@ export class tutorRegistration {
     }
   }
 
-  async createAccount(email, hashPassword, fname, lname) {
+  async createAccount(email, hashPassword, fname, lname, image, role) {
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
+        console.log(`Email: ${email}, Password: ${hashPassword}, First Name: ${fname}, Last Name: ${lname}`);
         client.query(
-          "CALL insertUser($1, $2, $3, $4, $5, $6)",
-          ["tutor", email, hashPassword, fname, lname, null],
+          "CALL insertUser($1, $2, $3, $4, $5, $6, $7)",
+          [role, email, hashPassword, fname, lname, image, null],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
