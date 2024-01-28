@@ -485,7 +485,7 @@ export default function ReactBigCalendar() {
   return (
     <div>
       {selectingTutor ? (
-        <AdminTutorCalendar selectedSlot={selectedSlot} handleSelectedTutor={handleSelectedTutor}/>
+        <AdminTutorCalendar selectedSlot={selectedSlot} handleSelectedTutor={handleSelectedTutor} enrollmentId={enrollmentId}/>
       ) : (
         <TutorDashboardLayout
           rightColumnContent={

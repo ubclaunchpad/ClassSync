@@ -239,7 +239,7 @@ export default function AdminTutorCalendar(props) {
         },
         body: JSON.stringify({
           booking: {
-            enrollment_id: 1,
+            enrollment_id: props.enrollmentId,
             tutor_id: id.value,
             session_duration: 60,
             start_time: selectedSlot.start,
