@@ -6,6 +6,8 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 const Courses = () => {
 
     const [courses, setCourses] = useState([])
+    const [sortDirection, setSortDirection] = useState('asc');
+
     const fetchCourses = async () => {
         const url = `http://localhost:8080/courses`;
         const response = await fetch(url);
