@@ -69,6 +69,16 @@ router.get("/appointments", (req, res) => {
         });
 });
 
+router.get("/courses", (req, res) => {
+    return admin.getCourses()
+        .then((courses) => {
+            res.status(200).json(courses);
+        })
+        .catch((err) => {
+            console.log("Error getting courses ", err);
+            res.status(500).json(err);
+        });
+})
 router.get("/registrations", (req, res) => {
     return admin
         .getRegistrations()
