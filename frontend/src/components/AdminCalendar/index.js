@@ -155,6 +155,8 @@ export default function ReactBigCalendar() {
     };
   }, []);
   const handleSelect = ({ start }) => {
+
+    if (enrollmentId === null) return  
     setBookingError(null); // Clear the error when selecting a new slot
     const end = moment(start).add(1, "hour").toDate();
 
@@ -174,7 +176,9 @@ export default function ReactBigCalendar() {
       !overlaps;
 
     if (isSlotAvailable) {
-      if (enrollmentId) handleBook(start, end);
+      setSelectedSlot({ start, end });
+      setSelectingTutor(true)
+      // if (enrollmentId) handleBook(start, end);
     } else {
       setSelectedSlot(null);
       console.log("This slot is not available.");
@@ -464,17 +468,24 @@ export default function ReactBigCalendar() {
       console.log("Appointments are ", appointments);
       setLessons(appointments);
       setBookings(true);
-      setSelectingTutor(true);
+      // setSelectingTutor(true);
     } else {
       setBookingError("No enrollment found for this student and course");
     }
     console.log("URL is ", url);
   };
 
+  const handleSelectedTutor = async () => {
+   setSelectingTutor(false)
+   await loadData()
+   if (studentId && courseId) searchEnrollments();
+
+  }
+
   return (
     <div>
       {selectingTutor ? (
-        <AdminTutorCalendar />
+        <AdminTutorCalendar selectedSlot={selectedSlot} handleSelectedTutor={handleSelectedTutor}/>
       ) : (
         <TutorDashboardLayout
           rightColumnContent={

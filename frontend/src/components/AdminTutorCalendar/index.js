@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import events from "./events";
@@ -11,9 +11,9 @@ import { endOfWeek, startOfWeek } from "date-fns";
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 
-export default function AdminTutorCalendar() {
+export default function AdminTutorCalendar(props) {
   const [eventsData, setEventsData] = useState(events);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
   const [startDate, setStartDate] = useState(startOfWeek(new Date()));
   const [isLoaded, setIsLoaded] = useState(false);
   const [openSlots, setOpenSlots] = useState({});
@@ -25,6 +25,56 @@ export default function AdminTutorCalendar() {
 
   const [forceRender, setForceRerender] = useState(false);
 
+  const handleSelect = ({ start }) => {
+    console.log("Start is ", start)
+    setBookingError(null); // Clear the error when selecting a new slot
+    const end = moment(start).add(1, "hour").toDate();
+
+    // Convert the start date to the format used in availableSlotsByDay.
+    const startTime = moment(start).format("HH:mm");
+    const nextTimeSlot = moment(start).add(30, "minutes").format("HH:mm");
+
+    // Get the day of the week of the start date.
+    const dayOfWeek = moment(start).day();
+
+    // setTutorIDS(tutorIDs)
+    //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
+
+    // })
+    // console.log(filteredTutorIdNameMap)
+    const overlaps = eventsData.some(
+      (event) => start < event.end && end > event.start
+    );
+    // Check if the start time and the next time slot are in the array for the day of the week.
+    const isSlotAvailable =
+      openSlots[dayOfWeek] &&
+      openSlots[dayOfWeek].includes(startTime) &&
+      !overlaps;
+
+    if (isSlotAvailable) {
+      setSelectedSlot({ start, end });
+
+      const ids = availabilityHashmap[dayOfWeek][startTime];
+
+      const selected = tutorIDs.filter((item) =>
+        ids.includes(Number(item.value))
+      );
+      setAvailablePeople(selected);
+    } else {
+      setSelectedSlot(null);
+      console.log("This slot is not available.");
+    }
+  };
+
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (isLoaded && !hasRun.current) {
+      console.log("Is loaded ", selectedSlot)
+      handleSelect(selectedSlot);
+      hasRun.current = true;
+    }
+  }, [selectedSlot, isLoaded]);
   const loadData = async () => {
     console.log("Loading data for ", startDate.toISOString().split("T")[0]);
     let url = `http://localhost:8080/availability?date=${
@@ -110,6 +160,8 @@ export default function AdminTutorCalendar() {
     console.log("Start date has changed:", startDate);
     setIsLoaded(false);
     loadData();
+    console.log("Selected Slot is ", selectedSlot)
+    // handleSelect({start:selectedSlot.start});
   }, [startDate]); // Add `startDate` as a dependency
 
   useEffect(() => {
@@ -123,45 +175,6 @@ export default function AdminTutorCalendar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const handleSelect = ({ start }) => {
-    setBookingError(null); // Clear the error when selecting a new slot
-    const end = moment(start).add(1, "hour").toDate();
-
-    // Convert the start date to the format used in availableSlotsByDay.
-    const startTime = moment(start).format("HH:mm");
-    const nextTimeSlot = moment(start).add(30, "minutes").format("HH:mm");
-
-    // Get the day of the week of the start date.
-    const dayOfWeek = moment(start).day();
-
-    // setTutorIDS(tutorIDs)
-    //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
-
-    // })
-    // console.log(filteredTutorIdNameMap)
-    const overlaps = eventsData.some(
-      (event) => start < event.end && end > event.start
-    );
-    // Check if the start time and the next time slot are in the array for the day of the week.
-    const isSlotAvailable =
-      openSlots[dayOfWeek] &&
-      openSlots[dayOfWeek].includes(startTime) &&
-      !overlaps;
-
-    if (isSlotAvailable) {
-      setSelectedSlot({ start, end });
-
-      const ids = availabilityHashmap[dayOfWeek][startTime];
-
-      const selected = tutorIDs.filter((item) =>
-        ids.includes(Number(item.value))
-      );
-      setAvailablePeople(selected);
-    } else {
-      setSelectedSlot(null);
-      console.log("This slot is not available.");
-    }
-  };
 
   const deleteEvent = async (event) => {
     const response = await fetch(
@@ -304,6 +317,7 @@ export default function AdminTutorCalendar() {
         console.log("Body is ", body);
 
         console.log("Events Data is ", eventsData);
+        props.handleSelectedTutor()
       } else {
         console.log("Error adding booking");
         setBookingError(
