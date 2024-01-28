@@ -20,7 +20,7 @@ export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => 
         <li><NavLink to="/tutor/appointments">Appointments</NavLink></li>
       </ul>} />
       <Banner
-        smallText="Tutor Dashboard"
+        smallText={props.smallText || "Tutor Dashboard"}
         mainText={`Welcome${displayName}!`}
       />
       <div class="main-row">
