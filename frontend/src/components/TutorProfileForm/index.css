@@ -24,10 +24,11 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
     padding: 5px;
-    margin-left: 0rem;
-    /* create space on right*/
+    margin-right: 40px
+        /* margin-left: 0rem; */
+        /* create space on right*/
 }
 
 .input-column label {
@@ -63,10 +64,6 @@
     border-radius: 5px;
     border-width: 2px;
     border-style: solid;
-
-
-
-    
     border-color: #B3DEFC;
 }
 
