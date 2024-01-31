@@ -1,7 +1,82 @@
+import { resolve } from "path";
 import con from "../../index.js";
 
 export class admin {
 
+    addTutorsToCourse(course_id, tutor_ids) {
+        return new Promise((resolve, reject) => {
+            for (let i = 0; i < tutor_ids.length; i++) {
+                con.query(`INSERT INTO tutor_offerings (course_id, tutor_id) VALUES ($1, $2)`, [course_id, tutor_ids[i]], (err, res) => {
+                    if (err) {
+                        console.log("error: ", err);
+                        reject(err);
+                    } else {
+                        resolve(res);
+                    }
+                });
+            }
+        });
+    }
+
+    getTutors() {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT DISTINCT
+                    offr.tutor_id,
+                    CONCAT(U.firstname, ' ', U.lastname) AS tutor_name
+                FROM
+                    tutor_offerings offr
+                JOIN
+                    users U ON offr.tutor_id = U.user_id
+            `;
+
+            con.query(query)
+                .then(result => {
+                    resolve(result.rows);
+                })
+                .catch(err => {
+                    console.error(err);
+                    reject(err);
+                });
+        });
+    }
+
+    getCourseTutorMap() {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT tutor_id, ARRAY_AGG(course_id) AS course_ids
+                FROM tutor_offerings
+                GROUP BY tutor_id
+            `;
+
+            con.query(query)
+                .then(result => {
+                    resolve(result.rows);
+                })
+                .catch(err => {
+                    console.error(err);
+                    reject(err);
+                });
+        });
+    }
+    addCourse(body) {
+        return new Promise((resolve, reject) => {
+            con.query(`INSERT INTO public.courses(
+                course_name, course_difficulty, course_description, color, target_age, prerequisites, image, info_page, learning_goals, files)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING course_id;`,
+                [body.name, body.difficulty, body.description, body.color, body.age, body.prerequisites, body.image, body.info_page, body.learning_goals, body.files],
+                function(err, result) {
+                    if (err) {
+                        console.log(err)
+                        reject(err);
+                    } else {
+                        console.log("Result is ", result)
+                        resolve(result.rows[0]);
+                    }
+                }
+            );
+        });
+    }
     getCourses() {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * from public.get_course_details()`, (err, res) => {

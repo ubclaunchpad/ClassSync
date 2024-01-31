@@ -2,6 +2,47 @@
 import { admin } from "../models/admin.js";
 export default class adminController {
 
+    addTutorsToCourse(course_id, tutor_ids) {
+        const admin_ = new admin()
+        return admin_.addTutorsToCourse(course_id, tutor_ids).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
+
+    addCourse(body) {
+         const admin_ = new admin()
+         return admin_.addCourse(body).then((res) => res)
+         .catch((err) => {
+            throw err
+         })
+    }
+
+
+    getCourseTutorMap() {
+        const admin_ = new admin()
+        return admin_.getCourseTutorMap().then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
+
+    getTutors() {
+        const admin_ = new admin()
+        return admin_.getTutors().then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+
+    }
+    getCourses() {
+        const admin_ = new admin();
+
+        return admin_.getCourses()
+            .then((res) => res)
+            .catch((err) => Promise.reject(err));
+    }
+
     getCourses() {
         const admin_ = new admin();
 
