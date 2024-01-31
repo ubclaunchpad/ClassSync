@@ -485,7 +485,11 @@ export default function ReactBigCalendar() {
   return (
     <div>
       {selectingTutor ? (
-        <AdminTutorCalendar selectedSlot={selectedSlot} handleSelectedTutor={handleSelectedTutor} enrollmentId={enrollmentId}/>
+        <AdminTutorCalendar
+          selectedSlot={selectedSlot}
+          handleSelectedTutor={handleSelectedTutor}
+          enrollmentId={enrollmentId}
+        />
       ) : (
         <TutorDashboardLayout
           rightColumnContent={
@@ -495,7 +499,7 @@ export default function ReactBigCalendar() {
                 backgroundColor: "#f5f5f5",
                 borderRadius: "10px",
                 padding: "20px",
-                margin: "10px",
+                marginRight: "12px",
                 boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
               }}
             >
@@ -645,6 +649,15 @@ export default function ReactBigCalendar() {
                       ))}
                     </tbody>
                   </table>
+                  {lessons.length < 5 ? (
+                    <div style={{ marginTop: "8px", color: "green" }}>
+                      Select a time and book a lesson!
+                    </div>
+                  ) : (
+                    <div style={{ color: "red", marginTop: "8px" }}>
+                      Warning: you have over 5 bookings
+                    </div>
+                  )}
                 </div>
               )}
             </div>

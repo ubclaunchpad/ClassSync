@@ -4,6 +4,7 @@ import moment from "moment";
 import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
+import backArrow from "../../assets/leftArrow.svg";
 import "./index.css";
 import { TutorDashboardLayout } from "../TutorDashboardLayout";
 import { endOfWeek, startOfWeek } from "date-fns";
@@ -26,7 +27,7 @@ export default function AdminTutorCalendar(props) {
   const [forceRender, setForceRerender] = useState(false);
 
   const handleSelect = ({ start }) => {
-    console.log("Start is ", start)
+    console.log("Start is ", start);
     setBookingError(null); // Clear the error when selecting a new slot
     const end = moment(start).add(1, "hour").toDate();
 
@@ -70,7 +71,7 @@ export default function AdminTutorCalendar(props) {
 
   useEffect(() => {
     if (isLoaded && !hasRun.current) {
-      console.log("Is loaded ", selectedSlot)
+      console.log("Is loaded ", selectedSlot);
       handleSelect(selectedSlot);
       hasRun.current = true;
     }
@@ -160,7 +161,7 @@ export default function AdminTutorCalendar(props) {
     console.log("Start date has changed:", startDate);
     setIsLoaded(false);
     loadData();
-    console.log("Selected Slot is ", selectedSlot)
+    console.log("Selected Slot is ", selectedSlot);
     // handleSelect({start:selectedSlot.start});
   }, [startDate]); // Add `startDate` as a dependency
 
@@ -317,7 +318,7 @@ export default function AdminTutorCalendar(props) {
         console.log("Body is ", body);
 
         console.log("Events Data is ", eventsData);
-        props.handleSelectedTutor()
+        props.handleSelectedTutor();
       } else {
         console.log("Error adding booking");
         setBookingError(
@@ -421,6 +422,10 @@ export default function AdminTutorCalendar(props) {
     </div>
   );
 
+  const reload = () => {
+    window.location.reload();
+  };
+
   return (
     <TutorDashboardLayout
       rightColumnContent={
@@ -438,13 +443,19 @@ export default function AdminTutorCalendar(props) {
                   setBookingError(null); // Clear the error when closing the modal
                 }}
               />
+              <div className="back-enrollment-container">
+                <button className="back-enrollment" onClick={reload}>
+                  <img src={backArrow} width={20} />
+                  <span>Back</span>
+                </button>
+              </div>
             </div>
           )
         )
       }
     >
       <div className="calendar-container">
-        {isLoaded && (
+        {isLoaded ? (
           <Calendar
             key={eventsData + availabilityHashmap}
             views={["week"]}
@@ -465,6 +476,8 @@ export default function AdminTutorCalendar(props) {
               setStartDate(startOfWeek(date));
             }}
           />
+        ) : (
+          <div>Finding avaliable tutors</div>
         )}
       </div>
     </TutorDashboardLayout>
