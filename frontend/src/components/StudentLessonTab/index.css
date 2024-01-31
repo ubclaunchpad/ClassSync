@@ -5,12 +5,14 @@
   background: #103da2;
   width: 100%;
   border-radius: 0.5rem;
+  overflow-y: scroll;
 }
 
 .lesson-information {
   display: flex;
   flex-direction: row;
   padding: 1rem;
+  margin-top: 1rem;
 }
 
 /* Learning Goals Card */
@@ -44,7 +46,6 @@
   border-radius: 0.5rem;
   overflow-y: auto;
   max-height: 26rem;
-  margin-bottom: 3rem;
   padding: 0.5rem;
 }
 
@@ -144,14 +145,14 @@
 }
 
 .student-classes__chart {
-  /* height: 150px; */
-  width: 150px;
+  height: 150px;
+  /* width: 300px; */
 }
 .class-complete__title {
   color: #103da2;
 }
 .classes-start-end-date__container {
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
   text-align: left;
   font-size: 0.85rem;
   padding: 1rem;
@@ -178,7 +179,7 @@
   border-radius: 0.5rem;
   margin-top: 0.5rem;
   padding: 0.5rem;
-  max-height: 100px;
+  max-height: 7rem;
   overflow-y: auto;
 }
 

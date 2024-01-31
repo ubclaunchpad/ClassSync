@@ -108,10 +108,10 @@ export const fakeData = {
               name: "software.pdf",
               link: "",
             },
-            {
-              name: "psudocode.pdf",
-              link: "",
-            },
+            // {
+            //   name: "psudocode.pdf",
+            //   link: "",
+            // },
           ],
         },
         {
