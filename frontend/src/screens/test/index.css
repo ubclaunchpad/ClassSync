@@ -1,0 +1,101 @@
+.round {
+    position: relative;
+    padding: 10px;
+    padding-left: 40px; /* Add left padding */
+}
+
+.round label {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 28px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 28px;
+}
+
+  .round label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    height: 6px;
+    left: 7px;
+    opacity: 0;
+    position: absolute;
+    top: 8px;
+    transform: rotate(-45deg);
+    width: 12px;
+  }
+  
+  .round input[type="checkbox"] {
+    visibility: hidden;
+  }
+  
+  .round input[type="checkbox"]:checked + label {
+    background-color: #66bb6a;
+    border-color: #66bb6a;
+  }
+  
+  .round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+  }
+  
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    width: 350px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    background: #b3d8ff;
+    color: #003a8c;
+    font-family: Arial, sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.card-content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-section {
+    width: 50%;
+}
+
+.icon-links {
+    display: flex;
+    justify-content: center;
+}
+
+.green-div {
+    padding: 5px;
+    width: 90%;
+    margin: 5px;
+}
+
+.learning-goals {
+    display: flex;
+    flex-direction: column;
+}
+
+.goal-item {
+    display: flex;
+    align-items: center;
+}
