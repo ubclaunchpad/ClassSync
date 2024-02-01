@@ -74,33 +74,49 @@ export const StudentLessonTab = ({ course }) => {
 
   // Calculate the percentage of completed classes & Add To Chart Data
   useEffect(() => {
-    const completedClasses = lessons.filter(
-      (lesson) => lesson.completed
-    ).length;
-    setCompletedClasses(completedClasses);
-    const incompletedClasses = lessons.length - completedClasses;
-    setIncompletedClasses(incompletedClasses);
-    setChartData({
-      datasets: [
-        {
-          data: [completedClasses, incompletedClasses],
-          backgroundColor: ["#00B0F1", "#B3DEFC"],
-          hoverBackgroundColor: ["#00B0F1", "#B3DEFC"],
-        },
-      ],
-    });
+    if (lessons.length > 0) {
+      // Set Completed Classes
+      const completedClasses = lessons.filter(
+        (lesson) => lesson.completed
+      ).length;
+      setCompletedClasses(completedClasses);
+      const incompletedClasses = lessons.length - completedClasses;
+      setIncompletedClasses(incompletedClasses);
+
+      setChartData({
+        datasets: [
+          {
+            data: [completedClasses, incompletedClasses],
+            backgroundColor: ["#00B0F1", "#B3DEFC"],
+            hoverBackgroundColor: ["#00B0F1", "#B3DEFC"],
+          },
+        ],
+      });
+
+      // Populate Dropdown & Lessons Array
+      const lessonsNamesArray = [{ name: "All Lessons", value: "All Lessons" }];
+      lessons.forEach((lesson) => {
+        lessonsNamesArray.push({ name: lesson.name, value: lesson.name });
+      });
+      setLessonNames(lessonsNamesArray);
+      setSelectedLessons([...lessons]);
+    } else {
+      setCompletedClasses(0);
+      setIncompletedClasses(0);
+      setChartData({
+        datasets: [
+          {
+            data: [0, 1],
+            backgroundColor: ["#00B0F1", "#B3DEFC"],
+            hoverBackgroundColor: ["#00B0F1", "#B3DEFC"],
+          },
+        ],
+      });
+    }
 
     // Get Proper Dates For Lessons
     setShortEndDate(getShortDate(endDate));
     setShortStartDate(getShortDate(startDate));
-
-    // Populate Dropdown & Lessons Array
-    const lessonsNamesArray = [{ name: "All Lessons", value: "All Lessons" }];
-    lessons.forEach((lesson) => {
-      lessonsNamesArray.push({ name: lesson.name, value: lesson.name });
-    });
-    setLessonNames(lessonsNamesArray);
-    setSelectedLessons([...lessons]);
   }, [lessons, startDate, endDate]);
   return (
     <div className="student-dashboard__lesson-tab">
@@ -111,19 +127,25 @@ export const StudentLessonTab = ({ course }) => {
               Learning Goals And Content Checklist
             </div>
             <div className="learning-goals-checklist__container">
-              {learningGoals.map((goal) => {
-                return (
-                  <div className="learning-goal__row">
-                    <div className="learning-goal__checkbox">
-                      <Checkbox
-                        // disabled={true}
-                        checked={goal.completed}
-                      ></Checkbox>
+              {!learningGoals?.length > 0 && (
+                <div className="learning-goal__row">
+                  No Learning Goals To Complete!
+                </div>
+              )}
+              {learningGoals?.length > 0 &&
+                learningGoals.map((goal) => {
+                  return (
+                    <div className="learning-goal__row">
+                      <div className="learning-goal__checkbox">
+                        <Checkbox
+                          // disabled={true}
+                          checked={goal.completed}
+                        ></Checkbox>
+                      </div>
+                      {goal.name}
                     </div>
-                    {goal.name}
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -155,22 +177,24 @@ export const StudentLessonTab = ({ course }) => {
             <div className="classes__next-lesson__container">
               <div className="student-dashboard__title">Lesson Links</div>
               <div className="next-lesson__container">
-                {lessons.map((lesson) => {
-                  return (
-                    <div className="next-lesson__date-row">
-                      <div>{getShortDateTime(lesson.dateTime)}</div>
-                      <div>
-                        <a className="meeting-link" href={lesson.meetingLink}>
-                          Meeting Link
-                        </a>
+                {!lessons?.length > 0 && (
+                  <div className="next-lesson__date-row">
+                    <div>No Lessons Scheduled !</div>
+                  </div>
+                )}
+                {lessons?.length > 0 &&
+                  lessons.map((lesson) => {
+                    return (
+                      <div className="next-lesson__date-row">
+                        <div>{getShortDateTime(lesson.dateTime)}</div>
+                        <div>
+                          <a className="meeting-link" href={lesson.meetingLink}>
+                            Meeting Link
+                          </a>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-                <div className="next-lesson__title">{lessons[0].title}</div>
-                <div className="next-lesson__description">
-                  {lessons[0].description}
-                </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -213,26 +237,32 @@ export const StudentLessonTab = ({ course }) => {
               </Button>
             </div>
             <div className="course-files-items">
-              {selectedLessons.map((lesson, index) => {
-                return (
-                  <div className="lesson-file__container">
-                    <div className="lesson-file__title">{`${lesson.name}`}</div>
-                    <div className="lesson-files-items">
-                      {lesson.files.map((file) => {
-                        return (
-                          <div className="lesson-file__item">
-                            <a className="lesson-file__link" href={file.link}>
-                              <span className="lesson-file__link__text">
-                                {file.name}
-                              </span>
-                            </a>
-                          </div>
-                        );
-                      })}
+              {!selectedLessons?.length && (
+                <div className="lesson-files__container--empty">
+                  <div className="lesson-file__title">No Lesson Files</div>
+                </div>
+              )}
+              {selectedLessons?.length > 0 &&
+                selectedLessons.map((lesson, index) => {
+                  return (
+                    <div className="lesson-file__container">
+                      <div className="lesson-file__title">{`${lesson.name}`}</div>
+                      <div className="lesson-files-items">
+                        {lesson.files.map((file) => {
+                          return (
+                            <div className="lesson-file__item">
+                              <a className="lesson-file__link" href={file.link}>
+                                <span className="lesson-file__link__text">
+                                  {file.name}
+                                </span>
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </div>

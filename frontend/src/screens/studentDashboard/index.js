@@ -9,6 +9,8 @@ import "primeicons/primeicons.css";
 import { fakeData } from "../../components/StudentLessonTab/fakeData";
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
+// import "primereact/resources/themes/lara-light-blue/theme.css";
+
 import { StudentLessonTab } from "../../components/StudentLessonTab";
 
 const StudentDashboard = () => {
@@ -66,16 +68,24 @@ const StudentDashboard = () => {
           </div>
         </div>
         <div className="student-information__browse-courses">
-          <Button size="small" label="Browse Courses" />
+          <Button
+            className="browse-courses__button"
+            size="small"
+            label="Browse Courses"
+          />
         </div>
       </div>
       <div className="courses-tabs">
         <TabView>
-          {fakeData.courses.map((course) => {
+          {fakeData.courses.map((course, index) => {
             // console.log(course);
             return (
-              <TabPanel header={`${course.name}`}>
-                <StudentLessonTab course={course} />
+              <TabPanel
+                key={index}
+                className="courses__tab-panel"
+                header={`${course.name}`}
+              >
+                <StudentLessonTab key={index} course={course} />
               </TabPanel>
             );
           })}

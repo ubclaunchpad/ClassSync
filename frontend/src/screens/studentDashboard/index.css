@@ -25,6 +25,10 @@
   justify-content: center;
   /* width: 50%; */
 }
+.browse-courses__button {
+  background-color: #103da2;
+  font-weight: 600;
+}
 
 .student-information__profile-picture {
   width: 80px;
@@ -35,6 +39,16 @@
 .student-information__profile-name {
   font-family: "Open sans", sans-serif;
   font-size: 2rem;
-  font-weight: bold;
+  font-weight: 700;
   margin: 0.5rem;
+  color: #103da2;
+}
+.p-tabview-nav {
+  color: #103da2;
+}
+.p-tabview-title {
+  color: #103da2;
+}
+.p-tabview-ink-bar {
+  background-color: #103da2;
 }

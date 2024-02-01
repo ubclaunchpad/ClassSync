@@ -157,12 +157,14 @@ export const fakeData = {
       startDate: new Date("01 March 2011 14:48 UTC"),
       endDate: new Date("23 April 2011 14:48 UTC"),
       learningGoals: [],
+      lessons: [],
     },
     {
       name: "Python",
       startDate: new Date("01 March 2011 14:48 UTC"),
       endDate: new Date("23 April 2011 14:48 UTC"),
       learningGoals: [],
+      lessons: [],
     },
   ],
 };
