@@ -155,6 +155,8 @@ export const StudentLessonTab = ({ course }) => {
               <div className="classes-graph__container">
                 <div className="classes-chart__container">
                   <Chart
+                    height={"150px"}
+                    width={"150px"}
                     className="student-classes__chart"
                     type="pie"
                     data={chartData}

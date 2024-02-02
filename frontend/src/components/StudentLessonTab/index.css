@@ -19,7 +19,7 @@
 /* Learning Goals Card */
 
 .lesson-information__learning-goals {
-  max-width: 60%;
+  width: 60%;
   padding-left: 1rem;
   display: flex;
   flex-direction: column;
