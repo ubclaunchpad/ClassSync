@@ -15,6 +15,10 @@
 
   margin-top: 5rem;
 }
+.student-profile__back-button {
+  background-color: transparent;
+  border: none;
+}
 .student-profile__icon {
   margin-right: 1rem;
 }

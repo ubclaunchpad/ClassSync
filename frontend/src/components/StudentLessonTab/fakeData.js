@@ -73,7 +73,7 @@ export const fakeData = {
               link: "",
             },
             {
-              name: "⚠️ Click Me ⚠️.pdf",
+              name: "CLICK ME.pdf",
               link: "https://youtu.be/j0gTRXfAO9c?t=14",
             },
             {

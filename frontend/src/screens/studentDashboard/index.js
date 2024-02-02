@@ -49,10 +49,17 @@ const StudentDashboard = () => {
     <div className="student-dashboard__page">
       <div className="student-dashboard__student-information">
         <div className="student-information__profile">
-          <i
-            className="pi pi-arrow-left student-profile__icon"
-            style={{ fontSize: "1.5em" }}
-          ></i>
+          <button
+            className="student-profile__back-button"
+            onClick={(e) => {
+              console.log("Clicked the back button");
+            }}
+          >
+            <i
+              className="pi pi-arrow-left student-profile__icon"
+              style={{ fontSize: "1.5em" }}
+            ></i>
+          </button>
 
           {/* <div>
             <Avatar
@@ -78,7 +85,6 @@ const StudentDashboard = () => {
       <div className="courses-tabs">
         <TabView>
           {fakeData.courses.map((course, index) => {
-            // console.log(course);
             return (
               <TabPanel
                 key={index}

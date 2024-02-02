@@ -4,6 +4,7 @@ import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 import { useEffect, useState } from "react";
 import "./index.css";
+
 export const StudentLessonTab = ({ course }) => {
   const { name, startDate, endDate, lessons, learningGoals } = course;
 
@@ -33,7 +34,6 @@ export const StudentLessonTab = ({ course }) => {
     ];
 
     const d = new Date(date);
-    console.log("this is the day", d.getDay());
     return `${months[d.getMonth()]} ${d.getDate()} ${d.getFullYear()}`;
   }
 
@@ -122,32 +122,31 @@ export const StudentLessonTab = ({ course }) => {
     <div className="student-dashboard__lesson-tab">
       <div className="lesson-information">
         <div className="lesson-information__learning-goals">
-          <div className="learning-goals__container">
-            <div className="student-dashboard__title">
-              Learning Goals And Content Checklist
-            </div>
-            <div className="learning-goals-checklist__container">
-              {!learningGoals?.length > 0 && (
-                <div className="learning-goal__row">
-                  No Learning Goals To Complete!
-                </div>
-              )}
-              {learningGoals?.length > 0 &&
-                learningGoals.map((goal) => {
-                  return (
-                    <div className="learning-goal__row">
-                      <div className="learning-goal__checkbox">
-                        <Checkbox
-                          // disabled={true}
-                          checked={goal.completed}
-                        ></Checkbox>
-                      </div>
-                      {goal.name}
-                    </div>
-                  );
-                })}
-            </div>
+          <div className="student-dashboard__title">
+            Learning Goals And Content Checklist
           </div>
+          <div className="learning-goals-checklist__container">
+            {!learningGoals?.length > 0 && (
+              <div className="learning-goal__row">
+                No Learning Goals To Complete!
+              </div>
+            )}
+            {learningGoals?.length > 0 &&
+              learningGoals.map((goal) => {
+                return (
+                  <div className="learning-goal__row">
+                    <div className="learning-goal__checkbox">
+                      <Checkbox
+                        // disabled={true}
+                        checked={goal.completed}
+                      ></Checkbox>
+                    </div>
+                    {goal.name}
+                  </div>
+                );
+              })}
+          </div>
+          {/* </div> */}
         </div>
         <div className="lesson-information__classes">
           <div className="course-progress__container">

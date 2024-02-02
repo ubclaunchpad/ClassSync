@@ -5,7 +5,6 @@
   background: #103da2;
   width: 100%;
   border-radius: 0.5rem;
-  overflow-y: scroll;
 }
 
 .lesson-information {
@@ -13,26 +12,26 @@
   flex-direction: row;
   padding: 1rem;
   margin-top: 1rem;
+  width: 100%;
+  padding-bottom: 0px;
 }
 
 /* Learning Goals Card */
 
 .lesson-information__learning-goals {
   max-width: 60%;
-}
-
-.learning-goals__container {
-  min-width: 320px;
-
-  /* width: 75%; */
+  padding-left: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 1rem;
+  height: 27rem;
 }
-.lesson-information__learning-goals {
+
+.learning-goals__container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .student-dashboard__title {
@@ -45,10 +44,10 @@
   margin-top: 0.5rem;
   background: white;
   border-radius: 0.5rem;
-  overflow-y: auto;
-  min-height: 22rem;
-  min-width: 28rem;
-  max-height: 26rem;
+  overflow-y: scroll;
+  min-height: 25rem;
+  max-height: 25rem;
+  width: 100%;
   padding: 0.5rem;
 }
 
@@ -63,15 +62,16 @@
 
 ::-webkit-scrollbar {
   width: 12px;
+  border-radius: 10px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
-  -webkit-border-radius: 10px;
+  -webkit-border-radius: 30px;
   border-radius: 10px;
   margin-top: 30px;
   margin-bottom: 30px;
-  margin-right: 10px;
+  /* background-color: #103da2; */
 }
 
 /* Handle */
@@ -91,7 +91,6 @@
   flex-direction: row;
   align-items: center;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
   font-size: 0.85rem;
   text-align: left;
   margin-right: 0.5rem;
@@ -107,43 +106,26 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-.lesson-information__classes {
-  display: flex;
-  flex-direction: column;
-  /* align-items: flex-start; */
   margin-left: 1rem;
   margin-right: 1rem;
-  /* width: 100%; */
+  width: 40%;
+  height: 26rem;
 }
 
 .course-progress__container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
+  padding-left: 1rem;
   width: 100%;
-}
-
-.lesson-information {
-}
-
-.course-progress__container {
-  /* background: white; */
-  width: 100%;
-  max-height: 300px;
 }
 
 .classes-graph__container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* width: 100%; */
-  min-width: 300px;
-  max-width: 320px;
-
-  /* min-height: 100px; */
+  width: 100%;
   background: white;
   border-radius: 0.5rem;
   margin-top: 0.5rem;
@@ -158,14 +140,12 @@
 
 .student-classes__chart {
   height: 150px;
-  /* width: 300px; */
 }
 .class-complete__title {
   color: #103da2;
   font-weight: 500;
 }
 .classes-start-end-date__container {
-  /* margin-top: 0.5rem; */
   text-align: left;
   font-size: 0.85rem;
   padding: 1rem;
@@ -175,6 +155,7 @@
 /* Next Lesson Card */
 .classes__next-lesson__container {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 1rem;
@@ -188,14 +169,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-width: 320px;
-  max-width: 350px;
+  width: 100%;
   background: white;
   border-radius: 0.5rem;
   margin-top: 0.5rem;
   padding: 0.5rem;
-  max-height: 7rem;
+  max-height: 6rem;
   overflow-y: auto;
+  min-height: 6rem;
 }
 
 .next-lesson__date-row {
@@ -220,9 +201,7 @@
 }
 
 .course-files__container {
-  /* width: 100%; */
-  /* min-width: 100%; */
-  min-height: 500px;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -232,9 +211,8 @@
 .course-files-items__container {
   display: flex;
   flex-direction: column;
-  /* align-items: flex-start; */
   min-width: 100%;
-  min-height: 300px;
+  min-height: 200px;
   background: white;
   border-radius: 0.5rem;
   margin-top: 0.5rem;
@@ -290,7 +268,6 @@
   justify-content: flex-start;
   padding: 1rem;
   overflow-y: scroll;
-  overflow-x: scroll;
   max-height: 300px;
 }
 
@@ -323,7 +300,6 @@
   width: 100px;
   background-color: #e3e3e6;
   margin-right: 1rem;
-  /* margin-left: 0.5rem; */
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -332,7 +308,6 @@
 
 .lesson-file__link {
   text-decoration: none;
-  /* color: black; */
   font-size: 0.75rem;
   height: 100%;
   width: 100%;
@@ -344,8 +319,6 @@
 }
 
 .lesson-file__link__text {
-  /* word-wrap: break-word;
-  overflow-x: hidden; */
   text-decoration: none;
   color: black;
 }
