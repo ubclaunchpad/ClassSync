@@ -1,6 +1,20 @@
 import con from "../../index.js";
 
 export class admin {
+
+    getCourses() {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * from public.get_course_details()`, (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    console.log(res.rows)
+                    resolve(res.rows);
+                }
+            });
+        })
+    }
     getAvailabilityById(id, result) {
         return new Promise((resolve, reject) => {
             //get the availability of tutor by id
