@@ -11,9 +11,6 @@ h2 {
     font-size: 1.4rem;
 }
 
-.column {
-    float: left;
-}
 
 .left-student {
     width: 17%;
@@ -23,15 +20,6 @@ h2 {
     padding: .7rem 1rem;
 }
 
-.right {
-    width: 17%;
-}
-
-.middle {
-    width: 66%;
-    display: flex;
-    flex-direction: column;
-}
 
 @media screen and (max-width: 750px) {
     .column {
