@@ -12,16 +12,12 @@ const TutorProfileForm = (props) => {
     const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
     const [description, setDescription] = useState(props.description);
     const [courses, setCourses] = useState(props.offerings);
+    const [teleport_link, setTeleport_link] = useState(props.teleport_link);
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
     console.log("Courses ", courses)
     console.log("Options ", props.offerings)
     const id = localStorage.getItem('userID');
-
-
-
-
-
 
 
     const closestFutureDate = (inputDate) => {
@@ -73,7 +69,8 @@ const TutorProfileForm = (props) => {
                     startdate: dateString,
                     description: description,
                     enddate: closestFutureDate(Date.now()).toDateString(),
-                    offerings: selectedOptions.map((option) => option.value)
+                    offerings: selectedOptions.map((option) => option.value),
+                    teleport_link: "https://www.teleport.org/cities/" + university + "/"
                 }
             });
 
@@ -99,73 +96,70 @@ const TutorProfileForm = (props) => {
                 <h2 className="add-student-header">Create Your Profile</h2>
             </div>
 
-            <div className="input-row">
-                <label className="input-label">
-                    Email
-                    <input type="text" value={email} disabled />
-                </label>
+            <div className="input-column">
 
-                <label className="input-label">
-                    Program and University
-                    <input
-                        type="text"
-                        value={university}
-                        onChange={(e) => setUniversity(e.target.value)}
-                    />
-                </label>
-            </div>
 
-            <div className="input-row">
-                <label className="input-label">
-                    About Me
-                    <textarea
-                        className="bio-input"
-                        value={about}
-                        onChange={(e) => setAbout(e.target.value)}
-                        maxLength={1000}
-                    ></textarea>
-                </label>
-
-                <div className="input-column">
-                    <label className="input-label">
-                        Summary Description (Headline)
-                        <textarea
-                            className="description-input"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            style={{ minHeight: '2em' }}
-                        />
-                    </label>
-                    <label className="input-label">
-                        Maximum Hours Per Week
-                        <input
-                            type="number"
-                            value={maxHours}
-                            onChange={(e) => setMaxHours(e.target.value)}
-                        />
-                    </label>
+                <div className="input-row">
+                    <div className="input-column">
+                        <label className="input-label">
+                            Email
+                            <input type="text" value={email} disabled />
+                        </label>
+                        <label className="input-label">
+                            About Me
+                            <textarea
+                                className="bio-input"
+                                value={about}
+                                onChange={(e) => setAbout(e.target.value)}
+                                maxLength={1000}
+                            ></textarea>
+                        </label>
+                        <label className="input-label">
+                            Teleport Link
+                            <input type="text" value={teleport_link} disabled />
+                        </label>
+                    </div>
+                    <div className="input-column">
+                        <label className="input-label">
+                            Program and University
+                            <input
+                                type="text"
+                                value={university}
+                                onChange={(e) => setUniversity(e.target.value)}
+                            />
+                        </label>
+                        <label className="input-label">
+                            Summary Description (Headline)
+                            <textarea
+                                className="description-input"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                style={{ minHeight: '2em' }}
+                            />
+                        </label>
+                        <label className="input-label">
+                            Maximum Hours Per Week
+                            <input
+                                type="number"
+                                value={maxHours}
+                                onChange={(e) => setMaxHours(e.target.value)}
+                            />
+                        </label>
+                    </div>
                 </div>
-            </div>
-
-            <div className="input-row course-offerings">
                 <label className="input-label" style={{ width: '100%' }}>
                     Course Offerings
                 </label>
-            </div>
-
-            <div className="input-row course-offerings" style={{ width: '80%' }}>
                 <Select
                     isMulti
                     options={courses}
                     styles={customStyles}
                     className="basic-multi-select"
                     value={selectedOptions}
-                    onChange={setSelectedOptions}
+                    isDisabled={true}
                 />
+                <input type="submit" value="Submit" />
             </div>
-
-
-            <input type="submit" value="Submit" />
         </form>
 
 
