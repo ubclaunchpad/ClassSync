@@ -54,30 +54,31 @@ export class tutorRegistration {
         }
     }
 
-    async createAccount(email, hashPassword, fname, lname) {
-        const client = await con.connect();
-        try {
-            return new Promise((resolve, reject) => {
-                client.query(
-                    "CALL insertUser($1, $2, $3, $4, $5, $6)",
-                    ["tutor", email, hashPassword, fname, lname, null],
-                    (error, results) => {
-                        if (error) {
-                            console.error("Error:", error);
-                            reject(error);
-                        } else {
-                            const user_id = results.rows[0].id; // Retrieve user_id from results
-                            resolve(user_id); // Resolve with the returned user_id
-                        }
-                    }
-                );
-            });
-        } catch (err) {
-            console.log(err);
-        } finally {
-            client.release();
-        }
+  async createAccount(email, hashPassword, fname, lname, image, role) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        console.log(`Email: ${email}, Password: ${hashPassword}, First Name: ${fname}, Last Name: ${lname}`);
+        client.query(
+          "CALL insertUser($1, $2, $3, $4, $5, $6, $7)",
+          [role, email, hashPassword, fname, lname, image, null],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              const user_id = results.rows[0].id; // Retrieve user_id from results
+              resolve(user_id); // Resolve with the returned user_id
+            }
+          }
+        );
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
     }
+  }
 
     async getPassword(email) {
         const client = await con.connect();

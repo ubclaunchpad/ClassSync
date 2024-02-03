@@ -17,6 +17,7 @@ import StudentDashboard from "./screens/studentDashboard";
 import Registrations from "./screens/registrations";
 import ShopCourses from "./screens/shopCourses";
 import AddStudent from "./screens/addStudent";
+import Courses from "./screens/courses";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/student/:id" element={<StudentDashboard />} />
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
+          <Route path="/courses" element={<Courses />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import "./index.css"; // Import the CSS file for styling
+import { v4 as uuidv4 } from 'uuid';
 
 
-import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+const RegisterUserForm = (props) => {
 
-const RegisterTutorForm = () => {
+    console.log(props)
     const [email, setEmail] = useState('');
     const [verifyEmail, setVerifyEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,8 +17,11 @@ const RegisterTutorForm = () => {
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formError, setFormError] = useState('');
+    const fileInput = useRef();
 
-
+    const [imageUrl, setImageUrl] = useState(null);
+  
+  
 
     const handleVerifyEmailChange = (e) => {
         setVerifyEmail(e.target.value);
@@ -34,6 +38,40 @@ const RegisterTutorForm = () => {
         };
     };
 
+    
+const handleClick = () => {
+    fileInput.current.click();
+};
+    const handleUpload = (event) => {
+        const selectedFile = event.target.files[0];
+
+        if (!selectedFile) {
+            alert('Please select an image to upload.');
+            return;
+        }
+
+        const uuid = uuidv4(); // Generate a UUID
+        const modifiedFileName = `${uuid}_${selectedFile.name}`;
+
+        const formData = new FormData();
+        formData.append('image', selectedFile, modifiedFileName);
+
+        fetch('http://localhost:8080/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+
+                // Assuming the server responds with the uploaded image URL
+                const uploadedImageUrl = data.imageUrl;
+                setImageUrl(uploadedImageUrl);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
     const createAccount = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -49,7 +87,7 @@ const RegisterTutorForm = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/tutor/signup", {
+            const response = await fetch("http://localhost:8080/signup", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,14 +96,16 @@ const RegisterTutorForm = () => {
                     email: email,
                     password: password,
                     fname: firstName,
-                    lname: lastName
+                    lname: lastName,
+                    image: imageUrl,
+                    role: props.role
                 })
             });
 
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log('User account created:', responseData);
-                window.location.href = "/tutor/login";
+                window.location.href = props.redirect;
             } else {
                 const errorData = await response.json();
                 setFormError('Account failed to create', errorData.error);
@@ -81,6 +121,47 @@ const RegisterTutorForm = () => {
 
             <div className="header-row">
                 <h2 className="add-student-header">Create Your Account</h2>
+            </div>
+
+            <div className="header-row" style={{ justifyContent: 'center' }}>
+
+            <div style={{marginLeft:'-160px'}}>
+      <input type="file" ref={fileInput} onChange={handleUpload} style={{ display: 'none' }} />
+      
+
+{imageUrl ? (
+      <img 
+        src={imageUrl} 
+        alt="Uploaded" 
+        style={{ 
+            borderRadius: '50%', 
+            width: '100px', 
+            minHeight: '100px', 
+            objectFit: 'cover',
+            border: '2px solid #333',
+            padding: '5px',
+        }} 
+        onClick={handleClick}
+
+      />
+    ) : (
+        <img
+        src='https://t4.ftcdn.net/jpg/05/69/90/73/360_F_569907313_fl7W3gX7YIVw2r05B4Ij1c21ix4xRUqD.jpg'
+        alt="Uploaded"
+        style={{
+            borderRadius: '50%', 
+            width: '100px', 
+            minHeight: '100px', 
+            objectFit: 'cover',
+            border: '2px solid #333',
+            padding: '5px',
+        }}
+        onClick={handleClick}
+      />
+    )}
+  <p style={{ textAlign: 'center', marginTop: '3px', marginBottom:'-5px' }}>Select a profile picture</p>
+</div>
+
             </div>
 
             <div className="input-row">
@@ -136,4 +217,4 @@ const RegisterTutorForm = () => {
     );
 };
 
-export default RegisterTutorForm;
+export default RegisterUserForm;
