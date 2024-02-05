@@ -1,7 +1,8 @@
 import './index.css';
-import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
-// import Modal from 'react-modal';
+import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
 import React, { useState, useEffect } from 'react';
+
+
 const TutorsList = () => {
     const [tutors, setTutors] = useState(null);
 
@@ -22,162 +23,85 @@ const TutorsList = () => {
     useEffect(() => {
         fetchData();
     }, []);
-    // Modal.setAppElement('#root');
+    
+    // return (
 
-    // const [modalIsOpen, setModalIsOpen] = useState(false);
+    //     <ParentDashboardLayout>
 
-    // const [selectedTutor, setTutor] = useState(null); // Replace with actual course data
+    //         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    //             <h2>All Tutors</h2>
+    //             {tutors && tutors.map((tutor, index) => (
+    //                 <div key={index}
+    //                     style={{
+    //                         display: 'flex',
+    //                         flexDirection: 'row',
+    //                         width: '80%',
+    //                         alignItems: 'center',
+    //                         justifyContent: 'space-between',
+    //                         marginBottom: '20px',
+    //                         border: '1px solid #ddd',
+    //                         borderRadius: '10px',
+    //                         padding: '20px',
+    //                         boxSizing: 'border-box',
+    //                         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+    //                         backgroundColor: '#f9f9f9',
+    //                     }}>
+    //                     <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="tutorPicture" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
+    //                     <div style={{ flex: 1 }}>
+    //                         <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{tutor.f_name} {tutor.l_name}</h3>
+    //                         <p style={{ color: 'grey', marginBottom: '10px' }}>{tutor.bio}</p>
+    //                     </div>
+    //                 </div>
 
-    // const openModal = () => {
-    //     setModalIsOpen(true);
-    // }; 
+    //             ))}
+    //         </div>
+    //     </ParentDashboardLayout>
+    // );
 
-    // const closeModal = () => {
-    //     setModalIsOpen(false);
-    // };
-
-    // const handleSeeMore = async () => {
-    //     let url = "http://localhost:8080/registrations";
-    //     try {
-
-    //     } catch (err) {
-    //     }
-    // };
-
-    // const openPopUp = (id, title) => () => {
-    //     console.log("Opening popup");
-    // }
 
     return (
+        <TutorDashboardLayout
+            smallText="Admin Dashboard"
+            rightColumnContent={
+                <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
+                    <h3>List of all Tutors</h3>
 
-        <ParentDashboardLayout>
+                    <p>This dashboard allows administrators to manage student enrollments. View and sort enrollments by clicking on column headers.</p>
+                    <p>The "Paid" column indicates whether the enrollment has been paid for. You can toggle the payment status by clicking on the respective button in each row.</p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h2>All Tutors</h2>
-                {tutors && tutors.map((tutor, index) => (
-                    <div key={index}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '80%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: '20px',
-                            border: '1px solid #ddd',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            boxSizing: 'border-box',
-                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                            backgroundColor: '#f9f9f9',
-                        }}>
-                        <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="tutorPicture" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
-                        <div style={{ flex: 1 }}>
-                            <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{tutor.f_name} {tutor.l_name}</h3>
-                            <p style={{ color: 'grey', marginBottom: '10px' }}>{tutor.bio}</p>
-                        </div>
-                        {/* <button
-                            style={{
-                                backgroundColor: '#103DA2',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                padding: '10px 20px',
-                                cursor: 'pointer',
-                                alignSelf: 'center',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                            }} onClick={() => {
-                                setTutor(tutors[index]);
-                                handleSeeMore();
-                            }}>SeeMore</button> */}
-                        {/* <Modal
-                            isOpen={modalIsOpen}
-                            onRequestClose={closeModal}
-                            contentLabel="Register Modal"
-                            style={{
-                                content: {
-                                    top: '50%',
-                                    left: '50%',
-                                    right: 'auto',
-                                    bottom: 'auto',
-                                    marginRight: '-50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    backgroundColor: '#f0f0f0',
-                                    borderRadius: '10px',
-                                    padding: '20px',
-                                    width: '400px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                },
-                            }}
-                        >
-                            {selectedCourse && (
-                                <h2 style={{ marginBottom: '20px' }}>
-                                    Register for {selectedCourse.course_difficulty} {selectedCourse.course_name}
-                                </h2>
-                            )}
-                            {selectedStudent && <select
-                                value={selectedStudent.id}
-                                onChange={(e) => {
-                                    const studentId = e.target.value;
-                                    const selected = students.find(student => student.id === Number(studentId));
-                                    setSelectedStudent(selected);
-                                }}
-                                style={{
-                                    marginBottom: '20px',
-                                    padding: '10px',
-                                    width: '100%',
-                                    fontSize: '16px',
-                                }}
-                            >
-                                {students && students.map((student, index) => (
-                                    <option key={index} value={student.id}>{student.name}</option>
-                                ))}
-                            </select>}
-                            {registrationError && (
-                                <div style={{ color: 'red', marginBottom: '10px' }}>
-                                    {registrationError}
-                                </div>
-                            )}
+                    <p>
+                        Additionally, you can track the progress of each course, seeing how many classes are completed, booked, and pending respectively.
+                    </p>                </div>
+            }>
+            
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <button
-                                    onClick={closeModal}
-                                    style={{
-                                        backgroundColor: '#ddd',
-                                        color: '#333',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        padding: '10px 20px',
-                                        cursor: 'pointer',
-                                        fontSize: '16px',
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleRegister}
-                                    style={{
-                                        backgroundColor: '#103DA2',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        padding: '10px 20px',
-                                        cursor: 'pointer',
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                    }}
-                                >
-                                    Confirm
-                                </button>
-                            </div>
-                        </Modal> */}
-                    </div>
+            <table style={{ width: '90%', borderCollapse: 'collapse', marginTop: '20px', marginLeft: '30px' }}>
+                <thead>
+                    <tr style={{ borderBottom: '1px solid #000', backgroundColor: '#f2f2f2' }}>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>ID</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>First Name</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>Last Name</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>Bio</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}></th>
 
-                ))}
-            </div>
-        </ParentDashboardLayout>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tutors && tutors.map((data, index) => (
+                        <tr key={data.tutor_id} style={{ borderBottom: '1px solid #ddd', backgroundColor: data.paid ? '#e6ffe6' : 'inherit' }}>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.tutor_id}</td>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.f_name}</td>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.l_name}</td>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.bio}</td>
+                            <td style={{ padding: '10px', textAlign: 'centre' }}>
+                                <button style={{ alignContent:'center', padding: '10px', backgroundColor: '#0091e6', border: '1px solid #ddd', borderRadius: '8px',textAlign:'center', width: '100px', color:'white', fontWeight:'bold' }}
+                                 onClick={null}>See More</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </TutorDashboardLayout>
     );
 }
 export default TutorsList;
