@@ -18,6 +18,7 @@ import Registrations from "./screens/registrations";
 import ShopCourses from "./screens/shopCourses";
 import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
+import TutorsList from "./screens/tutorsList";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/tutors" element={<TutorsList />} />
         </Routes>
       </BrowserRouter>
     </div>

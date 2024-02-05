@@ -1,4 +1,5 @@
 import { Router } from "express";
+import tutorsController from "../controllers/tutorsController.js";
 import StudentProfileController from "../controllers/studentProfileController.js";
 import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
 import adminController from "../controllers/adminController.js";
@@ -13,6 +14,7 @@ import tutorRegistrationController from "../controllers/tutorRegistrationControl
 const router = Router();
 const student = new StudentProfileController();
 const admin = new adminController();
+const tutors = new tutorsController();
 
 
 
@@ -212,4 +214,17 @@ router.put("/registrations/:id/:status", (req, res) => {
         });
 }
 );
+
+router.get("/tutors", (req, res) => {
+  return tutors.getAllTutors()
+      .then((tutors1) => {
+          console.log("Tutors ", tutors1);
+          res.status(200).json(tutors1);
+      })
+      .catch((err) => {
+          console.log("Error getting tutors ", err);
+          res.status(500).json(err);
+      });
+});
+
 export default router;

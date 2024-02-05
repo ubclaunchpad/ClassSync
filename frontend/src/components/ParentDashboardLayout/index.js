@@ -40,7 +40,7 @@ export const ParentDashboardLayout = (props) => {
                             <li><a href="/parentDash">Adam Bennett</a></li>
                             <li><a href="/parentDash">Children</a></li>
                             <li><a href="/shop">Courses</a></li>
-                            <li><a href="#">Tutors</a></li>
+                            <li><a href="/tutors">Tutors</a></li>
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Help</a></li>
                         </ul>
