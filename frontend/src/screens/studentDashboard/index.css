@@ -1,27 +1,58 @@
-/* custom-tabs.css */
+.student-dashboard__page {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+.student-dashboard__student-information {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 
-.custom-tabs {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
+  margin-top: 5rem;
+}
+.student-profile__back-button {
+  background-color: transparent;
+  border: none;
+}
+.student-profile__icon {
+  margin-right: 1rem;
+}
+.student-information__profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* width: 50%; */
+}
+.browse-courses__button {
+  background-color: #103da2;
+  font-weight: 600;
 }
 
-.custom-tab-item {
-    margin-right: 10px;
-    /* Adjust the spacing between tabs */
+.student-information__profile-picture {
+  width: 80px;
+  height: 80px;
+  margin: 1rem;
 }
 
-.custom-tab-link {
-    text-decoration: none;
-    padding: 10px;
-    border: 1px solid #ddd;
-    /* Bootstrap-like border color */
-    border-radius: 5px;
-    color: #333;
+.student-information__profile-name {
+  font-family: "Open sans", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.5rem;
+  color: #103da2;
 }
-
-.custom-tab-link:hover {
-    background-color: #f8f9fa;
-    /* Bootstrap-like background color on hover */
+.p-tabview-nav {
+  color: #103da2;
+}
+.p-tabview-title {
+  color: #103da2;
+}
+.p-tabview-ink-bar {
+  background-color: #103da2;
 }
