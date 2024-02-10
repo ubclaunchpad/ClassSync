@@ -1,0 +1,20 @@
+.admin-calendar__course-info-header {
+    width: 100%;
+    background-color: #103da2;
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.admin-calendar__course-info-title {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.admin-calendar__course-info-body {
+    font-size: 14px;
+}
