@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async getBookingInfo(booking_id) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getBookingInfo(booking_id)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getTutorOfferings(userID) {
     return new Promise((resolve, reject) => {
       return this.tutor

@@ -98,6 +98,17 @@ const s3 = new S3Client({
       res.status(500).json({ error: 'Error uploading file' });
     }
   });
+
+  router.get("/booking", (req, res) => {
+    const id = req.query.id
+    const tutor = new tutorRegistrationController()
+    return tutor.getBookingInfo(id).then((info) => {
+        res.status(200).json(info);
+    }).catch((err) => {
+      res.status(500).send({ error: err.detail });
+
+    })
+  })
   
   
 router.post("/signup", (req, res) => {
