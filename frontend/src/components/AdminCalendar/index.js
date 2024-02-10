@@ -29,7 +29,7 @@ export default function ReactBigCalendar() {
   const [lessons, setLessons] = useState([]);
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [selectingTutor, setSelectingTutor] = useState(false);
-
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [forceRender, setForceRerender] = useState(false);
 
   const loadData = async () => {
@@ -155,8 +155,7 @@ export default function ReactBigCalendar() {
     };
   }, []);
   const handleSelect = ({ start }) => {
-
-    if (enrollmentId === null) return  
+    if (enrollmentId === null) return;
     setBookingError(null); // Clear the error when selecting a new slot
     const end = moment(start).add(1, "hour").toDate();
 
@@ -177,12 +176,17 @@ export default function ReactBigCalendar() {
 
     if (isSlotAvailable) {
       setSelectedSlot({ start, end });
-      setSelectingTutor(true)
+      setSelectingTutor(true);
       // if (enrollmentId) handleBook(start, end);
     } else {
       setSelectedSlot(null);
       console.log("This slot is not available.");
     }
+  };
+
+  const editEvent = async (event) => {
+    console.log(event);
+    setSelectedBooking(event);
   };
 
   const deleteEvent = async (event) => {
@@ -240,143 +244,6 @@ export default function ReactBigCalendar() {
     }
   };
 
-  const handleBook = async (start, end) => {
-    console.log("Selected Slot is ", selectedSlot);
-
-    const response = await fetch("http://localhost:8080/availability", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        booking: {
-          enrollment_id: enrollmentId,
-          tutor_id: localStorage.getItem("userID"),
-          session_duration: 60,
-          start_time: start,
-        },
-      }),
-    });
-
-    const data = await response.json();
-    console.log("Success:", data);
-    // console.log('Success:', data[0].insert_booking);
-
-    if (response.status === 200) {
-      // let events = []
-      // const newEvents = data.map(booking => {
-      //     const bookingSlot = booking.insert_booking;
-      //     console.log("Booking is ", bookingSlot);
-
-      //     const end = moment(bookingSlot[4]).add(bookingSlot[2], "minute").toDate();
-      //     console.log(end);
-
-      //     return {
-      //         start: new Date(bookingSlot[4]),
-      //         end: end,
-      //         title: title,
-      //     };
-      // });
-      // console.log("New Events ", newEvents);
-      console.log("Events Data ", eventsData);
-      // setUpdatedEvents(true)
-      setEventsData([
-        ...eventsData,
-        {
-          start: start,
-          end: end,
-          title: title,
-          id: data,
-          tutor_id: localStorage.getItem("userID"),
-        },
-      ]);
-
-      const selectedTime = start.toTimeString().split(" ")[0].substring(0, 5);
-      const thirtyMinsLater = new Date(start.getTime() + 30 * 60000)
-        .toTimeString()
-        .split(" ")[0]
-        .substring(0, 5);
-      const times = [selectedTime, thirtyMinsLater];
-
-      let body = JSON.stringify({
-        tutor_id: localStorage.getItem("userID"),
-        start_date: startDate.toISOString().split("T")[0],
-        end_date: endOfWeek(startDate).toISOString().split("T")[0],
-        day: start.getDay(),
-        times: times,
-      });
-
-      let url = "http://localhost:8080/availability/remove";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: body,
-      });
-
-      if (response.ok) {
-        console.log("Removed availability");
-        loadData();
-        searchEnrollments();
-      } else {
-        console.log("Error removing availability");
-      }
-
-      console.log("Body is ", body);
-
-      console.log("Events Data is ", eventsData);
-    } else {
-      console.log("Error adding booking");
-      setBookingError(
-        "Booking failed: You have exceeded the maximum limit of 5 bookings."
-      );
-      console.log(data);
-    }
-  };
-
-  // Array of available slots for each day of the week
-  const availableSlotsByDay = {
-    0: [
-      "09:00",
-      "09:30",
-      "10:00",
-      "10:30",
-      "11:00",
-      "11:30",
-      "12:00",
-      "12:30",
-      "13:00",
-      "13:30",
-    ], // Sunday
-    1: [
-      "09:00",
-      "09:30",
-      "10:00",
-      "10:30",
-      "11:00",
-      "11:30",
-      "12:00",
-      "12:30",
-      "13:00",
-      "13:30",
-    ], // Monday
-    2: ["09:00", "09:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Tuesday
-    3: ["09:00", "09:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Wednesday
-    4: ["09:00", "09:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Thursday
-    5: ["09:00", "09:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Friday
-    6: [
-      "09:00",
-      "09:30",
-      "10:00",
-      "10:30",
-      "11:00",
-      "11:30",
-      "12:00",
-      "12:30",
-      "13:00",
-      "13:30",
-    ], // Saturday
-  };
-
   const slotPropGetter = (date) => {
     const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
     const timeFormat = "HH:mm";
@@ -409,25 +276,6 @@ export default function ReactBigCalendar() {
   const EventComponent = ({ event }) => (
     <div className="rbc-event" style={{ position: "relative" }}>
       <div className="event-content">{event.title}</div>
-      <button
-        className="delete-button"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: "#ff6347", // Tomato color
-          color: "white", // White text
-          border: "none", // Remove border
-          borderRadius: "5px", // Rounded corners
-          padding: "10px 20px", // Padding
-          fontSize: "1em", // Text size
-          cursor: "pointer", // Cursor style on hover
-        }}
-        onClick={() => deleteEvent(event)}
-      >
-        Delete
-      </button>
     </div>
   );
 
@@ -476,11 +324,10 @@ export default function ReactBigCalendar() {
   };
 
   const handleSelectedTutor = async () => {
-   setSelectingTutor(false)
-   await loadData()
-   if (studentId && courseId) searchEnrollments();
-
-  }
+    setSelectingTutor(false);
+    await loadData();
+    if (studentId && courseId) searchEnrollments();
+  };
 
   return (
     <div>
@@ -493,174 +340,210 @@ export default function ReactBigCalendar() {
       ) : (
         <TutorDashboardLayout
           rightColumnContent={
-            <div
-              style={{
-                width: "90%",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "10px",
-                padding: "20px",
-                marginRight: "12px",
-                boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-              }}
-            >
-              <h4 style={{ color: "#333", marginBottom: "10px" }}>
-                Select student
-              </h4>
-              <Select
-                className="basic-single"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="color"
-                value={studentId}
-                onChange={setStudentId}
-                options={students.map((student) => ({
-                  value: student._id,
-                  label: student._name,
-                  guardian: student._guardian,
-                }))}
-                formatOptionLabel={({ label, guardian }) => (
-                  <div>
-                    <div>{label}</div>
-                    <small
-                      style={{ fontSize: "0.8em", color: "gray" }}
-                    >{`Guardian: ${guardian}`}</small>
-                  </div>
-                )}
-              />
-
-              <h4
+            selectedBooking ? (
+              <div
                 style={{
-                  color: "#333",
-                  marginTop: "20px",
-                  marginBottom: "10px",
+                  width: "90%",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "10px",
+                  padding: "12px",
+                  marginTop: "16px",
+                  marginRight: "16px",
+                  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
                 }}
               >
-                Select course
-              </h4>
-              <Select
-                className="basic-single"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="color"
-                value={courseId}
-                onChange={setCourseId}
-                options={courses}
-              />
-
-              <input
-                type="submit"
-                value="Search Enrollments"
-                onClick={searchEnrollments}
+                <div className="admin-calendar__course-info-header">
+                  Course:{" "}
+                </div>
+                <div className="admin-calendar__course-info-body">
+                  Student: {selectedBooking.title}
+                </div>
+                <div className="admin-calendar__course-info-body">
+                  Tutor: {selectedBooking.title}
+                </div>
+                <div className="admin-calendar__course-info-body">
+                  Time: {selectedBooking.title}
+                </div>
+                <div className="admin-calendar__course-info-body">
+                  Course: {selectedBooking.title}
+                </div>
+              </div>
+            ) : (
+              <div
                 style={{
-                  display: "block",
-                  marginTop: "20px",
-                  padding: "10px",
-                  backgroundColor: "#007BFF",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
+                  width: "90%",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "10px",
+                  padding: "20px",
+                  marginTop: "16px",
+                  marginRight: "16px",
+                  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
                 }}
-              />
-              {bookingError && (
-                <div
+              >
+                <h4 style={{ color: "#333", marginBottom: "10px" }}>
+                  Select student
+                </h4>
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="color"
+                  value={studentId}
+                  onChange={setStudentId}
+                  options={students.map((student) => ({
+                    value: student._id,
+                    label: student._name,
+                    guardian: student._guardian,
+                  }))}
+                  formatOptionLabel={({ label, guardian }) => (
+                    <div>
+                      <div>{label}</div>
+                      <small
+                        style={{ fontSize: "0.8em", color: "gray" }}
+                      >{`Guardian: ${guardian}`}</small>
+                    </div>
+                  )}
+                />
+
+                <h4
                   style={{
+                    color: "#333",
+                    marginTop: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Select course
+                </h4>
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="color"
+                  value={courseId}
+                  onChange={setCourseId}
+                  options={courses}
+                />
+
+                <input
+                  type="submit"
+                  value="Search Enrollments"
+                  onClick={searchEnrollments}
+                  style={{
+                    display: "block",
                     marginTop: "20px",
                     padding: "10px",
-                    backgroundColor: "#DC3545",
+                    backgroundColor: "#007BFF",
                     color: "#fff",
                     border: "none",
                     borderRadius: "5px",
                     cursor: "pointer",
                   }}
-                >
-                  {bookingError}
-                </div>
-              )}
-              {bookings && (
-                <div>
-                  <h2 style={{ color: "#333", marginTop: "30px" }}>Bookings</h2>
-                  <table
+                />
+                {bookingError && (
+                  <div
                     style={{
-                      width: "100%",
-                      marginTop: "10px",
-                      textAlign: "left",
-                      borderCollapse: "collapse",
-                      fontFamily: "Arial, sans-serif",
-                      border: "1px solid #ddd",
-                      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                      marginTop: "20px",
+                      padding: "10px",
+                      backgroundColor: "#DC3545",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
                     }}
                   >
-                    <tbody key={lessons}>
-                      {lessons.map((appointment, index) => (
-                        <tr
-                          key={index}
-                          style={{
-                            borderBottom: "1px solid #ddd",
-                          }}
-                        >
-                          <td
+                    {bookingError}
+                  </div>
+                )}
+                {bookings && (
+                  <div>
+                    <h2 style={{ color: "#333", marginTop: "30px" }}>
+                      Bookings
+                    </h2>
+                    <table
+                      style={{
+                        width: "100%",
+                        marginTop: "10px",
+                        textAlign: "left",
+                        borderCollapse: "collapse",
+                        fontFamily: "Arial, sans-serif",
+                        border: "1px solid #ddd",
+                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <tbody key={lessons}>
+                        {lessons.map((appointment, index) => (
+                          <tr
+                            key={index}
                             style={{
-                              padding: "10px",
-                              fontSize: "16px",
-                              color: "#333",
+                              borderBottom: "1px solid #ddd",
                             }}
                           >
-                            {new Date(appointment.start).toLocaleDateString(
-                              "en-US",
-                              { month: "short", day: "2-digit" }
-                            )}{" "}
-                          </td>
-                          <td
-                            style={{
-                              padding: "10px",
-                              fontSize: "16px",
-                              color: "#333",
-                            }}
-                          >
-                            {appointment.time}
-                          </td>
-                          <td
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            {!appointment.readOnly && (
-                              <button
-                                style={{
-                                  border: "none",
-                                  borderRadius: "5px",
-                                  cursor: "pointer",
-                                  fontFamily: "Arial, sans-serif",
-                                  fontSize: "16px",
-                                  padding: "5px 10px",
-                                }}
-                                onClick={() => deleteEvent(appointment)}
-                              >
-                                ❌
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  {lessons.length < 5 ? (
-                    <div style={{ marginTop: "8px", color: "green" }}>
-                      Select a time and book a lesson!
-                    </div>
-                  ) : (
-                    <div style={{ color: "red", marginTop: "8px" }}>
-                      Warning: you have over 5 bookings
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+                            <td
+                              style={{
+                                padding: "10px",
+                                fontSize: "16px",
+                                color: "#333",
+                              }}
+                            >
+                              {new Date(appointment.start).toLocaleDateString(
+                                "en-US",
+                                { month: "short", day: "2-digit" }
+                              )}{" "}
+                            </td>
+                            <td
+                              style={{
+                                padding: "10px",
+                                fontSize: "16px",
+                                color: "#333",
+                              }}
+                            >
+                              {appointment.time}
+                            </td>
+                            <td
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              {!appointment.readOnly && (
+                                <button
+                                  style={{
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    fontFamily: "Arial, sans-serif",
+                                    fontSize: "16px",
+                                    padding: "5px 10px",
+                                  }}
+                                  onClick={() => deleteEvent(appointment)}
+                                >
+                                  ❌
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {lessons.length < 5 ? (
+                      <div style={{ marginTop: "8px", color: "green" }}>
+                        Select a time and book a lesson!
+                      </div>
+                    ) : (
+                      <div style={{ color: "red", marginTop: "8px" }}>
+                        Warning: you have over 5 bookings
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )
           }
         >
           <div className="calendar-container">
@@ -677,7 +560,7 @@ export default function ReactBigCalendar() {
                 min={new Date(2020, 1, 0, 7, 0, 0)}
                 max={new Date(2020, 1, 0, 19, 0, 0)}
                 style={{ height: "75vh", width: "90vw" }}
-                onSelectEvent={deleteEvent}
+                onSelectEvent={editEvent}
                 onSelectSlot={handleSelect}
                 slotPropGetter={slotPropGetter}
                 onNavigate={(date) => {
