@@ -5,18 +5,21 @@ import { sampleData } from "./fakeData";
 import { Rating } from "primereact/rating";
 import { Button } from "primereact/button";
 import { Redirect } from "react-router-dom";
+import { clsx } from "clsx";
 
 export const TutorInfoCard = ({ tutorId }) => {
+  const [tutorName, setTutorName] = useState("");
   const [university, setUniversity] = useState("");
   const [description, setDescription] = useState("");
   const [about, setAbout] = useState("");
   const [courses, setCourses] = useState([]);
   const [offerings, setOfferings] = useState([]);
-  console.log(courses);
+  const [showMore, setShowMore] = useState(false);
+  //   console.log(courses);
   const url = "http://localhost:8080";
   const frontEndUrl = "http://localhost:3000";
 
-  console.log(tutorId);
+  //   console.log(tutorId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +46,7 @@ export const TutorInfoCard = ({ tutorId }) => {
         // Fetch profile data
         const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
         const profileData = await profileResponse.json();
-        console.log("Profile Data", profileData);
+        // console.log("Profile Data", profileData);
 
         // Fetch Offerings data
 
@@ -60,6 +63,12 @@ export const TutorInfoCard = ({ tutorId }) => {
         setUniversity(profileData.university);
         setAbout(profileData.bio);
         setDescription(profileData.description);
+        setTutorName(
+          `${profileData.firstName ? profileData.firstName : ""} ${
+            profileData.lastName ? profileData.lastName : ""
+          }`
+        );
+        console.log("Tutor Name", tutorName.trim().length);
       } catch (error) {
         console.error("Failed to fetch data", error);
       }
@@ -68,7 +77,7 @@ export const TutorInfoCard = ({ tutorId }) => {
     fetchData();
   }, []); // Empty dependency array to run the effect only once after the initial render
   //   console.log(courses);
-  console.log(offerings);
+  //   console.log(offerings);
   return (
     <div className="tutor-info-card__container">
       <div className="tutor-info-card__overview">
@@ -81,9 +90,13 @@ export const TutorInfoCard = ({ tutorId }) => {
           />
         </div>
         <div className="tutor-info-card__details">
-          <div className="tutor-info-card__name">
-            {sampleData.firstName} {sampleData.lastName}
-          </div>
+          {
+            <div className="tutor-info-card__name">
+              {tutorName.trim().length > 0
+                ? tutorName
+                : `${sampleData.firstName} ${sampleData.lastName}`}
+            </div>
+          }
           <div className="tutor-info-card__description">
             {description ? description : sampleData.description}
           </div>
@@ -112,7 +125,20 @@ export const TutorInfoCard = ({ tutorId }) => {
             </span>
           </div>
           <div className="tutor-info-card__about-me">
-            {/* <p className="m-0 ">{about ? about : sampleData.aboutMe} </p> */}
+            <div
+              className={clsx(
+                showMore && "show-more__container--visible",
+                !showMore && "show-more__container--hidden"
+              )}
+            >
+              <p className="m-0 ">{about ? about : sampleData.aboutMe} </p>
+            </div>
+            <button
+              className="show-more__button"
+              onClick={() => setShowMore(!showMore)}
+            >
+              {showMore ? "Show Less" : "Show More"}
+            </button>
           </div>
         </div>
         <div className="tutor-info-card__more-info__container">

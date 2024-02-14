@@ -63,8 +63,38 @@
   font-size: 12px;
   width: 100%;
   display: flex;
+  flex-direction: column;
   text-align: left;
+  align-items: flex-start;
 }
+.show-more__container--hidden {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 50px;
+  overflow-y: hidden;
+}
+.show-more__container--visible {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.show-more__button {
+  background: none;
+  border: none;
+  color: black;
+  font-weight: 600;
+  text-align: left;
+  /* margin-top: 3px; */
+  padding: 0;
+  font-family: "open sans", sans-serif;
+  font-size: 12px;
+  text-decoration: underline;
+}
+.show-more__button:hover {
+  color: #103da2;
+}
+
 .tutor-info-card__more-info__container {
   display: flex;
   flex-direction: column;
