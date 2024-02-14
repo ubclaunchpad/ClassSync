@@ -33,6 +33,18 @@ export default class tutorRegistrationController {
         });
     });
   }
+  async getAllTutors() {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .getAllTutors()
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
   async getAllOfferings() {
     return new Promise((resolve, reject) => {
       return this.course

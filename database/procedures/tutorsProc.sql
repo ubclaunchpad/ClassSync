@@ -69,3 +69,12 @@ BEGIN
 END;
 END;
 
+-- Get All tutor IDs. 
+
+CREATE OR REPLACE PROCEDURE getAllTutors()
+LANGUAGE plpgsql
+AS $$ 
+BEGIN 
+    SELECT tutor_id FROM tutors 
+END; 
+END; 
