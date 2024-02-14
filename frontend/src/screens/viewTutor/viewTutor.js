@@ -129,13 +129,13 @@ export const TutorView = () => {
               {description ? description : sampleData.description}
             </div>
             <div className="tutor__courses__container">
-              <img className="tutor-overview__icon" src="./book.svg" alt="g" />
+              <img className="tutor-overview__icon" src="/book.svg" alt="g" />
               <span className="tutor-overview__text">{sampleData.courses}</span>
             </div>
             <div className="tutor__languages__container">
               <img
                 className="tutor-overview__icon"
-                src="./language.svg"
+                src="/language.svg"
                 alt="g"
               />
               <span className="tutor-overview__text">
@@ -145,7 +145,7 @@ export const TutorView = () => {
             <div className="tutor__languages__container">
               <img
                 className="tutor-overview__icon"
-                src="./graduation1.svg"
+                src="/graduation1.svg"
                 alt="g"
               />
               <span className="tutor-overview__text">

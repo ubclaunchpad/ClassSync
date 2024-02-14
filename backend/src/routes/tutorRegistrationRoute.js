@@ -75,6 +75,14 @@ router.get("/profile", (req, res) => {
     });
 });
 
+router.get("/allTutors", (req, res)=>{
+    tutor.getAllTutors().then((result)=>{
+        res.status(200).json(result);
+    }).catch((err)=>{
+        res.status(500).send({error: err.detail});
+    }); 
+})
+
 router.get("/offering", (req, res) => {
     const userID = req.query.id;
     return tutor.getTutorOfferings(userID).then((result) => {

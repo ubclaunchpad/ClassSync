@@ -1,0 +1,79 @@
+.tutor-info-card__container {
+  width: 100%;
+  border-radius: 10px;
+  border: 2px solid black;
+  margin: 1rem 1rem 1rem 0rem;
+  margin-left: none;
+  padding: 2rem;
+}
+
+.tutor-info-card__overview {
+  /* margin-top: 50px; */
+  display: flex;
+  /* align-items: center; */
+}
+
+.tutor-info-card__avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50px;
+}
+
+.tutor-info-card__details {
+  /* padding-top: 25px; */
+  margin-left: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 60%;
+}
+
+.tutor-info-card__name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.tutor-info-card__description {
+  font-size: 14px;
+}
+
+.tutor__courses__container {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  color: rgb(73, 73, 73);
+  font-weight: 500;
+}
+.tutor__languages__container {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  color: rgb(73, 73, 73);
+  font-weight: 500;
+}
+
+.tutor-info-card__text {
+  font-size: 12px;
+  margin-left: 10px;
+}
+.tutor-info-card__about {
+  font-weight: bold;
+}
+.tutor-info-card__about-me {
+  font-size: 12px;
+  width: 100%;
+  display: flex;
+  text-align: left;
+}
+.tutor-info-card__more-info__container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* margin-top: 10px; */
+  width: 40%;
+  /* padding-right: 1rem; */
+}
+
+.tutor-info__learn-more {
+  background-color: #103da2;
+}
