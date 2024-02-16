@@ -44,6 +44,7 @@ const LoginForm = () => {
     localStorage.setItem("token", res.token);
     localStorage.setItem("firstName", res.firstName);
     localStorage.setItem("lastName", res.lastName);
+    localStorage.setItem("userId", res.userId);
     navigate("/parentDash");
   };
 

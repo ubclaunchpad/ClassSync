@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async getBookingInfo(booking_id) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getBookingInfo(booking_id)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getTutorOfferings(userID) {
     return new Promise((resolve, reject) => {
       return this.tutor
@@ -46,11 +59,11 @@ export default class tutorRegistrationController {
     });
   }
 
-  async signup(email, password, fname, lname) {
+  async signup(email, password, fname, lname, image, role) {
     const hashedPassword = await hashPassword(password);
     return new Promise((resolve, reject) => {
       return this.tutor
-        .createAccount(email, hashedPassword, fname, lname)
+        .createAccount(email, hashedPassword, fname, lname, image, role)
         .then((id) => {
           resolve(id);
         })

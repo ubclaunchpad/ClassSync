@@ -3,7 +3,7 @@ import Calendar from "../../components/Calendar/Calendar";
 import { startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, set } from 'date-fns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import "./index.css"; // Import your custom styles
+// import "./index.css"; // Import your custom styles
 import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
 import { textAlign } from "@mui/system";
 

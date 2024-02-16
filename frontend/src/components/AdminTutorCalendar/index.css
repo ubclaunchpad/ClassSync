@@ -1,0 +1,23 @@
+.back-enrollment-container {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.back-enrollment {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    background-color: #89CFF0;
+    border: none;
+    margin-top: 8px;
+    padding: 10px 16px 10px 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+}
+
+.back-enrollment:hover {
+    cursor: pointer;
+}

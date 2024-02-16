@@ -121,6 +121,7 @@ const Registrations = () => {
 
     return (
         <TutorDashboardLayout
+            smallText="Admin Dashboard"
             rightColumnContent={
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
                     <h3>Manage Student Enrollments</h3>
