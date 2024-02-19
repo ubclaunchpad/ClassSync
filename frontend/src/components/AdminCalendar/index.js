@@ -14,6 +14,7 @@ import timeIcon from "../../assets/time.svg";
 import studentIcon from "../../assets/student.svg";
 import tutorIcon from "../../assets/tutor.svg";
 import courseIcon from "../../assets/course.svg";
+import trashIcon from "../../assets/trashBin.svg";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -401,11 +402,11 @@ export default function ReactBigCalendar() {
                 </div>
                 <div className="admin-calendar__course-info-body">
                   <img src={studentIcon} alt="student icon" />
-                  {selectedBooking.title}
+                  {appointmentInfo.student}
                 </div>
                 <div className="admin-calendar__course-info-body">
                   <img src={tutorIcon} alt="tutor icon" width={24} />
-                  {selectedBooking.title}
+                  {appointmentInfo.tutor}
                 </div>
                 <div className="admin-calendar__course-info-body">
                   <img src={courseIcon} alt="course icon" width={24} />
@@ -416,7 +417,7 @@ export default function ReactBigCalendar() {
                     <div
                       className="admin-calendar__course-number"
                       style={
-                        index < 2
+                        index < appointmentInfo.class
                           ? { backgroundColor: "#103da2" }
                           : { backgroundColor: "#B3DEFC" }
                       }
@@ -424,6 +425,16 @@ export default function ReactBigCalendar() {
                   ))}
                 </div>
                 <div className="admin-calendar__back-container">
+                  <button
+                    className="admin-calendar__back"
+                    onClick={() => {
+                      deleteEvent(selectedBooking);
+                      setSelectedBooking(null);
+                    }}
+                  >
+                    <img src={trashIcon} alt="delete" width={20} />
+                    <span>Cancel</span>
+                  </button>
                   <button
                     className="admin-calendar__back"
                     onClick={() => setSelectedBooking(null)}

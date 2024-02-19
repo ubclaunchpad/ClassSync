@@ -30,7 +30,7 @@
     flex-direction: row;
     gap: 8px;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 8px;
     justify-content: center;
 }
 
@@ -43,7 +43,7 @@
 .admin-calendar__back-container {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
 }
 
 .admin-calendar__back {
