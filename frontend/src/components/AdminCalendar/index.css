@@ -12,9 +12,55 @@
 
 .admin-calendar__course-info-title {
     font-weight: 600;
-    font-size: 24px;
+    font-size: 20px;
+    text-align: left;
+    margin-left: 4px;
 }
 
 .admin-calendar__course-info-body {
+    text-align: left;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-calendar__course-numbers-list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.admin-calendar__course-number {
+    width: 70px;
+    height: 5px;
+    border-radius: 2.5px;
+}
+
+.admin-calendar__back-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.admin-calendar__back {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    background-color: #B3DEFC;
+    border: none;
+    margin-top: 8px;
+    padding: 10px 16px 10px 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.admin-calendar__back:hover {
+    cursor: pointer;
 }

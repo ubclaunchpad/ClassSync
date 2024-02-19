@@ -6,9 +6,14 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
 import { TutorDashboardLayout } from "../TutorDashboardLayout";
-import { endOfWeek, set, startOfWeek } from "date-fns";
+import { differenceInHours, endOfWeek, set, startOfWeek } from "date-fns";
 import Select from "react-select";
 import AdminTutorCalendar from "../AdminTutorCalendar";
+import backArrow from "../../assets/leftArrow.svg";
+import timeIcon from "../../assets/time.svg";
+import studentIcon from "../../assets/student.svg";
+import tutorIcon from "../../assets/tutor.svg";
+import courseIcon from "../../assets/course.svg";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -30,6 +35,7 @@ export default function ReactBigCalendar() {
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [selectingTutor, setSelectingTutor] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [appointmentInfo, setAppointmentInfo] = useState(null);
   const [forceRender, setForceRerender] = useState(false);
 
   const loadData = async () => {
@@ -136,6 +142,18 @@ export default function ReactBigCalendar() {
       );
     }
   };
+
+  const fetchAppointmentInfo = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/booking?id=${id}`);
+      const appointmentData = await response.json();
+      setAppointmentInfo(appointmentData);
+      console.log(appointmentData);
+    } catch {
+      console.log("cannot get appointment info");
+    }
+  };
+
   useEffect(() => {
     // This code will run whenever `startDate` changes
     console.log("Start date has changed:", startDate);
@@ -187,6 +205,7 @@ export default function ReactBigCalendar() {
   const editEvent = async (event) => {
     console.log(event);
     setSelectedBooking(event);
+    fetchAppointmentInfo(event.id);
   };
 
   const deleteEvent = async (event) => {
@@ -343,43 +362,84 @@ export default function ReactBigCalendar() {
             selectedBooking ? (
               <div
                 style={{
-                  width: "90%",
                   backgroundColor: "#f5f5f5",
                   borderRadius: "10px",
                   padding: "12px",
                   marginTop: "16px",
-                  marginRight: "16px",
                   boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "8px",
+                  gap: "12px",
                 }}
               >
                 <div className="admin-calendar__course-info-header">
-                  Course:{" "}
+                  Appointment
                 </div>
                 <div className="admin-calendar__course-info-body">
-                  Student: {selectedBooking.title}
+                  <img src={timeIcon} alt="time icon" />
+                  {selectedBooking.start.toLocaleString([], {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                  {" -"}
+                  <br />
+                  {selectedBooking.end.toLocaleString([], {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}{" "}
+                  (
+                  {differenceInHours(
+                    selectedBooking.end,
+                    selectedBooking.start
+                  )}{" "}
+                  hour
+                  {differenceInHours(
+                    selectedBooking.end,
+                    selectedBooking.start
+                  ) > 1 && "s"}
+                  )
                 </div>
                 <div className="admin-calendar__course-info-body">
-                  Tutor: {selectedBooking.title}
+                  <img src={studentIcon} alt="student icon" />
+                  {selectedBooking.title}
                 </div>
                 <div className="admin-calendar__course-info-body">
-                  Time: {selectedBooking.title}
+                  <img src={tutorIcon} alt="tutor icon" width={24} />
+                  {selectedBooking.title}
                 </div>
                 <div className="admin-calendar__course-info-body">
-                  Course: {selectedBooking.title}
+                  <img src={courseIcon} alt="course icon" width={24} />
+                  {selectedBooking.title}
+                </div>
+                <div className="admin-calendar__course-numbers-list">
+                  {[...Array(5)].map((x, index) => (
+                    <div
+                      className="admin-calendar__course-number"
+                      style={
+                        index < 2
+                          ? { backgroundColor: "#103da2" }
+                          : { backgroundColor: "#B3DEFC" }
+                      }
+                    ></div>
+                  ))}
+                </div>
+                <div className="admin-calendar__back-container">
+                  <button
+                    className="admin-calendar__back"
+                    onClick={() => setSelectedBooking(null)}
+                  >
+                    <img src={backArrow} width={20} />
+                    <span>Back</span>
+                  </button>
                 </div>
               </div>
             ) : (
               <div
                 style={{
-                  width: "90%",
                   backgroundColor: "#f5f5f5",
                   borderRadius: "10px",
                   padding: "20px",
                   marginTop: "16px",
-                  marginRight: "16px",
                   boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
                 }}
               >
