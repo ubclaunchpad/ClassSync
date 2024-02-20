@@ -33,6 +33,11 @@ h2 {
     flex-direction: column;
 }
 
+.right-middle {
+    width: 81%;
+    display: flex;
+    flex-direction: column;
+}
 
 
 @media screen and (max-width: 750px) {

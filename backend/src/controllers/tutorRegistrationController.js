@@ -8,6 +8,65 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async shareFiles(booking_id, files) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .shareFiles(booking_id, files)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  async getCourseFiles(enrollment_id)
+ {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getCourseFiles(enrollment_id)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  async addLearningGoalProgress(enrollmentId, completed) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .addLearningGoalProgress(enrollmentId, completed)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getLearningGoalsProgress(enrollmentId) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getLearningGoalProgress(enrollmentId)
+        .then((result) => {
+          console.log(result)
+
+          const { learning_goals, completed } = result;
+
+          result = learning_goals[0].map((goal, index) => {
+              const isCompleted = completed[0].includes(index);
+              return { goal, completed: isCompleted };
+          });
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async getTutorOfferings(userID) {
     return new Promise((resolve, reject) => {
       return this.tutor

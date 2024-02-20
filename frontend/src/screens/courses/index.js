@@ -39,9 +39,7 @@ const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
 
     const [courseId, setCourseId] = useState(null)
 
-    const [uploadedFiles, setUploadedFiles] = useState([])
-    const createCourse = async e => {
-        e.preventDefault()
+    const getDifficulty = () => {
         let difficulty;
         switch (selectedIndex) {
             case 1:
@@ -54,6 +52,14 @@ const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                 difficulty = 'Advanced';
                 break;
         }
+        return difficulty
+    }
+
+    const [uploadedFiles, setUploadedFiles] = useState([])
+    const createCourse = async e => {
+        e.preventDefault()
+        let difficulty = getDifficulty()
+    
         let learning_goals = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
 
         const body = {
@@ -273,10 +279,10 @@ useEffect(() => {
     if (step === 3 && firstEdit) {
         let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
         let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-        let contentState = stateFromHTML(`<h1> Course Title </h1>
+        let contentState = stateFromHTML(`<h1> ${getDifficulty()} ${formValues.name} </h1>
         <h4> Learning Goals </h4>
         
-        <ul>${listItems}</ul><h1>Hello</h1>`);
+        <ul>${listItems}</ul>`);
         setEditorState(EditorState.createWithContent(contentState));
         setFirstEdit(false)
     }
@@ -988,11 +994,8 @@ const stars = Array.from({ length: maxStars }, (_, index) => (
                             <tr key={course.course_id} style={{ borderBottom: '1px solid #ddd' }}>
                                                               <td style={{ padding: '10px', textAlign: 'center' }}>
                                                             <div onClick={() => console.log('SVG clicked with id ', course.course_id)}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-                                                                    <path d="M0 0h24v24H0z" fill="none"/>
-                                                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                                                                </svg>
-                                                            </div>          </td>
+<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>                                                            </div>          </td>
+                                                                                  {/* Make delete only appear on hover */}
                                                                                   <td style={{ padding: '10px', textAlign: 'left' }}>{course.course_difficulty} {course.course_name}</td>
 
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{getDifficultyStars(course.course_difficulty)}</td>

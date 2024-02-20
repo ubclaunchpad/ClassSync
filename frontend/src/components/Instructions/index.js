@@ -5,7 +5,7 @@ import { Editor } from 'react-draft-wysiwyg';
 const Instructions = ({ editorState, handleEditorStateChange }) => (
     <div style={{ flex: 3, marginLeft: '10px' }}>
         <div>
-            <h4>Create Course Info Page</h4>
+            <h4>Create Lesson Plan</h4>
             <Editor editorState={editorState} onEditorStateChange={handleEditorStateChange}
                 wrapperClassName="wrapper-class"
                 editorClassName="editor-class"

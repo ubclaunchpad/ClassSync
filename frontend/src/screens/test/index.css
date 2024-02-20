@@ -1,19 +1,27 @@
 .round {
-    position: relative;
+    /* position: relative; */
+    display: flex;
+    align-items: center;
     padding: 10px;
-    padding-left: 40px; /* Add left padding */
+    /* padding-left: 40px; Add left padding */
+    /* margin-top:22px; */
 }
 
+
+
+.round input {
+margin: 0;
+}
 .round label {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 50%;
     cursor: pointer;
-    height: 28px;
+    height: 14px;
     left: 0;
-    position: absolute;
+    position: relative;
     top: 0;
-    width: 28px;
+    width: 14px;
 }
 
   .round label:after {
@@ -21,13 +29,13 @@
     border-top: none;
     border-right: none;
     content: "";
-    height: 6px;
-    left: 7px;
+    height: 3px;
+    left: 3px;
     opacity: 0;
     position: absolute;
-    top: 8px;
+    top: 4px;
     transform: rotate(-45deg);
-    width: 12px;
+    width: 6px;
   }
   
   .round input[type="checkbox"] {
