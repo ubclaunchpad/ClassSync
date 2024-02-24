@@ -256,10 +256,10 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         if (step === 3 && firstEdit) {
             let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
             let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-            let contentState = stateFromHTML(`<h1> Course Title </h1>
+            let contentState = stateFromHTML(`<h1> ${formValues.name} </h1>
         <h4> Learning Goals </h4>
         
-        <ul>${listItems}</ul><h1>Hello</h1>`);
+        <ul>${listItems}</ul>`);
             setEditorState(EditorState.createWithContent(contentState));
             setFirstEdit(false)
         }
