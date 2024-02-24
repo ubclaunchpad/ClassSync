@@ -16,7 +16,8 @@ const Courses = () => {
     const [courses, setCourses] = useState([])
     const [courseID, setCourseID] = useState(-1)
     const [sortDirection, setSortDirection] = useState('asc');
-    const [showModal, setShowModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
 
     const fetchCourses = async () => {
@@ -49,19 +50,20 @@ const Courses = () => {
 
 
     const handleAddCourseClick = () => {
-        setModalAction('add');
-        setShowModal(true);
+        setShowAddModal(true);
+        setShowEditModal(false);
     };
 
     const handleEditCourseClick = (id) => {
         console.log('Edit course clicked', id)
-        setModalAction('edit');
         setCourseID(id)
-        setShowModal(true);
+        setShowEditModal(true);
+        setShowAddModal(false);
     };
 
     const handleCloseModal = () => {
-        setShowModal(false);
+        setShowAddModal(false);
+        setShowEditModal(false);
         setCourseID(-1)
     };
 
@@ -167,7 +169,7 @@ const Courses = () => {
                     >
                         Add Course
                     </button>
-                    <CourseModal action={modalAction} showModal={showModal} handleCloseModal={handleCloseModal} courses={transformedCourses} course_id={courseID} />
+                    <AddCourseModal showModal={showAddModal} handleCloseModal={handleCloseModal} courses={transformedCourses} />
                 </div>
             }
         >
@@ -211,6 +213,8 @@ const Courses = () => {
                                                 <path d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                                             </svg>
+                                            <EditCourseModal showModal={showEditModal} handleCloseModal={handleCloseModal} courses={transformedCourses} course_id={courseID} />
+
                                         </div>
                                     )}
                                 </td>

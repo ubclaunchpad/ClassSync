@@ -14,9 +14,9 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, course_id }) => {
+export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_id }) => {
     const [step, setStep] = useState(1);
-    const [firstEdit, setFirstEdit] = useState(action === 'add')
+    const [firstEdit, setFirstEdit] = useState(false)
     console.log("Courses are ", courses)
     const [checkedCourses, setCheckedCourses] = useState([])
 
@@ -58,53 +58,30 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
         // const body = JSON.stringify(formValues)
         // body["color"] = formValues.color
 
-        if (action === 'add') {
-            const URL = "http://localhost:8080/course"
-            try {
-                const response = await fetch(URL, {
-                    method: 'POST',
-                    body: JSON.stringify(body),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        const URL = "http://localhost:8080/course/{course.id}"
+        try {
+            const response = await fetch(URL, {
+                method: 'PUT',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
+            });
 
-                const data = await response.json();
-                console.log(data);
-                setCourseId(data.course_id)
-                handleNextStep(e)
-            } catch (error) {
-                console.error('There has been a problem with creating this course', error);
-                alert(error)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        } else {
-            const URL = "http://localhost:8080/course/{course.id}"
-            try {
-                const response = await fetch(URL, {
-                    method: 'PUT',
-                    body: JSON.stringify(body),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                console.log(data);
-                setCourseId(data.course_id)
-                handleNextStep(e)
-            } catch (error) {
-                console.error('There has been a problem with editing this course', error);
-                alert(error)
-            }
+            const data = await response.json();
+            console.log(data);
+            setCourseId(data.course_id)
+            handleNextStep(e)
+        } catch (error) {
+            console.error('There has been a problem with editing this course', error);
+            alert(error)
         }
+
     }
     const [tutors, setTutors] = useState([])
     const [courseMap, setCourseMap] = useState([])
@@ -169,15 +146,8 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
     })
     const handleReset = () => {
         setTutors(allTutors)
-
-
-
         setCheckedCourses([])
-
         setSearchInput('');
-
-
-
     }
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -521,7 +491,7 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
             </button>
             {step === 1 ? (
                 // Your existing form goes here
-                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`${action === 'add' ? 'Add a New' : 'Edit a'} Course`}</h2>
+                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`'Edit a Course`}</h2>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <label style={{ color: '#103da2', marginBottom: '10px' }}>
                             <span style={{ display: 'block', marginBottom: '5px' }}>Banner Upload:</span>
@@ -646,7 +616,7 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
             ) : step === 2 ? (
                 // Your step 2 content goes here
                 <>
-                    <h2>{`Step 2: ${action === 'add' ? 'Add' : 'Edit'} Learning Goals and Files`}</h2>
+                    <h2>{`Step 2: Edit Learning Goals and Files`}</h2>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div style={{ flex: 1, marginRight: '10px' }}>
                             <LearningGoals learningGoals={learningGoals} handleLearningGoalsChange={handleLearningGoalsChange} />
@@ -742,7 +712,7 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
                                 fontSize: '14px',
                             }}
                         >
-                            {action === 'add' ? 'Create' : 'Edit'}
+                            Edit
                         </button>
                     </div>
                 </>
@@ -852,7 +822,7 @@ export const EditCourseModal = ({ action, showModal, handleCloseModal, courses, 
                                     fontSize: '14px',
                                 }}
                             >
-                                {`${action === 'add' ? 'Add' : 'Edit'} Tutors`}
+                                {`Edit Tutors`}
                             </button>
                         </div>
                     </div>

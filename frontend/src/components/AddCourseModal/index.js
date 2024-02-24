@@ -14,7 +14,7 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-export const AddCourseModal = ({ actishowModal, handleCloseModal, courses, course_id }) => {
+export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(true)
     console.log("Courses are ", courses)

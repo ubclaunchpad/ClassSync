@@ -6,6 +6,7 @@ import authorize from "../auth/authentication.js";
 import { S3Client } from '@aws-sdk/client-s3';
 import multerS3 from 'multer-s3';
 import multer from 'multer';
+import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
 const router = Router();
 const student = new StudentProfileController();
 const admin = new adminController();
@@ -13,7 +14,7 @@ const admin = new adminController();
 
 
 router.get("/guardian/students", authorize("Guardian"), (req, res) => {
-
+ 
     student
         .getStudentsByGuardian(req.auth.userId)
         .then((response) => {
@@ -175,6 +176,120 @@ router.post("/signup", (req, res) => {
         res.status(500).send({ error: err.detail });
     });
 });
+
+router.post("/booking/files", (req, res) => {
+  const tutor = new tutorRegistrationController()
+  const booking_id = req.body.id;
+  const files = req.body.files;
+  console.log("Sharing files for ", booking_id, " - ", files)
+  tutor.shareFiles(booking_id, files).then((response) => {
+    res.status(200).json(response);
+  }).catch((err) => {
+    res.status(500).json(err);
+  });
+})
+
+router.get("/booking/notes", (req, res) => {
+  const booking_id = req.query.id
+  const tutor = new tutorRegistrationController()
+  tutor.getNotesForBooking(booking_id).then((response) => {
+    res.status(200).json(response);
+  }).catch((err) => {
+    res.status(500).json(err);
+  })
+})
+
+router.post("/notes", (req, res) => {
+  const booking_id = req.body.id
+  const notes = req.body.notes
+  console.log("Notes are ", notes)
+  const tutor = new tutorRegistrationController()
+  return tutor.updateNotes(booking_id, notes).then(() => {
+    res.status(200);
+  }).catch((err) => {
+    res.status(500).json(err);
+  })
+
+})
+router.get("/class", (req, res) => {
+  const booking_id = req.query.id
+  const tutor = new tutorRegistrationController()
+  tutor.getClassInfo(booking_id).then((response) => {
+    res.status(200).json(response);
+}).catch((err) => {
+    res.status(500).json(err);
+})
+})
+
+router.get("/course/files", (req, res) => {
+  const tutor = new tutorRegistrationController()
+    const enrollment_id = req.query.id;
+    tutor.getCourseFiles(enrollment_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+
+
+
+})
+
+router.get("/sharedfiles", (req, res) => {
+  const tutor = new tutorRegistrationController()
+    const booking_id = req.query.id;
+    tutor.getSharedFiles(booking_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+
+
+
+})
+
+router.post("/classInfo", (req, res) => {
+  const enrollmentId = req.body.enrollment_id;
+  const completed = req.body.completed;
+  const booking_id = req.body.booking_id;
+  const notes = req.body.notes;
+
+  const tutor = new tutorRegistrationController();
+
+  const addLearningGoalProgressPromise = tutor.addLearningGoalProgress(enrollmentId, completed);
+  const updateNotesPromise = tutor.updateNotes(booking_id, notes);
+
+  Promise.all([addLearningGoalProgressPromise, updateNotesPromise])
+    .then(() => {
+      console.log("Successfully saved both")
+      res.status(200).end();
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
+router.post("/learninggoals", (req, res) => {
+    const enrollmentId = req.body.id;
+    const completed = req.body.completed;
+    const tutor = new tutorRegistrationController()
+    tutor.addLearningGoalProgress(enrollmentId, completed)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
+})
+router.get("/learninggoals", (req, res) => {
+    const enrollmentId = req.query.id;
+    const tutor = new tutorRegistrationController()
+    tutor.getLearningGoalsProgress(enrollmentId)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
+})
 router.get("/students", (_, res) => {
     student
         .getStudents()

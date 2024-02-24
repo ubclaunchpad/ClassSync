@@ -18,7 +18,7 @@ import Registrations from "./screens/registrations";
 import ShopCourses from "./screens/shopCourses";
 import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
-import Test from "./screens/test";
+import ClassRecordForm from "./screens/classRecord";
 
 function App() {
   return (
@@ -46,7 +46,7 @@ function App() {
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/class/:id" element={<ClassRecordForm />} />
         </Routes>
       </BrowserRouter>
     </div>
