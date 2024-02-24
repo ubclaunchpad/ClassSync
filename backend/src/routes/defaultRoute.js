@@ -188,6 +188,38 @@ router.post("/booking/files", (req, res) => {
   });
 })
 
+router.get("/booking/notes", (req, res) => {
+  const booking_id = req.query.id
+  const tutor = new tutorRegistrationController()
+  tutor.getNotesForBooking(booking_id).then((response) => {
+    res.status(200).json(response);
+  }).catch((err) => {
+    res.status(500).json(err);
+  })
+})
+
+router.post("/notes", (req, res) => {
+  const booking_id = req.body.id
+  const notes = req.body.notes
+  console.log("Notes are ", notes)
+  const tutor = new tutorRegistrationController()
+  return tutor.updateNotes(booking_id, notes).then(() => {
+    res.status(200);
+  }).catch((err) => {
+    res.status(500).json(err);
+  })
+
+})
+router.get("/class", (req, res) => {
+  const booking_id = req.query.id
+  const tutor = new tutorRegistrationController()
+  tutor.getClassInfo(booking_id).then((response) => {
+    res.status(200).json(response);
+}).catch((err) => {
+    res.status(500).json(err);
+})
+})
+
 router.get("/course/files", (req, res) => {
   const tutor = new tutorRegistrationController()
     const enrollment_id = req.query.id;
@@ -200,6 +232,40 @@ router.get("/course/files", (req, res) => {
 
 
 })
+
+router.get("/sharedfiles", (req, res) => {
+  const tutor = new tutorRegistrationController()
+    const booking_id = req.query.id;
+    tutor.getSharedFiles(booking_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+
+
+
+})
+
+router.post("/classInfo", (req, res) => {
+  const enrollmentId = req.body.enrollment_id;
+  const completed = req.body.completed;
+  const booking_id = req.body.booking_id;
+  const notes = req.body.notes;
+
+  const tutor = new tutorRegistrationController();
+
+  const addLearningGoalProgressPromise = tutor.addLearningGoalProgress(enrollmentId, completed);
+  const updateNotesPromise = tutor.updateNotes(booking_id, notes);
+
+  Promise.all([addLearningGoalProgressPromise, updateNotesPromise])
+    .then(() => {
+      console.log("Successfully saved both")
+      res.status(200).end();
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 router.post("/learninggoals", (req, res) => {
     const enrollmentId = req.body.id;
     const completed = req.body.completed;

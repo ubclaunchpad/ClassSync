@@ -8,6 +8,46 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async updateNotes(booking_id, notes) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .updateNotes(booking_id, notes)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async getClassInfo(booking_id) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getClassInfo(booking_id)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  async getNotesForBooking(booking_id) {
+    return new Promise((resolve, reject) => {
+      return this.course
+        .getNotesForBooking(booking_id)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+
+      
+    });
+  }
+
   async shareFiles(booking_id, files) {
     return new Promise((resolve, reject) => {
       return this.course
@@ -33,6 +73,20 @@ export default class tutorRegistrationController {
         });
     });
   }
+
+  async getSharedFiles(booking_id)
+  {
+     return new Promise((resolve, reject) => {
+       return this.course
+         .getSharedFiles(booking_id)
+         .then((result) => {
+           resolve(result);
+         })
+         .catch((err) => {
+           reject(err);
+         });
+     });
+   }
   async addLearningGoalProgress(enrollmentId, completed) {
     return new Promise((resolve, reject) => {
       return this.course

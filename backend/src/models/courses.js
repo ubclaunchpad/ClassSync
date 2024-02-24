@@ -2,6 +2,84 @@ import con from "../../index.js";
 
 export class courses {
 
+    async updateNotes(booking_id, notes) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'CALL update_lesson_notes($1, $2)',
+                    [booking_id, notes],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            resolve();  // Resolve with the returned result
+                        }
+                    }
+                );
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            client.release();
+        }
+    }
+
+    async getClassInfo(booking_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'SELECT * FROM get_class_info($1)',
+                    [booking_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            const classInfo = results.rows[0];  // Retrieve class info from results
+                            resolve(classInfo);  // Resolve with the returned class info
+                        }
+                    }
+                );
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            client.release();
+        }
+    }
+
+    async getNotesForBooking(booking_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'SELECT * FROM get_notes_details($1)',
+                    [booking_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log("Notes ", results)
+                            const notes = results.rows;  // Retrieve notes from results
+                            resolve(notes);  // Resolve with the returned notes
+                        }
+                    }
+                );
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            client.release();
+        }
+    }
+
     async shareFiles(booking_id, files) {
         const client = await con.connect()
 
@@ -42,6 +120,32 @@ export class courses {
                             reject(error);
                         } else {
                             const files = results.rows[0].get_course_files[0];  // Retrieve files from results
+                            resolve(files);  // Resolve with the returned files
+                        }
+                    }
+                );
+            });
+        } catch (err) {
+            console.log(err);
+        }
+        finally {
+            client.release();
+        }
+    }
+
+    async getSharedFiles(booking_id) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    'SELECT * FROM get_shared_files($1)',
+                    [booking_id],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            const files = results.rows[0].get_shared_files[0];  // Retrieve files from results
                             resolve(files);  // Resolve with the returned files
                         }
                     }
