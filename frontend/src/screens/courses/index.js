@@ -5,7 +5,8 @@ import './index.css'
 import 'react-dropzone-uploader/dist/styles.css'
 
 import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
-import { AddCourseModal } from '../../components/CourseModal';
+import { AddCourseModal } from '../../components/AddCourseModal';
+import { EditCourseModal } from '../../components/EditCourseModal';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +14,7 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 
 const Courses = () => {
     const [courses, setCourses] = useState([])
+    const [courseID, setCourseID] = useState(-1)
     const [sortDirection, setSortDirection] = useState('asc');
     const [showModal, setShowModal] = useState(false);
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
@@ -47,11 +49,20 @@ const Courses = () => {
 
 
     const handleAddCourseClick = () => {
+        setModalAction('add');
+        setShowModal(true);
+    };
+
+    const handleEditCourseClick = (id) => {
+        console.log('Edit course clicked', id)
+        setModalAction('edit');
+        setCourseID(id)
         setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
+        setCourseID(-1)
     };
 
 
@@ -156,7 +167,7 @@ const Courses = () => {
                     >
                         Add Course
                     </button>
-                    <AddCourseModal showModal={showModal} handleCloseModal={handleCloseModal} courses={transformedCourses} />
+                    <CourseModal action={modalAction} showModal={showModal} handleCloseModal={handleCloseModal} courses={transformedCourses} course_id={courseID} />
                 </div>
             }
         >
@@ -195,7 +206,7 @@ const Courses = () => {
                                 onMouseLeave={handleMouseLeave}>
                                 <td style={{ padding: '10px', textAlign: 'center', width: '60px' }}>
                                     {hoveredRowIndex === index && (
-                                        <div onClick={() => console.log('SVG clicked with id ', course.course_id)}>
+                                        <div onClick={() => { handleEditCourseClick(course.course_id) }}>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
                                                 <path d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />

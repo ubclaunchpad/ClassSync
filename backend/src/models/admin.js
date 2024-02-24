@@ -65,7 +65,7 @@ export class admin {
                 course_name, course_difficulty, course_description, color, target_age, prerequisites, image, info_page, learning_goals, files)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING course_id;`,
                 [body.name, body.difficulty, body.description, body.color, body.age, body.prerequisites, body.image, body.info_page, body.learning_goals, body.files],
-                function(err, result) {
+                function (err, result) {
                     if (err) {
                         console.log(err)
                         reject(err);
@@ -77,6 +77,35 @@ export class admin {
             );
         });
     }
+
+    viewCourse(id) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM public.courses WHERE course_id = $1`, [id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res.rows[0]);
+                }
+            });
+        });
+    }
+
+    editCourse(body) {
+        return new Promise((resolve, reject) => {
+            con.query(`UPDATE public.courses
+            SET course_name=$1, course_difficulty=$2, course_description=$3, color=$4, target_age=$5, prerequisites=$6, image=$7, info_page=$8, learning_goals=$9, files=$10
+            WHERE course_id=$11`, [body.name, body.difficulty, body.description, body.color, body.age, body.prerequisites, body.image, body.info_page, body.learning_goals, body.files, body.course_id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
+    }
+
     getCourses() {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * from public.get_course_details()`, (err, res) => {

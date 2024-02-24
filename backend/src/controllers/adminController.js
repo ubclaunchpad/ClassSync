@@ -18,6 +18,13 @@ export default class adminController {
          })
     }
 
+    viewCourse(id) {
+        const admin_ = new admin()
+        return admin_.viewCourse(id).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
 
     getCourseTutorMap() {
         const admin_ = new admin()

@@ -7,14 +7,14 @@ import { FaFilter } from 'react-icons/fa';
 import { v4 as uuidv4 } from 'uuid';
 import { useDropzone } from 'react-dropzone';
 
-import Instructions from '../../components/Instructions';
-import FileUpload from '../../components/FileUpload';
-import LearningGoals from '../../components/LearningGoals';
+import Instructions from '../Instructions';
+import FileUpload from '../FileUpload';
+import LearningGoals from '../LearningGoals';
 
 
 import { FaRedo } from 'react-icons/fa';
 
-export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
+export const AddCourseModal = ({ actishowModal, handleCloseModal, courses, course_id }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(true)
     console.log("Courses are ", courses)
@@ -144,15 +144,8 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     })
     const handleReset = () => {
         setTutors(allTutors)
-
-
-
         setCheckedCourses([])
-
         setSearchInput('');
-
-
-
     }
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -243,6 +236,8 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [filteredTutors, setFilteredTutors] = useState(tutors)
     // const filteredTutors = tutors.filter(tutor => tutor.tutor_name.toLowerCase().includes(searchInput.toLowerCase()));
     // 
+
+
     const handleFileUpload = (event) => {
         const names = Array.from(event.target.files).map(file => file.name);
         setFileNames(prevNames => [...prevNames, ...names]);
@@ -455,7 +450,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
             </button>
             {step === 1 ? (
                 // Your existing form goes here
-                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>Add a New Course</h2>
+                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{'Add a New Course'}</h2>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <label style={{ color: '#103da2', marginBottom: '10px' }}>
                             <span style={{ display: 'block', marginBottom: '5px' }}>Banner Upload:</span>
@@ -580,7 +575,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
             ) : step === 2 ? (
                 // Your step 2 content goes here
                 <>
-                    <h2>Step 2: Add Learning Goals and Files</h2>
+                    <h2>{`Step 2: Add Learning Goals and Files`}</h2>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div style={{ flex: 1, marginRight: '10px' }}>
                             <LearningGoals learningGoals={learningGoals} handleLearningGoalsChange={handleLearningGoalsChange} />
@@ -676,7 +671,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                                 fontSize: '14px',
                             }}
                         >
-                            Create
+                            {'Create'}
                         </button>
                     </div>
                 </>
@@ -727,21 +722,22 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                                         }}
 
 
-                                    >                                {courses.map((option, index) => (
-                                        <div key={index}>
-                                            <label>
-                                                <input
-                                                    type="checkbox"
-                                                    value={option.course_id}
-                                                    checked={checkedCourses[option.course_id] || false}
-                                                    onChange={() => {
-                                                        setCheckedCourses({ ...checkedCourses, [option.course_id]: !checkedCourses[option.course_id] });
-                                                    }}
-                                                />
-                                                {option.title}
-                                            </label>
-                                        </div>
-                                    ))}
+                                    >
+                                        {courses.map((option, index) => (
+                                            <div key={index}>
+                                                <label>
+                                                    <input
+                                                        type="checkbox"
+                                                        value={option.course_id}
+                                                        checked={checkedCourses[option.course_id] || false}
+                                                        onChange={() => {
+                                                            setCheckedCourses({ ...checkedCourses, [option.course_id]: !checkedCourses[option.course_id] });
+                                                        }}
+                                                    />
+                                                    {option.title}
+                                                </label>
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                                 <FaRedo onClick={handleReset} style={{ cursor: 'pointer', marginLeft: '5px' }} />
@@ -785,7 +781,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                                     fontSize: '14px',
                                 }}
                             >
-                                Add Tutors
+                                {`Add Tutors`}
                             </button>
                         </div>
                     </div>
