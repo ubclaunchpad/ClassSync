@@ -52,7 +52,7 @@ export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => 
           </div>
         </div>
 
-        <div class="column middle">{props.children}</div>
+        <div class={rightColumnContent ? "column middle" : "column right-middle"}>{props.children}</div>
 
         {rightColumnContent && (
           <div class="column right">{rightColumnContent}</div>

@@ -1,0 +1,17 @@
+.wrapper-class {
+    padding: 1rem;
+    border: 1px solid #ccc;
+}
+
+.editor-class {
+    /* background-color:#eee; */
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 2%;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.toolbar-class {
+    border: 0px solid #ccc;
+}
