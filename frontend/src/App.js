@@ -20,6 +20,7 @@ import ShopCourses from "./screens/shopCourses";
 import { TutorView } from "./screens/viewTutor/viewTutor";
 import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
+import ClassRecordForm from "./screens/classRecord";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/class/:id" element={<ClassRecordForm />} />
         </Routes>
       </BrowserRouter>
     </div>
