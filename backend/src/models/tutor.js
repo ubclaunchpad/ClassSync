@@ -24,27 +24,6 @@ export class tutor {
         }
     }
 
-    async getStudentsByGuardian(id) {
-        const client = await con.connect();
-        try {
-          return new Promise((resolve, reject) => {
-            client.query("SELECT * FROM get_students_by_guardian($1)", [id], (error, results) => {
-              if (error) {
-                console.error("Error:", error);
-                reject(error);
-              } else {
-                console.log(results.rows);
-                resolve(results.rows);
-              }
-            });
-          });
-        } catch (err) {
-          console.log(err);
-        } finally {
-          client.release();
-        }
-      }
-
     async getTutorById(tutor_id) {
         const client = await con.connect();
         try {
@@ -57,6 +36,28 @@ export class tutor {
                             console.error('Error:', error);
                             reject(error);
                         } else {
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+
+    async getAllTutorOfferings() {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    "SELECT * FROM tutor_offerings",
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log(results.rows);
                             resolve(results.rows);
                         }
                     }

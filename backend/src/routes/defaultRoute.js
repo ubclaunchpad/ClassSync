@@ -1,5 +1,4 @@
 import { Router } from "express";
-import tutorsController from "../controllers/tutorsController.js";
 import StudentProfileController from "../controllers/studentProfileController.js";
 import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
 import adminController from "../controllers/adminController.js";
@@ -14,7 +13,6 @@ import tutorRegistrationController from "../controllers/tutorRegistrationControl
 const router = Router();
 const student = new StudentProfileController();
 const admin = new adminController();
-const tutors = new tutorsController();
 
 
 
@@ -216,13 +214,37 @@ router.put("/registrations/:id/:status", (req, res) => {
 );
 
 router.get("/tutors", (req, res) => {
-  return tutors.getAllTutors()
+  return admin.getAllTutors()
       .then((tutors1) => {
           console.log("Tutors ", tutors1);
           res.status(200).json(tutors1);
       })
       .catch((err) => {
           console.log("Error getting tutors ", err);
+          res.status(500).json(err);
+      });
+});
+
+router.get("/tutor_offerings", (req, res) => {
+  return admin.getTutorOfferings()
+      .then((offerings) => {
+          console.log("Tutor Offerings ", offerings);
+          res.status(200).json(offerings);
+      })
+      .catch((err) => {
+          console.log("Error getting offerings ", err);
+          res.status(500).json(err);
+      });
+});
+
+router.get("/users", (req, res) => {
+  return admin.getUsers()
+      .then((users) => {
+          console.log("Users ", users);
+          res.status(200).json(users);
+      })
+      .catch((err) => {
+          console.log("Error getting users ", err);
           res.status(500).json(err);
       });
 });

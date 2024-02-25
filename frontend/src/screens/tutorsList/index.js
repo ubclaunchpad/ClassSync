@@ -5,24 +5,44 @@ import React, { useState, useEffect } from 'react';
 
 const TutorsList = () => {
     const [tutors, setTutors] = useState(null);
+    const [users, setUsers] = useState(null);
+    const [courses, setCourses] = useState(null);
+    const [offerings, setOfferings] = useState(null);
 
     const fetchData = async () => {
         try {
-            let url = "http://localhost:8080/tutors"
-            const teacherListResponse = await fetch(url);
+            // Gettig all tutors
+            let urlTutors = "http://localhost:8080/tutors"
+            const teacherListResponse = await fetch(urlTutors);
             // console.log("Tutors Response", teacherListResponse);
 
             const teacherListData = await teacherListResponse.json();
             // console.log("Tutors Data", teacherListResponse);
             setTutors(teacherListData);
+
+            // Getting all users
+            let urlUsers = "http://localhost:8080/users"
+            const usersListResponse = await fetch(urlUsers);
+            const usersListData = await usersListResponse.json();
+            setUsers(usersListData);
+        
+            // Getting all courses
+            let urlCourses = "http://localhost:8080/courses"
+            const coursesListResponse = await fetch(urlCourses);
+            const coursesListData = await coursesListResponse.json();
+            setCourses(coursesListData);
+
+
+            // Getting all tutor offerings
+            let urlTutorOfferings = "http://localhost:8080/tutor_offerings"
+            const offeringsListResponse = await fetch(urlTutorOfferings);
+            const offeringsListData = await offeringsListResponse.json();
+            setOfferings(offeringsListData);
+
         } catch (error) {
             console.error('Failed to fetch data', error);
         }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
     
     // return (
 
@@ -58,6 +78,15 @@ const TutorsList = () => {
     //     </ParentDashboardLayout>
     // );
 
+    const findCourses = (tutor_id) => {
+        let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+        let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id));
+        return courseList;
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <TutorDashboardLayout
@@ -77,26 +106,30 @@ const TutorsList = () => {
 
             <table style={{ width: '90%', borderCollapse: 'collapse', marginTop: '20px', marginLeft: '30px' }}>
                 <thead>
-                    <tr style={{ borderBottom: '1px solid #000', backgroundColor: '#f2f2f2' }}>
+                    <tr style={{ borderBottom: '1px solid #000', backgroundColor: '#103da2', color: 'white' }}>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>ID</th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>First Name</th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>Last Name</th>
-                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>Bio</th>
-                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}></th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}>Courses</th>
+                        {/* <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}></th> */}
 
                     </tr>
                 </thead>
                 <tbody>
-                    {tutors && tutors.map((data, index) => (
+                    {tutors?.map((data, index) => (
                         <tr key={data.tutor_id} style={{ borderBottom: '1px solid #ddd', backgroundColor: data.paid ? '#e6ffe6' : 'inherit' }}>
                             <td style={{ padding: '10px', textAlign: 'left' }}>{data.tutor_id}</td>
-                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.f_name}</td>
-                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.l_name}</td>
-                            <td style={{ padding: '10px', textAlign: 'left' }}>{data.bio}</td>
-                            <td style={{ padding: '10px', textAlign: 'centre' }}>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{users?.find(user => user.user_id === data.tutor_id)?.firstname}</td>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>{users?.find(user => user.user_id === data.tutor_id)?.lastname}</td>
+                            <td style={{ padding: '10px', textAlign: 'left' }}>
+                                {findCourses(data.tutor_id)?.map((course, index) => (
+                                    <p key={index}>{course.course_name},{course.course_difficulty}</p>
+                                ))}
+                            </td>
+                            {/* <td style={{ padding: '10px', textAlign: 'centre' }}>
                                 <button style={{ alignContent:'center', padding: '10px', backgroundColor: '#0091e6', border: '1px solid #ddd', borderRadius: '8px',textAlign:'center', width: '100px', color:'white', fontWeight:'bold' }}
                                  onClick={null}>See More</button>
-                            </td>
+                            </td> */}
                         </tr>
                     ))}
                 </tbody>
