@@ -9,7 +9,7 @@ const RegisterTutor = () => {
         <TutorDashboardLayout>
             <div className='register-tutor-container'>
                 <RegisterUserForm role='tutor' redirect='/tutor/login'/>
-            </div >
+            </div>
 
         </TutorDashboardLayout >
     );
