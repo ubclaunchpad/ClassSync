@@ -7,8 +7,12 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+.main-row {
+    height: 100%;
+}
+
 h2 {
-    font-size: 1.4rem;
+    font-size: 1.4rem; 
 }
 
 .column {
@@ -16,12 +20,13 @@ h2 {
 }
 
 .left-span {
-    width: 17%;
+    width: 15%;
     box-sizing: border-box;
-    height: 100vh;
     background-color: #103DA2;
     padding: .7rem 1rem;
-}
+    color: white;
+    height: 100vh;
+  }
 
 
 .middle-right {
@@ -97,6 +102,7 @@ h2 {
     align-items: center;
     font-weight: bold;
     max-width: 100%;
+    flex-direction: column;
 }
 
 .right-buttons {
@@ -158,5 +164,34 @@ h2 {
 .profile-pic {
     height: 100px;
     text-align: left; /* Left-align the text */
-    margin: 30px 25px;
+    margin-top: 2rem;
 }
+
+/*indenting the sublinks*/
+ul li ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 1rem; /* Adjust the indentation as needed */
+  }
+  
+  ul li ul li {
+    margin-left: 0.5rem; /* Adjust the indentation as needed */
+    font-size: .8rem
+  }
+
+  ul li:hover > ul {
+    display: block;
+  }
+
+  .children-sublinks {
+    display: none;
+  }
+
+  .courses-sublinks {
+    display: none;
+  }
+
+  .tutor-sublinks {
+    display: none;
+  }

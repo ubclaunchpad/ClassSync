@@ -16,10 +16,10 @@ h2 {
 }
 
 .left {
-    width: 17%;
+    width: 15%;
     box-sizing: border-box;
     height: 100vh;
-    background-color: #00B0F1;
+    background-color: #103DA2;
     padding: .7rem 1rem;
 }
 
@@ -107,6 +107,7 @@ h2 {
     align-items: center;
     font-weight: bold;
     max-width: 100%;
+    color: white;
 }
 
 .right-buttons {
@@ -132,3 +133,24 @@ h2 {
 .shop-courses {
     padding-right: 2.5rem;
 }
+
+/*indenting the sublinks*/
+ul li ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 1rem; /* Adjust the indentation as needed */
+  }
+  
+  ul li ul li {
+    margin-left: 0.5rem; /* Adjust the indentation as needed */
+    font-size: .8rem
+  }
+
+  ul li:hover > ul {
+    display: block;
+  }
+
+  .courses-sublinks {
+    display: none;
+  }
