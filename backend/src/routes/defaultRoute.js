@@ -4,7 +4,6 @@ import tutorAvailabilityController from "../controllers/tutorAvailabilityControl
 import adminController from "../controllers/adminController.js";
 import authorize from "../auth/authentication.js";
 import multer from 'multer';
-import multer from 'multer';
 import path from "path";
 import fs from 'fs';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
