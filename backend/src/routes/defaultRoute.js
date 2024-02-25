@@ -3,9 +3,13 @@ import StudentProfileController from "../controllers/studentProfileController.js
 import tutorAvailabilityController from "../controllers/tutorAvailabilityController.js";
 import adminController from "../controllers/adminController.js";
 import authorize from "../auth/authentication.js";
-import { S3Client } from '@aws-sdk/client-s3';
-import multerS3 from 'multer-s3';
 import multer from 'multer';
+import multer from 'multer';
+import path from "path";
+import fs from 'fs';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
+import multerS3 from 'multer-s3';
 import tutorRegistrationController from "../controllers/tutorRegistrationController.js";
 const router = Router();
 const student = new StudentProfileController();
@@ -290,6 +294,18 @@ router.get("/learninggoals", (req, res) => {
             res.status(500).json(err);
         });
 })
+
+  router.get("/booking", (req, res) => {
+    const id = req.query.id
+    const tutor = new tutorRegistrationController()
+    return tutor.getBookingInfo(id).then((info) => {
+        res.status(200).json(info);
+    }).catch((err) => {
+      res.status(500).send({ error: err.detail });
+
+    })
+  })
+  
 router.get("/students", (_, res) => {
     student
         .getStudents()

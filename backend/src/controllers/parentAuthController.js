@@ -49,6 +49,7 @@ export default class parentAuthController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  userId: userId,
                 });
               } else {
                 reject("Incorrect password");
