@@ -22,6 +22,7 @@ import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
 import { ViewAllTutors } from "./screens/viewAllTutors";
 import ClassRecordForm from "./screens/classRecord";
+import { CourseCurriculumView } from "./screens/courseCurriculum";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/allTutors" element={<ViewAllTutors />} />
           <Route path="/class/:id" element={<ClassRecordForm />} />
+          <Route path="/course/:id" element={<CourseCurriculumView />} />
         </Routes>
       </BrowserRouter>
     </div>

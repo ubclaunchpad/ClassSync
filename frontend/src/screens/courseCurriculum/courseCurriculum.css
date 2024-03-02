@@ -1,0 +1,190 @@
+.course-curriculum__view {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  min-height: 900px;
+  margin-top: 40px;
+  padding-left: 15rem;
+  padding-right: 15rem;
+}
+
+.course-curriculum__overview {
+  margin-top: 50px;
+  display: flex;
+  /* align-items: center; */
+}
+
+.p-avatar-image {
+  border-radius: 10px;
+}
+
+.course-curriculum__avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.course-curriculum__details {
+  /* padding-top: 25px; */
+  margin-left: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.course-curriculum__name {
+  font-size: 36px;
+  font-weight: bold;
+  color: #103da2;
+}
+
+/* .tutor-overview__description {
+  font-size: 16px;
+} */
+
+.curriculum-age-prereq__container {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.tutor__languages__container {
+  /* margin-top: 5px; */
+  display: flex;
+  align-items: center;
+}
+
+.curriculum-overview__text--age {
+  font-size: 14px;
+}
+.curriculum-overview__text--prereq {
+  margin-left: 3rem;
+  font-size: 14px;
+}
+.curriculum-taught-by__container {
+  margin-top: 5px;
+}
+
+.curriculum-overview__taught-by {
+  font-size: 14px;
+}
+.curriculum-register__container {
+  margin-top: 1rem;
+}
+.curriculum-register__button {
+  width: 200px;
+  border-radius: 10px;
+  height: 40px;
+  background-color: #103da2;
+}
+.curriculum-divider {
+  margin-top: 3rem;
+  height: 1px;
+  color: black;
+  width: 100%;
+  border: none;
+  background-color: black;
+}
+.curriculum-view-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 2rem;
+}
+
+.curriculum-more-information {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* padding-right: 5rem; */
+}
+.curriculum-concepts-projects-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.curriculum-description {
+  text-align: left;
+}
+.curriculum-concepts__container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.curriculum-concepts__title {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  text-align: left;
+}
+.curriculum-learning-goal {
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.project-description {
+  text-align: left;
+}
+.curriculum-project__container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+}
+.curriculum-projects__title {
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  text-align: left;
+}
+.curriculum-project {
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.curriculum__list {
+  margin: none;
+  padding-top: none;
+}
+
+.curriculum-reccomended-container {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  padding: 2rem 1rem 1rem 1rem;
+  width: 50%;
+  border: 1px solid black;
+  border-radius: 1rem;
+  margin-left: 5rem;
+  margin-top: 1rem;
+}
+.curriculum-reccomended-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
+.curriculum-reccomended-tabs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  /* padding: 1rem; */
+  margin-top: 1rem;
+}
+
+.course-curriculum__footer {
+  min-height: 300px;
+}
