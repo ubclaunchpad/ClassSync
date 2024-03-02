@@ -6,16 +6,16 @@ import axios from 'axios';
 
 const TutorProfileForm = (props) => {
     console.log("props ", props)
-    const [about, setAbout] = useState(props.about);
-    const [maxHours, setMaxHours] = useState(props.maxHours);
-    const [university, setUniversity] = useState(props.university);
+    const [about, setAbout] = useState(props.profileData.bio);
+    const [maxHours, setMaxHours] = useState(props.profileData.max_hours);
+    const [university, setUniversity] = useState(props.profileData.university);
     const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
-    const [description, setDescription] = useState(props.description);
-    const [courses, setCourses] = useState(props.offerings);
-    const [teleport_link, setTeleport_link] = useState(props.teleport_link);
+    const [description, setDescription] = useState(props.profileData.description);
+    const [teleport_link, setTeleport_link] = useState(props.profileData.link);
+    const [languages, setLanguages] = useState(props.profileData.languages);
     const url = "http://localhost:8080"; // Replace with your actual API endpoint
 
-    console.log("Courses ", courses)
+    // console.log("Courses ", courses)
     console.log("Options ", props.offerings)
     const id = localStorage.getItem('userID');
 
@@ -41,13 +41,24 @@ const TutorProfileForm = (props) => {
 
 
 
+    function getContrastColor(hexColor) {
+        const r = parseInt(hexColor.substr(1, 2), 16);
+        const g = parseInt(hexColor.substr(3, 2), 16);
+        const b = parseInt(hexColor.substr(5, 2), 16);
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return (yiq >= 128) ? 'black' : 'white';
+    }
+
     const customStyles = {
         multiValue: (base, state) => {
-            return { ...base, backgroundColor: "#" + state.data.color, borderRadius: '20px' };
+            const color = state.data.color;
+            return { ...base, backgroundColor: color, borderRadius: '20px', color: getContrastColor(color) };
         },
-
+        multiValueLabel: (base, state) => {
+            const color = state.data.color;
+            return { ...base, color: getContrastColor(color) };
+        },
     };
-
     const saveTutorInfo = async (e) => {
         e.preventDefault(); // Prevent the default form submission behavior
         console.log('Saving tutor info');
@@ -70,7 +81,9 @@ const TutorProfileForm = (props) => {
                     description: description,
                     enddate: closestFutureDate(Date.now()).toDateString(),
                     offerings: selectedOptions.map((option) => option.value),
-                    teleport_link: "https://www.teleport.org/cities/" + university + "/"
+                    teleport_link: teleport_link,
+                    languages: languages
+
                 }
             });
 
@@ -116,7 +129,10 @@ const TutorProfileForm = (props) => {
                         </label>
                         <label className="input-label">
                             Teleport Link
-                            <input type="text" value={teleport_link} disabled />
+                            <input type="text" value={teleport_link} 
+                            onChange={(e) => setTeleport_link(e.target.value)}
+                            
+                            />
                         </label>
                     </div>
                     <div className="input-column">
@@ -126,6 +142,15 @@ const TutorProfileForm = (props) => {
                                 type="text"
                                 value={university}
                                 onChange={(e) => setUniversity(e.target.value)}
+                            />
+                        </label>
+                        <label className="input-label">
+                            Languages Spoken
+                            <input
+                                type="text"
+                                value={languages}
+                                placeholder='English, French, etc.'
+                                onChange={(e) => setLanguages(e.target.value)}
                             />
                         </label>
                         <label className="input-label">
@@ -152,7 +177,7 @@ const TutorProfileForm = (props) => {
                 </label>
                 <Select
                     isMulti
-                    options={courses}
+                    options={selectedOptions}
                     styles={customStyles}
                     className="basic-multi-select"
                     value={selectedOptions}

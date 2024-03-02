@@ -201,36 +201,39 @@ export class tutorRegistration {
     }
   }
 
-  // $8 add to CALL to make the link
-  async updateBio(user_id, bio) {
-    console.log(user_id, bio);
-    const client = await con.connect();
-    try {
-      return new Promise((resolve, reject) => {
-        client.query(
-          "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8)",
-          [
-            user_id,
-            bio.about,
-            bio.university,
-            bio.maxHours,
-            bio.startdate,
-            bio.enddate,
-            bio.description,
-            bio.teleport_link,
-          ],
-          (error, results) => {
-            if (error) {
-              console.error("Error:", error);
-              reject(error);
-            } else {
-              resolve();
-            }
-          }
-        );
-      });
-    } finally {
-      client.release();
+    // $8 add to CALL to make the link
+    async updateBio(user_id, bio) {
+        console.log(user_id, bio);
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+                    [
+                        user_id,
+                        bio.about,
+                        bio.university,
+                        bio.maxHours,
+                        bio.startdate,
+                        bio.enddate,
+                        bio.description,
+                        bio.teleport_link,
+                        bio.languages
+                    ],
+                    (error, results) => {
+                        if (error) {
+                            console.error("Error:", error);
+                            reject(error);
+                        } else {
+                            resolve();
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+
     }
   }
 }
