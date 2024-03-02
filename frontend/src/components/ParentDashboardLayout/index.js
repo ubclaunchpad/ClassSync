@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 
 import "./index.css";
 
-export const ParentDashboardLayout = (props) => {
+export const ParentDashboardLayout = (props) => { 
     // Function to toggle the visibility of the Children sublinks
     const toggleChildrenDropdown = () => {
         const childrenSublinks = document.querySelector(".children-sublinks");
@@ -25,15 +25,14 @@ export const ParentDashboardLayout = (props) => {
       };
     return (
         <div className="page-container">
-            <Header
-            />
+            <Header/>
             <div class="main-row">
 
                 <div class="column left-span">
                     <div class="left-header">
                         <img className="profile-pic"
                             src={ProfilePic} />
-                        <p>Adam Bennet</p>
+                        <p>Adam Bennett</p>
                     </div>
                     
                     <div className="table-of-contents">
@@ -63,22 +62,22 @@ export const ParentDashboardLayout = (props) => {
                         </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="column middle-right">
-                        <Banner
-                            smallText="Parent Dashboard"
-                            mainText="Welcome Back!"
-                        />
-                        <div className="inner-row">
-                            <div className="column inner-left">
-                                {props.children}
-                            </div>
-                            <div className="column inner-right">
-                                {props.rightColumnContent}
-                            </div>
+
+                <div class="column middle-right">
+                    <Banner
+                        smallText="Parent Dashboard"
+                        mainText="Welcome Back!"
+                    />
+                    <div className="inner-row">
+                        <div className="column inner-left">
+                            {props.children}
+                        </div>
+                        <div className="column inner-right">
+                            {props.rightColumnContent}
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );

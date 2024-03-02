@@ -8,29 +8,21 @@
 }
 
 .main-row {
-    height: 100%;
+    display: grid;
+    grid-template-columns: 15% 85%;
 }
 
 h2 {
     font-size: 1.4rem; 
 }
 
-.column {
-    float: left;
-}
-
 .left-span {
-    width: 15%;
-    box-sizing: border-box;
     background-color: #103DA2;
-    padding: .7rem 1rem;
-    color: white;
-    height: 100vh;
+    box-sizing: border-box;
   }
 
 
 .middle-right {
-    width: 83%;
     display: flex;
     flex-direction: column;
 }
@@ -83,26 +75,12 @@ h2 {
     height: 3px;
 }
 
-.right-container {
-    box-sizing: border-box;
-    padding: 0 1rem;
-    color: white;
-    background-color: #103DA2;
-    height: 15rem;
-    margin: 0 .5rem;
-    margin-top: .5rem;
-    border-radius: 15px;
-    border: none;
-}
 
 .left-header,
 .right-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    max-width: 100%;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .right-buttons {
@@ -129,15 +107,12 @@ h2 {
     padding-right: 2.5rem;
 }
 
-.inner-left {
-    width: 80%;
+.inner-row {
+    display: grid;
+    grid-template-columns: 75% 25%;
 }
 
-.inner-right {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-}
+
 
 .table-of-contents {
     text-align: left; /* Left-align the text */

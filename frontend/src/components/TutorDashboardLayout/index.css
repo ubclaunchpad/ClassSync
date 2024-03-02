@@ -11,32 +11,24 @@ h2 {
     font-size: 1.4rem;
 }
 
-.column {
-    float: left;
+.main-tutor-row {
+    display: grid;
+    grid-template-columns: 15% 65% 20%;
 }
 
 .left {
-    width: 15%;
-    box-sizing: border-box;
-    height: 100vh;
     background-color: #103DA2;
-    padding: .7rem 1rem;
 }
 
-.right {
-    width: 17%;
-}
 
 .middle {
-    width: 64%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
 }
 
 .right-middle {
-    width: 81%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
 }
 
 

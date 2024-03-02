@@ -13,7 +13,7 @@ export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => 
     const toggleCoursesDropdown = () => {
       const coursesSublinks = document.querySelector(".courses-sublinks");
       coursesSublinks.style.display = coursesSublinks.style.display === "block" ? "none" : "block";
-    };
+    }; 
 
   return (
 
@@ -30,7 +30,7 @@ export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => 
         mainText={`Welcome ${displayName}!`}
         smallTextBelow={`Start date: July 20th, 2023${'\u00A0'.repeat(5)}End Date: July 20th, 2023`} //todo connect
       />
-      <div class="main-row">
+      <div class="main-tutor-row">
         <div class="column left">
           <div class="left-header">
                 <img className="profile-pic"
