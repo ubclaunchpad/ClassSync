@@ -49,6 +49,18 @@ export default class studentProfileController {
     });
   }
 
+  getBookingsById(student_id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getBookingsById(student_id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
+
   getStudents() {
     const studentProfileModel = new StudentProfile();
 

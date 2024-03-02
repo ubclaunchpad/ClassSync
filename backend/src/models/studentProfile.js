@@ -90,6 +90,29 @@ export class StudentProfile {
       client.release();
     }
   }
+
+  async getBookingsById(student_id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query("SELECT * FROM search_enrollments_by_student_id($1)",
+          [student_id], (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log(results.rows);
+              resolve(results.rows);
+            }
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
+    }
+  }
+
   async getStudents() {
     const client = await con.connect();
     try {
