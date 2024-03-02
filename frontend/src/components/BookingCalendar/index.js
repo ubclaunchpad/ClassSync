@@ -169,6 +169,10 @@ export default function ReactBigCalendar() {
         // Get the day of the week of the start date.
         const dayOfWeek = moment(start).day();
 
+         // Get difference between start day and current day to create constraint. 
+         const currentDate = new Date();
+         const diffTime = start - currentDate;
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
         // setTutorIDS(tutorIDs)
         //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
@@ -179,7 +183,7 @@ export default function ReactBigCalendar() {
             (start < event.end && end > event.start)
         );
         // Check if the start time and the next time slot are in the array for the day of the week.
-        const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps;
+        const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps && diffDays >= 7;
 
         if (isSlotAvailable) {
             setSelectedSlot({ start, end });
