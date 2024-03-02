@@ -90,6 +90,7 @@ export default function AdminTutorCalendar(props) {
       }
 
       const data = await response.json();
+      console.log("Admin cal data", data);
 
       let openSlots = {};
       Object.entries(data.availabilityHashmap).forEach(([day, slots]) => {

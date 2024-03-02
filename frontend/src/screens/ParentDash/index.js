@@ -1,22 +1,11 @@
 import "./index.css";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
+import ParentDashCalendar from "../../components/ParentDashCalendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import { useState, useEffect } from "react";
 import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 import { useNavigate } from "react-router-dom";
 
-const localizer = momentLocalizer(moment);
-const events = [
-    {
-      start: moment().toDate(),
-      end: moment()
-        .add(1, "days")
-        .toDate(),
-      title: "Some title"
-    }
-  ]
 
 const ParentDash = (props) => {
   const navigate = useNavigate();
@@ -38,7 +27,7 @@ const ParentDash = (props) => {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setStudents(data); // Assuming the response is the array of students
+      setStudents(data); 
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
@@ -94,16 +83,8 @@ const ParentDash = (props) => {
           </div>
       </div>
       <div className="student-info-container">
-        <div className="App">
-          <Calendar
-            localizer={localizer}
-            defaultDate={new Date()}
-            defaultView="month"
-            events={events}
-            style={{ height: "100vh" }}
-          />
+        <ParentDashCalendar></ParentDashCalendar>
         </div>
-      </div>
       
     </ParentDashboardLayout>
   );
