@@ -39,7 +39,7 @@ export default function ReactBigCalendar() {
 
 
 
-        let url = `http://localhost:8080/tutor/courses?course_id=1`
+        let url = `http://localhost:8080/tutor/courses?course_id=${id}`
 
         const tutors = await fetch(url);
         const tutorsData = await tutors.json();
@@ -250,7 +250,9 @@ export default function ReactBigCalendar() {
     }
 
 
-    const handleBook = async (id) => {
+    const handleBook = async (tutor) => {
+
+        console.log("ID is ", id)
         if (selectedSlot) {
 
             const response = await fetch('http://localhost:8080/availability', {
@@ -260,8 +262,8 @@ export default function ReactBigCalendar() {
                 },
                 body: JSON.stringify({
                     booking: {
-                        enrollment_id: 1,
-                        tutor_id: id.value,
+                        enrollment_id: id,
+                        tutor_id: tutor.value,
                         session_duration: 60,
                         start_time: selectedSlot.start
                     }
