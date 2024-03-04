@@ -105,6 +105,17 @@ const handleClick = () => {
             if (response.status === 200) {
                 const responseData = await response.json();
                 console.log('User account created:', responseData);
+                if (!props.admin && props.token) {
+                    try {
+                        await fetch(`http://localhost:8080/token/${props.token}`, {
+                            method: 'DELETE',
+                        });                       
+
+                    } catch(error) {
+                        console.log("Token not found");
+                        console.error('Error:', error);
+                    }
+                }
                 window.location.href = props.redirect;
             } else {
                 const errorData = await response.json();
