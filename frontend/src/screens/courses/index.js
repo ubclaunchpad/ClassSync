@@ -19,6 +19,7 @@ const Courses = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
+    const [edited, setEdited] = useState(0);
 
     const fetchCourses = async () => {
         let url = `http://localhost:8080/courses`;
@@ -34,7 +35,7 @@ const Courses = () => {
 
     useEffect(() => {
         fetchCourses();
-    }, []);
+    }, [edited]);
 
     const handleMouseEnter = (index) => {
         if (hoveredRowIndex !== index) {
@@ -122,7 +123,7 @@ const Courses = () => {
         // const difficultyLevel = difficulty.toLowerCase();
 
         const difficultyLevel = getDifficultyIndex(difficulty)
-        console.log('Difficulty level is ', getDifficultyIndex(difficulty))
+        // console.log('Difficulty level is ', getDifficultyIndex(difficulty))
         const stars = Array.from({ length: maxStars }, (_, index) => (
             <span
                 key={index}
@@ -170,6 +171,8 @@ const Courses = () => {
                         Add Course
                     </button>
                     <AddCourseModal showModal={showAddModal} handleCloseModal={handleCloseModal} courses={transformedCourses} />
+                    <EditCourseModal showModal={showEditModal} handleCloseModal={handleCloseModal} setCourses={setCourses} courses={transformedCourses} course_id={courseID} onSave={() => { setEdited(edited + 1) }} />
+
                 </div>
             }
         >
@@ -213,8 +216,6 @@ const Courses = () => {
                                                 <path d="M0 0h24v24H0z" fill="none" />
                                                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
                                             </svg>
-                                            {/* <EditCourseModal showModal={showEditModal} handleCloseModal={handleCloseModal} courses={transformedCourses} course_id={courseID} /> */}
-
                                         </div>
                                     )}
                                 </td>

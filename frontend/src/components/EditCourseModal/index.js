@@ -14,16 +14,13 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_id }) => {
+export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, courses, course_id, onSave }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(false)
-    console.log("Courses are ", courses)
     const [checkedCourses, setCheckedCourses] = useState([])
 
-    const [courseId, setCourseId] = useState(null)
-
     const [uploadedFiles, setUploadedFiles] = useState([])
-    const createCourse = async e => {
+    const editCourse = async e => {
         e.preventDefault()
         let difficulty;
         switch (selectedIndex) {
@@ -44,6 +41,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         let learning_goals = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
 
         const body = {
+            id: course_id,
             name: formValues.name,
             age: formValues.age,
             description: formValues.description,
@@ -59,7 +57,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         // body["color"] = formValues.color
 
 
-        const URL = "http://localhost:8080/course/{course.id}"
+        const URL = "http://localhost:8080/course/edit"
         try {
             const response = await fetch(URL, {
                 method: 'PUT',
@@ -74,8 +72,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
             }
 
             const data = await response.json();
-            console.log(data);
-            setCourseId(data.course_id)
+
+
+            onSave()
             handleNextStep(e)
         } catch (error) {
             console.error('There has been a problem with editing this course', error);
@@ -87,13 +86,12 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
     const [courseMap, setCourseMap] = useState([])
     const [allTutors, setAllTutors] = useState([])
     const loadTutors = async () => {
-
         let url = "http://localhost:8080/course/tutor"
 
         let response = await fetch(url);
         const map = await response.json();
         setCourseMap(map)
-
+        console.log("Course Map")
         console.log(map)
 
         url = "http://localhost:8080/tutors"
@@ -102,8 +100,6 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         console.log(tutors)
         setAllTutors(tutors)
         setTutors(tutors)
-
-
     }
 
     useEffect(() => {
@@ -125,8 +121,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
             method: 'POST',
             body: formData
         }).then(res => res.json())
+
         console.log(data.imageUrls)
-        const transformedData = Object.entries(data.imageUrls).map(([name, url]) => {
+        const transformedData = Object.entries(data.imageUrls ? data.imageUrls : []).map(([name, url]) => {
             return { name, url };
         });
         setUploadedFiles(transformedData)
@@ -267,7 +264,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                         image: data.image
                     })
 
-                    setFiles(data.files)
+                    setFiles(data.files == null ? [] : data.files)
 
                     setSelectedIndex(data.course_difficulty === 'Beginner' ? 1 : data.course_difficulty === 'Intermediate' ? 2 : 3)
 
@@ -284,17 +281,30 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         setFileNames(prevNames => [...prevNames, ...names]);
     };
 
-    // const handleDelete = (name) => {
-    //     setFileNames(fileNames.filter(fileName => fileName !== name));
-    // };
+    const handleRemove = async course_id => {
+        try {
+            const response = await fetch(`http://localhost:8080/course/delete?id=${course_id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            setFiles(files => files.filter(file => file.id !== course_id));
+        } catch (error) {
+            console.error('An error occurred while deleting the course:', error);
+        }
+    }
 
     const handleDelete = name => {
         setFiles(files => files.filter(file => file.name !== name))
     }
+
     const [showFilters, setShowFilters] = useState(false);
 
     useEffect(() => {
-        if (step === 3 && firstEdit) {
+        if (step === 3 && firstEdit || step === 3 && editorState === null) {
             let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
             let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
             let contentState = stateFromHTML(`<h1> Course Title </h1>
@@ -412,7 +422,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         const tutorIds = Object.keys(checkedTutors).filter(tutor_id => checkedTutors[tutor_id]);
 
         const body = {
-            course_id: courseId,
+            course_id: course_id,
             tutor_ids: tutorIds
         }
 
@@ -426,7 +436,6 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         // const response = await data.json()
         if (data.ok) {
             setStep(1)
-            setCourseId(null)
             handleCloseModal(e)
         } else {
             alert("There was an error adding tutors")
@@ -491,7 +500,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
             </button>
             {step === 1 ? (
                 // Your existing form goes here
-                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`'Edit a Course`}</h2>
+                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`Edit a Course`}</h2>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <label style={{ color: '#103da2', marginBottom: '10px' }}>
                             <span style={{ display: 'block', marginBottom: '5px' }}>Banner Upload:</span>
@@ -577,29 +586,13 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                         <span style={{ display: 'block', marginBottom: '5px' }}>Description:</span>
                         <textarea name="description" value={formValues.description} onChange={handleInputChange} rows="4" style={{ padding: '10px', maxHeight: '200px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '14px', width: '100%' }}></textarea>
                     </label>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                         <button
-                            onClick={handleCloseModal}
+                            onClick={() => handleRemove(course_id)}
                             style={{
+                                // height: '40px',
                                 padding: '10px 20px',
-                                backgroundColor: '#ccc',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s ease',
-                                fontSize: '14px',
-                                marginRight: '10px',
-                            }}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            onClick={handleNextStep}
-                            style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#007BFF',
+                                backgroundColor: '#ff6347',
                                 color: 'white',
                                 border: 'none',
                                 borderRadius: '5px',
@@ -608,8 +601,42 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                 fontSize: '14px',
                             }}
                         >
-                            Next
+                            Delete
                         </button>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <button
+                                onClick={handleCloseModal}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#ccc',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s ease',
+                                    fontSize: '14px',
+                                    marginRight: '10px',
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                onClick={handleNextStep}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#007BFF',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s ease',
+                                    fontSize: '14px',
+                                }}
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                     {/* <button type="submit">Next</button> */}
                 </form>
@@ -699,7 +726,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
                                 console.log(html);
                                 setHTML(html)
-                                createCourse(e)
+                                editCourse(e)
                             }}
                             style={{
                                 padding: '10px 20px',
@@ -712,7 +739,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                 fontSize: '14px',
                             }}
                         >
-                            Edit
+                            Edit Course
                         </button>
                     </div>
                 </>

@@ -94,8 +94,21 @@ export class admin {
     editCourse(body) {
         return new Promise((resolve, reject) => {
             con.query(`UPDATE public.courses
-            SET course_name=$1, course_difficulty=$2, course_description=$3, color=$4, target_age=$5, prerequisites=$6, image=$7, info_page=$8, learning_goals=$9, files=$10
-            WHERE course_id=$11`, [body.name, body.difficulty, body.description, body.color, body.age, body.prerequisites, body.image, body.info_page, body.learning_goals, body.files, body.course_id], (err, res) => {
+            SET course_name=$2, course_difficulty=$3, course_description=$4, color=$5, target_age=$6, prerequisites=$7, image=$8, info_page=$9, learning_goals=$10, files=$11
+            WHERE course_id=$1`, [body.id, body.name, body.difficulty, body.description, body.color, body.age, body.prerequisites, body.image, body.info_page, body.learning_goals, body.files], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
+    }
+
+    deleteCourse(id) {
+        return new Promise((resolve, reject) => {
+            con.query(`DELETE FROM public.courses WHERE course_id = $1`, [id], (err, res) => {
                 if (err) {
                     console.log("error: ", err);
                     reject(err);
