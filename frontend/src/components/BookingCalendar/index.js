@@ -12,11 +12,14 @@ import { ParentDashboardLayout } from "../ParentDashboardLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
+const nextWeekDate = new Date();
+nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+
 
 export default function ReactBigCalendar() {
     const [eventsData, setEventsData] = useState(events);
     const [selectedSlot, setSelectedSlot] = useState(null);
-    const [startDate, setStartDate] = useState(startOfWeek(new Date()));
+    const [startDate, setStartDate] = useState(startOfWeek(nextWeekDate));
     const [isLoaded, setIsLoaded] = useState(false)
     const [openSlots, setOpenSlots] = useState({})
     const [availablePeople, setAvailablePeople] = useState([])
@@ -169,10 +172,10 @@ export default function ReactBigCalendar() {
         // Get the day of the week of the start date.
         const dayOfWeek = moment(start).day();
 
-         // Get difference between start day and current day to create constraint. 
-         const currentDate = new Date();
-         const diffTime = start - currentDate;
-         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        // Get difference between start day and current day to create constraint. 
+        const currentDate = new Date();
+        const diffTime = start - currentDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         // setTutorIDS(tutorIDs)
         //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
@@ -413,6 +416,48 @@ export default function ReactBigCalendar() {
             </button>
         </div>
     );
+
+
+    const CustomToolbar = ({ label, onNavigate, onView }) => {
+        let currWeek = new Date()
+        let isButtonDisabled = startDate < currWeek
+
+        return (
+            <div className="rbc-toolbar">
+                <span className="rbc-btn-group">
+                    <button type="button" onClick={() => onNavigate('TODAY')}>
+                        Today
+                    </button>
+                    <button type="button"
+                        className={isButtonDisabled ? 'disabled-button' : ''}
+                        disabled={isButtonDisabled}
+                        onClick={!isButtonDisabled ? () => onNavigate('PREV') : null}
+                    >
+                        Back
+                    </button>
+                    <button type="button" onClick={() => onNavigate('NEXT')}>
+                        Next
+                    </button>
+                </span>
+                <span className="rbc-toolbar-label">{label}</span>
+                <span className="rbc-btn-group">
+                    <button type="button" onClick={() => onView('month')}>
+                        Month
+                    </button>
+                    <button type="button" onClick={() => onView('week')}>
+                        Week
+                    </button>
+                    <button type="button" onClick={() => onView('day')}>
+                        Day
+                    </button>
+                </span>
+            </div>
+        );
+
+
+    };
+
+
     const tutors = [
         { id: '1', firstName: 'John', lastName: 'Doe' },
         { id: '2', firstName: 'Jane', lastName: 'Doe' },
@@ -491,7 +536,10 @@ export default function ReactBigCalendar() {
                             localizer={localizer}
                             defaultDate={startDate}
                             defaultView="week"
-                            components={{ event: EventComponent }}
+                            components={{
+                                event: EventComponent,
+                                toolbar: CustomToolbar
+                            }}
                             events={eventsData}
                             min={new Date(2020, 1, 0, 7, 0, 0)}
                             max={new Date(2020, 1, 0, 19, 0, 0)}
