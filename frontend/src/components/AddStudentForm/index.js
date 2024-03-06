@@ -9,7 +9,11 @@ const AddStudentForm = () => {
         fname: '',
         lname: '',
         dob: '',
-        accommdations: '',
+        grade: '',
+        pronouns: '',
+        city:'',
+        province: '',
+        accommodations: '',
     })
     const handleFormChange = (e) => { 
         const { name, value } = e.target;
@@ -24,6 +28,10 @@ const AddStudentForm = () => {
             f_name: formState.fname,
             l_name: formState.lname,
             dob: formState.dob,
+            grade: formState.grade,
+            city: formState.city,
+            province: formState.province,
+            pronouns: formState.pronouns,
             accommodations: formState.accommodations,
             fk_guardian_id: localStorage.getItem('userId')
           };
@@ -52,27 +60,89 @@ const AddStudentForm = () => {
                 <h2 className="add-student-header">Add a Student</h2>
                 <button class="header-button">+ Add a New Student</button>
             </div>
+            <div className="input-col">
+              <h3>Personal</h3>
             <div className="input-row">
-                <label>
-                    First Name
-                    <input name="fname" type="text" value={formState.fname} onChange={handleFormChange}/>
-                </label>
-                <label>
-                    Date of Birth
-                    <input name="dob" type="text" value={formState.dob} onChange={handleFormChange} />
-                </label>
-            </div>
-            <div className="input-row">
-                <label>
+                  <label>
+                  First Name
+                      <input name="fname" type="text" value={formState.fname} onChange={handleFormChange}/>
+                  </label>
+                  <label>
                     Last Name
-                    <input name="lname" type="text" value={formState.lname} onChange={handleFormChange}/>
+                      <input name="lname" type="text" value={formState.lname} onChange={handleFormChange}/>
+                  </label>
+            </div>
+            </div>
+            <div className="input-col">
+
+            </div>
+            <div className="input-row">
+            <label>
+                    Date of Birth
+                    <input name="dob" type="date" value={formState.dob} onChange={handleFormChange} />
                 </label>
                 <label>
-                    Accommodations
-                    <input name="accommodations" type="text" value={formState.accommodations} onChange={handleFormChange}/>
+                    Grade
+                    <select name="dob" type="text" value={formState.grade} onChange={handleFormChange}> 
+                      <option value="pre">Pre-school</option>
+                        <option value="kinder">Kindergarten</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+
                 </label>
             </div>
-            <input type="submit" value="Register Student" />
+            <div className="input-col">
+              <h3>Address</h3>
+              <div className="input-row">
+                  <label>
+                      City
+                      <input name="city" type="text" value={formState.city} onChange={handleFormChange}/>
+                  </label>
+                  <label>
+                      Province
+                      <input name="province" type="text" value={formState.province} onChange={handleFormChange}/>
+                  </label>
+              </div>
+            </div>
+            <div className="input-col">
+              <h3>Additional</h3>
+              <div className="input-row">
+                  <label>
+                      Pronouns
+                      <input name="pronouns" type="text" value={formState.pronouns} onChange={handleFormChange}/>
+                  </label>
+                  <label>
+                      Accommodations
+                      <input name="accommodations" type="text" value={formState.accommodations} onChange={handleFormChange}/>
+                  </label>
+              </div>
+            </div>
+            <div className="input-col">
+              <h3>Assign Colour</h3>
+              <div className="colour-dots">
+                <input type="radio" name="colour-select" value="orange"></input>
+                <input type="radio" name="colour-select" value="green"></input>
+                <input type="radio" name="colour-select"></input>
+                <input type="radio" name="colour-select"></input>
+                <input type="radio" name="colour-select"></input>
+                <input type="radio" name="colour-select"></input>
+              </div>
+            </div>
+            <div className="input-row">
+              <input value="Cancel" />
+              <input type="submit" value="Confirm Student" />
+            </div>
         </form>
     );
 };

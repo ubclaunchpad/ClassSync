@@ -12,6 +12,12 @@
     /* create space on right*/
 }
 
+.input-col {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
 .input-row label {
     text-align: left;
     font-weight: bold;
@@ -29,6 +35,7 @@
     margin-top: .25rem;
 }
 
+
 input[type="submit"] {
     align-self: flex-end;
     width: 12rem;
@@ -42,4 +49,16 @@ input[type="submit"] {
     color: #103DA2;
     font-size: .9rem;
     cursor: pointer;
+}
+
+.colour-dots {
+    display: flex;
+    flex-direction: row;
+}
+.dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+    background-color: black; /* or any desired color */
 }
