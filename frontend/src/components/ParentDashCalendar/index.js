@@ -39,7 +39,7 @@ const events = [];
         //   console.log(data);
         //   console.log(data[0].search_enrollments_by_student_id.student_id);
         // })
-        // setEventsData(events);
+        setEventsData(events);
 
       } catch (err) {
         throw new Error("Network response was not ok", err);
