@@ -11,7 +11,7 @@ const events = [];
   const fetchStudentEvents = async () => {
 
       try {
-        const fetchEvents = await Promise.all(students.map(async (student) => {
+        await Promise.all(students.map(async (student) => {
         const url = `http://localhost:8080/student-profile/bookings/${student.id}`;
         const response = await fetch(url);
         if (response.ok) {
