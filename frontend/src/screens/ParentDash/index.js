@@ -83,7 +83,7 @@ const ParentDash = (props) => {
           </div>
       </div>
       <div className="student-info-container">
-        <ParentDashCalendar></ParentDashCalendar>
+        <ParentDashCalendar students={students}></ParentDashCalendar>
         </div>
       
     </ParentDashboardLayout>
