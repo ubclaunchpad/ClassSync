@@ -17,7 +17,7 @@ const admin = new adminController();
 
 
 router.get("/guardian/students", authorize("Guardian"), (req, res) => {
- 
+
     student
         .getStudentsByGuardian(req.auth.userId)
         .then((response) => {
@@ -185,61 +185,59 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/booking/files", (req, res) => {
-  const tutor = new tutorRegistrationController()
-  const booking_id = req.body.id;
-  const files = req.body.files;
-  console.log("Sharing files for ", booking_id, " - ", files)
-  tutor.shareFiles(booking_id, files).then((response) => {
-    res.status(200).json(response);
-  }).catch((err) => {
-    res.status(500).json(err);
-  });
+    const tutor = new tutorRegistrationController()
+    const booking_id = req.body.id;
+    const files = req.body.files;
+    console.log("Sharing files for ", booking_id, " - ", files)
+    tutor.shareFiles(booking_id, files).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
 })
 
 router.get("/booking/notes", (req, res) => {
-  const booking_id = req.query.id
-  const tutor = new tutorRegistrationController()
-  tutor.getNotesForBooking(booking_id).then((response) => {
-    res.status(200).json(response);
-  }).catch((err) => {
-    res.status(500).json(err);
-  })
+    const booking_id = req.query.id
+    const tutor = new tutorRegistrationController()
+    tutor.getNotesForBooking(booking_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 })
 
 router.post("/notes", (req, res) => {
-  const booking_id = req.body.id
-  const notes = req.body.notes
-  console.log("Notes are ", notes)
-  const tutor = new tutorRegistrationController()
-  return tutor.updateNotes(booking_id, notes).then(() => {
-    res.status(200);
-  }).catch((err) => {
-    res.status(500).json(err);
-  })
+    const booking_id = req.body.id
+    const notes = req.body.notes
+    console.log("Notes are ", notes)
+    const tutor = new tutorRegistrationController()
+    return tutor.updateNotes(booking_id, notes).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 
 })
 router.get("/class", (req, res) => {
-  const booking_id = req.query.id
-  const tutor = new tutorRegistrationController()
-  tutor.getClassInfo(booking_id).then((response) => {
-    res.status(200).json(response);
-}).catch((err) => {
-    res.status(500).json(err);
-})
+    const booking_id = req.query.id
+    const tutor = new tutorRegistrationController()
+    tutor.getClassInfo(booking_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 })
 
 router.get("/course/files", (req, res) => {
-  const tutor = new tutorRegistrationController()
+    const tutor = new tutorRegistrationController()
     const enrollment_id = req.query.id;
     tutor.getCourseFiles(enrollment_id).then((response) => {
         res.status(200).json(response);
     }).catch((err) => {
         res.status(500).json(err);
     });
-
-
-
 })
+
 
 // // Validate token
 router.get("/token/:id", (req, res) => {
@@ -274,7 +272,7 @@ router.delete("/token/:id", (req, res) => {
 })
 
 router.get("/sharedfiles", (req, res) => {
-  const tutor = new tutorRegistrationController()
+    const tutor = new tutorRegistrationController()
     const booking_id = req.query.id;
     tutor.getSharedFiles(booking_id).then((response) => {
         res.status(200).json(response);
@@ -287,24 +285,24 @@ router.get("/sharedfiles", (req, res) => {
 })
 
 router.post("/classInfo", (req, res) => {
-  const enrollmentId = req.body.enrollment_id;
-  const completed = req.body.completed;
-  const booking_id = req.body.booking_id;
-  const notes = req.body.notes;
+    const enrollmentId = req.body.enrollment_id;
+    const completed = req.body.completed;
+    const booking_id = req.body.booking_id;
+    const notes = req.body.notes;
 
-  const tutor = new tutorRegistrationController();
+    const tutor = new tutorRegistrationController();
 
-  const addLearningGoalProgressPromise = tutor.addLearningGoalProgress(enrollmentId, completed);
-  const updateNotesPromise = tutor.updateNotes(booking_id, notes);
+    const addLearningGoalProgressPromise = tutor.addLearningGoalProgress(enrollmentId, completed);
+    const updateNotesPromise = tutor.updateNotes(booking_id, notes);
 
-  Promise.all([addLearningGoalProgressPromise, updateNotesPromise])
-    .then(() => {
-      console.log("Successfully saved both")
-      res.status(200).end();
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+    Promise.all([addLearningGoalProgressPromise, updateNotesPromise])
+        .then(() => {
+            console.log("Successfully saved both")
+            res.status(200).end();
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        });
 });
 router.post("/learninggoals", (req, res) => {
     const enrollmentId = req.body.id;
@@ -330,17 +328,17 @@ router.get("/learninggoals", (req, res) => {
         });
 })
 
-  router.get("/booking", (req, res) => {
+router.get("/booking", (req, res) => {
     const id = req.query.id
     const tutor = new tutorRegistrationController()
     return tutor.getBookingInfo(id).then((info) => {
         res.status(200).json(info);
     }).catch((err) => {
-      res.status(500).send({ error: err.detail });
+        res.status(500).send({ error: err.detail });
 
     })
-  })
-  
+})
+
 router.get("/students", (_, res) => {
     student
         .getStudents()
@@ -373,6 +371,16 @@ router.post("/course/tutors", (req, res) => {
         res.status(500).json(err);
     })
 })
+
+router.delete("/course/tutors", (req, res) => {
+    const course_id = req.query.id;
+    admin.removeTutorsFromCourse(course_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
+})
+
 router.get("/course/tutor", (req, res) => {
     admin.getCourseTutorMap().then((response) => {
         res.status(200).json(response)
@@ -383,9 +391,35 @@ router.get("/course/tutor", (req, res) => {
 
 })
 
+router.get("/course/checkedtutors", (req, res) => {
+    admin.getCheckedTutors(req.query.id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
+})
+
 router.get("/course/view", (req, res) => {
     console.log(req.query.id)
     admin.viewCourse(req.query.id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
+})
+
+router.put("/course/edit", (req, res) => {
+    // console.log(req.query.id)
+    admin.editCourse(req.body).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
+})
+
+router.delete("/course/delete", (req, res) => {
+    console.log("Delete " + req.query.id)
+    admin.deleteCourse(req.query.id).then((response) => {
         res.status(200).json(response);
     }).catch((err) => {
         res.status(500).json(err);
