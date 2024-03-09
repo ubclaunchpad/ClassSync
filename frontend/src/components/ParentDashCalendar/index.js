@@ -6,7 +6,6 @@ const ParentDashCalendar = ({students}) => {
 const localizer = momentLocalizer(moment);
 const [eventsData, setEventsData] = useState([]);
 const events = [];
-  const test = [];
 
   const fetchStudentEvents = async () => {
 
@@ -28,17 +27,10 @@ const events = [];
                   studentName: student.name,
                   color: "green",
                 })
-                console.log("END TIME", moment(booking.start_time)
-                .add(booking.session_duration, "minute")
-                .toDate());
               })
             }
           })
         }}))
-        // test.map(data => {
-        //   console.log(data);
-        //   console.log(data[0].search_enrollments_by_student_id.student_id);
-        // })
         setEventsData(events);
 
       } catch (err) {
@@ -47,25 +39,25 @@ const events = [];
 
   useEffect(() => {
     fetchStudentEvents();
-  }, [])
+  }, [students])
 
 
   return (
     <div className="student-info-container">
-    <div className="App">
-      <Calendar
-        localizer={localizer}
-        defaultDate={new Date()}
-        defaultView="month"
-        events={eventsData}
-        style={{ height: "100vh" }}
-        eventPropGetter={(event) => {
-          const backgroundColor = event.color;
-          return { style: { backgroundColor } }
-        }}
-      />
+      <div className="App">
+          <Calendar
+            localizer={localizer}
+            defaultDate={new Date()}
+            defaultView="month"
+            events={eventsData}
+            style={{ height: "100vh" }}
+            eventPropGetter={(event) => {
+              const backgroundColor = event.color;
+              return { style: { backgroundColor } };
+            }}
+          />
+      </div>
     </div>
-  </div>
-  )
+  );
 };
 export default ParentDashCalendar;

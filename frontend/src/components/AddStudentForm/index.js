@@ -10,10 +10,11 @@ const AddStudentForm = () => {
         lname: '',
         dob: '',
         grade: '',
-        pronouns: '',
         city:'',
         province: '',
+        pronouns: '',
         accommodations: '',
+        color: '',
     })
     const handleFormChange = (e) => { 
         const { name, value } = e.target;
@@ -21,6 +22,12 @@ const AddStudentForm = () => {
             ...prevState,
             [name]: value
         }));
+        };
+      const handleColorSelection = (color) => {
+          setFormState((prevState) => ({
+            ...prevState,
+            color: color,
+          }));
         };
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,6 +40,7 @@ const AddStudentForm = () => {
             province: formState.province,
             pronouns: formState.pronouns,
             accommodations: formState.accommodations,
+            color: formState.color,
             fk_guardian_id: localStorage.getItem('userId')
           };
         try {
@@ -53,6 +61,7 @@ const AddStudentForm = () => {
           console.log(error);
         }
       }
+      const colors = ["red", "blue", "green", "yellow", "purple"];
     console.log(formState);
     return (
         <form className="student-info-form" onSubmit={handleSubmit}>
@@ -83,7 +92,7 @@ const AddStudentForm = () => {
                 </label>
                 <label>
                     Grade
-                    <select name="dob" type="text" value={formState.grade} onChange={handleFormChange}> 
+                    <select name="grade" type="text" value={formState.grade} onChange={handleFormChange}> 
                       <option value="pre">Pre-school</option>
                         <option value="kinder">Kindergarten</option>
                         <option value="1">1</option>
@@ -128,19 +137,23 @@ const AddStudentForm = () => {
                   </label>
               </div>
             </div>
-            <div className="input-col">
-              <h3>Assign Colour</h3>
-              <div className="colour-dots">
-                <input type="radio" name="colour-select" value="orange"></input>
-                <input type="radio" name="colour-select" value="green"></input>
-                <input type="radio" name="colour-select"></input>
-                <input type="radio" name="colour-select"></input>
-                <input type="radio" name="colour-select"></input>
-                <input type="radio" name="colour-select"></input>
-              </div>
-            </div>
+        <div className="input-col">
+        <h3>Assign Color</h3>
+        <div className="color-options">
+          {/* Generate color options dynamically */}
+          {colors.map((color) => (
+            <div
+              key={color}
+              className={`color-option ${color} ${
+                formState.color === color ? "selected" : ""
+              }`}
+              onClick={() => handleColorSelection(color)}
+            ></div>
+          ))}
+        </div>
+      </div>
+
             <div className="input-row">
-              <input value="Cancel" />
               <input type="submit" value="Confirm Student" />
             </div>
         </form>

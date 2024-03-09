@@ -147,11 +147,16 @@ export class StudentProfile {
 
   insertStudentProfile(newStudentProfile, result) {
     con.query(
-      "CALL insertStudent($1, $2, $3, $4, $5)",
+      "CALL insertstudent1($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
       [
         newStudentProfile.first_name,
         newStudentProfile.last_name,
         newStudentProfile.birthday,
+        newStudentProfile.grade,
+        newStudentProfile.city,
+        newStudentProfile.province,
+        newStudentProfile.pronouns,
+        newStudentProfile.color,
         newStudentProfile.accommodations,
         newStudentProfile.fk_parent_id,
       ],

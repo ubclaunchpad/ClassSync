@@ -62,3 +62,39 @@ input[type="submit"] {
     margin-right: 5px;
     background-color: black; /* or any desired color */
 }
+.color-options {
+    display: flex;
+    justify-content: space-between;
+    width: 200px; /* Adjust as needed */
+  }
+  
+  .color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .selected {
+    border: 2px solid black; /* Add a border to indicate selection */
+  }
+
+  .red {
+    background-color: red;
+  }
+  
+  .blue {
+    background-color: blue;
+  }
+  
+  .green {
+    background-color: green;
+  }
+  
+  .yellow {
+    background-color: yellow;
+  }
+  
+  .purple {
+    background-color: purple;
+  }
