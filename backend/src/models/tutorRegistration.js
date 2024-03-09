@@ -208,11 +208,12 @@ export class tutorRegistration {
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+                    "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
                     [
                         user_id,
                         bio.about,
                         bio.university,
+                        bio.major,
                         bio.maxHours,
                         bio.startdate,
                         bio.enddate,

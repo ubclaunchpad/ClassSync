@@ -1,6 +1,40 @@
 
 import { admin } from "../models/admin.js";
-export default class adminController {
+import { v4 as uuidv4 } from 'uuid';
+
+
+export default class adminController {    
+    getToken() {
+        const admin_ = new admin()
+        const token = uuidv4(); // Generate a new token
+        
+        return admin_.saveToken(token).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+
+
+    }
+
+    validateToken(token) {
+        const admin_ = new admin()
+
+        return admin_.validateToken(token).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
+
+    deleteToken(token) {
+
+        const admin_ = new admin()
+
+        return admin_.deleteToken(token).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
+
     addTutorsToCourse(course_id, tutor_ids) {
         const admin_ = new admin()
         return admin_.addTutorsToCourse(course_id, tutor_ids).then((res) => res)

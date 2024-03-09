@@ -1,67 +1,83 @@
 import Header from "../Header";
 import Banner from "../Banner";
-import SearchBar from "../SearchBar";
-import AddStudentForm from "../AddStudentForm";
-import Plus from "../../assets/plus.png";
 import ProfilePic from "../../assets/parentProfile.png"
-import Notification from "../../assets/notifications.png";
-import Bag from "../../assets/bag.png";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"; 
 
 import "./index.css";
 
-export const ParentDashboardLayout = (props) => {
+export const ParentDashboardLayout = (props) => { 
+    // Function to toggle the visibility of the Children sublinks
+    const toggleChildrenDropdown = () => {
+        const childrenSublinks = document.querySelector(".children-sublinks");
+        childrenSublinks.style.display = childrenSublinks.style.display === "block" ? "none" : "block";
+        };
+
+    // Function to toggle the visibility of the Courses sublinks
+    const toggleCoursesDropdown = () => {
+      const coursesSublinks = document.querySelector(".courses-sublinks");
+      coursesSublinks.style.display = coursesSublinks.style.display === "block" ? "none" : "block";
+    };
+
+    // Function to toggle the visibility of the Tutor sublinks
+    const toggleTutorSublinks = () => {
+        const tutorSublinks = document.querySelector(".tutor-sublinks");
+        tutorSublinks.style.display = tutorSublinks.style.display === "block" ? "none" : "block";
+      };
     return (
         <div className="page-container">
-            <Header
-            />
+            <Header/>
             <div class="main-row">
 
                 <div class="column left-span">
                     <div class="left-header">
-                        <button class="header-button">Upcoming Classes</button>
-                        <div class="right-buttons">
-                            <button class="header-button-round">
-                                <img className="plusImage" src={Plus} alt="Plus" />
-                            </button>
-                            <button class="header-button-round">
-                                <img
-                                    className="notificationsImage"
-                                    src={Notification}
-                                    alt="Notification"
-                                />
-                            </button>
-                        </div>
+                        <img className="profile-pic"
+                            src={ProfilePic} />
+                        <p>Adam Bennett</p>
                     </div>
-                    <img className="profile-pic"
-                        src={ProfilePic} />
+                    
                     <div className="table-of-contents">
                         <ul>
-                            <li><a href="/parentDash">Adam Bennett</a></li>
-                            <li><a href="/parentDash">Children</a></li>
-                            <li><a href="/shop">Courses</a></li>
-                            <li><a href="#">Tutors</a></li>
+                            <li>
+                            <a href="#" onClick={toggleChildrenDropdown}>Children</a>
+                            <ul className="children-sublinks">
+                                <li><a href="#">Alex Bennett</a></li>
+                                <li><a href="#">Laura Bennett</a></li>
+                            </ul>
+                            </li>
+                            <li>
+                            <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
+                            <ul className="courses-sublinks">
+                                <li><a href="#">Java</a></li>
+                                <li><a href="#">Python</a></li>
+                            </ul>
+                            </li>
+                            <li>
+                            <a href="#" onClick={toggleTutorSublinks}>Tutors</a>
+                            <ul className="tutor-sublinks">
+                                <li><a href="#">Jasmine May</a></li>
+                            </ul>
+                            </li>
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Help</a></li>
                         </ul>
                     </div>
                 </div>
-                <div>
-                    <div class="column middle-right">
-                        <Banner
-                            smallText="Parent Dashboard"
-                            mainText="Welcome Back!"
-                        />
-                        <div className="inner-row">
-                            <div className="column inner-left">
-                                {props.children}
-                            </div>
-                            <div className="column inner-right">
-                                {props.rightColumnContent}
-                            </div>
+
+                <div class="column middle-right">
+                    <Banner
+                        smallText="Parent Dashboard"
+                        mainText="Welcome Back!"
+                    />
+                    <div className="inner-row">
+                        <div className="column inner-left">
+                            {props.children}
+                        </div>
+                        <div className="column inner-right">
+                            {props.rightColumnContent}
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );
