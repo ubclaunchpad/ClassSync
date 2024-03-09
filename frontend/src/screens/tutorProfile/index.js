@@ -40,11 +40,7 @@ const TutorProfile = () => {
                 const profileData = await profileResponse.json();
                 console.log("Profile Data", profileData);
 
-                setMaxHours(profileData.max_hours);
-                setUniversity(profileData.university);
-                setAbout(profileData.bio);
-                setDescription(profileData.description);
-                setLink(profileData.link)
+        
                 setProfileData(profileData)
 
 

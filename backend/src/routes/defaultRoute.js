@@ -36,6 +36,7 @@ const s3 = new S3Client({
     }
 });
 
+
 async function listBucketContents(bucketName) {
     const params = {
         Bucket: bucketName
@@ -48,6 +49,8 @@ async function listBucketContents(bucketName) {
         console.error('Error:', error.message);
     }
 }
+
+
 
 async function deleteObjectFromBucket(url) {
     // Extract the bucket name and key from the URL
@@ -83,6 +86,7 @@ router.delete('/file', async (req, res) => {
         res.status(500).json({ error: 'Error deleting object' });
     }
 });
+
 
 
 listBucketContents("class-sync");
@@ -235,6 +239,38 @@ router.get("/course/files", (req, res) => {
 
 
 
+})
+
+// // Validate token
+router.get("/token/:id", (req, res) => {
+    const admin = new adminController()
+    admin.validateToken(req.params.id).then((result) => {
+        res.status(200).json(result)
+    }).catch((e) => {
+        res.status(500).json("Token does not exist")
+    })
+})
+
+// // get token
+router.get("/token", (req, res) => {
+    const admin = new adminController()
+    admin.getToken().then((result) => {
+        res.status(200).json(result)
+    }).catch((e) => {
+        res.status(500).json(err)
+    })
+})
+
+
+
+// // Delete token
+router.delete("/token/:id", (req, res) => {
+    const admin = new adminController()
+    admin.deleteToken(req.params.id).then((result) => {
+        res.status(200).json(result)
+    }).catch((e) => {
+        res.status(500).json(err)
+    })
 })
 
 router.get("/sharedfiles", (req, res) => {

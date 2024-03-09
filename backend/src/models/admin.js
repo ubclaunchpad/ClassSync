@@ -3,6 +3,48 @@ import con from "../../index.js";
 
 export class admin {
 
+    saveToken(token) {
+        return new Promise((resolve, reject) => {
+            con.query(`INSERT INTO tokens (token_value) VALUES ($1)`, [token], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(token);
+                }
+            });
+        });
+    }
+
+    validateToken(token) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT * FROM tokens WHERE token_value = $1`, [token], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    if (res.rowCount > 0) {
+                        resolve(); // If the token exists, the function resolves with true
+                    } else {
+                        reject(new Error('Token does not exist')); // If the token doesn't exist, the function rejects with an error
+                    }
+                }
+            });
+        });
+    }
+    deleteToken(token) {
+        return new Promise((resolve, reject) => {
+            con.query(`DELETE FROM tokens WHERE token_value = $1`, [token], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
     addTutorsToCourse(course_id, tutor_ids) {
         return new Promise((resolve, reject) => {
             for (let i = 0; i < tutor_ids.length; i++) {
