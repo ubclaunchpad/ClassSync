@@ -53,6 +53,12 @@ img {
   font-size: 2.6vw;
 }
 
+.banner-subtitle {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  white-space: pre-line;
+}
+
 @media screen and (max-width: 750px) {
   .right-shape {
     height: 0;

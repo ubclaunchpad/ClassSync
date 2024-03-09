@@ -21,6 +21,14 @@
   object-fit: contain;
 }
 
+
+.header-logout {
+  height: 85%;
+  width: 100%;
+  object-fit: contain;
+  margin-left: 94vw;
+}
+
 .navbar {
   list-style-type: none;
   margin: 0;
