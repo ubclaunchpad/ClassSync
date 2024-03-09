@@ -291,7 +291,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
             setFiles(files => files.filter(file => file.id !== course_id));
         } catch (error) {
-            console.error('An error occurred while deleting the course:', error);
+            alert("You cannot delete a course with tutors assigned to it")
         }
     }
 
