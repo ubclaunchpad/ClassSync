@@ -1,6 +1,13 @@
 
 import { admin } from "../models/admin.js";
 export default class adminController {
+    deleteCourseFiles(course_id) {
+        const admin_ = new admin()
+        return admin_.deleteCourseFiles(course_id).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
 
     addTutorsToCourse(course_id, tutor_ids) {
         const admin_ = new admin()

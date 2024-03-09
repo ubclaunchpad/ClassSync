@@ -14,9 +14,8 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, courses, course_id, onSave }) => {
+export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_id, onSave }) => {
     const [step, setStep] = useState(1);
-    const [firstEdit, setFirstEdit] = useState(false)
     const [checkedCourses, setCheckedCourses] = useState([])
 
     const [uploadedFiles, setUploadedFiles] = useState([])
@@ -40,6 +39,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
 
         let learning_goals = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
 
+        console.log("HTML OUTPUT ", html)
+
         const body = {
             id: course_id,
             name: formValues.name,
@@ -53,8 +54,6 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
             learning_goals: learning_goals,
             difficulty: difficulty,
         }
-        // const body = JSON.stringify(formValues)
-        // body["color"] = formValues.color
 
 
         const URL = "http://localhost:8080/course/edit"
@@ -116,6 +115,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
         }
     }, [step])
 
+
+
     const handleStep2Submit = async e => {
         e.preventDefault()
 
@@ -123,8 +124,14 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
 
         const formData = new FormData()
 
-        files.forEach((file, index) => formData.append('images', file));
-        const URL = "http://localhost:8080/upload/all"
+        let URL = `http://localhost:8080/course/files?id=${course_id}`
+        await fetch(URL, {
+            method: 'DELETE',
+        })
+
+        files.filter(file => !uploadedFiles.includes(file)).forEach((file, index) => formData.append('images', file));
+        console.log("Files are ", files)
+        URL = "http://localhost:8080/upload/all"
         const data = await fetch(URL, {
             method: 'POST',
             body: formData
@@ -134,7 +141,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
         const transformedData = Object.entries(data.imageUrls ? data.imageUrls : []).map(([name, url]) => {
             return { name, url };
         });
-        setUploadedFiles(transformedData)
+        setUploadedFiles([...uploadedFiles, ...transformedData]);
         console.log(transformedData);
     }
 
@@ -186,7 +193,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
     const [learningGoals, setLearningGoals] = useState('');
     let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
     let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-    let contentState = stateFromHTML(`<ul>${listItems}</ul><h1>Hello</h1>`);
+    let contentState = stateFromHTML(``);
+    const [html, setHTML] = useState("notnull")
 
     const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
 
@@ -195,34 +203,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
         setLearningGoals(event.target.value);
     };
 
-    const getContentState = () => {
-        let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
-        let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-        let contentState = stateFromHTML(`<h1> Course Title </h1> <h4> Learning Goals <h4> <ul>${listItems}</ul>`);
-        return contentState
-
-    }
-
     const handleEditorStateChange = (editorState) => {
         setEditorState(editorState);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        // Convert Draft.js editor content to HTML
-        const contentState = editorState.getCurrentContent();
-        const rawContentState = convertToRaw(contentState);
-        const htmlContent = rawContentState.blocks.map(block => {
-            return `<p>${block.text}</p>`;
-        }).join('');
-
-        // Here you can use 'learningGoals' and 'htmlContent' as needed
-        console.log('Learning Goals:', learningGoals);
-        console.log('Instructions HTML:', htmlContent);
-
-        // Proceed to the next step
-        handleNextStep();
     };
 
     // const [filteredTutors, setFilteredTutors] = useState(tutors)
@@ -245,44 +227,57 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
     // 
 
     useEffect(() => {
-        if (course_id != -1) {
-            fetch(`http://localhost:8080/course/view?id=${course_id}`)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.text().then((text) => {
-                            return text ? JSON.parse(text) : {}
-                        })
-                    } else {
-                        throw new Error('Server response not OK');
-                    }
-                })
-                .then((data) => {
-                    console.log(data)
-                    if (data.learning_goals != null && data.learning_goals.length > 0) {
-                        console.log("Setting learning goals" + data.learning_goals.join('\n'))
-                        setLearningGoals(data.learning_goals.join('\n'))
-                    }
-
-                    setFormValues({
-                        name: data.course_name,
-                        age: data.target_age,
-                        color: data.color,
-                        prerequisites: data.prerequisites,
-                        description: data.course_description,
-                        image: data.image
+        fetch(`http://localhost:8080/course/view?id=${course_id}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.text().then((text) => {
+                        return text ? JSON.parse(text) : {}
                     })
+                } else {
+                    throw new Error('Server response not OK');
+                }
+            })
+            .then((data) => {
+                console.log("Data is ", data)
+                if (data.learning_goals != null && data.learning_goals.length > 0) {
+                    console.log("Setting learning goals" + data.learning_goals.join('\n'))
+                    setLearningGoals(data.learning_goals.join('\n'))
+                } else {
+                    setLearningGoals('')
+                }
 
-                    setFiles(data.files == null ? [] : data.files)
+                setFormValues({
+                    name: data.course_name,
+                    age: data.target_age,
+                    color: data.color,
+                    prerequisites: data.prerequisites,
+                    description: data.course_description,
+                    image: data.image
+                })
 
-                    setSelectedIndex(data.course_difficulty === 'Beginner' ? 1 : data.course_difficulty === 'Intermediate' ? 2 : 3)
 
-                    setFirstEdit(false)
+                setFiles(data.files == null ? [] : data.files)
+                setUploadedFiles(data.files == null ? [] : data.files)
 
-                    setEditorState(EditorState.createWithContent(stateFromHTML(data.info_page)))
+                setSelectedIndex(data.course_difficulty === 'Beginner' ? 1 : data.course_difficulty === 'Intermediate' ? 2 : 3)
 
-                });
-        }
+                setHTML(data.info_page)
+                setEditorState(EditorState.createWithContent(stateFromHTML(data.info_page)))
+            });
     }, [course_id]);
+
+    useEffect(() => {
+        // Get the current content of the editor
+        const contentState = editorState.getCurrentContent();
+
+        // Convert the content state to raw JS
+        const rawContent = convertToRaw(contentState);
+
+        // Convert the raw JS to HTML
+        let drafthtml = draftToHtml(rawContent);
+
+        setHTML(drafthtml)
+    }, [editorState])
 
     const handleFileUpload = (event) => {
         const names = Array.from(event.target.files).map(file => file.name);
@@ -306,31 +301,12 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
     }
 
     const handleDelete = name => {
-        setFiles(files => files.filter(file => file.name !== name))
+        setFiles(files => files.filter(file => file.name !== name));
+        setUploadedFiles(uploadedFiles => uploadedFiles.filter(file => file.name !== name));
     }
 
     const [showFilters, setShowFilters] = useState(false);
 
-    useEffect(() => {
-        if (step === 3 && firstEdit || step === 3 && editorState === null) {
-            let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
-            let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-            let contentState = stateFromHTML(`<h1> Course Title </h1>
-        <h4> Learning Goals </h4>
-        
-        <ul>${listItems}</ul><h1>Hello</h1>`);
-            setEditorState(EditorState.createWithContent(contentState));
-            setFirstEdit(false)
-        }
-    }, [step, learningGoals, firstEdit]);
-    const getEditorState = () => {
-        if (firstEdit) {
-            return EditorState.createWithContent(contentState)
-        } else {
-            return editorState
-        }
-
-    }
 
     const [formValues, setFormValues] = useState({
         image: null,
@@ -398,7 +374,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
 
         const formData = new FormData();
         formData.append('image', selectedFile, modifiedFileName);
-
+        console.log("Form Data is ", formData)
         fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData,
@@ -420,7 +396,6 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
 
 
     };
-    const [html, setHTML] = useState(null)
 
     const addTutors = async (e) => {
         e.preventDefault()
@@ -467,7 +442,11 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
     return (
         <Modal
             isOpen={showModal}
-            onRequestClose={handleCloseModal}
+            onRequestClose={() => {
+                setStep(1)
+                handleCloseModal()
+            }
+            }
             style={{
                 overlay: {
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -511,7 +490,10 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
                     color: '#666',
                     cursor: 'pointer'
                 }}
-                onClick={handleCloseModal}
+                onClick={() => {
+                    setStep(1)
+                    handleCloseModal()
+                }}
             >
                 &times;
             </button>
@@ -622,7 +604,10 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
                         </button>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                             <button
-                                onClick={handleCloseModal}
+                                onClick={() => {
+                                    setStep(1)
+                                    handleCloseModal()
+                                }}
                                 style={{
                                     padding: '10px 20px',
                                     backgroundColor: '#ccc',
@@ -732,6 +717,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
                             // type="submit"
                             onClick={(e) => {
 
+                                console.log(files)
+
                                 // Get the current content of the editor
                                 const contentState = editorState.getCurrentContent();
 
@@ -739,10 +726,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
                                 const rawContent = convertToRaw(contentState);
 
                                 // Convert the raw JS to HTML
-                                const html = draftToHtml(rawContent);
+                                let drafthtml = draftToHtml(rawContent);
 
-                                console.log(html);
-                                setHTML(html)
+                                setHTML(drafthtml)
                                 editCourse(e)
                             }}
                             style={{

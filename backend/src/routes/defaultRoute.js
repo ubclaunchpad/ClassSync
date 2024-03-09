@@ -232,10 +232,17 @@ router.get("/course/files", (req, res) => {
     }).catch((err) => {
         res.status(500).json(err);
     });
-
-
-
 })
+
+router.delete("/course/files", (req, res) => {
+    const course_id = req.query.id;
+    admin.deleteCourseFiles(course_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+})
+
 
 router.get("/sharedfiles", (req, res) => {
     const tutor = new tutorRegistrationController()

@@ -171,7 +171,7 @@ const Courses = () => {
                         Add Course
                     </button>
                     <AddCourseModal showModal={showAddModal} handleCloseModal={handleCloseModal} courses={transformedCourses} />
-                    <EditCourseModal showModal={showEditModal} handleCloseModal={handleCloseModal} setCourses={setCourses} courses={transformedCourses} course_id={courseID} onSave={() => { setEdited(edited + 1) }} />
+                    <EditCourseModal showModal={showEditModal} handleCloseModal={handleCloseModal} courses={transformedCourses} course_id={courseID} onSave={() => { setEdited(edited + 1) }} />
 
                 </div>
             }
