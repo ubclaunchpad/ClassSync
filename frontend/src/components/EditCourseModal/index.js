@@ -97,9 +97,17 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
         url = "http://localhost:8080/tutors"
         response = await fetch(url)
         const tutors = await response.json()
-        console.log(tutors)
         setAllTutors(tutors)
         setTutors(tutors)
+
+        url = `http://localhost:8080/course/checkedtutors?id=${course_id}`
+        response = await fetch(url)
+        const preCheckedTutors = await response.json()
+        const checkedTutorsMap = {}
+        preCheckedTutors.forEach(tutor => {
+            checkedTutorsMap[tutor.tutor_id] = true
+        })
+        setCheckedTutors(checkedTutorsMap);
     }
 
     useEffect(() => {
@@ -339,14 +347,12 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
         let filteringTutors = tutors;
         const checkedCourseIds = Object.keys(checkedCourses).filter(course_id => checkedCourses[course_id]);
 
-        console.log("Checked course Ids", checkedCourseIds)
         if (checkedCourseIds.length > 0) {
             filteringTutors = allTutors.filter(tutor => {
                 const tutorCourses = courseMap.find(item => item.tutor_id === tutor.tutor_id)?.course_ids || [];
                 return checkedCourseIds.some(course_id => tutorCourses.includes(Number(course_id)));
             });
         } else {
-            console.log("In else block")
             filteringTutors = allTutors
         }
 
@@ -418,8 +424,19 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
 
     const addTutors = async (e) => {
         e.preventDefault()
-        let url = "http://localhost:8080/course/tutors"
+
+        let url = `http://localhost:8080/course/tutors?id=${course_id}`
+        await fetch(url, {
+            method: 'DELETE',
+        })
+
+        url = "http://localhost:8080/course/tutors"
         const tutorIds = Object.keys(checkedTutors).filter(tutor_id => checkedTutors[tutor_id]);
+
+        if (tutorIds.length === 0) {
+            setStep(1)
+            handleCloseModal(e)
+        }
 
         const body = {
             course_id: course_id,
@@ -438,7 +455,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
             setStep(1)
             handleCloseModal(e)
         } else {
-            alert("There was an error adding tutors")
+            alert("There was an error editing tutors")
 
         }
     }
@@ -755,6 +772,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, setCourses, cours
                                     filteredTutors.forEach(tutor => {
                                         newCheckedTutors[tutor.tutor_id] = !selectAll;
                                     });
+                                    console.log(newCheckedTutors)
                                     setCheckedTutors(newCheckedTutors);
                                     setSelectAll(!selectAll);
                                 }}

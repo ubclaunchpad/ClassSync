@@ -18,6 +18,19 @@ export class admin {
         });
     }
 
+    removeTutorsFromCourse(course_id) {
+        return new Promise((resolve, reject) => {
+            con.query(`DELETE FROM tutor_offerings WHERE course_id = $1`, [course_id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
+    }
+
     getTutors() {
         return new Promise((resolve, reject) => {
             const query = `
@@ -59,6 +72,20 @@ export class admin {
                 });
         });
     }
+
+    getCheckedTutors(id) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT tutor_id FROM tutor_offerings WHERE course_id = $1`, [id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res.rows);
+                }
+            });
+        });
+    }
+
     addCourse(body) {
         return new Promise((resolve, reject) => {
             con.query(`INSERT INTO public.courses(

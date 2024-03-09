@@ -10,9 +10,25 @@ export default class adminController {
             })
     }
 
+    removeTutorsFromCourse(course_id) {
+        const admin_ = new admin()
+        return admin_.removeTutorsFromCourse(course_id).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
     addCourse(body) {
         const admin_ = new admin()
         return admin_.addCourse(body).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
+    getCheckedTutors(id) {
+        const admin_ = new admin()
+        return admin_.getCheckedTutors(id).then((res) => res)
             .catch((err) => {
                 throw err
             })

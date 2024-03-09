@@ -337,6 +337,16 @@ router.post("/course/tutors", (req, res) => {
         res.status(500).json(err);
     })
 })
+
+router.delete("/course/tutors", (req, res) => {
+    const course_id = req.query.id;
+    admin.removeTutorsFromCourse(course_id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
+})
+
 router.get("/course/tutor", (req, res) => {
     admin.getCourseTutorMap().then((response) => {
         res.status(200).json(response)
@@ -345,6 +355,14 @@ router.get("/course/tutor", (req, res) => {
             res.status(500).json(err);
         });
 
+})
+
+router.get("/course/checkedtutors", (req, res) => {
+    admin.getCheckedTutors(req.query.id).then((response) => {
+        res.status(200).json(response);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 })
 
 router.get("/course/view", (req, res) => {
