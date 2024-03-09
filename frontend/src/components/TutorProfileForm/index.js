@@ -3,12 +3,12 @@ import "./index.css"; // Import the CSS file for styling
 import Select from 'react-select';
 import axios from 'axios';
 
-
 const TutorProfileForm = (props) => {
     console.log("props ", props)
     const [about, setAbout] = useState(props.profileData.bio);
     const [maxHours, setMaxHours] = useState(props.profileData.max_hours);
     const [university, setUniversity] = useState(props.profileData.university);
+    const [major, setMajor] = useState(props.profileData.major);
     const [selectedOptions, setSelectedOptions] = useState(props.selectedOptions);
     const [description, setDescription] = useState(props.profileData.description);
     const [teleport_link, setTeleport_link] = useState(props.profileData.link);
@@ -75,6 +75,7 @@ const TutorProfileForm = (props) => {
                 user_id: id,
                 bio: {
                     university: university,
+                    major: major,
                     about: about,
                     maxHours: maxHours,
                     startdate: dateString,
@@ -113,20 +114,22 @@ const TutorProfileForm = (props) => {
 
 
                 <div className="input-row">
+                    
                     <div className="input-column">
                         <label className="input-label">
                             Email
                             <input type="text" value={email} disabled />
                         </label>
                         <label className="input-label">
-                            About Me
-                            <textarea
-                                className="bio-input"
-                                value={about}
-                                onChange={(e) => setAbout(e.target.value)}
-                                maxLength={1000}
-                            ></textarea>
+                            Maximum Hours Per Week
+                            <input
+                                type="number"
+                                value={maxHours}
+                                onChange={(e) => setMaxHours(e.target.value)}
+
+                            />
                         </label>
+                     
                         <label className="input-label">
                             Teleport Link
                             <input type="text" value={teleport_link} 
@@ -134,14 +137,25 @@ const TutorProfileForm = (props) => {
                             
                             />
                         </label>
+                      
                     </div>
                     <div className="input-column">
+                  
                         <label className="input-label">
-                            Program and University
+                            University
                             <input
                                 type="text"
                                 value={university}
                                 onChange={(e) => setUniversity(e.target.value)}
+                            />
+                        </label>
+
+                        <label className="input-label">
+                            Program of Study (Major)
+                            <input
+                                type="text"
+                                value={major}
+                                onChange={(e) => setMajor(e.target.value)}
                             />
                         </label>
                         <label className="input-label">
@@ -153,7 +167,25 @@ const TutorProfileForm = (props) => {
                                 onChange={(e) => setLanguages(e.target.value)}
                             />
                         </label>
-                        <label className="input-label">
+                   
+                
+                        {/* <label className="input-label">
+                            About Me
+                            <textarea
+                                className="bio-input"
+                                value={about}
+                                onChange={(e) => setAbout(e.target.value)}
+                                maxLength={1000}
+                            ></textarea>
+                        </label> */}
+                      
+                    </div>
+                </div>
+                <div className='input-row'>
+
+                <div className='input-column' style={{width: '100%', marginTop: '-20px'}}>
+
+                <label className="input-label">
                             Summary Description (Headline)
                             <textarea
                                 className="description-input"
@@ -162,17 +194,24 @@ const TutorProfileForm = (props) => {
                                 style={{ minHeight: '2em' }}
                             />
                         </label>
-                        <label className="input-label">
-                            Maximum Hours Per Week
-                            <input
-                                type="number"
-                                value={maxHours}
-                                onChange={(e) => setMaxHours(e.target.value)}
-                            />
+                <label className="input-label">
+                            About Me
+                            <textarea
+                                className="bio-input"
+                                value={about}
+                                onChange={(e) => setAbout(e.target.value)}
+                                maxLength={1000}
+                            ></textarea>
                         </label>
-                    </div>
-                </div>
-                <label className="input-label" style={{ width: '100%' }}>
+                        <input 
+                    type="submit" 
+                    value="Submit" 
+                    style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} 
+                />  
+                        </div>
+                        
+                        </div>
+                {/* <label className="input-label" style={{ width: '100%' }}>
                     Course Offerings
                 </label>
                 <Select
@@ -182,9 +221,10 @@ const TutorProfileForm = (props) => {
                     className="basic-multi-select"
                     value={selectedOptions}
                     isDisabled={true}
-                />
-                <input type="submit" value="Submit" />
-            </div>
+                /> */}
+                        </div>
+            
+            
         </form>
 
 
