@@ -2,7 +2,6 @@ import { resolve } from "path";
 import con from "../../index.js";
 
 export class admin {
-
     addTutorsToCourse(course_id, tutor_ids) {
         return new Promise((resolve, reject) => {
             for (let i = 0; i < tutor_ids.length; i++) {

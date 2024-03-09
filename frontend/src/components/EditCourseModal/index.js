@@ -124,14 +124,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
         const formData = new FormData()
 
-        let URL = `http://localhost:8080/course/files?id=${course_id}`
-        await fetch(URL, {
-            method: 'DELETE',
-        })
-
         files.filter(file => !uploadedFiles.includes(file)).forEach((file, index) => formData.append('images', file));
         console.log("Files are ", files)
-        URL = "http://localhost:8080/upload/all"
+        const URL = "http://localhost:8080/upload/all"
         const data = await fetch(URL, {
             method: 'POST',
             body: formData
