@@ -112,7 +112,7 @@ export class admin {
                         console.log(err)
                         reject(err);
                     } else {
-                        console.log("Result is ", result)
+                        // console.log("Result is ", result)
                         resolve(result.rows[0]);
                     }
                 }
@@ -155,7 +155,7 @@ export class admin {
                     console.log("error: ", err);
                     reject(err);
                 } else {
-                    console.log(res.rows)
+                    // console.log(res.rows)
                     resolve(res.rows);
                 }
             });

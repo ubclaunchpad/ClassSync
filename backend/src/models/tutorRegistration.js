@@ -15,7 +15,7 @@ export class tutorRegistration {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results);
+              // console.log(results);
               const resultsArray = results.rows.map(
                 (row) => row.get_tutor_offerings
               );
@@ -42,8 +42,8 @@ export class tutorRegistration {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results);
-              console.log(results.rows[0]);
+              // console.log(results);
+              // console.log(results.rows[0]);
               resolve(results.rows[0]);
             }
           }
@@ -63,7 +63,7 @@ export class tutorRegistration {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results);
+            // console.log(results);
             resolve(results.rows);
           }
         });
@@ -77,9 +77,9 @@ export class tutorRegistration {
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
-        console.log(
-          `Email: ${email}, Password: ${hashPassword}, First Name: ${fname}, Last Name: ${lname}`
-        );
+        // console.log(
+        //   `Email: ${email}, Password: ${hashPassword}, First Name: ${fname}, Last Name: ${lname}`
+        // );
         client.query(
           "CALL insertUser($1, $2, $3, $4, $5, $6, $7)",
           [role, email, hashPassword, fname, lname, image, null],
@@ -183,6 +183,23 @@ export class tutorRegistration {
     }
   }
 
+  async addLog(data) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query("INSERT INTO public.change_log(change_time, tutor_id, action, event_time, enrollment) VALUES ($1, $2, $3, $4, $5);", [data.change_time, data.tutor_id, data.action, data.event_time, data.enrollment], (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows[0]);
+          }
+        });
+      });
+    } finally {
+      client.release();
+    }
+  }
   async getOfferings(email) {
     const client = await con.connect();
     try {

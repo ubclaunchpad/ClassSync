@@ -97,7 +97,7 @@ export class tutorAvailability {
   async getSelectedTutorsAvailability(start_date, tutorIds) {
     const client = await con.connect();
     console.log("Getting availability");
-    console.log(start_date, tutorIds);
+    // console.log(start_date, tutorIds);
 
     let date = "12-31-2023";
     let tutor_array = [1, 2, 3];
@@ -111,7 +111,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log("Got availability ", results);
+              // console.log("Got availability ", results);
               resolve(results.rows);
             }
           }
@@ -154,7 +154,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log("Got schedule ", results);
+              // console.log("Got schedule ", results);
               resolve(results.rows[0].get_tutor_availability);
             }
           }
@@ -177,7 +177,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log("Results ", results);
+              // console.log("Results ", results);
               resolve(results.rows[0].get_recurring_availability);
             }
           }
@@ -223,7 +223,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log("Results ", results);
+              // console.log("Results ", results);
               resolve(results.rows[0]);
             }
           }
@@ -244,7 +244,7 @@ export class tutorAvailability {
           "CALL insert_availability_pattern($1, $2)",
           [availability, null],
           (error, results) => {
-            console.log("Results ", results);
+            // console.log("Results ", results);
             console.log("Error ", error);
             if (error) {
               console.error("throwing error:", error);
@@ -254,7 +254,7 @@ export class tutorAvailability {
               // Access the pattern_id from the results
               console.log("Inside results");
               const patternId = results.rows[0].id;
-              console.log("Pattern ID:", patternId);
+              // console.log("Pattern ID:", patternId);
               resolve(patternId);
             }
           }
@@ -277,7 +277,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log("Got appointments ", results);
+              // console.log("Got appointments ", results);
               resolve(results.rows);
             }
           }
