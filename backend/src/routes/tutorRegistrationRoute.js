@@ -32,6 +32,17 @@ router.post("/log", (req, res) => {
     });
 
 })
+
+
+router.get("/log", (req, res) => {
+    const tutor = new tutorRegistrationController();
+    return tutor.getLogs().then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+
+})
 router.get("/select", (req, res) => {
 
     const tutor = new tutorAvailabilityController();

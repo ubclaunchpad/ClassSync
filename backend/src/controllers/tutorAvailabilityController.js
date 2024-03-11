@@ -107,7 +107,7 @@ export default class tutorAvailabilityController {
         return this.tutor.getSelectedTutorsAvailability(startDate, tutor_ids).then((availabilityData) => {
 
 
-            console.log("Availability data ", availabilityData);
+            // console.log("Availability data ", availabilityData);
             let availabilityHashmap = {};
             let tutorIdNameMap = {}
 
@@ -201,7 +201,7 @@ export default class tutorAvailabilityController {
 
     getDates(userID) {
         return this.tutor.getDates(userID).then((dates) => {
-            console.log("Dates ", dates);
+            // console.log("Dates ", dates);
             return dates;
         }).catch((err) => {
             console.log("Error getting dates ", err)
@@ -232,9 +232,9 @@ export default class tutorAvailabilityController {
 
             const patternID = await this.tutor.createAvailabilityPattern(availability);
 
-            console.log("Pattern ID: ", patternID);
-            console.log("Weeks: ", weeks);
-            console.log(JSON.parse(weeks).length);
+            // console.log("Pattern ID: ", patternID);
+            // console.log("Weeks: ", weeks);
+            // console.log(JSON.parse(weeks).length);
 
             await this.tutor.setAvailabilityForWeeks(userID, weeks, patternID);
 

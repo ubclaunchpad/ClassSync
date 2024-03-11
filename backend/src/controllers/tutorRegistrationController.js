@@ -308,6 +308,13 @@ export default class tutorRegistrationController {
       .catch((err) => Promise.reject(err));
   }
 
+  getLogs() {
+    const tutor = new tutorRegistration()
+      return tutor
+      .getLogs()
+      .then((res) => Promise.resolve(res))
+      .catch((err) => Promise.reject(err));
+  }
   updateOfferings(userID, offerings) {
     const tutor = new tutorRegistration();
 

@@ -183,6 +183,44 @@ export class tutorRegistration {
     }
   }
 
+  async getLogs() {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query(`
+          SELECT 
+            c.change_time as time,
+            c.event_time as event,
+            c.enrollment,
+            c.action,
+            c.tutor_id,
+            CONCAT(u.firstname, ' ', u.lastname) AS tutor, 
+            CONCAT(s.f_name, ' ', s.l_name) AS student 
+          FROM 
+            change_log c
+          JOIN 
+            users u ON c.tutor_id = u.user_id
+          JOIN 
+            enrollments e ON e.enrollment_id = c.enrollment
+          JOIN 
+            students s ON s.student_id = e.student_id
+          ORDER BY 
+            c.change_time DESC
+        `, [], (error, results) => {
+          // Handle the results here
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows);
+          }
+        });
+        });          
+
+    } finally {
+      client.release();
+    }
+  }
   async addLog(data) {
     const client = await con.connect();
     try {
