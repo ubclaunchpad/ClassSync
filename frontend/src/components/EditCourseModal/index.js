@@ -14,16 +14,12 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_id }) => {
+export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_id, onSave }) => {
     const [step, setStep] = useState(1);
-    const [firstEdit, setFirstEdit] = useState(false)
-    console.log("Courses are ", courses)
     const [checkedCourses, setCheckedCourses] = useState([])
 
-    const [courseId, setCourseId] = useState(null)
-
     const [uploadedFiles, setUploadedFiles] = useState([])
-    const createCourse = async e => {
+    const editCourse = async e => {
         e.preventDefault()
         let difficulty;
         switch (selectedIndex) {
@@ -43,7 +39,10 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
         let learning_goals = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
 
+        console.log("HTML OUTPUT ", html)
+
         const body = {
+            id: course_id,
             name: formValues.name,
             age: formValues.age,
             description: formValues.description,
@@ -55,11 +54,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
             learning_goals: learning_goals,
             difficulty: difficulty,
         }
-        // const body = JSON.stringify(formValues)
-        // body["color"] = formValues.color
 
 
-        const URL = "http://localhost:8080/course/{course.id}"
+        const URL = "http://localhost:8080/course/edit"
         try {
             const response = await fetch(URL, {
                 method: 'PUT',
@@ -74,8 +71,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
             }
 
             const data = await response.json();
-            console.log(data);
-            setCourseId(data.course_id)
+
+
+            onSave()
             handleNextStep(e)
         } catch (error) {
             console.error('There has been a problem with editing this course', error);
@@ -87,23 +85,28 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
     const [courseMap, setCourseMap] = useState([])
     const [allTutors, setAllTutors] = useState([])
     const loadTutors = async () => {
-
         let url = "http://localhost:8080/course/tutor"
 
         let response = await fetch(url);
         const map = await response.json();
         setCourseMap(map)
-
+        console.log("Course Map")
         console.log(map)
 
         url = "http://localhost:8080/tutors"
         response = await fetch(url)
         const tutors = await response.json()
-        console.log(tutors)
         setAllTutors(tutors)
         setTutors(tutors)
 
-
+        url = `http://localhost:8080/course/checkedtutors?id=${course_id}`
+        response = await fetch(url)
+        const preCheckedTutors = await response.json()
+        const checkedTutorsMap = {}
+        preCheckedTutors.forEach(tutor => {
+            checkedTutorsMap[tutor.tutor_id] = true
+        })
+        setCheckedTutors(checkedTutorsMap);
     }
 
     useEffect(() => {
@@ -112,6 +115,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         }
     }, [step])
 
+
+
     const handleStep2Submit = async e => {
         e.preventDefault()
 
@@ -119,17 +124,19 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
         const formData = new FormData()
 
-        files.forEach((file, index) => formData.append('images', file));
+        files.filter(file => !uploadedFiles.includes(file)).forEach((file, index) => formData.append('images', file));
+        console.log("Files are ", files)
         const URL = "http://localhost:8080/upload/all"
         const data = await fetch(URL, {
             method: 'POST',
             body: formData
         }).then(res => res.json())
+
         console.log(data.imageUrls)
-        const transformedData = Object.entries(data.imageUrls).map(([name, url]) => {
+        const transformedData = Object.entries(data.imageUrls ? data.imageUrls : []).map(([name, url]) => {
             return { name, url };
         });
-        setUploadedFiles(transformedData)
+        setUploadedFiles([...uploadedFiles, ...transformedData]);
         console.log(transformedData);
     }
 
@@ -181,7 +188,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
     const [learningGoals, setLearningGoals] = useState('');
     let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
     let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-    let contentState = stateFromHTML(`<ul>${listItems}</ul><h1>Hello</h1>`);
+    let contentState = stateFromHTML(``);
+    const [html, setHTML] = useState("notnull")
 
     const [editorState, setEditorState] = useState(() => EditorState.createWithContent(contentState));
 
@@ -190,34 +198,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         setLearningGoals(event.target.value);
     };
 
-    const getContentState = () => {
-        let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
-        let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-        let contentState = stateFromHTML(`<h1> Course Title </h1> <h4> Learning Goals <h4> <ul>${listItems}</ul>`);
-        return contentState
-
-    }
-
     const handleEditorStateChange = (editorState) => {
         setEditorState(editorState);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        // Convert Draft.js editor content to HTML
-        const contentState = editorState.getCurrentContent();
-        const rawContentState = convertToRaw(contentState);
-        const htmlContent = rawContentState.blocks.map(block => {
-            return `<p>${block.text}</p>`;
-        }).join('');
-
-        // Here you can use 'learningGoals' and 'htmlContent' as needed
-        console.log('Learning Goals:', learningGoals);
-        console.log('Instructions HTML:', htmlContent);
-
-        // Proceed to the next step
-        handleNextStep();
     };
 
     // const [filteredTutors, setFilteredTutors] = useState(tutors)
@@ -240,79 +222,86 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
     // 
 
     useEffect(() => {
-        if (course_id != -1) {
-            fetch(`http://localhost:8080/course/view?id=${course_id}`)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.text().then((text) => {
-                            return text ? JSON.parse(text) : {}
-                        })
-                    } else {
-                        throw new Error('Server response not OK');
-                    }
-                })
-                .then((data) => {
-                    console.log(data)
-                    if (data.learning_goals != null && data.learning_goals.length > 0) {
-                        console.log("Setting learning goals" + data.learning_goals.join('\n'))
-                        setLearningGoals(data.learning_goals.join('\n'))
-                    }
-
-                    setFormValues({
-                        name: data.course_name,
-                        age: data.target_age,
-                        color: data.color,
-                        prerequisites: data.prerequisites,
-                        description: data.course_description,
-                        image: data.image
+        fetch(`http://localhost:8080/course/view?id=${course_id}`)
+            .then((response) => {
+                if (response.ok) {
+                    return response.text().then((text) => {
+                        return text ? JSON.parse(text) : {}
                     })
+                } else {
+                    throw new Error('Server response not OK');
+                }
+            })
+            .then((data) => {
+                console.log("Data is ", data)
+                if (data.learning_goals != null && data.learning_goals.length > 0) {
+                    console.log("Setting learning goals" + data.learning_goals.join('\n'))
+                    setLearningGoals(data.learning_goals.join('\n'))
+                } else {
+                    setLearningGoals('')
+                }
 
-                    setFiles(data.files)
+                setFormValues({
+                    name: data.course_name,
+                    age: data.target_age,
+                    color: data.color,
+                    prerequisites: data.prerequisites,
+                    description: data.course_description,
+                    image: data.image
+                })
 
-                    setSelectedIndex(data.course_difficulty === 'Beginner' ? 1 : data.course_difficulty === 'Intermediate' ? 2 : 3)
 
-                    setFirstEdit(false)
+                setFiles(data.files == null ? [] : data.files)
+                setUploadedFiles(data.files == null ? [] : data.files)
 
-                    setEditorState(EditorState.createWithContent(stateFromHTML(data.info_page)))
+                setSelectedIndex(data.course_difficulty === 'Beginner' ? 1 : data.course_difficulty === 'Intermediate' ? 2 : 3)
 
-                });
-        }
+                setHTML(data.info_page)
+                setEditorState(EditorState.createWithContent(stateFromHTML(data.info_page)))
+            });
     }, [course_id]);
+
+    useEffect(() => {
+        // Get the current content of the editor
+        const contentState = editorState.getCurrentContent();
+
+        // Convert the content state to raw JS
+        const rawContent = convertToRaw(contentState);
+
+        // Convert the raw JS to HTML
+        let drafthtml = draftToHtml(rawContent);
+
+        setHTML(drafthtml)
+    }, [editorState])
 
     const handleFileUpload = (event) => {
         const names = Array.from(event.target.files).map(file => file.name);
         setFileNames(prevNames => [...prevNames, ...names]);
     };
 
-    // const handleDelete = (name) => {
-    //     setFileNames(fileNames.filter(fileName => fileName !== name));
-    // };
+    const handleRemove = async course_id => {
+        try {
+            const response = await fetch(`http://localhost:8080/course/delete?id=${course_id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            setFiles(files => files.filter(file => file.id !== course_id));
+        } catch (error) {
+            alert("You cannot delete a course with tutors assigned to it")
+        }
+    }
 
     const handleDelete = name => {
-        setFiles(files => files.filter(file => file.name !== name))
+        setFiles(files => files.filter(file => file.name !== name));
+        setUploadedFiles(uploadedFiles => uploadedFiles.filter(file => file.name !== name));
     }
+
     const [showFilters, setShowFilters] = useState(false);
 
-    useEffect(() => {
-        if (step === 3 && firstEdit) {
-            let trimmedValues = learningGoals.split("\n").map(val => val.trim()).filter(val => val.length > 0);
-            let listItems = trimmedValues.map(val => `<li>${val}</li>`).join('');
-            let contentState = stateFromHTML(`<h1> Course Title </h1>
-        <h4> Learning Goals </h4>
-        
-        <ul>${listItems}</ul><h1>Hello</h1>`);
-            setEditorState(EditorState.createWithContent(contentState));
-            setFirstEdit(false)
-        }
-    }, [step, learningGoals, firstEdit]);
-    const getEditorState = () => {
-        if (firstEdit) {
-            return EditorState.createWithContent(contentState)
-        } else {
-            return editorState
-        }
-
-    }
 
     const [formValues, setFormValues] = useState({
         image: null,
@@ -329,14 +318,12 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         let filteringTutors = tutors;
         const checkedCourseIds = Object.keys(checkedCourses).filter(course_id => checkedCourses[course_id]);
 
-        console.log("Checked course Ids", checkedCourseIds)
         if (checkedCourseIds.length > 0) {
             filteringTutors = allTutors.filter(tutor => {
                 const tutorCourses = courseMap.find(item => item.tutor_id === tutor.tutor_id)?.course_ids || [];
                 return checkedCourseIds.some(course_id => tutorCourses.includes(Number(course_id)));
             });
         } else {
-            console.log("In else block")
             filteringTutors = allTutors
         }
 
@@ -382,7 +369,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
         const formData = new FormData();
         formData.append('image', selectedFile, modifiedFileName);
-
+        console.log("Form Data is ", formData)
         fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData,
@@ -404,15 +391,25 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
 
 
     };
-    const [html, setHTML] = useState(null)
 
     const addTutors = async (e) => {
         e.preventDefault()
-        let url = "http://localhost:8080/course/tutors"
+
+        let url = `http://localhost:8080/course/tutors?id=${course_id}`
+        await fetch(url, {
+            method: 'DELETE',
+        })
+
+        url = "http://localhost:8080/course/tutors"
         const tutorIds = Object.keys(checkedTutors).filter(tutor_id => checkedTutors[tutor_id]);
 
+        if (tutorIds.length === 0) {
+            setStep(1)
+            handleCloseModal(e)
+        }
+
         const body = {
-            course_id: courseId,
+            course_id: course_id,
             tutor_ids: tutorIds
         }
 
@@ -426,10 +423,9 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
         // const response = await data.json()
         if (data.ok) {
             setStep(1)
-            setCourseId(null)
             handleCloseModal(e)
         } else {
-            alert("There was an error adding tutors")
+            alert("There was an error editing tutors")
 
         }
     }
@@ -441,7 +437,11 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
     return (
         <Modal
             isOpen={showModal}
-            onRequestClose={handleCloseModal}
+            onRequestClose={() => {
+                setStep(1)
+                handleCloseModal()
+            }
+            }
             style={{
                 overlay: {
                     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -485,13 +485,16 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                     color: '#666',
                     cursor: 'pointer'
                 }}
-                onClick={handleCloseModal}
+                onClick={() => {
+                    setStep(1)
+                    handleCloseModal()
+                }}
             >
                 &times;
             </button>
             {step === 1 ? (
                 // Your existing form goes here
-                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`'Edit a Course`}</h2>
+                <form style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px', margin: 'auto' }}>         <h2 style={{ color: '#103da2', marginBottom: '20px' }}>{`Edit a Course`}</h2>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <label style={{ color: '#103da2', marginBottom: '10px' }}>
                             <span style={{ display: 'block', marginBottom: '5px' }}>Banner Upload:</span>
@@ -577,29 +580,13 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                         <span style={{ display: 'block', marginBottom: '5px' }}>Description:</span>
                         <textarea name="description" value={formValues.description} onChange={handleInputChange} rows="4" style={{ padding: '10px', maxHeight: '200px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '14px', width: '100%' }}></textarea>
                     </label>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
                         <button
-                            onClick={handleCloseModal}
+                            onClick={() => handleRemove(course_id)}
                             style={{
+                                // height: '40px',
                                 padding: '10px 20px',
-                                backgroundColor: '#ccc',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: '5px',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s ease',
-                                fontSize: '14px',
-                                marginRight: '10px',
-                            }}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            onClick={handleNextStep}
-                            style={{
-                                padding: '10px 20px',
-                                backgroundColor: '#007BFF',
+                                backgroundColor: '#ff6347',
                                 color: 'white',
                                 border: 'none',
                                 borderRadius: '5px',
@@ -608,8 +595,45 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                 fontSize: '14px',
                             }}
                         >
-                            Next
+                            Delete
                         </button>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <button
+                                onClick={() => {
+                                    setStep(1)
+                                    handleCloseModal()
+                                }}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#ccc',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s ease',
+                                    fontSize: '14px',
+                                    marginRight: '10px',
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                onClick={handleNextStep}
+                                style={{
+                                    padding: '10px 20px',
+                                    backgroundColor: '#007BFF',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.3s ease',
+                                    fontSize: '14px',
+                                }}
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                     {/* <button type="submit">Next</button> */}
                 </form>
@@ -688,6 +712,8 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                             // type="submit"
                             onClick={(e) => {
 
+                                console.log(files)
+
                                 // Get the current content of the editor
                                 const contentState = editorState.getCurrentContent();
 
@@ -695,11 +721,10 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                 const rawContent = convertToRaw(contentState);
 
                                 // Convert the raw JS to HTML
-                                const html = draftToHtml(rawContent);
+                                let drafthtml = draftToHtml(rawContent);
 
-                                console.log(html);
-                                setHTML(html)
-                                createCourse(e)
+                                setHTML(drafthtml)
+                                editCourse(e)
                             }}
                             style={{
                                 padding: '10px 20px',
@@ -712,7 +737,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                 fontSize: '14px',
                             }}
                         >
-                            Edit
+                            Edit Course
                         </button>
                     </div>
                 </>
@@ -728,6 +753,7 @@ export const EditCourseModal = ({ showModal, handleCloseModal, courses, course_i
                                     filteredTutors.forEach(tutor => {
                                         newCheckedTutors[tutor.tutor_id] = !selectAll;
                                     });
+                                    console.log(newCheckedTutors)
                                     setCheckedTutors(newCheckedTutors);
                                     setSelectAll(!selectAll);
                                 }}
