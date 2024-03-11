@@ -375,8 +375,11 @@ export default function ReactBigCalendar() {
         const timeFormat = "HH:mm";
         const currentTimeSlot = moment(date).format(timeFormat);
         const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+        const currentDate = new Date();
+        const diffTime = date - currentDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (openSlots[dayOfWeek] && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+        if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
             return {
                 className: "available",
             };

@@ -15,7 +15,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -36,7 +36,7 @@ export class StudentProfile {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results.rows);
+              // console.log(results.rows);
               resolve();
             }
           });
@@ -57,7 +57,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -79,7 +79,7 @@ export class StudentProfile {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results.rows);
+              // console.log(results.rows);
               resolve(results.rows);
             }
           });
@@ -99,7 +99,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -116,7 +116,7 @@ export class StudentProfile {
         console.log("error: ", err);
         result(err, null);
       } else {
-        console.log(res.rows);
+        // console.log(res.rows);
         result(null, res.rows);
       }
     });

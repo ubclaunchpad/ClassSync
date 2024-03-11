@@ -207,15 +207,15 @@ router.get("/booking/notes", (req, res) => {
 })
 
 router.post("/notes", (req, res) => {
-    const booking_id = req.body.id
-    const notes = req.body.notes
-    console.log("Notes are ", notes)
-    const tutor = new tutorRegistrationController()
-    return tutor.updateNotes(booking_id, notes).then(() => {
-        res.status(200);
-    }).catch((err) => {
-        res.status(500).json(err);
-    })
+  const booking_id = req.body.id
+  const notes = req.body.notes
+//   console.log("Notes are ", notes)
+  const tutor = new tutorRegistrationController()
+  return tutor.updateNotes(booking_id, notes).then(() => {
+    res.status(200);
+  }).catch((err) => {
+    res.status(500).json(err);
+  })
 
 })
 router.get("/class", (req, res) => {
