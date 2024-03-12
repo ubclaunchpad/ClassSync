@@ -667,7 +667,7 @@ export default function ReactBigCalendar(props) {
                         min={new Date(2020, 1, 0, 7, 0, 0)}
                         max={new Date(2020, 1, 0, 19, 0, 0)}
                         style={{ height: "75vh", width: "90vw" }}
-                        onSelectEvent={deleteEvent}
+                        // onSelectEvent={deleteEvent}
                         onSelectSlot={handleSelect}
                         slotPropGetter={slotPropGetter}
                         onNavigate={(date) => {
