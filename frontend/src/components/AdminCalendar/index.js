@@ -15,11 +15,12 @@ import studentIcon from "../../assets/student.svg";
 import tutorIcon from "../../assets/tutor.svg";
 import courseIcon from "../../assets/course.svg";
 import trashIcon from "../../assets/trashBin.svg";
+import editIcon from "../../assets/edit.svg";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 
-export default function ReactBigCalendar() {
+export default function AdminCalendar() {
   const [eventsData, setEventsData] = useState(events);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [startDate, setStartDate] = useState(startOfWeek(new Date()));
@@ -35,12 +36,14 @@ export default function ReactBigCalendar() {
   const [lessons, setLessons] = useState([]);
   const [enrollmentId, setEnrollmentId] = useState(null);
   const [selectingTutor, setSelectingTutor] = useState(false);
+  const [changeNewTutor, setChangeNewTutor] = useState();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [appointmentInfo, setAppointmentInfo] = useState(null);
+  const [editting, setEditting] = useState(false);
   const [forceRender, setForceRerender] = useState(false);
+  const [availableTutors, setAvailableTutors] = useState([]);
 
   const loadData = async () => {
-    console.log("Loading data for ", startDate.toISOString().split("T")[0]);
     let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem(
       "userID"
     )}&startDate=${startDate.toISOString().split("T")[0]}`;
@@ -73,8 +76,6 @@ export default function ReactBigCalendar() {
           );
         });
       });
-
-      console.log("Filtered data is ", filteredData);
 
       setOpenSlots(filteredData);
       url = `http://localhost:8080/appointments?tutor_id=${localStorage.getItem(
@@ -118,7 +119,6 @@ export default function ReactBigCalendar() {
         const end = moment(booking.start)
           .add(booking.duration, "minute")
           .toDate();
-        console.log(end);
 
         appointments.push({
           start: new Date(booking.start),
@@ -149,7 +149,6 @@ export default function ReactBigCalendar() {
       const response = await fetch(`http://localhost:8080/booking?id=${id}`);
       const appointmentData = await response.json();
       setAppointmentInfo(appointmentData);
-      console.log(appointmentData);
     } catch {
       console.log("cannot get appointment info");
     }
@@ -157,7 +156,6 @@ export default function ReactBigCalendar() {
 
   useEffect(() => {
     // This code will run whenever `startDate` changes
-    console.log("Start date has changed:", startDate);
     setIsLoaded(false);
     loadData();
   }, [startDate]); // Add `startDate` as a dependency
@@ -204,12 +202,49 @@ export default function ReactBigCalendar() {
   };
 
   const editEvent = async (event) => {
-    console.log(event);
+    getAvailableTutors(event);
     setSelectedBooking(event);
     fetchAppointmentInfo(event.id);
   };
 
+  const getAvailableTutors = async (event) => {
+    const changeCourseId = courses.find(
+      (course) => course.label === event.title
+    ).value;
+    // API call for tutor availability
+    const response = await fetch(
+      `http://localhost:8080/tutor/courses?course_id=${changeCourseId}`
+    );
+    const data = await response.json();
+    const tutorsOptions = data.map((course) => ({
+      value: course.tutor_id,
+      label: course.tutor_name,
+    }));
+    console.log(tutorsOptions);
+    setAvailableTutors(tutorsOptions);
+  };
+
+  const changeTutor = async (event) => {
+    await deleteEvent(event);
+    const response = await fetch("http://localhost:8080/availability", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        booking: {
+          enrollment_id: selectedBooking.enrollment,
+          tutor_id: changeNewTutor.value,
+          session_duration: 60,
+          start_time: event.start,
+        },
+      }),
+    });
+    setAppointmentInfo({ ...appointmentInfo, tutor: changeNewTutor.label });
+  };
+
   const deleteEvent = async (event) => {
+    console.log(event);
     const response = await fetch(
       `http://localhost:8080/availability/booking?id=${event.id}`,
       {
@@ -361,89 +396,134 @@ export default function ReactBigCalendar() {
         <TutorDashboardLayout
           rightColumnContent={
             selectedBooking ? (
-              <div
-                style={{
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "10px",
-                  padding: "12px",
-                  marginTop: "16px",
-                  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                }}
-              >
-                <div className="admin-calendar__course-info-header">
-                  Appointment
+              appointmentInfo && (
+                <div
+                  style={{
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "10px",
+                    padding: "12px",
+                    marginTop: "16px",
+                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
+                  <div className="admin-calendar__course-info-header">
+                    Appointment
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={timeIcon} alt="time icon" />
+                    {selectedBooking.start.toLocaleString([], {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}
+                    {" -"}
+                    <br />
+                    {selectedBooking.end.toLocaleString([], {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}{" "}
+                    (
+                    {differenceInHours(
+                      selectedBooking.end,
+                      selectedBooking.start
+                    )}{" "}
+                    hour
+                    {differenceInHours(
+                      selectedBooking.end,
+                      selectedBooking.start
+                    ) > 1 && "s"}
+                    )
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={studentIcon} alt="student icon" />
+                    {appointmentInfo.student}
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={tutorIcon} alt="tutor icon" width={24} />
+                    {editting ? (
+                      <Select
+                        options={availableTutors}
+                        className="admin-calendar__tutor-select"
+                        onChange={(e) => {
+                          setChangeNewTutor(e);
+                          console.log(changeNewTutor);
+                        }}
+                      />
+                    ) : changeNewTutor ? (
+                      changeNewTutor.label
+                    ) : (
+                      appointmentInfo.tutor
+                    )}
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={courseIcon} alt="course icon" width={24} />
+                    {selectedBooking.title}
+                  </div>
+                  <div className="admin-calendar__course-numbers-list">
+                    {[...Array(5)].map((x, index) => (
+                      <div
+                        className="admin-calendar__course-number"
+                        style={
+                          index < appointmentInfo.class
+                            ? { backgroundColor: "#103da2" }
+                            : { backgroundColor: "#B3DEFC" }
+                        }
+                      ></div>
+                    ))}
+                  </div>
+                  <div className="admin-calendar__back-container">
+                    <div className="admin-calendar__change-appointment-container">
+                      <button
+                        className="admin-calendar__change"
+                        onClick={() => {
+                          editting && setChangeNewTutor(null);
+                          setEditting(!editting);
+                        }}
+                      >
+                        <img src={editIcon} alt="edit" width={18} />
+                        <span>{editting ? "Stop Edit" : "Edit"}</span>
+                      </button>
+                      {editting ? (
+                        <button
+                          className="admin-calendar__change"
+                          onClick={() => {
+                            changeTutor(selectedBooking);
+                            setEditting(false);
+                          }}
+                        >
+                          <img src={trashIcon} alt="delete" width={20} />
+                          <span>Save</span>
+                        </button>
+                      ) : (
+                        <button
+                          className="admin-calendar__change"
+                          onClick={() => {
+                            deleteEvent(selectedBooking);
+                            setSelectedBooking(null);
+                            setEditting(false);
+                          }}
+                        >
+                          <img src={trashIcon} alt="delete" width={20} />
+                          <span>Delete</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <button
+                      className="admin-calendar__back"
+                      onClick={() => {
+                        setSelectedBooking(null);
+                        setEditting(false);
+                      }}
+                    >
+                      <img src={backArrow} width={20} />
+                      <span>Back</span>
+                    </button>
+                  </div>
                 </div>
-                <div className="admin-calendar__course-info-body">
-                  <img src={timeIcon} alt="time icon" />
-                  {selectedBooking.start.toLocaleString([], {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
-                  {" -"}
-                  <br />
-                  {selectedBooking.end.toLocaleString([], {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}{" "}
-                  (
-                  {differenceInHours(
-                    selectedBooking.end,
-                    selectedBooking.start
-                  )}{" "}
-                  hour
-                  {differenceInHours(
-                    selectedBooking.end,
-                    selectedBooking.start
-                  ) > 1 && "s"}
-                  )
-                </div>
-                <div className="admin-calendar__course-info-body">
-                  <img src={studentIcon} alt="student icon" />
-                  {appointmentInfo.student}
-                </div>
-                <div className="admin-calendar__course-info-body">
-                  <img src={tutorIcon} alt="tutor icon" width={24} />
-                  {appointmentInfo.tutor}
-                </div>
-                <div className="admin-calendar__course-info-body">
-                  <img src={courseIcon} alt="course icon" width={24} />
-                  {selectedBooking.title}
-                </div>
-                <div className="admin-calendar__course-numbers-list">
-                  {[...Array(5)].map((x, index) => (
-                    <div
-                      className="admin-calendar__course-number"
-                      style={
-                        index < appointmentInfo.class
-                          ? { backgroundColor: "#103da2" }
-                          : { backgroundColor: "#B3DEFC" }
-                      }
-                    ></div>
-                  ))}
-                </div>
-                <div className="admin-calendar__back-container">
-                  <button
-                    className="admin-calendar__back"
-                    onClick={() => {
-                      deleteEvent(selectedBooking);
-                      setSelectedBooking(null);
-                    }}
-                  >
-                    <img src={trashIcon} alt="delete" width={20} />
-                    <span>Cancel</span>
-                  </button>
-                  <button
-                    className="admin-calendar__back"
-                    onClick={() => setSelectedBooking(null)}
-                  >
-                    <img src={backArrow} width={20} />
-                    <span>Back</span>
-                  </button>
-                </div>
-              </div>
+              )
             ) : (
               <div
                 style={{
