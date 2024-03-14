@@ -90,7 +90,6 @@ export default function AdminTutorCalendar(props) {
       }
 
       const data = await response.json();
-
       let openSlots = {};
       Object.entries(data.availabilityHashmap).forEach(([day, slots]) => {
         openSlots[day] = Object.keys(slots);
