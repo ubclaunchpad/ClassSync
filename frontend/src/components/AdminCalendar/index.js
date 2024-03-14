@@ -16,6 +16,7 @@ import tutorIcon from "../../assets/tutor.svg";
 import courseIcon from "../../assets/course.svg";
 import trashIcon from "../../assets/trashBin.svg";
 import editIcon from "../../assets/edit.svg";
+import saveIcon from "../../assets/save.svg";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -113,6 +114,7 @@ export default function AdminCalendar() {
       );
 
       setCourses(filteredOptions);
+      console.log(appointmentsData);
 
       let appointments = [];
       appointmentsData.forEach((booking) => {
@@ -126,6 +128,7 @@ export default function AdminCalendar() {
           title: booking.title,
           id: booking.booking,
           tutor_id: booking.tutor,
+          enrollment_id: booking.enrollment,
         });
       });
 
@@ -202,6 +205,7 @@ export default function AdminCalendar() {
   };
 
   const editEvent = async (event) => {
+    console.log(event);
     getAvailableTutors(event);
     setSelectedBooking(event);
     fetchAppointmentInfo(event.id);
@@ -220,26 +224,30 @@ export default function AdminCalendar() {
       value: course.tutor_id,
       label: course.tutor_name,
     }));
-    console.log(tutorsOptions);
     setAvailableTutors(tutorsOptions);
   };
 
   const changeTutor = async (event) => {
+    console.log(event);
     await deleteEvent(event);
-    const response = await fetch("http://localhost:8080/availability", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        booking: {
-          enrollment_id: selectedBooking.enrollment,
-          tutor_id: changeNewTutor.value,
-          session_duration: 60,
-          start_time: event.start,
+    try {
+      fetch("http://localhost:8080/availability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          booking: {
+            enrollment_id: selectedBooking.enrollment_id,
+            tutor_id: changeNewTutor.value,
+            session_duration: 60,
+            start_time: event.start,
+          },
+        }),
+      });
+    } catch {
+      console.log("Couldn't change tutor");
+    }
     setAppointmentInfo({ ...appointmentInfo, tutor: changeNewTutor.label });
   };
 
@@ -257,7 +265,7 @@ export default function AdminCalendar() {
 
     if (response.ok) {
       console.log("Deleted booking");
-      setEventsData(eventsData.filter((item) => item.id !== event.id));
+      setEventsData(eventsData);
 
       const selectedTime = event.start
         .toTimeString()
@@ -322,12 +330,6 @@ export default function AdminCalendar() {
     }
   };
 
-  const appointments = [
-    { date: "2022-03-01", startTime: "10:00", readOnly: false },
-    { date: "2022-03-02", startTime: "11:00", readOnly: true },
-    { date: "2022-03-03", startTime: "12:00", readOnly: false },
-    // Add more appointments as needed
-  ];
   const EventComponent = ({ event }) => (
     <div className="rbc-event" style={{ position: "relative" }}>
       <div className="event-content">{event.title}</div>
@@ -448,7 +450,6 @@ export default function AdminCalendar() {
                         className="admin-calendar__tutor-select"
                         onChange={(e) => {
                           setChangeNewTutor(e);
-                          console.log(changeNewTutor);
                         }}
                       />
                     ) : changeNewTutor ? (
@@ -493,7 +494,7 @@ export default function AdminCalendar() {
                             setEditting(false);
                           }}
                         >
-                          <img src={trashIcon} alt="delete" width={20} />
+                          <img src={saveIcon} alt="delete" width={20} />
                           <span>Save</span>
                         </button>
                       ) : (
@@ -662,21 +663,19 @@ export default function AdminCalendar() {
                                 alignItems: "center",
                               }}
                             >
-                              {!appointment.readOnly && (
-                                <button
-                                  style={{
-                                    border: "none",
-                                    borderRadius: "5px",
-                                    cursor: "pointer",
-                                    fontFamily: "Arial, sans-serif",
-                                    fontSize: "16px",
-                                    padding: "5px 10px",
-                                  }}
-                                  onClick={() => deleteEvent(appointment)}
-                                >
-                                  ❌
-                                </button>
-                              )}
+                              <button
+                                style={{
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  fontFamily: "Arial, sans-serif",
+                                  fontSize: "16px",
+                                  padding: "5px 10px",
+                                }}
+                                onClick={() => deleteEvent(appointment)}
+                              >
+                                ❌
+                              </button>
                             </td>
                           </tr>
                         ))}

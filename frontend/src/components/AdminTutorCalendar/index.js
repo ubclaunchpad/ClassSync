@@ -76,6 +76,7 @@ export default function AdminTutorCalendar(props) {
       hasRun.current = true;
     }
   }, [selectedSlot, isLoaded]);
+
   const loadData = async () => {
     console.log("Loading data for ", startDate.toISOString().split("T")[0]);
     let url = `http://localhost:8080/availability?date=${
@@ -155,6 +156,7 @@ export default function AdminTutorCalendar(props) {
       );
     }
   };
+
   useEffect(() => {
     // This code will run whenever `startDate` changes
     console.log("Start date has changed:", startDate);

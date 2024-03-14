@@ -327,6 +327,7 @@ export default function ReactBigCalendar(props) {
 
 
         // console.log("Selected Slot is ", selectedSlot)
+        console.log(enrollmentId);
 
         const response = await fetch('http://localhost:8080/availability', {
             method: 'POST',
