@@ -200,6 +200,29 @@ export class admin {
             });
         })
     }
+
+    async getAllUsers() {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+                client.query(
+                    "SELECT * FROM users",
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error:', error);
+                            reject(error);
+                        } else {
+                            console.log(results.rows);
+                            resolve(results.rows);
+                        }
+                    }
+                );
+            });
+        } finally {
+            client.release();
+        }
+    }
+
     getAvailabilityById(id, result) {
         return new Promise((resolve, reject) => {
             //get the availability of tutor by id

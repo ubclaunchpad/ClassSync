@@ -8,6 +8,14 @@ export class StudentProfile {
 
   async getStudentsByGuardian(id) {
     const client = await con.connect();
+    
+    client.query("SELECT * FROM tutors", (error, results) => {
+      if (error) {
+        console.error("Error:", error);
+      } else {
+        console.log(results.rows);
+      }
+    });
     try {
       return new Promise((resolve, reject) => {
         client.query("SELECT * FROM get_students_by_guardian($1)", [id], (error, results) => {

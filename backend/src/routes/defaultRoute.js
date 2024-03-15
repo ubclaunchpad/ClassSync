@@ -522,4 +522,41 @@ router.put("/registrations/:id/:status", (req, res) => {
         });
 }
 );
+
+router.get("/tutors", (req, res) => {
+  return admin.getAllTutors()
+      .then((tutors1) => {
+          console.log("Tutors ", tutors1);
+          res.status(200).json(tutors1);
+      })
+      .catch((err) => {
+          console.log("Error getting tutors ", err);
+          res.status(500).json(err);
+      });
+});
+
+router.get("/tutor_offerings", (req, res) => {
+  return admin.getTutorOfferings()
+      .then((offerings) => {
+          console.log("Tutor Offerings ", offerings);
+          res.status(200).json(offerings);
+      })
+      .catch((err) => {
+          console.log("Error getting offerings ", err);
+          res.status(500).json(err);
+      });
+});
+
+router.get("/users", (req, res) => {
+  return admin.getUsers()
+      .then((users) => {
+          console.log("Users ", users);
+          res.status(200).json(users);
+      })
+      .catch((err) => {
+          console.log("Error getting users ", err);
+          res.status(500).json(err);
+      });
+});
+
 export default router;
