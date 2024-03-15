@@ -9,6 +9,7 @@ const TutorsList = () => {
     const [users, setUsers] = useState(null);
     const [courses, setCourses] = useState(null);
     const [offerings, setOfferings] = useState(null);
+    const url = "localhost:3000/registertutor/"
 
     const fetchData = async () => {
         try {
@@ -52,7 +53,18 @@ const TutorsList = () => {
         return courseList;
     }
 
+    const copyToken = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/token');
+            const data = await response.json();
 
+
+            // Now you have the token in `data`, you can copy it to clipboard
+            navigator.clipboard.writeText(url+data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
     useEffect(() => {
         fetchData();
     }, []);
@@ -65,7 +77,36 @@ const TutorsList = () => {
                     <h3>List of all Tutors</h3>
 
                     <p>This dashboard allows administrators to manage Tutors. View and edit Tutors by clicking on View More.</p>
-                    </div>
+
+                    <button 
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginTop: '10px',
+                            padding: '10px 20px',
+                            backgroundColor: '#007BFF', // Change this to match your theme color
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '5px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            transition: 'all 0.3s ease'
+                        }}
+                        onClick={copyToken}
+                    >
+                        Tutor Invite Link (Single-Use)
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            height="16" 
+                            viewBox="0 0 24 24" 
+                            width="16"
+                            style={{ marginLeft: '10px' }}
+                        >
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path fill='white' d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                    </button>
+                            </div>
             }>
             
 
