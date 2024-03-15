@@ -3,7 +3,7 @@ import LeftShape from "../../assets/leftBannerShape.png";
 import RightShape from "../../assets/rightBannerShape.png";
 import CodeBuddy from "../../assets/CodeBuddyWhiteOutline.png";
 
-const Banner = ({ smallText, mainText }) => {
+const Banner = ({ smallText, mainText, smallTextBelow }) => {
   return <div className="banner-container">
     <img src={LeftShape} className="left-shape" />
     <img src={RightShape} className="right-shape" />
@@ -11,6 +11,7 @@ const Banner = ({ smallText, mainText }) => {
     <div className="banner-text-container">
       <p className="banner-subtitle">{smallText}</p>
       <h1 className="banner-title">{mainText}</h1>
+      {smallTextBelow && <p className="banner-subtitle">{smallTextBelow}</p>}
     </div>
   </div>;
 };

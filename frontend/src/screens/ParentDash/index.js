@@ -84,7 +84,7 @@ const ParentDash = (props) => {
           {
             students.map((student) => {
               return (
-                <div className="student-tile" onClick={() => handleTileClick(student.id)}>
+                <div className="student-tile" onClick={() => handleTileClick(student.student_id)}>
                   <div className="colour"></div>
                   {student.name}
                 </div>

@@ -17,7 +17,7 @@ import { FaRedo } from 'react-icons/fa';
 export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(true)
-    console.log("Courses are ", courses)
+    // console.log("Courses are ", courses)
     const [checkedCourses, setCheckedCourses] = useState([])
 
     const [courseId, setCourseId] = useState(null)

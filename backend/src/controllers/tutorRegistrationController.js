@@ -117,7 +117,7 @@ export default class tutorRegistrationController {
       return this.course
         .getLearningGoalProgress(enrollmentId)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
 
           const { learning_goals, completed } = result;
 
@@ -139,7 +139,7 @@ export default class tutorRegistrationController {
       return this.tutor
         .getTutorOfferings(userID)
         .then((result) => {
-          console.log("Result ", result);
+          // console.log("Result ", result);
           resolve(result);
         })
         .catch((err) => {
@@ -151,6 +151,18 @@ export default class tutorRegistrationController {
     return new Promise((resolve, reject) => {
       return this.tutor
         .getProfile(userID)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+  async getAllTutors() {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .getAllTutors()
         .then((result) => {
           resolve(result);
         })
@@ -190,7 +202,7 @@ export default class tutorRegistrationController {
       return this.tutor
         .getPassword(email)
         .then((res) => {
-          console.log("Res ", res);
+          // console.log("Res ", res);
           const hashedPassword = res.hashedPassword;
           const userId = res.user_id;
           const firstName = res.firstName;
@@ -210,7 +222,7 @@ export default class tutorRegistrationController {
                   }
                 );
 
-                console.log("Printing token: " + token);
+                // console.log("Printing token: " + token);
 
                 resolve({
                   email: email,
@@ -287,6 +299,22 @@ export default class tutorRegistrationController {
       .catch((err) => Promise.reject(err));
   }
 
+  addLog(data) {
+    const tutor = new tutorRegistration();
+
+    return tutor
+      .addLog(data)
+      .then(() => Promise.resolve())
+      .catch((err) => Promise.reject(err));
+  }
+
+  getLogs() {
+    const tutor = new tutorRegistration()
+      return tutor
+      .getLogs()
+      .then((res) => Promise.resolve(res))
+      .catch((err) => Promise.reject(err));
+  }
   updateOfferings(userID, offerings) {
     const tutor = new tutorRegistration();
 

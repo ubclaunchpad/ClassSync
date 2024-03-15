@@ -2,45 +2,111 @@
 import { admin } from "../models/admin.js";
 import { tutor } from "../models/tutor.js";
 export default class adminController {
+import { v4 as uuidv4 } from 'uuid';
 
-    addTutorsToCourse(course_id, tutor_ids) {
+
+export default class adminController {    
+    getToken() {
         const admin_ = new admin()
-        return admin_.addTutorsToCourse(course_id, tutor_ids).then((res) => res)
+        const token = uuidv4(); // Generate a new token
+        
+        return admin_.saveToken(token).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+
+
+    }
+
+    validateToken(token) {
+        const admin_ = new admin()
+
+        return admin_.validateToken(token).then((res) => res)
         .catch((err) => {
            throw err
         })
     }
 
+    deleteToken(token) {
+
+        const admin_ = new admin()
+
+        return admin_.deleteToken(token).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+    }
+
+    addTutorsToCourse(course_id, tutor_ids) {
+        const admin_ = new admin()
+        return admin_.addTutorsToCourse(course_id, tutor_ids).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
+    removeTutorsFromCourse(course_id) {
+        const admin_ = new admin()
+        return admin_.removeTutorsFromCourse(course_id).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
     addCourse(body) {
-         const admin_ = new admin()
-         return admin_.addCourse(body).then((res) => res)
-         .catch((err) => {
-            throw err
-         })
+        const admin_ = new admin()
+        return admin_.addCourse(body).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
+    getCheckedTutors(id) {
+        const admin_ = new admin()
+        return admin_.getCheckedTutors(id).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
     }
 
     viewCourse(id) {
         const admin_ = new admin()
         return admin_.viewCourse(id).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
+    }
+
+    editCourse(body) {
+        const admin_ = new admin()
+        return admin_.editCourse(body).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
+    }
+
+    deleteCourse(id) {
+        const admin_ = new admin()
+        return admin_.deleteCourse(id).then((res) => res)
+            .catch((err) => {
+                throw err
+            })
     }
 
     getCourseTutorMap() {
         const admin_ = new admin()
         return admin_.getCourseTutorMap().then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
     }
 
     getTutors() {
         const admin_ = new admin()
         return admin_.getTutors().then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
 
     }
     getCourses() {

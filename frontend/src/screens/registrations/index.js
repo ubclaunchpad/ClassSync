@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Switch from 'react-switch';
 import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 
 const Registrations = () => {
 
@@ -12,6 +18,7 @@ const Registrations = () => {
     const [sortedByDate, setSortedByDate] = useState(false);
     const [sortedByPaid, setSortedByPaid] = useState(false);
 
+    
     const fetchRegistrations = async () => {
         const url = `http://localhost:8080/registrations`;
         const response = await fetch(url);
@@ -235,6 +242,8 @@ const Registrations = () => {
                     ))}
                 </tbody>
             </table>
+
+
         </TutorDashboardLayout>
     );
 

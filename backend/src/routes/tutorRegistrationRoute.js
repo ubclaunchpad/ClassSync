@@ -21,6 +21,28 @@ router.get("/courses", (req, res) => {
     });
 });
 
+router.post("/log", (req, res) => {
+    console.log("Adding log ", req.body.data)
+    const tutor = new tutorRegistrationController();
+    const data = req.body.data;
+    return tutor.addLog(data).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+
+})
+
+
+router.get("/log", (req, res) => {
+    const tutor = new tutorRegistrationController();
+    return tutor.getLogs().then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+
+})
 router.get("/select", (req, res) => {
 
     const tutor = new tutorAvailabilityController();
@@ -47,7 +69,7 @@ router.post("/login", (req, res) => {
     const password = req.body.password;
 
     return tutor.login(email, password).then((result) => {
-        console.log("Result ", result);
+        // console.log("Result ", result);
         res.status(200).send(result);
     }).catch((err) => {
         console.log(err);
@@ -74,6 +96,14 @@ router.get("/profile", (req, res) => {
         res.status(500).send({ error: err.detail });
     });
 });
+
+router.get("/allTutors", (req, res)=>{
+    tutor.getAllTutors().then((result)=>{
+        res.status(200).json(result);
+    }).catch((err)=>{
+        res.status(500).send({error: err.detail});
+    }); 
+})
 
 router.get("/offering", (req, res) => {
     const userID = req.query.id;

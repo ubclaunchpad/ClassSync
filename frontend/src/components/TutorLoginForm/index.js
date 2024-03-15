@@ -1,5 +1,6 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const TutorLoginForm = () => {
   const {
@@ -9,6 +10,7 @@ const TutorLoginForm = () => {
   } = useForm({
     mode: "onBlur",
   });
+  const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -44,7 +46,7 @@ const TutorLoginForm = () => {
     localStorage.setItem("firstName", result.firstName);
     localStorage.setItem("lastName", result.lastName);
 
-    window.location.href = "/tutorProfile";
+    navigate("/tutorProfile");
   };
 
   return (
