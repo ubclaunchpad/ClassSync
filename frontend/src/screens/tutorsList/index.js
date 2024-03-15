@@ -1,6 +1,7 @@
 import './index.css';
 import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
 import React, { useState, useEffect } from 'react';
+import { Chip, alpha } from '@material-ui/core';
 
 
 const TutorsList = () => {
@@ -17,7 +18,7 @@ const TutorsList = () => {
             // console.log("Tutors Response", teacherListResponse);
 
             const teacherListData = await teacherListResponse.json();
-            // console.log("Tutors Data", teacherListResponse);
+            console.log("Tutors Data", teacherListResponse);
             setTutors(teacherListData);
 
             // Getting all users
@@ -43,46 +44,14 @@ const TutorsList = () => {
             console.error('Failed to fetch data', error);
         }
     };
-    
-    // return (
-
-    //     <ParentDashboardLayout>
-
-    //         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    //             <h2>All Tutors</h2>
-    //             {tutors && tutors.map((tutor, index) => (
-    //                 <div key={index}
-    //                     style={{
-    //                         display: 'flex',
-    //                         flexDirection: 'row',
-    //                         width: '80%',
-    //                         alignItems: 'center',
-    //                         justifyContent: 'space-between',
-    //                         marginBottom: '20px',
-    //                         border: '1px solid #ddd',
-    //                         borderRadius: '10px',
-    //                         padding: '20px',
-    //                         boxSizing: 'border-box',
-    //                         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-    //                         backgroundColor: '#f9f9f9',
-    //                     }}>
-    //                     <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="tutorPicture" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
-    //                     <div style={{ flex: 1 }}>
-    //                         <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{tutor.f_name} {tutor.l_name}</h3>
-    //                         <p style={{ color: 'grey', marginBottom: '10px' }}>{tutor.bio}</p>
-    //                     </div>
-    //                 </div>
-
-    //             ))}
-    //         </div>
-    //     </ParentDashboardLayout>
-    // );
 
     const findCourses = (tutor_id) => {
         let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
         let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id));
+        
         return courseList;
     }
+
 
     useEffect(() => {
         fetchData();
@@ -95,12 +64,8 @@ const TutorsList = () => {
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
                     <h3>List of all Tutors</h3>
 
-                    <p>This dashboard allows administrators to manage student enrollments. View and sort enrollments by clicking on column headers.</p>
-                    <p>The "Paid" column indicates whether the enrollment has been paid for. You can toggle the payment status by clicking on the respective button in each row.</p>
-
-                    <p>
-                        Additionally, you can track the progress of each course, seeing how many classes are completed, booked, and pending respectively.
-                    </p>                </div>
+                    <p>This dashboard allows administrators to manage Tutors. View and edit Tutors by clicking on View More.</p>
+                    </div>
             }>
             
 
@@ -122,9 +87,20 @@ const TutorsList = () => {
                             <td style={{ padding: '10px', textAlign: 'left' }}>{users?.find(user => user.user_id === data.tutor_id)?.firstname}</td>
                             <td style={{ padding: '10px', textAlign: 'left' }}>{users?.find(user => user.user_id === data.tutor_id)?.lastname}</td>
                             <td style={{ padding: '10px', textAlign: 'left' }}>
-                                {findCourses(data.tutor_id)?.map((course, index) => (
-                                    <p key={index}>{course.course_name},{course.course_difficulty}</p>
+                                {findCourses(data.tutor_id)?.map((course) => (
+                                    <Chip 
+                                    label={`${course.course_name}, ${course.course_difficulty}`} 
+                                    color='default' 
+                                    style={{backgroundColor:alpha(course.color, 0.5), margin: '5px'}} 
+                                    variant='outlined' />
                                 ))}
+                                <Chip 
+                                label="Add Course"
+                                color='default'
+                                style={{margin: '5px'}}
+                                onClick={() => console.log('Add course')}
+                                clickable
+                                />
                             </td>
                             {/* <td style={{ padding: '10px', textAlign: 'centre' }}>
                                 <button style={{ alignContent:'center', padding: '10px', backgroundColor: '#0091e6', border: '1px solid #ddd', borderRadius: '8px',textAlign:'center', width: '100px', color:'white', fontWeight:'bold' }}

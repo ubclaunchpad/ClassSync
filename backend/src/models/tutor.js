@@ -2,12 +2,13 @@ import con from "../../index.js";
 
 export class tutor {
     
+
     async getAllTutors() {
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    "SELECT * FROM tutors",
+                    "select t.*, u.firstname, u.lastname from tutors t join users u on u.user_id = t.tutor_id",
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
