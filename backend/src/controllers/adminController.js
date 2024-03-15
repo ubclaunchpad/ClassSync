@@ -1,9 +1,7 @@
 
 import { admin } from "../models/admin.js";
 import { tutor } from "../models/tutor.js";
-export default class adminController {
 import { v4 as uuidv4 } from 'uuid';
-
 
 export default class adminController {    
     getToken() {
