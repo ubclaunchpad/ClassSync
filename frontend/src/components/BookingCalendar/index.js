@@ -379,9 +379,11 @@ export default function ReactBigCalendar() {
         const diffTime = date - currentDate;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+        if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+           //added new restriction to date, but have no avaiable time schedule to see if it works 
+            
             return {
-                className: "available",
+                className: "available"
             };
         } else {
             return {
