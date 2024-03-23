@@ -79,22 +79,22 @@ input[type="submit"] {
     border: 2px solid black; /* Add a border to indicate selection */
   }
 
-  .red {
-    background-color: red;
-  }
-  
-  .blue {
-    background-color: blue;
-  }
-  
-  .green {
-    background-color: green;
-  }
-  
-  .yellow {
-    background-color: yellow;
-  }
-  
-  .purple {
-    background-color: purple;
-  }
+.orange {
+    background-color: #FF914D;
+}
+
+.green {
+    background-color: #70B32C;
+}
+
+.purple {
+    background-color: #737EDE;
+}
+
+.pink {
+    background-color: #FF7AAC;
+}
+
+.yellow {
+    background-color: #FFCD00;
+}

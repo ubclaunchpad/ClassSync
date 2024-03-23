@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar'
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
 
 const ParentDashCalendar = ({students}) => {
@@ -7,11 +7,21 @@ const localizer = momentLocalizer(moment);
 const [eventsData, setEventsData] = useState([]);
 const events = [];
 
+const ColorEnum = {
+  pink: "#FF7AAC",
+  purple: "#737EDE", 
+  green: "#70B32C",
+  yellow: "#FFCD00", 
+  orange: "#FF914D"
+  // Add more colors here as needed
+};
+
   const fetchStudentEvents = async () => {
 
       try {
+        console.log(students);
         await Promise.all(students.map(async (student) => {
-        const url = `http://localhost:8080/student-profile/bookings/${student.id}`;
+        const url = `http://localhost:8080/student-profile/bookings/${student.student_id}`;
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
@@ -25,7 +35,7 @@ const events = [];
                   .toDate(),
                   title: `${student.name} Tutoring Session with Tutor ${booking.tutor_id}`,
                   studentName: student.name,
-                  color: "green",
+                  color: student.color,
                 })
               })
             }
@@ -52,7 +62,7 @@ const events = [];
             events={eventsData}
             style={{ height: "100vh" }}
             eventPropGetter={(event) => {
-              const backgroundColor = event.color;
+              const backgroundColor = ColorEnum[event.color];
               return { style: { backgroundColor } };
             }}
           />

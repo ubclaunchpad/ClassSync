@@ -31,27 +31,6 @@ const ParentDash = (props) => {
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
-    // const data = [
-    //   {
-    //     id: 1,
-    //     fname: "Alice", 
-    //     lname: "Lee",
-    //     age: 20,
-    //   }, 
-    //   {
-    //     id: 2,
-    //     fname: "Bob", 
-    //     lname: "Smith",
-    //     age: 22
-    //   }, 
-    //   {
-    //     id: 3,
-    //     fname: "Charlie",
-    //     lname: "Brown", 
-    //     age: 24
-    //   }
-    // ];
-    // setStudents(data);
   }
 
 
@@ -72,11 +51,12 @@ const ParentDash = (props) => {
         <div className="existing-students-row">
           {
             students.map((student) => {
+              const tileColorClass = `student-tile ${student.color}-tile`;
               return (
-                <div className="student-tile" onClick={() => handleTileClick(student.id)}>
-                  <div className="colour"></div>
-                  {student.name}
-                </div>
+                <div className={tileColorClass} onClick={() => handleTileClick(student.id)}>
+                  <div className="rectangle"></div>
+                  <div className="name">{student.name}</div>
+              </div>
               )
             })
           }

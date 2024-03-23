@@ -35,6 +35,7 @@
 
 .student-tile {
     cursor: pointer;
+    position: relative;
     border-style: solid;
     border-radius: 10px;
     border-color: rgb(160, 157, 157);
@@ -46,21 +47,48 @@
     font-size: x-large;
 }
 
-.student-tile:nth-child(3n + 1) .colour{
-    background-color: #70B32C; /* Color for the first tile in each group of three */
-}
-
-.student-tile:nth-child(3n + 2) .colour{
-    background-color: #FF914D; /* Color for the second tile in each group of three */
-}
-
-.student-tile:nth-child(3n + 3) .colour{
-    background-color: #737EDE; /* Color for the third tile in each group of three */
-}
-
 .colour {
     height: 80%;
     background-color: #b3defc;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
 }
+
+.name-background {
+    height: 80%;
+    border-top-right-radius: 10px;
+    background-color: white;
+    border-top-left-radius: 10px;
+}
+
+.name {
+    height: 40%;
+    border-width: 1px;
+    border-radius: 0px 0px 10px 10px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+}
+
+.orange-tile {
+    background-color: #FF914D;
+}
+
+.green-tile {
+    background-color: #70B32C;
+}
+
+.purple-tile {
+    background-color: #737EDE;
+}
+
+.pink-tile {
+    background-color: #FF7AAC;
+}
+
+.yellow-tile {
+    background-color: #FFCD00;
+}
+
+

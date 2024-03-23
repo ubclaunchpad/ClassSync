@@ -61,7 +61,7 @@ const AddStudentForm = () => {
           console.log(error);
         }
       }
-      const colors = ["red", "blue", "green", "yellow", "purple"];
+      const colors = ["orange", "green", "purple", "pink", "yellow"];
     console.log(formState);
     return (
         <form className="student-info-form" onSubmit={handleSubmit}>
