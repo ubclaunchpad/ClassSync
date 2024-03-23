@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Switch from "react-switch";
 import "./index.css";
@@ -20,10 +20,10 @@ export default function RegistrationRow({
   };
 
   const searchEnrollment = async () => {
-    let url = `http://localhost:8080/bookings?enrollment_id=${data.enrollment_id}`;
-    console.log("URL is ", url);
+    let url = `http://localhost:8080/classes?enrollment_id=${data.enrollment_id}`;
     const response = await fetch(url);
-    const bookingsResponse = await response.json();
+    const classes = await response.json();
+    setEnrollmentData(classes);
   };
 
   useEffect(() => {
@@ -121,13 +121,12 @@ export default function RegistrationRow({
               <tr className="registration__row-expand-row">
                 <th className="registration__expand-row-element">{index}</th>
                 <th className="registration__expand-row-element">
-                  {classInfo.tutor}
+                  {classInfo.tutor_name}
                 </th>
                 <th className="registration__expand-row-element">
-                  {classInfo.date.toLocaleString([], {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
+                  {classInfo.start_time.substring(0, 10) +
+                    ", " +
+                    classInfo.start_time.substring(11, 16)}
                 </th>
                 <th className="registration__expand-row-element">
                   <a href={`/class/${classInfo.booking_id}`}>Link</a>
