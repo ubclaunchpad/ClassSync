@@ -259,6 +259,16 @@ router.get("/token", (req, res) => {
     })
 })
 
+router.get("/classes", (req, res) => {
+    const admin = new adminController()
+    admin.getClasses(req.query.enrollment_id).then((result) => {
+        res.status(200).json(result)
+    }).catch((e) => {
+        res.status(500).json(err)
+    })
+})
+
+
 
 
 // // Delete token
