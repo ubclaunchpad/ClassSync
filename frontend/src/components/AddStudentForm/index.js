@@ -31,6 +31,13 @@ const AddStudentForm = () => {
         };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const requiredFields = ['fname', 'lname', 'dob', 'grade', 'city', 'province', 'color'];
+        const emptyFields = requiredFields.filter(field => formState[field] === "");
+
+        if (emptyFields.length > 0) {
+            alert(`Please fill out the following fields: ${emptyFields.join(", ")}`);
+            return;
+        }
         const studentData = {
             f_name: formState.fname,
             l_name: formState.lname,
@@ -74,11 +81,11 @@ const AddStudentForm = () => {
             <div className="input-row">
                   <label>
                   First Name
-                      <input name="fname" type="text" value={formState.fname} onChange={handleFormChange}/>
+                      <input name="fname" type="text" value={formState.fname} onChange={handleFormChange} required pattern="[A-Za-z]+"/>
                   </label>
                   <label>
                     Last Name
-                      <input name="lname" type="text" value={formState.lname} onChange={handleFormChange}/>
+                      <input name="lname" type="text" value={formState.lname} onChange={handleFormChange} required pattern="[A-Za-z]+"/>
                   </label>
             </div>
             </div>
@@ -88,11 +95,11 @@ const AddStudentForm = () => {
             <div className="input-row">
             <label>
                     Date of Birth
-                    <input name="dob" type="date" value={formState.dob} onChange={handleFormChange} />
+                    <input name="dob" type="date" value={formState.dob} onChange={handleFormChange} required/>
                 </label>
                 <label>
                     Grade
-                    <select name="grade" type="text" value={formState.grade} onChange={handleFormChange}> 
+                    <select name="grade" type="text" value={formState.grade} onChange={handleFormChange} required> 
                       <option value="pre">Pre-school</option>
                         <option value="kinder">Kindergarten</option>
                         <option value="1">1</option>
@@ -116,11 +123,11 @@ const AddStudentForm = () => {
               <div className="input-row">
                   <label>
                       City
-                      <input name="city" type="text" value={formState.city} onChange={handleFormChange}/>
+                      <input name="city" type="text" value={formState.city} onChange={handleFormChange} required/>
                   </label>
                   <label>
                       Province
-                      <input name="province" type="text" value={formState.province} onChange={handleFormChange}/>
+                      <input name="province" type="text" value={formState.province} onChange={handleFormChange} required/>
                   </label>
               </div>
             </div>
@@ -129,7 +136,7 @@ const AddStudentForm = () => {
               <div className="input-row">
                   <label>
                       Pronouns
-                      <input name="pronouns" type="text" value={formState.pronouns} onChange={handleFormChange}/>
+                      <input name="pronouns" type="text" value={formState.pronouns} onChange={handleFormChange} pattern="[A-Za-z\/]+"/>
                   </label>
                   <label>
                       Accommodations

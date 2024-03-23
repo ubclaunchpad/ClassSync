@@ -53,7 +53,7 @@ const ParentDash = (props) => {
             students.map((student) => {
               const tileColorClass = `student-tile ${student.color}-tile`;
               return (
-                <div className={tileColorClass} onClick={() => handleTileClick(student.id)}>
+                <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
                   <div className="rectangle"></div>
                   <div className="name">{student.name}</div>
               </div>
