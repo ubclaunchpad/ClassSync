@@ -471,6 +471,17 @@ router.get("/bookings", (req, res) => {
         });
 });
 
+router.get("/appointments/all", (req, res) => {
+    const tutor = new tutorAvailabilityController();
+    return tutor.getAppointmentsByDate(req.query.date)
+        .then((availability) => {
+            res.status(200).json(availability);
+        })
+        .catch((err) => {
+            console.log("Error getting schedule ", err);
+            res.status(500).json(err);
+        });
+});
 router.get("/appointments", (req, res) => {
     const tutor = new tutorAvailabilityController();
     return tutor.getAppointmentsByTutor(req.query.tutor_id, req.query.date)
@@ -482,6 +493,7 @@ router.get("/appointments", (req, res) => {
             res.status(500).json(err);
         });
 });
+
 
 router.get("/courses", (req, res) => {
     return admin.getCourses()
