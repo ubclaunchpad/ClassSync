@@ -140,6 +140,9 @@ export default function AdminCalendar() {
     }
   };
 
+
+
+
   const fetchAppointmentInfo = async (id) => {
     try {
       const response = await fetch(`http://localhost:8080/booking?id=${id}`);
@@ -444,14 +447,43 @@ console.log("Course id is ", changeCourseId)
             bookingDate.getHours().toString().padStart(2, "0") +
             ":" +
             bookingDate.getMinutes().toString().padStart(2, "0"),
-          readOnly: booking.tutor_id !== Number(id),
+          readOnly: false,
         });
       }
       setAppointmentInfo(bookings)
       console.log(enrollmentId);
       console.log("Appointments are ", appointments);
+
+      setIsLoaded(false)
+
+      console.log("Student id is ", studentId)
+      let url = `http://localhost:8080/appointments/student/${studentId.value}`;
+      const appointmentsResponse = await fetch(url);
+      const appointmentsData = await appointmentsResponse.json();
+      console.log("Appt " ,appointmentsData)
+    
+      let appts = [];
+      appointmentsData.forEach((booking) => {
+        const end = moment(booking.start)
+          .add(booking.duration, "minute")
+          .toDate();
+    
+        appts.push({
+          start: new Date(booking.start),
+          end: end,
+          title: booking.title,
+          id: booking.booking,
+          tutor_id: booking.tutor,
+          enrollment_id: booking.enrollment,
+        });
+      });
+    
+      console.log("Appointments are ", appointments);
+    
+      setEventsData(appts);
       setLessons(appointments);
       setBookings(true);
+      setIsLoaded(true)
       // setSelectingTutor(true);
     } else {
       setBookingError("No enrollment found for this student and course");

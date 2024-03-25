@@ -290,6 +290,29 @@ export class tutorAvailability {
       client.release();
     }
   }
+  async getAppointmentsByStudent(id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        con.query(
+          "SELECT * FROM get_appointments_by_student($1)",          
+          [id],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log("Got appointments ", results.rows);
+              resolve(results.rows);
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
+
 
   async getAppointmentsByDate(startDate) {
     console.log(startDate)

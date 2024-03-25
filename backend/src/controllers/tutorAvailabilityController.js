@@ -4,7 +4,13 @@ export default class tutorAvailabilityController {
     constructor() {
         this.tutor = new tutorAvailability();
     }
-
+    async getAppointmentsByStudent(id) {
+        return this.tutor.getAppointmentsByStudent(id).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
     async getAppointmentsByDate(date) {
         return this.tutor.getAppointmentsByDate(date).then((result) => {
             return result;
