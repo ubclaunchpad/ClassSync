@@ -45,45 +45,46 @@ export default function AdminCalendar() {
   const [availableTutors, setAvailableTutors] = useState([]);
 
   const loadData = async () => {
-    let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem(
-      "userID"
-    )}&startDate=${startDate.toISOString().split("T")[0]}`;
+    // let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem(
+    //   "userID"
+    // )}&startDate=${startDate.toISOString().split("T")[0]}`;
 
     try {
-      const response = await fetch(url);
+      // const response = await fetch(url);
 
-      if (!response.ok) {
-        console.log("Failed to fetch data");
-        throw new Error("Network response was not ok");
-      }
+      // if (!response.ok) {
+      //   console.log("Failed to fetch data");
+      //   throw new Error("Network response was not ok");
+      // }
 
-      const data = await response.json();
-      const filteredData = {};
+      // const data = await response.json();
+      // console.log("Response is ", data);
 
-      Object.entries(data[0]).forEach(([day, slots]) => {
-        slots.sort(); // Ensure the slots are sorted in ascending order
-        filteredData[day] = slots.filter((slot, index) => {
-          const nextSlot = slots[index + 1];
-          if (!nextSlot) return false; // If there's no next slot, exclude the current slot
-          const currentSlotHour = parseInt(slot.split(":")[0]);
-          const currentSlotMinute = parseInt(slot.split(":")[1]);
-          const nextSlotHour = parseInt(nextSlot.split(":")[0]);
-          const nextSlotMinute = parseInt(nextSlot.split(":")[1]);
-          // If the next slot is within the same hour or the next half hour, include the current slot
-          return (
-            nextSlotHour === currentSlotHour ||
-            (nextSlotHour === currentSlotHour + 1 &&
-              nextSlotMinute < currentSlotMinute)
-          );
-        });
-      });
+      // const filteredData = {};
 
-      setOpenSlots(filteredData);
-      url = `http://localhost:8080/appointments?tutor_id=${localStorage.getItem(
-        "userID"
-      )}&date=${startOfWeek(new Date()).toISOString().split("T")[0]}`;
+      // Object.entries(data[0]).forEach(([day, slots]) => {
+      //   slots.sort(); // Ensure the slots are sorted in ascending order
+      //   filteredData[day] = slots.filter((slot, index) => {
+      //     const nextSlot = slots[index + 1];
+      //     if (!nextSlot) return false; // If there's no next slot, exclude the current slot
+      //     const currentSlotHour = parseInt(slot.split(":")[0]);
+      //     const currentSlotMinute = parseInt(slot.split(":")[1]);
+      //     const nextSlotHour = parseInt(nextSlot.split(":")[0]);
+      //     const nextSlotMinute = parseInt(nextSlot.split(":")[1]);
+      //     // If the next slot is within the same hour or the next half hour, include the current slot
+      //     return (
+      //       nextSlotHour === currentSlotHour ||
+      //       (nextSlotHour === currentSlotHour + 1 &&
+      //         nextSlotMinute < currentSlotMinute)
+      //     );
+      //   });
+      // });
+
+      // setOpenSlots(filteredData);
+      let url = `http://localhost:8080/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
+      console.log("Appt " ,appointmentsData)
 
       url = "http://localhost:8080/students";
       const studentsResponse = await fetch(url);
@@ -101,19 +102,11 @@ export default function AdminCalendar() {
         color: course.color,
       }));
 
-      const offeringsResponse = await fetch(
-        `http://localhost:8080/tutor/offering?id=${localStorage.getItem(
-          "userID"
-        )}`
-      );
-      const offeringsData = await offeringsResponse.json();
-
+   
       // Filter selectedOptions based on offeringsData
-      const filteredOptions = options.filter((option) =>
-        offeringsData.includes(option.value)
-      );
 
-      setCourses(filteredOptions);
+
+      setCourses(options);
       console.log(appointmentsData);
 
       let appointments = [];
@@ -151,6 +144,7 @@ export default function AdminCalendar() {
     try {
       const response = await fetch(`http://localhost:8080/booking?id=${id}`);
       const appointmentData = await response.json();
+      console.log("Appointment info ", appointmentData)
       setAppointmentInfo(appointmentData);
     } catch {
       console.log("cannot get appointment info");
@@ -159,6 +153,7 @@ export default function AdminCalendar() {
 
   useEffect(() => {
     // This code will run whenever `startDate` changes
+    console.log("Start date is ", startDate)
     setIsLoaded(false);
     loadData();
   }, [startDate]); // Add `startDate` as a dependency
@@ -205,33 +200,66 @@ export default function AdminCalendar() {
   };
 
   const editEvent = async (event) => {
-    console.log(event);
-    getAvailableTutors(event);
-    setSelectedBooking(event);
+ 
     fetchAppointmentInfo(event.id);
+    const selectedTime = event.start
+    .toTimeString()
+    .split(" ")[0]
+    .substring(0, 5);
+  const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000)
+    .toTimeString()
+    .split(" ")[0]
+    .substring(0, 5);
+  const times = [selectedTime, thirtyMinsLater];
+console.log(times);
+    getAvailableTutors(event, times);
+    setSelectedBooking(event);
   };
 
-  const getAvailableTutors = async (event) => {
-    const changeCourseId = courses.find(
-      (course) => course.label === event.title
-    ).value;
+  const getAvailableTutors = async (event, times) => {
+    console.log("Event is ", event)
+    console.log(courses)
+
+console.log(event.title);
+const changeCourseId = courses.find(
+  (course) => course.label === event.title
+)?.value;
+
+console.log("Course id is ", changeCourseId)
+
+
     // API call for tutor availability
-    const response = await fetch(
+    let response = await fetch(
       `http://localhost:8080/tutor/courses?course_id=${changeCourseId}`
     );
     const data = await response.json();
-    const tutorsOptions = data.map((course) => ({
+    console.log(data)
+    const ids = data.map(item => item.tutor_id);
+    console.log("ids are ", ids)
+
+    response = await fetch(`http://localhost:8080/tutor/time?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${ids}&day=${event.start.getDay()}&time1=${times[0]}&time2=${times[1]}`);    
+    const respData = await response.json()
+
+    console.log("response is ", respData)
+
+    
+    const tutorsOptions = respData.map((course) => ({
       value: course.tutor_id,
       label: course.tutor_name,
     }));
+
     setAvailableTutors(tutorsOptions);
   };
 
   const changeTutor = async (event) => {
     console.log(event);
-    await deleteEvent(event);
+    // await deleteEvent(event);
     try {
-      fetch("http://localhost:8080/availability", {
+      console.log('selectedBooking:', selectedBooking);
+      console.log('changeNewTutor:', changeNewTutor);
+      console.log('event:', event);
+
+      await fetch("http://localhost:8080/availability", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -245,10 +273,61 @@ export default function AdminCalendar() {
           },
         }),
       });
-    } catch {
-      console.log("Couldn't change tutor");
+
+      const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
+      const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
+      const times = [selectedTime, thirtyMinsLater];
+
+      console.log('selectedTime:', selectedTime);
+      console.log('thirtyMinsLater:', thirtyMinsLater);
+      console.log('times:', times);
+
+      console.log("Adding for " ,event.tutor_id)
+      console.log("Removing for " ,changeNewTutor.value)
+
+
+      let body = JSON.stringify({
+          tutor_id: event.tutor_id,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endOfWeek(startDate).toISOString().split('T')[0],
+          day: event.start.getDay(),
+          times: times
+      });
+
+      console.log("Body is ", body)
+
+      let URL = "http://localhost:8080/availability/add"
+
+      await fetch(URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body
+      });
+
+      body = JSON.stringify({
+          tutor_id: changeNewTutor.value,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endOfWeek(startDate).toISOString().split('T')[0],
+          day: event.start.getDay(),
+          times: times
+      });
+
+      console.log("New body is ", body)
+
+      let url = "http://localhost:8080/availability/remove"
+      await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body
+      });
+
+      setAppointmentInfo({ ...appointmentInfo, tutor: changeNewTutor.label });
+
+      console.log('appointmentInfo after setAppointmentInfo:', appointmentInfo);
+
+    } catch (error) {
+      console.error('An error occurred:', error);
     }
-    setAppointmentInfo({ ...appointmentInfo, tutor: changeNewTutor.label });
   };
 
   const deleteEvent = async (event) => {
@@ -368,7 +447,7 @@ export default function AdminCalendar() {
           readOnly: booking.tutor_id !== Number(id),
         });
       }
-
+      setAppointmentInfo(bookings)
       console.log(enrollmentId);
       console.log("Appointments are ", appointments);
       setLessons(appointments);
@@ -480,6 +559,7 @@ export default function AdminCalendar() {
                         className="admin-calendar__change"
                         onClick={() => {
                           editting && setChangeNewTutor(null);
+                          console.log("Start date " ,startDate.toISOString().split("T")[0])
                           setEditting(!editting);
                         }}
                       >
