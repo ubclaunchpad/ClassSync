@@ -265,13 +265,13 @@ export class tutorAvailability {
     }
   }
 
-  async getAppointmentsByTutor(tutorId, startDate) {
+  async getAppointmentsByTutor(tutorId, startDate, endDate) {
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
         con.query(
-          "SELECT * FROM get_appointments_by_tutor($1, $2)",
-          [tutorId, startDate],
+          "SELECT * FROM get_appointments_by_tutor($1, $2, $3)",
+          [tutorId, startDate, endDate],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
@@ -376,10 +376,10 @@ export class tutorAvailability {
 
   async setAvailabilityForWeeks(userID, weeks, patternID) {
     const client = await con.connect();
-    const weeksParsed = JSON.parse(weeks);
+    // const weeksParsed = JSON.parse(weeks);
 
     try {
-      const promises = weeksParsed.map((week) => {
+      const promises = weeks.map((week) => {
         return new Promise((resolve, reject) => {
           console.log(week.start_date, week.end_date);
           con.query(
