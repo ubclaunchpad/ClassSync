@@ -248,21 +248,41 @@ export default function ReactBigCalendar(props) {
             console.log("Deleted booking ", event);
             setEventsData(eventsData.filter(item => item.id !== event.id));
 
-            const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
-            const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
-            const times = [selectedTime, thirtyMinsLater];
-
-            let body = JSON.stringify({
+            setData({
+                change_time: new Date().toISOString(),
                 tutor_id: localStorage.getItem('userID'),
-                start_date: startDate.toISOString().split('T')[0],
-                end_date: endOfWeek(startDate).toISOString().split('T')[0],
-                day: event.start.getDay(),
-                times: times
+                action: 0,
+                event_time: event.start.toISOString(),
+                enrollment: event.enrollment/* value here */,
             });
+            loadData()
+            if (studentId && courseId)
+            searchEnrollments()
+         
 
-            console.log("Body is ", body)
 
-            let url = "http://localhost:8080/availability/add"
+        } else {
+            setBookingError("Failed to delete session")
+        }
+
+    }
+
+    const restoreAvailability = async (event) => {
+        const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
+        const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
+        const times = [selectedTime, thirtyMinsLater];
+
+        let body = JSON.stringify({
+            tutor_id: localStorage.getItem('userID'),
+            start_date: startDate.toISOString().split('T')[0],
+            end_date: endOfWeek(startDate).toISOString().split('T')[0],
+            day: event.start.getDay(),
+            times: times
+        });
+
+        console.log("Body is ", body)
+
+   let url = "http://localhost:8080/availability/add"
 
             const response = await fetch(url, {
                 method: "POST",
@@ -272,13 +292,7 @@ export default function ReactBigCalendar(props) {
 
             console.log("Deleting event here ", event)
 
-            setData({
-                change_time: new Date().toISOString(),
-                tutor_id: localStorage.getItem('userID'),
-                action: 0,
-                event_time: event.start.toISOString(),
-                enrollment: event.enrollment/* value here */,
-            });
+           
             if (response.ok) {
                 console.log("Added availability");
                 loadData()
@@ -289,12 +303,6 @@ export default function ReactBigCalendar(props) {
 
                 console.log("Error adding availability");
             }
-
-
-        } else {
-            setBookingError("Failed to delete session")
-        }
-
     }
 
     const [data, setData] = useState({
@@ -415,7 +423,7 @@ export default function ReactBigCalendar(props) {
                 console.log("Removed availability");
                 console.log(name ," has booked a new appointment for enrollment ", enrollmentId , " at ", start)
                
-                                loadData()
+                loadData()
                 searchEnrollments()
 
             } else {
@@ -496,8 +504,14 @@ export default function ReactBigCalendar(props) {
                 padding: '10px 20px', // Padding
                 fontSize: '1em', // Text size
                 cursor: 'pointer' // Cursor style on hover
-            }} onClick={() => deleteEvent(event)}>
-                Delete
+            }} 
+            onClick={() => {
+                deleteEvent(event);
+
+                if (window.confirm('Would you like to restore your availability?')) {  
+                    restoreAvailability(event)
+                } 
+            }}>                Delete
             </button>
         </div>
     );
@@ -522,9 +536,9 @@ export default function ReactBigCalendar(props) {
 
             setEnrollmentId(bookingsResponse[0].search_enrollments.id)
 
+            let sortedBookings = bookingsResponse[0].search_enrollments.bookings.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
 
-            for (let booking of bookingsResponse[0].search_enrollments.bookings) {
-                // console.log("Booking is ", booking)
+            for (let booking of sortedBookings) {
                 let bookingDate = new Date(booking.start_time)
                 appointments.push({
                     id: booking.booking_id,
@@ -537,6 +551,7 @@ export default function ReactBigCalendar(props) {
 
             // console.log(enrollmentId)
             // console.log("Appointments are ", appointments)
+
             setLessons(appointments)
             setBookings(true)
         } else {
@@ -634,7 +649,15 @@ export default function ReactBigCalendar(props) {
                                                             fontSize: '16px',
                                                             padding: '5px 10px'
                                                         }}
-                                                        onClick={() => deleteEvent(appointment)}
+                                                        onClick={() => {
+                                                            deleteEvent(appointment);
+
+                                                            if (window.confirm('Would you like to restore the availability or keep the current settings?')) {  
+
+                                                                restoreAvailability(appointment)
+                                                                                                                      
+                                                                                                                      }
+                                                        }}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
                                                     </button>}

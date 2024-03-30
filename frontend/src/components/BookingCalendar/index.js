@@ -42,11 +42,11 @@ export default function ReactBigCalendar() {
 
 
 
-        let url = `http://localhost:8080/tutor/courses?course_id=${id}`
+        let url = `http://localhost:8080/tutor/enrollment?course_id=${id}`
 
         const tutors = await fetch(url);
         const tutorsData = await tutors.json();
-        // console.log("Course Data", courseData)
+        console.log("Course Data", tutorsData)
 
         const tutorsOptions = tutorsData.map(course => ({
             value: course.tutor_id,
@@ -60,7 +60,7 @@ export default function ReactBigCalendar() {
         if (tutorIds === "") {
             tutorIds = tutorsOptions.map(option => option.value).join(',');
         }
-        console.log("Tutor ids ", tutorIds);
+        console.log("Tutor ids ", tutorsData);
 
 
 
@@ -141,13 +141,13 @@ export default function ReactBigCalendar() {
             console.error('There has been a problem with your fetch operation:', error);
         }
     }
-    useEffect(() => {
-        // This code will run whenever `startDate` changes
-        console.log('Start date has changed:', startDate);
-        setIsLoaded(false)
-        loadData()
+    // useEffect(() => {
+    //     // This code will run whenever `startDate` changes
+    //     console.log('Start date has changed:', startDate);
+    //     // setIsLoaded(false)
+    //     loadData()
 
-    }, [startDate]); // Add `startDate` as a dependency
+    // }, [startDate]); // Add `startDate` as a dependency
 
     useEffect(() => {
         const handleResize = () => {
@@ -281,7 +281,8 @@ export default function ReactBigCalendar() {
 
 
 
-            if (response.status === 200) {
+            if (response.ok) {
+                console.log("Booking successful")
                 // let events = []
                 // const newEvents = data.map(booking => {
                 //     const bookingSlot = booking.insert_booking;
@@ -306,7 +307,7 @@ export default function ReactBigCalendar() {
                         end: selectedSlot.end,
                         title: title,
                         id: data,
-                        tutor_id: id.value
+                        tutor_id: tutor.value
                     },
                 ]);
 
@@ -315,7 +316,7 @@ export default function ReactBigCalendar() {
                 const times = [selectedTime, thirtyMinsLater];
 
                 let body = JSON.stringify({
-                    tutor_id: id.value,
+                    tutor_id: tutor.value,
                     start_date: startDate.toISOString().split('T')[0],
                     end_date: endOfWeek(startDate).toISOString().split('T')[0],
                     day: selectedSlot.start.getDay(),

@@ -161,6 +161,7 @@ export default function AdminTutorCalendar(props) {
     // This code will run whenever `startDate` changes
     console.log("Start date has changed:", startDate);
     setIsLoaded(false);
+    
     loadData();
     console.log("Selected Slot is ", selectedSlot);
     // handleSelect({start:selectedSlot.start});
@@ -311,7 +312,7 @@ export default function AdminTutorCalendar(props) {
 
         if (response.ok) {
           console.log("Removed availability");
-          loadData();
+          await loadData();
         } else {
           console.log("Error removing availability");
         }

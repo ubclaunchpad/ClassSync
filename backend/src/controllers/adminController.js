@@ -16,6 +16,17 @@ export default class adminController {
 
     }
 
+    getClasses(enrollmentId) {
+        const admin_ = new admin()
+        
+        return admin_.getClasses(enrollmentId).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+
+
+    }
+
     validateToken(token) {
         const admin_ = new admin()
 

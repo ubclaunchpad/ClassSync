@@ -15,6 +15,22 @@ export class admin {
         });
     }
 
+    getClasses(enrollmentId) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT b.booking_id, b.start_time, u.firstname || ' ' || u.lastname as tutor_name 
+            FROM bookings b
+            JOIN users u ON u.user_id = b.tutor_id
+            WHERE enrollment_id = $1;`, [enrollmentId], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res.rows);
+                }
+            });
+        });
+    }
+
     validateToken(token) {
         return new Promise((resolve, reject) => {
             con.query(`SELECT * FROM tokens WHERE token_value = $1`, [token], (err, res) => {
