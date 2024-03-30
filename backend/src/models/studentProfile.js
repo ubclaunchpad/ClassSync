@@ -8,6 +8,14 @@ export class StudentProfile {
 
   async getStudentsByGuardian(id) {
     const client = await con.connect();
+    
+    client.query("SELECT * FROM tutors", (error, results) => {
+      if (error) {
+        console.error("Error:", error);
+      } else {
+        console.log(results.rows);
+      }
+    });
     try {
       return new Promise((resolve, reject) => {
         client.query("SELECT * FROM get_students_by_guardian($1)", [id], (error, results) => {
@@ -15,7 +23,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -36,7 +44,7 @@ export class StudentProfile {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results.rows);
+              // console.log(results.rows);
               resolve();
             }
           });
@@ -57,7 +65,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -79,7 +87,7 @@ export class StudentProfile {
               console.error("Error:", error);
               reject(error);
             } else {
-              console.log(results.rows);
+              // console.log(results.rows);
               resolve(results.rows);
             }
           });
@@ -99,7 +107,7 @@ export class StudentProfile {
             console.error("Error:", error);
             reject(error);
           } else {
-            console.log(results.rows);
+            // console.log(results.rows);
             resolve(results.rows);
           }
         });
@@ -116,7 +124,7 @@ export class StudentProfile {
         console.log("error: ", err);
         result(err, null);
       } else {
-        console.log(res.rows);
+        // console.log(res.rows);
         result(null, res.rows);
       }
     });

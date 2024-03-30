@@ -12,13 +12,14 @@ import Select from "react-select";
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 
-export default function ReactBigCalendar() {
+export default function ReactBigCalendar(props) {
     const [eventsData, setEventsData] = useState(events);
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [startDate, setStartDate] = useState(startOfWeek(new Date()));
     const [isLoaded, setIsLoaded] = useState(false)
     const [openSlots, setOpenSlots] = useState({})
     const [title, setTitle] = useState("")
+    const name = props.name;
     const [students, setStudents] = useState([])
     const [bookingError, setBookingError] = useState(null);
     const [courses, setCourses] = useState([])
@@ -35,7 +36,7 @@ export default function ReactBigCalendar() {
 
 
     const loadData = async () => {
-        console.log("Loading data for ", startDate.toISOString().split('T')[0]);
+        // console.log("Loading data for ", startDate.toISOString().split('T')[0]);
         let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem("userID")}&startDate=${startDate.toISOString().split('T')[0]}`
 
         try {
@@ -47,8 +48,8 @@ export default function ReactBigCalendar() {
             }
 
             const data = await response.json();
-            console.log("Response is ", response)
-            console.log("Data is ", data[0])
+            // console.log("Response is ", response)
+            // console.log("Data is ", data[0])
             const filteredData = {};
 
             Object.entries(data[0]).forEach(([day, slots]) => {
@@ -66,7 +67,7 @@ export default function ReactBigCalendar() {
                 });
             });
 
-            console.log("Filtered data is ", filteredData);
+            // console.log("Filtered data is ", filteredData);
 
             setOpenSlots(filteredData);
             // let openSlots = {}
@@ -77,7 +78,7 @@ export default function ReactBigCalendar() {
             url = `http://localhost:8080/appointments?tutor_id=${localStorage.getItem('userID')}&date=${startOfWeek(new Date()).toISOString().split('T')[0]}`
             const appointmentsResponse = await fetch(url);
             const appointmentsData = await appointmentsResponse.json();
-            console.log("Appointments Data", appointmentsData)
+            // console.log("Appointments Data", appointmentsData)
             // url = "http://localhost:8080/availability/bookings?id=1"
             // const bookingsResponse = await fetch(url);
             // const bookingsData = await bookingsResponse.json();
@@ -121,7 +122,7 @@ export default function ReactBigCalendar() {
             console.log("Date ")
             // console.log(new Date(bookingsData.bookings[0].start_time))
 
-            console.log("Events Data", eventsData)
+            // console.log("Events Data", eventsData)
 
             // let events = []
 
@@ -151,7 +152,8 @@ export default function ReactBigCalendar() {
                     end: end,
                     title: booking.title,
                     id: booking.booking,
-                    tutor_id: booking.tutor
+                    tutor_id: booking.tutor,
+                    enrollment: booking.enrollment
                 })
             })
 
@@ -234,6 +236,7 @@ export default function ReactBigCalendar() {
 
     const deleteEvent = async (event) => {
 
+
         const response = await fetch(`http://localhost:8080/availability/booking?id=${event.id}`, {
             method: 'DELETE',
             headers: {
@@ -242,40 +245,20 @@ export default function ReactBigCalendar() {
         });
 
         if (response.ok) {
-            console.log("Deleted booking");
+            console.log("Deleted booking ", event);
             setEventsData(eventsData.filter(item => item.id !== event.id));
 
-            const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
-            const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
-            const times = [selectedTime, thirtyMinsLater];
-
-            let body = JSON.stringify({
+            setData({
+                change_time: new Date().toISOString(),
                 tutor_id: localStorage.getItem('userID'),
-                start_date: startDate.toISOString().split('T')[0],
-                end_date: endOfWeek(startDate).toISOString().split('T')[0],
-                day: event.start.getDay(),
-                times: times
+                action: 0,
+                event_time: event.start.toISOString(),
+                enrollment: event.enrollment/* value here */,
             });
-
-            console.log("Body is ", body)
-
-            let url = "http://localhost:8080/availability/add"
-
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: body
-            });
-
-            if (response.ok) {
-                console.log("Added availability");
-                loadData()
-                if (studentId && courseId)
-                    searchEnrollments()
-            } else {
-
-                console.log("Error adding availability");
-            }
+            loadData()
+            if (studentId && courseId)
+            searchEnrollments()
+         
 
 
         } else {
@@ -284,11 +267,75 @@ export default function ReactBigCalendar() {
 
     }
 
+    const restoreAvailability = async (event) => {
+        const selectedTime = event.start.toTimeString().split(' ')[0].substring(0, 5);
+        const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000).toTimeString().split(' ')[0].substring(0, 5);
+        const times = [selectedTime, thirtyMinsLater];
+
+        let body = JSON.stringify({
+            tutor_id: localStorage.getItem('userID'),
+            start_date: startDate.toISOString().split('T')[0],
+            end_date: endOfWeek(startDate).toISOString().split('T')[0],
+            day: event.start.getDay(),
+            times: times
+        });
+
+        console.log("Body is ", body)
+
+   let url = "http://localhost:8080/availability/add"
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: body
+            });
+
+            console.log("Deleting event here ", event)
+
+           
+            if (response.ok) {
+                console.log("Added availability");
+                loadData()
+               
+                if (studentId && courseId)
+                    searchEnrollments()
+            } else {
+
+                console.log("Error adding availability");
+            }
+    }
+
+    const [data, setData] = useState({
+        change_time: null,
+        tutor_id: null,
+        action: null,
+        event_time: null,
+        enrollment: null,
+    });
+
+    useEffect(() => {
+        if (data.change_time && data.tutor_id && data.event_time && data.enrollment) {
+           console.log("Sending Log Data ", data)
+            fetch('http://localhost:8080/tutor/log', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: data })
+
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch((error) => console.error('Error:', error));
+        }
+    }, [data]);
+
 
     const handleBook = async (start, end) => {
 
 
-        console.log("Selected Slot is ", selectedSlot)
+        // console.log("Selected Slot is ", selectedSlot)
+        console.log(enrollmentId);
 
         const response = await fetch('http://localhost:8080/availability', {
             method: 'POST',
@@ -306,7 +353,10 @@ export default function ReactBigCalendar() {
         });
 
         const data = await response.json();
-        console.log('Success:', data);
+        // console.log('Success:', data);
+
+
+
         // console.log('Success:', data[0].insert_booking);
 
 
@@ -329,7 +379,7 @@ export default function ReactBigCalendar() {
             //     };
             // });
             // console.log("New Events ", newEvents);
-            console.log("Events Data ", eventsData);
+            // console.log("Events Data ", eventsData);
             // setUpdatedEvents(true)
             setEventsData([
                 ...eventsData,
@@ -353,6 +403,13 @@ export default function ReactBigCalendar() {
                 day: start.getDay(),
                 times: times
             });
+            setData({
+                change_time: new Date().toISOString(),
+                tutor_id: localStorage.getItem('userID'),
+                action: 1,
+                event_time: start.toISOString(),
+                enrollment: enrollmentId/* value here */,
+            });
 
             let url = "http://localhost:8080/availability/remove"
             const response = await fetch(url, {
@@ -361,10 +418,14 @@ export default function ReactBigCalendar() {
                 body: body
             });
 
+
             if (response.ok) {
                 console.log("Removed availability");
+                console.log(name ," has booked a new appointment for enrollment ", enrollmentId , " at ", start)
+               
                 loadData()
                 searchEnrollments()
+
             } else {
 
                 console.log("Error removing availability");
@@ -372,15 +433,15 @@ export default function ReactBigCalendar() {
 
 
 
-            console.log("Body is ", body)
+            // console.log("Body is ", body)
 
 
-            console.log("Events Data is ", eventsData)
+            // console.log("Events Data is ", eventsData)
 
         } else {
             console.log("Error adding booking");
             setBookingError('Booking failed: You have exceeded the maximum limit of 5 bookings.');
-            console.log(data);
+            // console.log(data);
 
         }
 
@@ -443,8 +504,14 @@ export default function ReactBigCalendar() {
                 padding: '10px 20px', // Padding
                 fontSize: '1em', // Text size
                 cursor: 'pointer' // Cursor style on hover
-            }} onClick={() => deleteEvent(event)}>
-                Delete
+            }} 
+            onClick={() => {
+                deleteEvent(event);
+
+                if (window.confirm('Would you like to restore your availability?')) {  
+                    restoreAvailability(event)
+                } 
+            }}>                Delete
             </button>
         </div>
     );
@@ -464,31 +531,33 @@ export default function ReactBigCalendar() {
         if (response.ok) {
             let appointments = []
 
-            console.log("Bookings Response is ", bookingsResponse[0])
+            // console.log("Bookings Response is ", bookingsResponse[0])
 
 
             setEnrollmentId(bookingsResponse[0].search_enrollments.id)
 
+            let sortedBookings = bookingsResponse[0].search_enrollments.bookings.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
 
-            for (let booking of bookingsResponse[0].search_enrollments.bookings) {
-                console.log("Booking is ", booking)
+            for (let booking of sortedBookings) {
                 let bookingDate = new Date(booking.start_time)
                 appointments.push({
                     id: booking.booking_id,
                     start: new Date(booking.start_time),
                     time: bookingDate.getHours().toString().padStart(2, '0') + ':' + bookingDate.getMinutes().toString().padStart(2, '0'),
-                    readOnly: booking.tutor_id !== Number(id)
+                    readOnly: booking.tutor_id !== Number(id),
+                    enrollment: enrollmentId
                 });
             }
 
-            console.log(enrollmentId)
-            console.log("Appointments are ", appointments)
+            // console.log(enrollmentId)
+            // console.log("Appointments are ", appointments)
+
             setLessons(appointments)
             setBookings(true)
         } else {
             setBookingError("No enrollment found for this student and course")
         }
-        console.log("URL is ", url)
+        // console.log("URL is ", url)
     }
 
     return (
@@ -580,7 +649,15 @@ export default function ReactBigCalendar() {
                                                             fontSize: '16px',
                                                             padding: '5px 10px'
                                                         }}
-                                                        onClick={() => deleteEvent(appointment)}
+                                                        onClick={() => {
+                                                            deleteEvent(appointment);
+
+                                                            if (window.confirm('Would you like to restore the availability or keep the current settings?')) {  
+
+                                                                restoreAvailability(appointment)
+                                                                                                                      
+                                                                                                                      }
+                                                        }}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
                                                     </button>}
@@ -614,7 +691,7 @@ export default function ReactBigCalendar() {
                         min={new Date(2020, 1, 0, 7, 0, 0)}
                         max={new Date(2020, 1, 0, 19, 0, 0)}
                         style={{ height: "75vh", width: "90vw" }}
-                        onSelectEvent={deleteEvent}
+                        // onSelectEvent={deleteEvent}
                         onSelectSlot={handleSelect}
                         slotPropGetter={slotPropGetter}
                         onNavigate={(date) => {

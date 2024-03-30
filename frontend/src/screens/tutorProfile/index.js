@@ -13,6 +13,8 @@ const TutorProfile = () => {
     const [courses, setCourses] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [description, setDescription] = useState('');
+    const [link, setLink] = useState('')
+    const [profileData, setProfileData] = useState({})
     const [dataLoaded, setDataLoaded] = useState(false);
 
     useEffect(() => {
@@ -21,6 +23,7 @@ const TutorProfile = () => {
                 // Fetch courses data
                 const coursesResponse = await fetch(`${url}/tutor/offerings`);
                 const coursesData = await coursesResponse.json();
+                console.log(coursesData)
 
                 // Transform coursesData into options format
                 const options = coursesData.map(course => ({
@@ -37,10 +40,8 @@ const TutorProfile = () => {
                 const profileData = await profileResponse.json();
                 console.log("Profile Data", profileData);
 
-                setMaxHours(profileData.max_hours);
-                setUniversity(profileData.university);
-                setAbout(profileData.bio);
-                setDescription(profileData.description);
+        
+                setProfileData(profileData)
 
 
 
@@ -70,11 +71,14 @@ const TutorProfile = () => {
                     <div className='tutor-info-container'>
                         <TutorProfileForm
                             offerings={courses}
-                            maxHours={maxHours}
-                            university={university}
-                            about={about}
-                            description={description}
+                            profileData={profileData}
+                            // maxHours={profileData.max_hours}
+                            // university={profileData.university}
+                            // about={profileData.bio}
+                            // description={description}
                             selectedOptions={selectedOptions}
+                            // link={link}
+                            // languages={'test language'}
                         />
                     </div>
                 </TutorDashboardLayout>

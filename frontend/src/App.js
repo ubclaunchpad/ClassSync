@@ -20,6 +20,7 @@ import ShopCourses from "./screens/shopCourses";
 import { TutorView } from "./screens/viewTutor/viewTutor";
 import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
+import TutorsList from "./screens/tutorsList";
 import { ViewAllTutors } from "./screens/viewAllTutors";
 import ClassRecordForm from "./screens/classRecord";
 import { CourseCurriculumView } from "./screens/courseCurriculum";
@@ -30,7 +31,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/confirmation" element={<Confirmation />} />
           <Route path="/parentDash" element={<ParentDash />} />
           <Route path="/addStudent" element={<AddStudent />} />
@@ -52,6 +53,7 @@ function App() {
           <Route path="/registrations" element={<Registrations />} />
           <Route path="/shop" element={<ShopCourses />} />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/tutors" element={<TutorsList />} />
           <Route path="/allTutors" element={<ViewAllTutors />} />
           <Route path="/class/:id" element={<ClassRecordForm />} />
           <Route path="/course/:id" element={<CourseCurriculumView />} />

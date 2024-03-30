@@ -12,11 +12,14 @@ import { ParentDashboardLayout } from "../ParentDashboardLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
+const nextWeekDate = new Date();
+nextWeekDate.setDate(nextWeekDate.getDate() + 7);
+
 
 export default function ReactBigCalendar() {
     const [eventsData, setEventsData] = useState(events);
     const [selectedSlot, setSelectedSlot] = useState(null);
-    const [startDate, setStartDate] = useState(startOfWeek(new Date()));
+    const [startDate, setStartDate] = useState(startOfWeek(nextWeekDate));
     const [isLoaded, setIsLoaded] = useState(false)
     const [openSlots, setOpenSlots] = useState({})
     const [availablePeople, setAvailablePeople] = useState([])
@@ -39,11 +42,11 @@ export default function ReactBigCalendar() {
 
 
 
-        let url = `http://localhost:8080/tutor/courses?course_id=1`
+        let url = `http://localhost:8080/tutor/enrollment?course_id=${id}`
 
         const tutors = await fetch(url);
         const tutorsData = await tutors.json();
-        // console.log("Course Data", courseData)
+        console.log("Course Data", tutorsData)
 
         const tutorsOptions = tutorsData.map(course => ({
             value: course.tutor_id,
@@ -57,7 +60,7 @@ export default function ReactBigCalendar() {
         if (tutorIds === "") {
             tutorIds = tutorsOptions.map(option => option.value).join(',');
         }
-        console.log("Tutor ids ", tutorIds);
+        console.log("Tutor ids ", tutorsData);
 
 
 
@@ -141,7 +144,7 @@ export default function ReactBigCalendar() {
     useEffect(() => {
         // This code will run whenever `startDate` changes
         console.log('Start date has changed:', startDate);
-        setIsLoaded(false)
+        // setIsLoaded(false)
         loadData()
 
     }, [startDate]); // Add `startDate` as a dependency
@@ -169,6 +172,10 @@ export default function ReactBigCalendar() {
         // Get the day of the week of the start date.
         const dayOfWeek = moment(start).day();
 
+        // Get difference between start day and current day to create constraint. 
+        const currentDate = new Date();
+        const diffTime = start - currentDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         // setTutorIDS(tutorIDs)
         //     const filteredTutorIdNameMap = tutorIDs.forEach([key, value] => {
@@ -179,7 +186,7 @@ export default function ReactBigCalendar() {
             (start < event.end && end > event.start)
         );
         // Check if the start time and the next time slot are in the array for the day of the week.
-        const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps;
+        const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps && diffDays >= 7;
 
         if (isSlotAvailable) {
             setSelectedSlot({ start, end });
@@ -246,7 +253,9 @@ export default function ReactBigCalendar() {
     }
 
 
-    const handleBook = async (id) => {
+    const handleBook = async (tutor) => {
+
+        console.log("ID is ", id)
         if (selectedSlot) {
 
             const response = await fetch('http://localhost:8080/availability', {
@@ -256,8 +265,8 @@ export default function ReactBigCalendar() {
                 },
                 body: JSON.stringify({
                     booking: {
-                        enrollment_id: 1,
-                        tutor_id: id.value,
+                        enrollment_id: id,
+                        tutor_id: tutor.value,
                         session_duration: 60,
                         start_time: selectedSlot.start
                     }
@@ -272,7 +281,8 @@ export default function ReactBigCalendar() {
 
 
 
-            if (response.status === 200) {
+            if (response.ok) {
+                console.log("Booking successful")
                 // let events = []
                 // const newEvents = data.map(booking => {
                 //     const bookingSlot = booking.insert_booking;
@@ -297,7 +307,7 @@ export default function ReactBigCalendar() {
                         end: selectedSlot.end,
                         title: title,
                         id: data,
-                        tutor_id: id.value
+                        tutor_id: tutor.value
                     },
                 ]);
 
@@ -306,7 +316,7 @@ export default function ReactBigCalendar() {
                 const times = [selectedTime, thirtyMinsLater];
 
                 let body = JSON.stringify({
-                    tutor_id: id.value,
+                    tutor_id: tutor.value,
                     start_date: startDate.toISOString().split('T')[0],
                     end_date: endOfWeek(startDate).toISOString().split('T')[0],
                     day: selectedSlot.start.getDay(),
@@ -366,8 +376,11 @@ export default function ReactBigCalendar() {
         const timeFormat = "HH:mm";
         const currentTimeSlot = moment(date).format(timeFormat);
         const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+        const currentDate = new Date();
+        const diffTime = date - currentDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (openSlots[dayOfWeek] && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+        if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
             return {
                 className: "available",
             };
@@ -407,6 +420,48 @@ export default function ReactBigCalendar() {
             </button>
         </div>
     );
+
+
+    const CustomToolbar = ({ label, onNavigate, onView }) => {
+        let currWeek = new Date()
+        let isButtonDisabled = startDate < currWeek
+
+        return (
+            <div className="rbc-toolbar">
+                <span className="rbc-btn-group">
+                    <button type="button" onClick={() => onNavigate('TODAY')}>
+                        Today
+                    </button>
+                    <button type="button"
+                        className={isButtonDisabled ? 'disabled-button' : ''}
+                        disabled={isButtonDisabled}
+                        onClick={!isButtonDisabled ? () => onNavigate('PREV') : null}
+                    >
+                        Back
+                    </button>
+                    <button type="button" onClick={() => onNavigate('NEXT')}>
+                        Next
+                    </button>
+                </span>
+                <span className="rbc-toolbar-label">{label}</span>
+                <span className="rbc-btn-group">
+                    <button type="button" onClick={() => onView('month')}>
+                        Month
+                    </button>
+                    <button type="button" onClick={() => onView('week')}>
+                        Week
+                    </button>
+                    <button type="button" onClick={() => onView('day')}>
+                        Day
+                    </button>
+                </span>
+            </div>
+        );
+
+
+    };
+
+
     const tutors = [
         { id: '1', firstName: 'John', lastName: 'Doe' },
         { id: '2', firstName: 'Jane', lastName: 'Doe' },
@@ -485,7 +540,10 @@ export default function ReactBigCalendar() {
                             localizer={localizer}
                             defaultDate={startDate}
                             defaultView="week"
-                            components={{ event: EventComponent }}
+                            components={{
+                                event: EventComponent,
+                                toolbar: CustomToolbar
+                            }}
                             events={eventsData}
                             min={new Date(2020, 1, 0, 7, 0, 0)}
                             max={new Date(2020, 1, 0, 19, 0, 0)}

@@ -1,6 +1,6 @@
 .login-form-container {
   width: 30%;
-  height: 50%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
