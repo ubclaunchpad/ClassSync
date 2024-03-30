@@ -15,8 +15,10 @@ export const ReccomendedCourseTab = ({
       <div className="reccomended-tab__information">
         <div className="reccommended-tab__name"> {name}</div>
         <div className="tab-age-prerequisite__container">
-          <div className="reccommended-tab__age">Target Age range: {age}</div>
-          <div className="reccommended-tab__prerequisite">{prerequisites}</div>
+          <div className="reccommended-tab__age">Target age range: {age}</div>
+          <div className="reccommended-tab__prerequisite">
+            Prerequisites: {prerequisites}
+          </div>
         </div>
       </div>
       <div className="reccomended-tab-button__container">

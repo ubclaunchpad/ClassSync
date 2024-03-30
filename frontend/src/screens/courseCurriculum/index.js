@@ -76,15 +76,24 @@ export const CourseCurriculumView = ({
   tutors,
 }) => {
   const [courseDescription, setCourseDescription] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const [goals, setGoals] = useState([]);
+  const id = 4;
   useEffect(() => {
-    const fetchData = async () => {};
+    // Getting the learning goals
+    fetch(`http://localhost:8080/learninggoals?id=${id}`)
+      .then((response) => response.json())
+      .then((data) => setGoals(data))
+      .catch((error) => console.error("Error:", error));
 
-    fetchData();
-    if (description) {
-      setCourseDescription(description.split("\n"));
-    } else {
-      setCourseDescription(sampleData.description.split("\n"));
-    }
+    // Getting the files
+    fetch(`http://localhost:8080/course/files?id=${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setFileList(data);
+        console.log("Files loaded");
+      })
+      .catch((error) => console.error("Error:", error));
   }, []); // Empty dependency array to run the effect only once after the initial render
   console.log(courseDescription);
   return (
@@ -110,18 +119,6 @@ export const CourseCurriculumView = ({
                 Prerequisites:{" "}
                 {prerequisites ? prerequisites : sampleData.prerequisites}
               </span>
-            </div>
-            <div className="curriculum-taught-by__container">
-              <span className="curriculum-overview__taught-by">
-                Taught By: {tutors ? tutors : sampleData.tutors.join(", ")}
-              </span>
-            </div>
-            <div className="curriculum-register__container">
-              <Button
-                className="curriculum-register__button"
-                label="Register"
-                onClick={() => {}}
-              />
             </div>
           </div>
         </div>
