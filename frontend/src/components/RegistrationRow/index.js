@@ -34,37 +34,37 @@ export default function RegistrationRow({
     <>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)" }}
       >
         {data.enrollment_id}
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)" }}
       >
         {data.guardian}
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ?  "inherit" : 'rgb(255, 204, 204)' }}
       >
         {data.student}
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : 'rgb(255, 204, 204)' }}
       >
         {data.course}
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : 'rgb(255, 204, 204)' }}
       >
         {new Date(data.registration_date).toLocaleDateString()}
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : 'rgb(255, 204, 204)'}}
       >
         <Switch
           checked={data.paid}
@@ -84,7 +84,7 @@ export default function RegistrationRow({
       </div>
       <div
         className="registration__table-row-element"
-        style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+        style={{ backgroundColor: data.paid ? "inherit" : 'rgb(255, 204, 204)' }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
           {[...Array(Math.min(data.completed, 5))].map((_, i) => (
@@ -132,7 +132,7 @@ export default function RegistrationRow({
         style={{
           textAlign: "center",
           cursor: "pointer",
-          backgroundColor: data.paid ? "#e6ffe6" : "inherit",
+          backgroundColor: data.paid ? "inherit" : 'rgb(255, 204, 204)',
         }}
         onClick={expandRow}
       >
@@ -141,7 +141,7 @@ export default function RegistrationRow({
       {curExpand == data.enrollment_id && (
         <div
           className="registration__row-expand-content"
-          style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
+          style={{ backgroundColor: data.paid ? "#inherit" : "inherit" }}
         >
           <div className="registration__row-expand-title">All Bookings</div>
           <table className="registration__row-expand-table">
