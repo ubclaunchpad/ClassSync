@@ -380,10 +380,7 @@ export default function ReactBigCalendar() {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
-           //added new restriction to date, but have no avaiable time schedule to see if it works 
-           //furthest to book is too month
-           //whatever they can see they can actually book 
-           //should I still leave the 60 day restriction?
+           //added new restriction to date
             
             return {
                 className: "available"
