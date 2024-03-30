@@ -3,13 +3,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onBlur",
-  });
+ 
+const { register, handleSubmit, formState: { errors }, setError } = useForm({
+  mode: "onBlur",
+});
   const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
@@ -39,6 +36,14 @@ const LoginForm = () => {
       body: JSON.stringify(data),
     });
 
+    if (!response.ok) { 
+      setError("general", {
+        type: "manual",
+        message: "Incorrect username or password"
+      });
+
+    }
+   
     const res = await response.json();
 
     localStorage.setItem("token", res.token);
@@ -85,18 +90,13 @@ const LoginForm = () => {
             {errors?.password?.message && errors.password.message}
           </p>
         </div>
-        <div className="login-checkbox-container">
-          <input
-            type="checkbox"
-            className="login-checkbox"
-            id="remember-me"
-            {...register("remember-me")}
-          />
-          <label htmlFor="remember-me">Remember Me</label>
-        </div>
+       
         <button type="submit" className="login-submit-button">
           Log In
         </button>
+        <p className="login-error-message">
+            {errors.general && errors.general.message}
+          </p>
       </form>
     </div>
   );

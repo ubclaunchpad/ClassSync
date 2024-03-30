@@ -86,15 +86,7 @@ const TutorLoginForm = () => {
             {errors?.password?.message && errors.password.message}
           </p>
         </div>
-        <div className="login-checkbox-container">
-          <input
-            type="checkbox"
-            className="login-checkbox"
-            id="remember-me"
-            {...register("remember-me")}
-          />
-          <label htmlFor="remember-me">Remember Me</label>
-        </div>
+     
         <button type="submit" className="login-submit-button">
           Log In
         </button>
