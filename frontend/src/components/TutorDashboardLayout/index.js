@@ -3,6 +3,7 @@ import Banner from "../Banner";
 import { NavLink } from "react-router-dom";
 import ProfilePic from "../../assets/parentProfile.png"
 import React, {useState} from 'react'
+import Sidebar from '../Sidebar';
 
 import "./index.css"; 
 import LogModal from "../LogModal";
@@ -53,31 +54,7 @@ export const TutorDashboardLayout = ({ name, rightColumnContent, ...props }) => 
         smallTextBelow={`Start date: July 20th, 2023${'\u00A0'.repeat(5)}End Date: July 20th, 2023`} //todo connect
       />
       <div class="main-tutor-row">
-        <div class="column left">
-          <div class="left-header">
-                <img className="profile-pic"
-                    src={ProfilePic} />
-                <p>Jasmine May</p>
-            </div>
-            
-            <div className="table-of-contents">
-                <ul>
-                    <li><a href="/parentDash">Dashboard</a></li>
-                    <li><a href="/shop">Schedule</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li>
-                      <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
-                      <ul className="courses-sublinks">
-                        <li><a href="#">Advanced Java</a></li>
-                        <li><a href="#">Beginner Java</a></li>
-                      </ul>
-                    </li>
-                </ul>
-
-
-            </div>
-        </div>
+      <Sidebar toggleCoursesDropdown={toggleCoursesDropdown} role='guardian' />
 
         <div class={rightColumnContent ? "column middle" : "column right-middle"}>{props.children}</div>
 
