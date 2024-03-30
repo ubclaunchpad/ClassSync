@@ -141,13 +141,13 @@ export default function ReactBigCalendar() {
             console.error('There has been a problem with your fetch operation:', error);
         }
     }
-    useEffect(() => {
-        // This code will run whenever `startDate` changes
-        console.log('Start date has changed:', startDate);
-        setIsLoaded(false)
-        loadData()
+    // useEffect(() => {
+    //     // This code will run whenever `startDate` changes
+    //     console.log('Start date has changed:', startDate);
+    //     // setIsLoaded(false)
+    //     loadData()
 
-    }, [startDate]); // Add `startDate` as a dependency
+    // }, [startDate]); // Add `startDate` as a dependency
 
     useEffect(() => {
         const handleResize = () => {
