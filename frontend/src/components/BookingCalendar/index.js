@@ -381,6 +381,9 @@ export default function ReactBigCalendar() {
 
         if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
            //added new restriction to date, but have no avaiable time schedule to see if it works 
+           //furthest to book is too month
+           //whatever they can see they can actually book 
+           //should I still leave the 60 day restriction?
             
             return {
                 className: "available"
@@ -425,13 +428,21 @@ export default function ReactBigCalendar() {
 
     const CustomToolbar = ({ label, onNavigate, onView }) => {
         let currWeek = new Date()
+        //added new date type
+        let monthsahead = new Date();
+        monthsahead.setDate(monthsahead.getDate() + 50);
         let isButtonDisabled = startDate < currWeek
+        let isAfter60Days = startDate > monthsahead;
+
+        console.log(monthsahead)
+        console.log(isAfter60Days)
 
         return (
             <div className="rbc-toolbar">
                 <span className="rbc-btn-group">
-                    <button type="button" onClick={() => onNavigate('TODAY')}>
+                    <button type="button" onClick={() => onNavigate('TODAY')}> 
                         Today
+                        
                     </button>
                     <button type="button"
                         className={isButtonDisabled ? 'disabled-button' : ''}
@@ -439,9 +450,15 @@ export default function ReactBigCalendar() {
                         onClick={!isButtonDisabled ? () => onNavigate('PREV') : null}
                     >
                         Back
+
                     </button>
-                    <button type="button" onClick={() => onNavigate('NEXT')}>
+                    <button type="button" 
+                    className={isAfter60Days ? 'disabled-button' : ''}
+                    disabled={isAfter60Days}
+                    onClick={!isAfter60Days ? () => onNavigate('NEXT') : null}
+                    >
                         Next
+                        
                     </button>
                 </span>
                 <span className="rbc-toolbar-label">{label}</span>
