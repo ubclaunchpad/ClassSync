@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async renewtutors(tutors, enddate) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .renewTutors(tutors, enddate)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async updateNotes(booking_id, notes) {
     return new Promise((resolve, reject) => {
       return this.course

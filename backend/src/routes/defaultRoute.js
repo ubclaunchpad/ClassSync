@@ -507,6 +507,17 @@ router.get("/appointments", (req, res) => {
         });
 });
 
+router.post("/renew", (req, res) => {
+    const tutors = req.body.tutors;
+    const enddate = req.body.end_date;
+
+    const tutor = new tutorRegistrationController()
+    return tutor.renewTutor(tutors, enddate).then(() => {
+        res.status(200).end();
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+})
 
 router.get("/courses", (req, res) => {
     return admin.getCourses()

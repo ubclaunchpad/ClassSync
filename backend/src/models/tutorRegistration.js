@@ -1,6 +1,30 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
+
+  async renewTutors(tutors, enddate) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query(
+          `UPDATE public.tutors
+          SET enddate = $1
+          WHERE tutor_id = ANY($2);`,
+          [tutors, enddate],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              resolve();
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
   async getTutorOfferings(userID) {
     console.log("User ID ", userID);
 
