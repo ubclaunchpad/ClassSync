@@ -268,7 +268,6 @@ const Registrations = () => {
             handleChange={handleChange}
             curExpand={curExpand}
             setCurExpand={setCurExpand}
-            style={{ backgroundColor: data.paid ? "#e6ffe6" : "inherit" }}
           />
         ))}
       </div>
