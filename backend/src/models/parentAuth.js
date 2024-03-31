@@ -25,38 +25,52 @@ export default class parentAuth {
       client.release();
     }
   }
-
-  async getPassword(email) {
+async getPassword(email) {
     const client = await con.connect();
     let role = "guardian";
     try {
-      return new Promise((resolve, reject) => {
-        client.query(
-          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6)",
-          [email, role, null, null, null, null],
-          (error, results) => {
-            if (error) {
-              console.error("Error:", error);
-              reject(error);
-            } else {
-              const hashedPassword = results.rows[0].password; // Retrieve hashed password from results
-              const user_id = results.rows[0]._user_id;
-              const firstName = results.rows[0]._firstname;
-              const lastName = results.rows[0]._lastname;
-              resolve({
-                hashedPassword: hashedPassword,
-                user_id: user_id,
-                firstName: firstName,
-                lastName: lastName,
-              });
-            }
-          }
-        );
-      });
+        return new Promise((resolve, reject) => {
+            client.query(
+                "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6)",
+                [email, role, null, null, null, null],
+                (error, results) => {
+                    if (error) {
+                        console.error("Error:", error);
+                        reject(error);
+                    } else {
+                        const hashedPassword = results.rows[0].password; // Retrieve hashed password from results
+                        const user_id = results.rows[0]._user_id;
+                        const firstName = results.rows[0]._firstname;
+                        const lastName = results.rows[0]._lastname;
+
+                        // Execute another SQL query
+                        client.query(
+                            "SELECT student_id, CONCAT(f_name, ' ', l_name) AS name FROM students WHERE guardian_id = $1",
+                            [user_id],
+                            (error, studentResults) => {
+                                if (error) {
+                                    console.error("Error:", error);
+                                    reject(error);
+                                } else {
+                                    // Resolve the promise with an object containing all the user data
+                                    resolve({
+                                        hashedPassword: hashedPassword,
+                                        user_id: user_id,
+                                        firstName: firstName,
+                                        lastName: lastName,
+                                        children: studentResults.rows, // Add the results of the second query to the object
+                                    });
+                                }
+                            }
+                        );
+                    }
+                }
+            );
+        });
     } catch (err) {
-      console.log(err);
+        console.log(err);
     } finally {
-      client.release();
+        client.release();
     }
-  }
+}
 }
