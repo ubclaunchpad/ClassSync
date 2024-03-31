@@ -4,7 +4,7 @@ import { startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, set } fr
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // import "./index.css"; // Import your custom styles
-import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
+import { MainContentLayout } from "../../components/MainContentLayout";
 import { textAlign } from "@mui/system";
 
 
@@ -174,7 +174,7 @@ export default function ScheduleSelectorRecurring() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <TutorDashboardLayout
+            <MainContentLayout
 
                 rightColumnContent={
                     <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
@@ -198,7 +198,7 @@ export default function ScheduleSelectorRecurring() {
                         )}
                     </div>
                 </div>
-            </TutorDashboardLayout >
+            </MainContentLayout >
         </LocalizationProvider >
     );
 }

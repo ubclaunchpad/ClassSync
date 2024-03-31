@@ -1,5 +1,5 @@
 import './index.css';
-import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+import { MainContentLayout } from '../../components/MainContentLayout';
 import React, { useState, useEffect } from 'react';
 import { Chip, alpha } from '@material-ui/core';
 
@@ -70,7 +70,7 @@ const TutorsList = () => {
     }, []);
 
     return (
-        <TutorDashboardLayout
+        <MainContentLayout
             smallText="Admin Dashboard"
             rightColumnContent={
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
@@ -151,7 +151,7 @@ const TutorsList = () => {
                     ))}
                 </tbody>
             </table>
-        </TutorDashboardLayout>
+        </MainContentLayout>
     );
 }
 export default TutorsList;

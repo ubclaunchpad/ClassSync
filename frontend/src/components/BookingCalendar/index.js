@@ -9,6 +9,7 @@ import "./index.css";
 import { endOfWeek, startOfWeek } from "date-fns";
 import Select from "react-select";
 import { ParentDashboardLayout } from "../ParentDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -476,7 +477,7 @@ export default function ReactBigCalendar() {
     }));
 
     return (
-        <ParentDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 bookingError ? (
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
@@ -559,6 +560,6 @@ export default function ReactBigCalendar() {
                     </div>
                 )}
             </div>
-        </ParentDashboardLayout>
+        </MainContentLayout>
     )
 }

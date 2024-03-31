@@ -11,11 +11,7 @@ import "./index.css";
 const AddStudent = (props) => {
   return (
 <div className="page-container">
-            <Header />
-            <Banner
-                smallText="Parent Dashboard"
-                mainText="Welcome Back!"
-            />
+         
             <div class="main-row">
                 <div class="column left-student">
                 </div>

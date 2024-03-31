@@ -11,8 +11,8 @@ const Login = () => {
 
   return (
     <div className="screen-container">
-      <Header />
-      <Banner />
+      {/* <Header />
+      <Banner /> */}
       <div className="content-container">
         <LoginForm />
         <div className="signup-container">

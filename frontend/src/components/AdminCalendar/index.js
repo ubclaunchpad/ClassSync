@@ -5,7 +5,7 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 import { differenceInHours, endOfWeek, set, startOfWeek } from "date-fns";
 import Select from "react-select";
 import AdminTutorCalendar from "../AdminTutorCalendar";
@@ -1150,7 +1150,7 @@ if (newBooking === 1) {
           </div>
         </TutorDashboardLayout>
       )} */}
-<TutorDashboardLayout 
+<MainContentLayout 
 rightColumnContent={
   selectingTutor ? (
     bookingError ? (
@@ -1529,7 +1529,7 @@ Clear Search
               />
             )}
           </div>
-        </TutorDashboardLayout>
+        </MainContentLayout>
 
     </div>
   );

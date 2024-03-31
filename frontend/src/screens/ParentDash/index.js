@@ -6,6 +6,9 @@ import "./index.css";
 import { useState, useEffect } from "react";
 import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 import { useNavigate } from "react-router-dom";
+import { MainContentLayout } from "../../components/MainContentLayout";
+import { NavLink } from 'react-router-dom';
+
 
 const localizer = momentLocalizer(moment);
 const events = [
@@ -21,6 +24,7 @@ const events = [
 const ParentDash = (props) => {
   const navigate = useNavigate();
   const[students, setStudents] = useState([]);
+
 
   const handleTileClick = (studentId) => {
     navigate(`/student/${studentId}`);
@@ -72,13 +76,13 @@ const ParentDash = (props) => {
 
 
   return (
-    <ParentDashboardLayout>
+    <MainContentLayout>
       <div className="student-info-container">
         <div className="student-info-header">
           <h2>Student</h2>
           <button class="header-button">
-            <a href="/addStudent" class="header-button">Add a New Student</a>
-          </button>
+
+<NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
         </div>
         <div className="existing-students-row">
           {
@@ -105,7 +109,7 @@ const ParentDash = (props) => {
         </div>
       </div>
       
-    </ParentDashboardLayout>
+    </MainContentLayout>
   );
 };
 

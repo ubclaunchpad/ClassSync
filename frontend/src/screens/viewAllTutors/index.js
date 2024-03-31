@@ -23,7 +23,6 @@ export const ViewAllTutors = () => {
   console.log(allTutors);
   return (
     <div>
-      <Banner smallText="Parent Dashboard" mainText="Hello, Richard!"></Banner>
       <div className="view-tutors__page">
         <div className="view-tutors__container">
           <div className="all-tutors__header">

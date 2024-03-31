@@ -50,6 +50,11 @@ export default class adminAuthController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: 'admin',
+                    picture: res.picture
+                  }
                 });
               } else {
                 reject("Incorrect password");

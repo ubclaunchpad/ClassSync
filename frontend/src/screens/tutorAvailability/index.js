@@ -5,7 +5,7 @@ import { format, startOfWeek, endOfWeek, addWeeks, isAfter, formatISO, addDays, 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { TutorDashboardLayout } from "../../components/TutorDashboardLayout";
+import { MainContentLayout } from "../../components/MainContentLayout";
 import "./index.css"; // Import your custom styles
 
 
@@ -267,7 +267,7 @@ export default function ScheduleSelector() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns} >
-            <TutorDashboardLayout
+            <MainContentLayout
 
                 rightColumnContent={
                     <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
@@ -313,7 +313,7 @@ export default function ScheduleSelector() {
                         )}
                     </div>
                 </div>
-            </TutorDashboardLayout>
+            </MainContentLayout>
         </LocalizationProvider >
     );
 }
