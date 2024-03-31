@@ -30,7 +30,7 @@ import { useAuth } from './contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 
 function PrivateRoute({ Component, roles }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   let path = "/";
 
   if (roles.includes('guardian')) {
@@ -41,6 +41,9 @@ function PrivateRoute({ Component, roles }) {
     path = "/admin/login";
   }
 
+  if (loading) {
+    return <p>Loading</p>; // or return a loading indicator
+  }
 
   return user && roles.includes(user.role) ? <Component /> : <Navigate to={path} />;
 }
@@ -67,7 +70,7 @@ function App() {
           <Route path="/tutorProfile" element={<PrivateRoute Component={TutorProfile} roles={['tutor']} />} />
 
           {/* <Route path="/add-tutor" element={<AddTutor />} /> */}
-          <Route path="/viewTutor/:id" element={<TutorView />} />
+          <Route path="/viewTutor/:id" element={<PrivateRoute Component={TutorView} roles={['admin', 'tutor', 'guardian']} />} />         
           <Route path="/tutor/availability/recurring" element={<PrivateRoute Component={ScheduleSelectorRecurring} roles={['tutor']} />} />
           <Route path="/schedule/:id" element={<PrivateRoute Component={ScheduleSelector} roles={['tutor']} />} />
           <Route path="/appointment/:id" element={<PrivateRoute Component={AppointmentCalendar} roles={['guardian']} />} />          
