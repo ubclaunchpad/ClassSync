@@ -22,8 +22,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                     <a href="#" onClick={toggleCoursesDropdown}>Children</a>
                     <ul className="courses-sublinks">
                         {user.children.map((child) => (
-                            <li key={child.id}>
-                                <a href={`/student/${child.id}`}>{child.name}</a>
+                            <li key={child.student_id}>
+                                <a href={`/student/${child.student_id}`}>{child.name}</a>
                             </li>
                         ))}
                     </ul>
