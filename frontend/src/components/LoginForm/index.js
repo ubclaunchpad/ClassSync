@@ -1,13 +1,23 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../contexts/AuthContext';
+
 
 const LoginForm = () => {
+  const { login, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (user && user.role === 'guardian') {
+    navigate("/parentDash");
+  } else {
+    logout()
+  }
+
  
 const { register, handleSubmit, formState: { errors }, setError } = useForm({
   mode: "onBlur",
 });
-  const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -50,8 +60,9 @@ const { register, handleSubmit, formState: { errors }, setError } = useForm({
     localStorage.setItem("firstName", res.firstName);
     localStorage.setItem("lastName", res.lastName);
     localStorage.setItem("userId", res.userId);
-    navigate("/parentDash");
-  };
+    const userData = { name: res.firstName + " " + res.lastName, role: 'guardian', children: [] }; // Example user data
+    login(userData);    
+    navigate("/parentDash");}
 
   return (
     <div className="login-form-container">
