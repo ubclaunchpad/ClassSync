@@ -4,37 +4,43 @@ import { navigate } from 'react-big-calendar/lib/utils/constants';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate()
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on component mount
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    // Load user from localStorage on component mount
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+        setLoading(false);
 
-  // Update localStorage whenever user changes
-  useEffect(() => {
-    localStorage.setItem('user', JSON.stringify(user));
-  }, [user]);
+    }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-  };
+  
 
-  const logout = () => {
-    setUser(null);
-  };
+    // Update localStorage whenever user changes
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
+        }
+    }, [user]);
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    const login = (userData) => {
+        setUser(userData);
+    };
+
+    const logout = () => {
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, loading, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
-
 export const useAuth = () => useContext(AuthContext);
