@@ -8,7 +8,7 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
     return (
         <div className="column left">
         <div className="left-header">
-            <img className="profile-pic" src={ProfilePic} alt="Profile" />
+            <img className="profile-pic" src={user.picture} alt="Profile" />
             <p>{user.name}</p>
         </div>
 
@@ -43,8 +43,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                     <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
                     <ul className="courses-sublinks">
                         {user.courses.map((course) => (
-                            <li key={course.id}>
-                                <a href={`/course/${course.id}`}>{course.name}</a>
+                            <li key={course.course_id}>
+                                <a href={`/course/${course.course_id}`}>{course.name}</a>
                             </li>
                         ))}
                     </ul>

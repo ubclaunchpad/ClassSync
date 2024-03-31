@@ -59,7 +59,7 @@ const TutorLoginForm = () => {
     localStorage.setItem("lastName", result.lastName);
 
     const userData = { name: result.firstName + " " + result.lastName, role: 'tutor', courses:[] }; // Example user data
-    login(userData);    
+    login(result.user);    
     navigate("/tutorprofile")
 
   };

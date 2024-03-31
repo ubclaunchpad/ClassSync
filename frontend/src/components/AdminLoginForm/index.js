@@ -43,7 +43,7 @@ const AdminLoginForm = () => {
       localStorage.setItem("lastName", data.lastName);
 
       const userData = { name: data.firstName + " " + data.lastName, role: 'admin' }; // Example user data
-      login(userData);    
+      login(data.user);    
 
       navigate("/registrations");
     }

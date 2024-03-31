@@ -6,6 +6,12 @@
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
 }
+.profile-pic {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
 
 h2 {
     font-size: 1.4rem;

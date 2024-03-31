@@ -60,6 +60,7 @@ const { register, handleSubmit, formState: { errors }, setError } = useForm({
     localStorage.setItem("firstName", res.firstName);
     localStorage.setItem("lastName", res.lastName);
     localStorage.setItem("userId", res.userId);
+    console.log("Res", res.user)
     const userData = { name: res.firstName + " " + res.lastName, role: 'guardian', children: [] }; // Example user data
     login(res.user);    
     navigate("/parentDash");}

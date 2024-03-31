@@ -53,7 +53,8 @@ export default class parentAuthController {
                   user: {
                     name: firstName + " " + lastName,
                     role: 'guardian',
-                    children: res.children
+                    children: res.children,
+                    picture: res.picture
                   }
                 });
               } else {

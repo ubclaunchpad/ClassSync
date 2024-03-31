@@ -244,6 +244,13 @@ export default class tutorRegistrationController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: "tutor",
+                    picture: res.picture,
+                    courses: res.courses
+                  
+                  }
                 });
               } else {
                 reject("Incorrect password");
