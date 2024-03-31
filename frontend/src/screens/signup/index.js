@@ -11,8 +11,8 @@ const Signup = () => {
   return (
 
 <div className="screen-container">
-<Header />
-  <Banner />
+{/* <Header />
+  <Banner /> */}
 <div className='register-tutor-container'>
 <RegisterUserForm role='guardian' redirect='/' />
 </div >

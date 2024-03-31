@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Switch from 'react-switch';
-import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+import { MainContentLayout } from '../../components/MainContentLayout';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -133,7 +133,7 @@ const Registrations = () => {
   };
 
   return (
-    <TutorDashboardLayout
+    <MainContentLayout
       smallText="Admin Dashboard"
       rightColumnContent={
         <div
@@ -271,7 +271,7 @@ const Registrations = () => {
           />
         ))}
       </div>
-    </TutorDashboardLayout>
+    </MainContentLayout>
   );
 };
 
