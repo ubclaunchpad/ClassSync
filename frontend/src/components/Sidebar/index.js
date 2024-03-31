@@ -1,57 +1,67 @@
 import React from 'react';
 import ProfilePic from "../../assets/parentProfile.png"
+import "./index.css";
 
-const Sidebar = ({ toggleCoursesDropdown, role }) => (
-    <div className="column left">
+
+const Sidebar = ({ toggleCoursesDropdown, user }) => {
+
+    return (
+        <div className="column left">
         <div className="left-header">
             <img className="profile-pic" src={ProfilePic} alt="Profile" />
-            <p>Jasmin May</p>
+            <p>{user.name}</p>
         </div>
 
         <div className="table-of-contents">
             <ul>
                 
-            {role === 'guardian' && (
+            {user.role === 'guardian' && (
                 <>
                     <li><a href="/parentDash">Dashboard</a></li>
                     <li>
                     <a href="#" onClick={toggleCoursesDropdown}>Children</a>
                     <ul className="courses-sublinks">
-                        <li><a href="#">Kat B.</a></li>
-                        <li><a href="#">Sue Lee</a></li>
+                        {user.children.map((child) => (
+                            <li key={child.id}>
+                                <a href={`/student/${child.id}`}>{child.name}</a>
+                            </li>
+                        ))}
                     </ul>
                 </li>
                     <li><a href="/shop">Courses</a></li>
-                    <li><a href="/shop">Tutors</a></li>
-                    <li><a href="/shop">Help</a></li>
+                    <li><a href="/alltutors">Tutors</a></li>
+                    <li><a href="/help">Help</a></li>
                 </>
             )}
 
 
-                {role === 'tutor' && (
+                {user.role === 'tutor' && (
                     <>
-                        <li><a href="/parentDash">Dashboard</a></li>
-                        <li><a href="/shop">Profile</a></li>
+                        <li><a href="/tutor">Dashboard</a></li>
+                        <li><a href="/tutorprofile">Profile</a></li>
                         <li>
                     <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
                     <ul className="courses-sublinks">
-                        <li><a href="#">Advanced Java</a></li>
-                        <li><a href="#">Beginner Java</a></li>
+                        {user.courses.map((course) => (
+                            <li key={course.id}>
+                                <a href={`/course/${course.id}`}>{course.name}</a>
+                            </li>
+                        ))}
                     </ul>
-                </li>                        <li><a href="/shop">Availability</a></li>
-                        <li><a href="/shop">Appointments</a></li>
+                </li>                        <li><a href="/tutor/availability/recurring">Availability</a></li>
+                        <li><a href="/tutor/appointments">Appointments</a></li>
                     </>
                 )}
 
 
-                {role === 'admin' && (
+                {user.role === 'admin' && (
                     <>
-                        <li><a href="/parentDash">Dashboard</a></li>                
-                        <li><a href="/shop">Curriculum</a></li>
-                        <li><a href="/shop">Courses</a></li>
-                        <li><a href="/shop">Tutors</a></li>
-                        <li><a href="/shop">Registrations</a></li>
-                        <li><a href="/shop">Change Logs</a></li>
+                        <li><a href="/">Dashboard</a></li>                
+                        <li><a href="/curriculum">Curriculum</a></li>
+                        <li><a href="/courses">Courses</a></li>
+                        <li><a href="/tutors">Tutors</a></li>
+                        <li><a href="/registrations">Registrations</a></li>
+                        <li><a href="/logs">Change Logs</a></li>
                     </>
                 )}
 
@@ -77,6 +87,6 @@ const Sidebar = ({ toggleCoursesDropdown, role }) => (
             </ul>
         </div>
     </div>
-);
+)};
 
 export default Sidebar;
