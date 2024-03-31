@@ -8,7 +8,7 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
-  async renewtutors(tutors, enddate) {
+  async renewTutors(tutors, enddate) {
     return new Promise((resolve, reject) => {
       return this.tutor
         .renewTutors(tutors, enddate)
