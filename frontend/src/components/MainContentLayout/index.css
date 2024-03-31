@@ -13,7 +13,7 @@ h2 {
 
 .main-tutor-row {
     display: grid;
-    grid-template-columns: 15% 65% 20%;
+    grid-template-columns: 75% 25%;
 }
 
 .left {
