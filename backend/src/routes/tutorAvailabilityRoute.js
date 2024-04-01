@@ -14,7 +14,7 @@ router.get("/schedule", (req, res) => {
     console.log("Getting schedule for ", userID, " on ", startDate);
 
     tutor.getSchedule(userID, startDate).then((availability) => {
-        console.log("Availability ", availability);
+        // console.log("Availability ", availability);
         res.status(200).send(availability);
     }).catch((err) => {
         res.status(500).send("Availability not found");

@@ -1,16 +1,23 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../contexts/AuthContext';
+
 
 const LoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onBlur",
-  });
+  const { login, user, logout } = useAuth();
   const navigate = useNavigate();
+
+  if (user && user.role === 'guardian') {
+    navigate("/parentDash");
+  } else {
+    logout()
+  }
+
+ 
+const { register, handleSubmit, formState: { errors }, setError } = useForm({
+  mode: "onBlur",
+});
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -39,14 +46,24 @@ const LoginForm = () => {
       body: JSON.stringify(data),
     });
 
+    if (!response.ok) { 
+      setError("general", {
+        type: "manual",
+        message: "Incorrect username or password"
+      });
+
+    }
+   
     const res = await response.json();
 
     localStorage.setItem("token", res.token);
     localStorage.setItem("firstName", res.firstName);
     localStorage.setItem("lastName", res.lastName);
     localStorage.setItem("userId", res.userId);
-    navigate("/parentDash");
-  };
+    console.log("Res", res.user)
+    const userData = { name: res.firstName + " " + res.lastName, role: 'guardian', children: [] }; // Example user data
+    login(res.user);    
+    navigate("/parentDash");}
 
   return (
     <div className="login-form-container">
@@ -85,18 +102,13 @@ const LoginForm = () => {
             {errors?.password?.message && errors.password.message}
           </p>
         </div>
-        <div className="login-checkbox-container">
-          <input
-            type="checkbox"
-            className="login-checkbox"
-            id="remember-me"
-            {...register("remember-me")}
-          />
-          <label htmlFor="remember-me">Remember Me</label>
-        </div>
+       
         <button type="submit" className="login-submit-button">
           Log In
         </button>
+        <p className="login-error-message">
+            {errors.general && errors.general.message}
+          </p>
       </form>
     </div>
   );

@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 
 import { addDays, endOfWeek, startOfWeek } from 'date-fns';
 import { navigate } from 'react-big-calendar/lib/utils/constants';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const Course = (props) => {
     const [lessons, setLessons] = useState([]);
+    const [loaded, setLoaded] = useState(false)
 
     const fetchData = async () => {
         const url = `http://localhost:8080/availability/bookings?id=${props.id}`;
@@ -19,7 +21,7 @@ const Course = (props) => {
         for (let booking of bookingsData.bookings) {
             console.log("Booking is ", booking)
             let bookingDate = new Date(booking.start_time);
-            let editDate = addDays(new Date(), 7);
+            let editDate = addDays(new Date(), 2);
 
 
             appointments.push({
@@ -30,7 +32,9 @@ const Course = (props) => {
 
             });
         }
+        appointments.sort((a, b) => a.start - b.start);
         setLessons(appointments)
+        setLoaded(true)
 
     };
 
@@ -99,9 +103,9 @@ const Course = (props) => {
     return (
         <div>
 
-            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-                <h3 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h3>
-                {lessons.length < 5 && (
+            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0px', fontFamily: 'Arial, sans-serif' }}>
+                {/* <h3 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h3> */}
+                {loaded && lessons.length < 5 && (
                     <button
                         style={{
                             display: 'block',

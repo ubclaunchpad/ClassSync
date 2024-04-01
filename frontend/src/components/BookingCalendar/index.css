@@ -28,7 +28,10 @@
 
 }
 
-
+.disabled-button {
+    cursor: not-allowed;
+    /* Change cursor to not-allowed */
+}
 
 .rbc-day-slot .unavailable {
     background-color: #FFD6D6;

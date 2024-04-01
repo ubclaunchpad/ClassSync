@@ -1,8 +1,21 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const TutorLoginForm = () => {
+
+    
+  const { user, login, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (user && user.role === 'admin') {
+    navigate("/tutorprofile");
+  
+  } else {
+    logout()
+  }
+
   const {
     register,
     handleSubmit,
@@ -10,7 +23,6 @@ const TutorLoginForm = () => {
   } = useForm({
     mode: "onBlur",
   });
-  const navigate = useNavigate();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -46,12 +58,15 @@ const TutorLoginForm = () => {
     localStorage.setItem("firstName", result.firstName);
     localStorage.setItem("lastName", result.lastName);
 
-    navigate("/tutorProfile");
+    const userData = { name: result.firstName + " " + result.lastName, role: 'tutor', courses:[] }; // Example user data
+    login(result.user);    
+    navigate("/tutorprofile")
+
   };
 
   return (
     <div className="login-form-container">
-      <h4 className="login-form-title">Login</h4>
+      <h4 className="login-form-title">Tutor Login</h4>
       <form
         className="login-input-form"
         onSubmit={handleSubmit(handleUserSubmit)}
@@ -86,15 +101,7 @@ const TutorLoginForm = () => {
             {errors?.password?.message && errors.password.message}
           </p>
         </div>
-        <div className="login-checkbox-container">
-          <input
-            type="checkbox"
-            className="login-checkbox"
-            id="remember-me"
-            {...register("remember-me")}
-          />
-          <label htmlFor="remember-me">Remember Me</label>
-        </div>
+     
         <button type="submit" className="login-submit-button">
           Log In
         </button>

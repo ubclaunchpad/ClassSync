@@ -32,8 +32,8 @@ export default class adminAuth {
     try {
       return new Promise((resolve, reject) => {
         client.query(
-          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6)",
-          [email, role, null, null, null, null],
+          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6, $7)",
+          [email, role, null, null, null, null, null],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
@@ -43,11 +43,13 @@ export default class adminAuth {
               const user_id = results.rows[0]._user_id;
               const firstName = results.rows[0]._firstname;
               const lastName = results.rows[0]._lastname;
+              const picture = results.rows[0]._picture;
               resolve({
                 hashedPassword: hashedPassword,
                 user_id: user_id,
                 firstName: firstName,
                 lastName: lastName,
+                picture: picture,
               });
             }
           }

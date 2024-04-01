@@ -6,37 +6,35 @@
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
 }
+.profile-pic {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
 
 h2 {
     font-size: 1.4rem;
 }
 
-.column {
-    float: left;
+.main-tutor-row {
+    display: grid;
+    grid-template-columns: 15% 65% 20%;
 }
 
 .left {
-    width: 17%;
-    box-sizing: border-box;
-    height: 100vh;
-    background-color: #00B0F1;
-    padding: .7rem 1rem;
+    background-color: #103DA2;
 }
 
-.right {
-    width: 17%;
-}
 
 .middle {
-    width: 64%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
 }
 
 .right-middle {
-    width: 81%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
 }
 
 
@@ -107,6 +105,7 @@ h2 {
     align-items: center;
     font-weight: bold;
     max-width: 100%;
+    color: white;
 }
 
 .right-buttons {
@@ -132,3 +131,24 @@ h2 {
 .shop-courses {
     padding-right: 2.5rem;
 }
+
+/*indenting the sublinks*/
+ul li ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 1rem; /* Adjust the indentation as needed */
+  }
+  
+  ul li ul li {
+    margin-left: 0.5rem; /* Adjust the indentation as needed */
+    font-size: .8rem
+  }
+
+  ul li:hover > ul {
+    display: block;
+  }
+
+  .courses-sublinks {
+    display: none;
+  }

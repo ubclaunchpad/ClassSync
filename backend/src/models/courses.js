@@ -65,7 +65,7 @@ export class courses {
                             console.error('Error:', error);
                             reject(error);
                         } else {
-                            console.log("Notes ", results)
+                            // console.log("Notes ", results)
                             const notes = results.rows;  // Retrieve notes from results
                             resolve(notes);  // Resolve with the returned notes
                         }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./index.css";
-import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+import { MainContentLayout } from '../../components/MainContentLayout';
 import TutorProfileForm from '../../components/TutorProfileForm';
 
 const TutorProfile = () => {
@@ -40,11 +40,7 @@ const TutorProfile = () => {
                 const profileData = await profileResponse.json();
                 console.log("Profile Data", profileData);
 
-                setMaxHours(profileData.max_hours);
-                setUniversity(profileData.university);
-                setAbout(profileData.bio);
-                setDescription(profileData.description);
-                setLink(profileData.link)
+        
                 setProfileData(profileData)
 
 
@@ -71,7 +67,7 @@ const TutorProfile = () => {
     return (
         <React.Fragment>
             {dataLoaded && (
-                <TutorDashboardLayout name={name}>
+                <MainContentLayout name={name}>
                     <div className='tutor-info-container'>
                         <TutorProfileForm
                             offerings={courses}
@@ -85,7 +81,7 @@ const TutorProfile = () => {
                             // languages={'test language'}
                         />
                     </div>
-                </TutorDashboardLayout>
+                </MainContentLayout>
             )}
         </React.Fragment>
     );

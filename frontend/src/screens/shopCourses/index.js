@@ -2,9 +2,14 @@ import './index.css';
 import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
+import { MainContentLayout } from '../../components/MainContentLayout';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
+
+
 
     const fetchData = async () => {
         try {
@@ -97,7 +102,7 @@ const ShopCourses = () => {
 
     return (
 
-        <ParentDashboardLayout>
+        <MainContentLayout>
 
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h2>Browse Courses</h2>
@@ -224,7 +229,7 @@ const ShopCourses = () => {
 
                 ))}
             </div>
-        </ParentDashboardLayout>
+        </MainContentLayout>
     );
 }
 export default ShopCourses;

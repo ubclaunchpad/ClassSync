@@ -3,8 +3,8 @@
   flex-direction: column;
   /* align-items: center; */
   justify-content: center;
-  margin-left: 20%;
-  margin-right: 20%;
+  /* margin-left: 20%; */
+  /* margin-right: 20%; */
 }
 .student-dashboard__student-information {
   display: flex;
@@ -13,7 +13,7 @@
   justify-content: space-between;
   width: 100%;
 
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
 }
 .student-profile__back-button {
   background-color: transparent;
@@ -32,6 +32,7 @@
 .browse-courses__button {
   background-color: #103da2;
   font-weight: 600;
+  margin-left: 10px;
 }
 
 .student-information__profile-picture {
@@ -49,6 +50,7 @@
 }
 .p-tabview-nav {
   color: #103da2;
+
 }
 .p-tabview-title {
   color: #103da2;

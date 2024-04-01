@@ -9,7 +9,17 @@ router.get("/pingcheck", (_, res) => {
     res.send("pong");
 });
 
-
+router.get("/enrollment", (req, res) => {
+    console.log("Received request")
+    const tutor = new tutorAvailabilityController();
+    const course_id = req.query.course_id;
+    return tutor.getTutorByEnrollment(course_id).then((result) => {
+        console.log(result)
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
 
 router.get("/courses", (req, res) => {
     const tutor = new tutorAvailabilityController();
@@ -21,6 +31,28 @@ router.get("/courses", (req, res) => {
     });
 });
 
+router.post("/log", (req, res) => {
+    console.log("Adding log ", req.body.data)
+    const tutor = new tutorRegistrationController();
+    const data = req.body.data;
+    return tutor.addLog(data).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+
+})
+
+
+router.get("/log", (req, res) => {
+    const tutor = new tutorRegistrationController();
+    return tutor.getLogs().then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+
+})
 router.get("/select", (req, res) => {
 
     const tutor = new tutorAvailabilityController();
@@ -30,7 +62,7 @@ router.get("/select", (req, res) => {
 
     const tutorIdsArray = tutor_ids !== "" ? tutor_ids.split(',').map(Number) : [];
 
-    console.log("Tutor ids ", tutorIdsArray);
+    console.log("Tutor ids ", tutorIdsArray, startDate);
 
     return tutor.getSelectedTutorsAvailability(startDate, tutorIdsArray).then((result) => {
         res.status(200).json(result);
@@ -40,6 +72,24 @@ router.get("/select", (req, res) => {
 });
 
 
+router.get("/time", (req, res) => {
+
+    const tutor = new tutorAvailabilityController();
+    const tutor_ids = req.query.tutor_ids;
+
+    const startDate = req.query.start_date;
+
+    const tutorIdsArray = tutor_ids !== "" ? tutor_ids.split(',').map(Number) : [];
+
+    console.log("Tutor ids ", tutorIdsArray, startDate);
+
+    return tutor.getSelectedTutorsAvailabilityByTime(startDate, tutorIdsArray, req.query.day, req.query.time1, req.query.time2).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
+
 
 
 router.post("/login", (req, res) => {
@@ -47,7 +97,7 @@ router.post("/login", (req, res) => {
     const password = req.body.password;
 
     return tutor.login(email, password).then((result) => {
-        console.log("Result ", result);
+        // console.log("Result ", result);
         res.status(200).send(result);
     }).catch((err) => {
         console.log(err);

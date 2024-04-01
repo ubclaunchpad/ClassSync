@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async renewTutors(tutors, enddate) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .renewTutors(tutors, enddate)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async updateNotes(booking_id, notes) {
     return new Promise((resolve, reject) => {
       return this.course
@@ -117,7 +130,7 @@ export default class tutorRegistrationController {
       return this.course
         .getLearningGoalProgress(enrollmentId)
         .then((result) => {
-          console.log(result)
+          // console.log(result)
 
           const { learning_goals, completed } = result;
 
@@ -139,7 +152,7 @@ export default class tutorRegistrationController {
       return this.tutor
         .getTutorOfferings(userID)
         .then((result) => {
-          console.log("Result ", result);
+          // console.log("Result ", result);
           resolve(result);
         })
         .catch((err) => {
@@ -202,7 +215,7 @@ export default class tutorRegistrationController {
       return this.tutor
         .getPassword(email)
         .then((res) => {
-          console.log("Res ", res);
+          // console.log("Res ", res);
           const hashedPassword = res.hashedPassword;
           const userId = res.user_id;
           const firstName = res.firstName;
@@ -222,7 +235,7 @@ export default class tutorRegistrationController {
                   }
                 );
 
-                console.log("Printing token: " + token);
+                // console.log("Printing token: " + token);
 
                 resolve({
                   email: email,
@@ -231,6 +244,13 @@ export default class tutorRegistrationController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: "tutor",
+                    picture: res.picture,
+                    courses: res.courses
+                  
+                  }
                 });
               } else {
                 reject("Incorrect password");
@@ -299,6 +319,22 @@ export default class tutorRegistrationController {
       .catch((err) => Promise.reject(err));
   }
 
+  addLog(data) {
+    const tutor = new tutorRegistration();
+
+    return tutor
+      .addLog(data)
+      .then(() => Promise.resolve())
+      .catch((err) => Promise.reject(err));
+  }
+
+  getLogs() {
+    const tutor = new tutorRegistration()
+      return tutor
+      .getLogs()
+      .then((res) => Promise.resolve(res))
+      .catch((err) => Promise.reject(err));
+  }
   updateOfferings(userID, offerings) {
     const tutor = new tutorRegistration();
 
