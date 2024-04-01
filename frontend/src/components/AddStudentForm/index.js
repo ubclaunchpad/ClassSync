@@ -1,6 +1,7 @@
 import "./index.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {ArrowLeft} from 'react-bootstrap-icons'
 
 const AddStudentForm = () => {
     const navigate = useNavigate();
@@ -69,12 +70,18 @@ const AddStudentForm = () => {
         }
       }
       const colors = ["orange", "green", "purple", "pink", "yellow"];
+
+      const goBack = () => {
+        navigate('/parentDash');
+      }
     console.log(formState);
     return (
         <form className="student-info-form" onSubmit={handleSubmit}>
             <div class="header-row">
+                <ArrowLeft size="30px" onClick={goBack} cursor="pointer"/>
+            </div>
+            <div class="header-row">
                 <h2 className="add-student-header">Add a Student</h2>
-                <button class="header-button">+ Add a New Student</button>
             </div>
             <div className="input-col">
               <h3>Personal</h3>
