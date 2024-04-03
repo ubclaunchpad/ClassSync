@@ -63,6 +63,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                         <li><a href="/courses">Courses</a></li>
                         <li><a href="/tutors">Tutors</a></li>
                         <li><a href="/registrations">Registrations</a></li>
+                        <li><a href="/admin/appointments">Appointments</a></li>
+
                         <li><a href="/logs">Change Logs</a></li>
                         <li><a href="/help">Help</a></li>
 

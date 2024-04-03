@@ -736,7 +736,7 @@ if (newBooking === 1) {
   };
 
   return (
-    <div>
+    <>
       {/* {selectingTutor ? (
      <TutorDashboardLayout
      rightColumnContent={  bookingError ? (
@@ -1155,6 +1155,7 @@ rightColumnContent={
   selectingTutor ? (
     bookingError ? (
       <div style={{ color: "red", marginTop: "10px" }}>{bookingError} 
+      
             <div className="back-enrollment-container">
             <button className="back-enrollment" 
             onClick={()=>{setSelectingTutor(false)
@@ -1319,15 +1320,8 @@ rightColumnContent={
         </div>
       )
     ) : (
-      <div
-        style={{
-          backgroundColor: "#f5f5f5",
-          borderRadius: "10px",
-          padding: "20px",
-          marginTop: "16px",
-          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-        }}
-      >
+      <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
+
         <h4 style={{ color: "#333", marginBottom: "10px" }}>
           Select student
         </h4>
@@ -1531,6 +1525,6 @@ Clear Search
           </div>
         </MainContentLayout>
 
-    </div>
+    </>
   );
 }
