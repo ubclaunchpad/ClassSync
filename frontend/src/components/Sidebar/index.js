@@ -50,6 +50,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                     </ul>
                 </li>                        <li><a href="/tutor/availability/recurring">Availability</a></li>
                         <li><a href="/tutor/appointments">Appointments</a></li>
+                        <li><a href="/help">Help</a></li>
+
                     </>
                 )}
 
@@ -62,6 +64,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                         <li><a href="/tutors">Tutors</a></li>
                         <li><a href="/registrations">Registrations</a></li>
                         <li><a href="/logs">Change Logs</a></li>
+                        <li><a href="/help">Help</a></li>
+
                     </>
                 )}
 
