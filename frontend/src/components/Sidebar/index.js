@@ -58,7 +58,7 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
 
                 {user.role === 'admin' && (
                     <>
-                        <li><a href="/">Dashboard</a></li>                
+                        <li><a href="/adminDash">Dashboard</a></li>                
                         <li><a href="/curriculum">Curriculum</a></li>
                         <li><a href="/courses">Courses</a></li>
                         <li><a href="/tutors">Tutors</a></li>
