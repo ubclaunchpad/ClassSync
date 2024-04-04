@@ -110,7 +110,6 @@ export const TutorView = () => {
   console.log(offerings);
   return (
     <div>
-      <Banner smallText="Parent Dashboard" mainText="Hello, Richard!" />
       <div className="tutor-profile__view">
         <div className="tutor-profile__overview">
           <div className="tutor-profile__avatar-container">
