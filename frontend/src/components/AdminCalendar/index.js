@@ -729,6 +729,26 @@ if (newBooking === 1) {
     loadData()
   }
 
+
+  const selectSlot = (event) => {
+
+    const dayOfWeek = moment(event.start).day(); // 0 for Sunday, 1 for Monday, etc.
+    const timeFormat = "HH:mm";
+    const currentTimeSlot = moment(event.start).format(timeFormat);
+    const nextTimeSlot = moment(currentTimeSlot, "HH:mm")
+      .add(30, "minutes")
+      .format("HH:mm");
+
+    if (
+      openSlots[dayOfWeek] &&
+      (openSlots[dayOfWeek].includes(currentTimeSlot) ||
+        openSlots[dayOfWeek].includes(nextTimeSlot))
+    ) {
+      setSelectedSlot(event)
+    getAvailableTutors(event, 1)
+    setSelectingTutor(true)}
+    }
+  
   const handleSelectedTutor = async () => {
     setSelectingTutor(false);
     // await loadData();
@@ -1511,10 +1531,7 @@ Clear Search
                 max={new Date(2020, 1, 0, 19, 0, 0)}
                 style={{ height: "75vh", width: "90vw" }}
                 onSelectEvent={editEvent}
-                onSelectSlot={(event) => {
-                  setSelectedSlot(event)
-                getAvailableTutors(event, 1)
-                setSelectingTutor(true)}}
+                onSelectSlot={selectSlot}
                 slotPropGetter={slotPropGetter}
                 onNavigate={(date) => {
                   setSelectedSlot(null);
