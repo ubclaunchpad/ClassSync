@@ -18,8 +18,6 @@ import trashIcon from "../../assets/trashBin.svg";
 import editIcon from "../../assets/edit.svg";
 import saveIcon from "../../assets/save.svg";
 
-moment.locale("en-GB");
-const localizer = momentLocalizer(moment);
 
 export default function AdminCalendar() {
   const [eventsData, setEventsData] = useState(events);
@@ -49,43 +47,13 @@ export default function AdminCalendar() {
   const [availablePeople, setAvailablePeople] = useState([])
   const [bookingChange, setBookingChange] = useState(0)
 
+  moment.locale("en-GB");
+  const localizer = momentLocalizer(moment);
   const loadData = async () => {
-    // let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem(
-    //   "userID"
-    // )}&startDate=${startDate.toISOString().split("T")[0]}`;
+    
 
     try {
-      // const response = await fetch(url);
-
-      // if (!response.ok) {
-      //   console.log("Failed to fetch data");
-      //   throw new Error("Network response was not ok");
-      // }
-
-      // const data = await response.json();
-      // console.log("Response is ", data);
-
-      // const filteredData = {};
-
-      // Object.entries(data[0]).forEach(([day, slots]) => {
-      //   slots.sort(); // Ensure the slots are sorted in ascending order
-      //   filteredData[day] = slots.filter((slot, index) => {
-      //     const nextSlot = slots[index + 1];
-      //     if (!nextSlot) return false; // If there's no next slot, exclude the current slot
-      //     const currentSlotHour = parseInt(slot.split(":")[0]);
-      //     const currentSlotMinute = parseInt(slot.split(":")[1]);
-      //     const nextSlotHour = parseInt(nextSlot.split(":")[0]);
-      //     const nextSlotMinute = parseInt(nextSlot.split(":")[1]);
-      //     // If the next slot is within the same hour or the next half hour, include the current slot
-      //     return (
-      //       nextSlotHour === currentSlotHour ||
-      //       (nextSlotHour === currentSlotHour + 1 &&
-      //         nextSlotMinute < currentSlotMinute)
-      //     );
-      //   });
-      // });
-
-      // setOpenSlots(filteredData);
+      
       let url = `http://localhost:8080/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
