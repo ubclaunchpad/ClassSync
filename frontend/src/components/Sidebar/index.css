@@ -23,7 +23,8 @@ h2 {
 }
 
 .left {
-    height: 200vh;
+    background-color: #103DA2;
+    min-height: 200vh;
 }
 
 
