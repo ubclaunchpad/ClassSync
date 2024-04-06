@@ -118,20 +118,22 @@ export default class adminController {
             })
 
     }
-    getCourses() {
-        const admin_ = new admin();
 
-        return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
-    }
 
     getCourses() {
         const admin_ = new admin();
 
         return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
+.then((res) => {
+    return res.reduce((map, course) => {
+        map[course.course_id] = {
+            course_name: course.course_name,
+            course_difficulty: course.course_difficulty,
+            color: course.color 
+        };
+        return map;
+    }, {});
+})            .catch((err) => Promise.reject(err));
     }
 
     getTutorOfferings() {
