@@ -28,6 +28,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 
 import { useAuth } from './contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
+import LogPage from "./components/LogPage";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
@@ -77,6 +78,8 @@ function App() {
           <Route path="/tutor/appointments" element={<PrivateRoute Component={TutorCalendar} roles={['tutor']} />} />          
           <Route path="/student/:id" element={<PrivateRoute Component={StudentDashboard} roles={['guardian']} />} />          
           <Route path="/admin/appointments" element={<PrivateRoute Component={AdminCalendar} roles={['admin']} />} />
+
+          <Route path="/logs" element={<PrivateRoute Component={LogPage} roles={['admin']} />} />
 
           <Route path="/registrations" element={<PrivateRoute Component={Registrations} roles={['admin']} />} />
           <Route path="/courses" element={<PrivateRoute Component={Courses} roles={['admin']} />} />

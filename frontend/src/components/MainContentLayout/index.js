@@ -6,7 +6,6 @@ import React, {useState} from 'react'
 import Sidebar from '../Sidebar';
 
 import "./index.css"; 
-import LogModal from "../LogModal";
 
 
 export const MainContentLayout = ({ name, rightColumnContent, ...props }) => {
