@@ -21,6 +21,7 @@ import { TutorView } from "./screens/viewTutor/viewTutor";
 import AddStudent from "./screens/addStudent";
 import Courses from "./screens/courses";
 import TutorsList from "./screens/tutorsList";
+import TutorDashboard from "./screens/tutorDashboard";
 import { ViewAllTutors } from "./screens/viewAllTutors";
 import ClassRecordForm from "./screens/classRecord";
 import Layout from './screens/Layout/Layout'
@@ -85,7 +86,8 @@ function App() {
           <Route path="/courses" element={<PrivateRoute Component={Courses} roles={['admin']} />} />
           <Route path="/tutors" element={<PrivateRoute Component={TutorsList} roles={['admin']} />} />
           <Route path="/shop" element={<PrivateRoute Component={ShopCourses} roles={['guardian']} />} />          
-          <Route path="/allTutors" element={<PrivateRoute Component={ViewAllTutors} roles={['admin','tutor', 'guardian']} />} />          
+          <Route path="/allTutors" element={<PrivateRoute Component={ViewAllTutors} roles={['admin','tutor', 'guardian']} />} />   
+          <Route path="/tutorDash" element={<TutorDashboard />} />
 <Route path="/class/:id" element={<PrivateRoute Component={ClassRecordForm} roles={['tutor', 'guardian']} />} />
 
 
