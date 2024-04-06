@@ -15,8 +15,26 @@ const ParentDash = (props) => {
   const[students, setStudents] = useState([]);
 
 
-  const handleTileClick = (studentId) => {
-    navigate(`/student/${studentId}`);
+  const handleTileClick = async (studentId) => {
+      const url = `http://localhost:8080/student/${studentId}/courses`;
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if (data.length == 0) {
+          navigate(`/shop`);
+        } else {
+          navigate(`/student/${studentId}`);
+        }
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
   };
 
   const fetchStudents = async () => {

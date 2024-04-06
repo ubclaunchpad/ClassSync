@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from "moment";
+import moment from "moment-timezone";
 
 const ParentDashCalendar = ({students}) => {
- 
+  // moment.tz.setDefault('America/Los_Angeles');
+  moment.locale("en-GB");
+   
 const events = [];
 
 const ColorEnum = {
@@ -21,21 +23,26 @@ const [eventsData, setEventsData] = useState([]);
   const fetchStudentEvents = async () => {
 
       try {
-        console.log(students);
         await Promise.all(students.map(async (student) => {
-        const url = `http://localhost:8080/student-profile/bookings/${student.student_id}`;
+        const url = `http://localhost:8080/student-profile/bookings/student/${student.student_id}`;
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-            data[0].search_enrollments_by_student_id.enrollments.map(enrollment => {
+            data[0].get_enrollments_by_student_id_2.enrollments.map(enrollment => {
+              const courseTitle = enrollment.course_info.course_difficulty + " " + enrollment.course_info.course_name;
+         
             if (enrollment.bookings != null) {
               enrollment.bookings.map(booking => {
+                console.log("start time here: ", new Date(booking.start_time));
+                console.log("end time here: ", moment(booking.start_time)
+                .add(booking.session_duration, "minute")
+                .toDate());
                 events.push({
                   start: moment(booking.start_time).toDate(),
                   end: moment(booking.start_time)
                   .add(booking.session_duration, "minute")
                   .toDate(),
-                  title: `${student.name} Tutoring Session with Tutor ${booking.tutor_id}`,
+                  title: courseTitle,
                   studentName: student.name,
                   color: student.color,
                 })
