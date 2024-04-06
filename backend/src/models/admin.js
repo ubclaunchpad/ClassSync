@@ -213,7 +213,7 @@ export class admin {
 
     getCourses() {
         return new Promise((resolve, reject) => {
-            con.query(`SELECT course_id, course_name, course_difficulty, color from public.get_course_details()`, (err, res) => {
+            con.query(`SELECT * from public.get_course_details()`, (err, res) => {
                 if (err) {
                     console.log("error: ", err);
                     reject(err);

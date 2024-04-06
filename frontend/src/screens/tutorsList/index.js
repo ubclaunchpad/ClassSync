@@ -28,6 +28,7 @@ const TutorsList = () => {
             const teacherListResponse = await fetch(urlTutors);
             const teacherListData = await teacherListResponse.json();
             console.log(teacherListData)
+            
             setTutors(teacherListData);
 
            
@@ -42,7 +43,17 @@ const TutorsList = () => {
               const coursesListResponse = await fetch(urlCourses);
               const coursesListData = await coursesListResponse.json();
               console.log(coursesListData)
-              setCourses(coursesListData);
+
+              const coursesMap = coursesListData.reduce((map, course) => {
+                map[course.course_id] = {
+                    course_name: course.course_name,
+                    course_difficulty: course.course_difficulty,
+                    color: course.color 
+                };
+                return map;
+                }, {});
+    
+              setCourses(coursesMap);
 
        
 
