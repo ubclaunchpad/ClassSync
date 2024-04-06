@@ -5,8 +5,7 @@ import moment from "moment-timezone";
 const ParentDashCalendar = ({students}) => {
   // moment.tz.setDefault('America/Los_Angeles');
   moment.locale("en-GB");
-  const localizer = momentLocalizer(moment);
-const [eventsData, setEventsData] = useState([]);
+   
 const events = [];
 
 const ColorEnum = {
@@ -17,7 +16,10 @@ const ColorEnum = {
   orange: "#FF914D"
   // Add more colors here as needed
 };
+moment.locale("en-GB");
 
+const localizer = momentLocalizer(moment);
+const [eventsData, setEventsData] = useState([]);
   const fetchStudentEvents = async () => {
 
       try {
@@ -36,7 +38,7 @@ const ColorEnum = {
                 .add(booking.session_duration, "minute")
                 .toDate());
                 events.push({
-                  start: new Date(booking.start_time),
+                  start: moment(booking.start_time).toDate(),
                   end: moment(booking.start_time)
                   .add(booking.session_duration, "minute")
                   .toDate(),
@@ -44,10 +46,14 @@ const ColorEnum = {
                   studentName: student.name,
                   color: student.color,
                 })
+
+                console.log(new Date(booking.start_time))
               })
             }
           })
         }}))
+
+        console.log("Pushing ", events)
         setEventsData(events);
 
       } catch (err) {
@@ -68,11 +74,15 @@ const ColorEnum = {
             defaultView="month"
             events={eventsData}
             style={{ height: "100vh" }}
+            min={new Date(2020, 1, 0, 7, 0, 0)}
+            max={new Date(2020, 1, 0, 19, 0, 0)}
             eventPropGetter={(event) => {
               const backgroundColor = ColorEnum[event.color];
               return { style: { backgroundColor } };
             }}
           />
+
+
       </div>
     </div>
   );

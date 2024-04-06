@@ -508,8 +508,8 @@ router.get("/appointments", (req, res) => {
 });
 
 router.post("/renew", (req, res) => {
-    const tutors = req.body.tutors;
-    const enddate = req.body.end_date;
+    const tutors = req.body.selectedTutors;
+    const enddate = req.body.endDate;
 
     const tutor = new tutorRegistrationController()
     return tutor.renewTutors(tutors, enddate).then(() => {
@@ -584,7 +584,7 @@ router.get("/tutors", (req, res) => {
 router.get("/tutor_offerings", (req, res) => {
   return admin.getTutorOfferings()
       .then((offerings) => {
-          console.log("Tutor Offerings ", offerings);
+        //   console.log("Tutor Offerings ", offerings);
           res.status(200).json(offerings);
       })
       .catch((err) => {

@@ -1,21 +1,27 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
-
-  async renewTutors(tutors, enddate) {
+async renewTutors(tutors, enddate) {
+ 
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
+        let query = `UPDATE public.tutors
+        SET enddate = '${enddate}'
+        WHERE tutor_id = ANY(ARRAY[${tutors.join(',')}]);`;
+
+
         client.query(
           `UPDATE public.tutors
           SET enddate = $1
-          WHERE tutor_id = ANY($2);`,
-          [tutors, enddate],
+          WHERE tutor_id = ANY($2::int[]);`,
+          [enddate, tutors],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
               reject(error);
             } else {
+              console.log("Success")
               resolve();
             }
           }
