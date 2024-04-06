@@ -89,19 +89,22 @@ setSelectAll(!selectAll)
 
     }
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState(tutors);
   
     useEffect(() => {
+
+        if (tutors) {
         if (searchTerm !== '') {
-      const results = tutors.filter(tutor =>
-        tutor.tutor_name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+            const results = tutors.filter(tutor =>
+                tutor.tutor_name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
       setSearchResults(results);
       console.log("Tutors are ", results)
     } else {
         setSearchResults(tutors);
     }
-    }, [searchTerm]);
+}
+    }, [searchTerm, tutors]);
   
     const handleChange = event => {
       setSearchTerm(event.target.value);
@@ -296,7 +299,7 @@ const renewTutors = async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tutors && searchResults.map((tutor, index) => (
+                    {tutors && searchResults && searchResults.map((tutor, index) => (
                         <React.Fragment key={index}>
                             <tr >
                                 <td className="registration__table-row-element">
