@@ -20,9 +20,20 @@ router.get("/", (_, res) => {
     });
 });
 
-router.get("/bookings/:studentId", (req, res) => {
+router.get("/bookings/student/:studentId", (req, res) => {
   studentProfileController
-    .getBookingsById(req.params.studentId)
+    .getBookingsByStudentId(req.params.studentId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(404).json(err);
+    });
+});
+
+router.get("/bookings/guardian/:guardianId", (req, res) => {
+  studentProfileController
+    .getBookingsByGuardianId(req.params.guardianId)
     .then((response) => {
       res.status(200).json(response);
     })
