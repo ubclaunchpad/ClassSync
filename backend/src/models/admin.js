@@ -91,13 +91,21 @@ export class admin {
     getTutors() {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT DISTINCT
-                    offr.tutor_id,
-                    CONCAT(U.firstname, ' ', U.lastname) AS tutor_name
-                FROM
-                    tutor_offerings offr
-                JOIN
-                    users U ON offr.tutor_id = U.user_id
+            SELECT
+            t.tutor_id,	
+            t.startdate,
+            t.enddate,
+            t.max_hours,
+            t.university,
+            t.link,
+            t.languages,
+            t.major,
+            CONCAT(U.firstname, ' ', U.lastname) AS tutor_name,
+            u.email
+        FROM
+            tutors t
+        JOIN
+            users U ON t.tutor_id = U.user_id
             `;
 
             con.query(query)
