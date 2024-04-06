@@ -4,6 +4,7 @@ import AdminLoginForm from "../../components/AdminLoginForm";
 import "./index.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import LoginForm from "../../components/LoginForm";
 
 const AdminLogin = () => {
 
@@ -21,7 +22,7 @@ const AdminLogin = () => {
   return (
     <div className="screen-container">
       <div className="content-container">
-        <AdminLoginForm />
+        <LoginForm role="admin" />
       </div>
     </div>
   );

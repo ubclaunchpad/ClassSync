@@ -10,8 +10,15 @@ const Header = (props) => {
   const navigate = useNavigate()
   const LogOut = () => {
     logout()
-    navigate("/");
+    if (user && user.role === 'tutor') {
+      navigate("/tutor/login")
 
+    } else if (user && user.role === 'admin') {
+      navigate("/admin/login")
+    } else {
+      navigate("/")
+
+    }
   }
   
   return (

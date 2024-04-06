@@ -17,7 +17,7 @@ const Login = () => {
       {/* <Header />
       <Banner /> */}
       <div className="content-container">
-        <LoginForm />
+        <LoginForm role="guardian" />
         <div className="signup-container">
           <h2>New to the Code Initiative?</h2>
           <button onClick={signUpOnClick}>Sign Up</button>
