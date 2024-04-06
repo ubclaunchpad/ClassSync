@@ -13,7 +13,7 @@ const TutorsList = () => {
     const [startDate, setStartDate] = useState(Date.now())
     const [tutors, setTutors] = useState(null);
     const [users, setUsers] = useState(null);
-    const [courses, setCourses] = useState(null);
+    const [courses, setCourses] = useState({});
     const [offerings, setOfferings] = useState(null);
     const [expandedRow, setExpandedRow] = useState(null); // State to manage expanded row
     const url = "localhost:3000/registertutor/"
@@ -33,11 +33,6 @@ const TutorsList = () => {
             const usersListData = await usersListResponse.json();
             setUsers(usersListData);
         
-            // Getting all courses
-            let urlCourses = "http://localhost:8080/courses"
-            const coursesListResponse = await fetch(urlCourses);
-            const coursesListData = await coursesListResponse.json();
-            setCourses(coursesListData);
 
 
             // Getting all tutor offerings
@@ -46,18 +41,52 @@ const TutorsList = () => {
             const offeringsListData = await offeringsListResponse.json();
             setOfferings(offeringsListData);
 
+              // Getting all courses
+              let urlCourses = "http://localhost:8080/courses"
+              const coursesListResponse = await fetch(urlCourses);
+              const coursesListData = await coursesListResponse.json();
+              console.log(coursesListData)
+              setCourses(coursesListData);
+
+       
+
+
         } catch (error) {
             console.error('Failed to fetch data', error);
         }
     };
 
     const findCourses = (tutor_id) => {
-        let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
-        let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id));
-        
-        return courseList;
+ let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+       let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
+       
+       return tutorCourseIds 
     }
 
+    const getCourseNames = (tutor_id) => {
+            let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+                  let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
+                  console.log("Courses are ", tutorOfferings)
+let courseNames = new Set();
+tutorCourseIds.forEach(id => {
+    let course = courses[id];
+    if (course) {
+        courseNames.add(course.course_name.trim());
+    }
+});
+console.log("Names ", courseNames)  
+           return Array.from(courseNames)
+    }
+
+// const findUniqueCourses = (tutor_id) => {
+//     let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+//     let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id)?.course_name);
+    
+//     let uniqueCourseList = [...new Set(courseList)];
+//     console.log(uniqueCourseList)
+    
+//     return uniqueCourseList;
+// }
     const copyToken = async () => {
         try {
             const response = await fetch('http://localhost:8080/token');
@@ -216,7 +245,9 @@ const TutorsList = () => {
 {new Date(tutor.startdate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</td>                                
 <td className="registration__table-row-element">{new Date(tutor.enddate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</td>                                
 
-                                <td className="registration__table-row-element">Python, Java, Javascript</td>
+                             <td className="registration__table-row-element">
+{offerings && getCourseNames(tutor.tutor_id)?.join(', ')}
+</td>
                             </tr>
                             {expandedRow === index && (
                                 <tr>
@@ -253,11 +284,11 @@ const TutorsList = () => {
                             <div >
                                 
                                 <strong>Courses</strong>
-                                {findCourses(tutor.tutor_id)?.map((course) => (
+                                {findCourses(tutor.tutor_id)?.map((id) => (
                                     <Chip 
-                                        label={`${course.course_name}, ${course.course_difficulty}`} 
+                                        label={`${courses[id].course_name}, ${courses[id].course_difficulty}`} 
                                         color='default' 
-                                        style={{backgroundColor:alpha(course.color, 0.5), margin: '5px'}} 
+                                        style={{backgroundColor:alpha(courses[id].color, 0.5), margin: '5px'}} 
                                         variant='outlined' />
                                 ))}
                                 <Chip 
