@@ -324,4 +324,30 @@ export class admin {
         //get the availability of tutor by id
 
     }
+
+    getTutorReviews(id) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT r.*, CONCAT(u.firstname, ' ', u.lastname) AS guardian_name FROM reviews r JOIN users u ON r.guardian_id = u.user_id WHERE tutor_id = $1`, [id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res.rows);
+                }
+            });
+        });
+    }
+
+    addReview(body) {
+        return new Promise((resolve, reject) => {
+            con.query(`INSERT INTO reviews (description, guardian_id, tutor_id, course_name, date) VALUES ($1, $2, $3, $4, $5)`, [body.description, body.guardian_id, body.tutor_id, body.course_name, body.date], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
+    }
 }

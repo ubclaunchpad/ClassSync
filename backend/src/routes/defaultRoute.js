@@ -207,15 +207,15 @@ router.get("/booking/notes", (req, res) => {
 })
 
 router.post("/notes", (req, res) => {
-  const booking_id = req.body.id
-  const notes = req.body.notes
-//   console.log("Notes are ", notes)
-  const tutor = new tutorRegistrationController()
-  return tutor.updateNotes(booking_id, notes).then(() => {
-    res.status(200);
-  }).catch((err) => {
-    res.status(500).json(err);
-  })
+    const booking_id = req.body.id
+    const notes = req.body.notes
+    //   console.log("Notes are ", notes)
+    const tutor = new tutorRegistrationController()
+    return tutor.updateNotes(booking_id, notes).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 
 })
 router.get("/class", (req, res) => {
@@ -524,39 +524,63 @@ router.put("/registrations/:id/:status", (req, res) => {
 );
 
 router.get("/tutors", (req, res) => {
-  return admin.getAllTutors()
-      .then((tutors1) => {
-          console.log("Tutors ", tutors1);
-          res.status(200).json(tutors1);
-      })
-      .catch((err) => {
-          console.log("Error getting tutors ", err);
-          res.status(500).json(err);
-      });
+    return admin.getAllTutors()
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/tutor_offerings", (req, res) => {
-  return admin.getTutorOfferings()
-      .then((offerings) => {
-          console.log("Tutor Offerings ", offerings);
-          res.status(200).json(offerings);
-      })
-      .catch((err) => {
-          console.log("Error getting offerings ", err);
-          res.status(500).json(err);
-      });
+    return admin.getTutorOfferings()
+        .then((offerings) => {
+            console.log("Tutor Offerings ", offerings);
+            res.status(200).json(offerings);
+        })
+        .catch((err) => {
+            console.log("Error getting offerings ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/users", (req, res) => {
-  return admin.getUsers()
-      .then((users) => {
-          console.log("Users ", users);
-          res.status(200).json(users);
-      })
-      .catch((err) => {
-          console.log("Error getting users ", err);
-          res.status(500).json(err);
-      });
+    return admin.getUsers()
+        .then((users) => {
+            console.log("Users ", users);
+            res.status(200).json(users);
+        })
+        .catch((err) => {
+            console.log("Error getting users ", err);
+            res.status(500).json(err);
+        });
+});
+
+router.get("/reviews", (req, res) => { 
+    return admin.getTutorReviews(req.query.id)
+        .then((reviews) => {
+            console.log("Reviews ", reviews);
+            res.status(200).json(reviews);
+        })
+        .catch((err) => {
+            console.log("Error getting reviews ", err);
+            res.status(500).json(err);
+        });
+});
+
+router.post("/reviews", (req, res) => {
+    return admin
+        .addReview(req.body)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            console.log("Error adding review ", err);
+            res.status(500).json(err);
+        });
 });
 
 export default router;

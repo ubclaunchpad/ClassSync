@@ -3,15 +3,15 @@ import { admin } from "../models/admin.js";
 import { tutor } from "../models/tutor.js";
 import { v4 as uuidv4 } from 'uuid';
 
-export default class adminController {    
+export default class adminController {
     getToken() {
         const admin_ = new admin()
         const token = uuidv4(); // Generate a new token
-        
+
         return admin_.saveToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
 
 
     }
@@ -20,9 +20,9 @@ export default class adminController {
         const admin_ = new admin()
 
         return admin_.validateToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
     }
 
     deleteToken(token) {
@@ -30,9 +30,9 @@ export default class adminController {
         const admin_ = new admin()
 
         return admin_.deleteToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
     }
 
     addTutorsToCourse(course_id, tutor_ids) {
@@ -179,6 +179,29 @@ export default class adminController {
             });
     }
 
+    async getTutorReviews(id) {
+        const admin_ = new admin();
+        return admin_.getTutorReviews(id)
+            .then((reviews) => {
+                return reviews;
+            })
+            .catch((err) => {
+                console.log("Error getting reviews ", err);
+                throw (err);
+            });
+    }
+
+    async addReview(body) {
+        const admin_ = new admin();
+        return admin_.addReview(body)
+            .then((reviews) => {
+                return reviews;
+            })
+            .catch((err) => {
+                console.log("Error adding review ", err);
+                throw (err);
+            });
+    }
 }
 
 
