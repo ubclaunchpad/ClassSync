@@ -1,7 +1,7 @@
 .registration__table-row-element {
     padding: 10px;
     border-bottom: 1px solid #000;
-    text-align: left;
+    text-align: start;
 }
 
 .registration__row-expand-content {

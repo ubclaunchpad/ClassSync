@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Switch from 'react-switch';
-import { MainContentLayout } from '../../components/MainContentLayout';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import React, { useEffect, useState } from "react";
+import { MainContentLayout } from "../../components/MainContentLayout";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSort } from "@fortawesome/free-solid-svg-icons";
 import RegistrationRow from "../../components/RegistrationRow";
 import "./index.css";
 
@@ -228,32 +224,76 @@ const Registrations = () => {
           className="registration__table-header-element"
           onClick={handleSortByGuardian}
         >
-          Guardian {sortedByGuardian && (sortDirection === "asc" ? " ▲" : " ▼")}
+          Guardian{" "}
+          {sortedByGuardian ? (
+            sortDirection === "asc" ? (
+              " ▲"
+            ) : (
+              " ▼"
+            )
+          ) : (
+            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+          )}
         </div>
         <div
           className="registration__table-header-element"
           onClick={handleSortByStudent}
         >
-          Student {sortedByStudent && (sortDirection === "asc" ? " ▲" : " ▼")}
+          Student{" "}
+          {sortedByStudent ? (
+            sortDirection === "asc" ? (
+              " ▲"
+            ) : (
+              " ▼"
+            )
+          ) : (
+            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+          )}
         </div>
         <div
           className="registration__table-header-element"
           onClick={handleSortByCourse}
         >
-          Course {sortedByCourse && (sortDirection === "asc" ? " ▲" : " ▼")}
+          Course{" "}
+          {sortedByCourse ? (
+            sortDirection === "asc" ? (
+              " ▲"
+            ) : (
+              " ▼"
+            )
+          ) : (
+            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+          )}
         </div>
         <div
           className="registration__table-header-element"
           onClick={handleSortByDate}
         >
           Registration Date{" "}
-          {sortedByDate && (sortDirection === "asc" ? " ▲" : " ▼")}
+          {sortedByDate ? (
+            sortDirection === "asc" ? (
+              " ▲"
+            ) : (
+              " ▼"
+            )
+          ) : (
+            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+          )}
         </div>
         <div
           className="registration__table-header-element"
           onClick={handleByPaid}
         >
-          Paid {sortedByPaid && (sortDirection === "asc" ? " ▲" : " ▼")}
+          Paid{" "}
+          {sortedByPaid ? (
+            sortDirection === "asc" ? (
+              " ▲"
+            ) : (
+              " ▼"
+            )
+          ) : (
+            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+          )}
         </div>
         <div className="registration__table-header-element">Progress</div>
         <div
