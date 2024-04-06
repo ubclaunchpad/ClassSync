@@ -88,7 +88,24 @@ setSelectedTutors(selectAll ? [] : tutors.map(tutor => tutor.tutor_id));
 setSelectAll(!selectAll)
 
     }
-
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+  
+    useEffect(() => {
+        if (searchTerm !== '') {
+      const results = tutors.filter(tutor =>
+        tutor.tutor_name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+      console.log("Tutors are ", results)
+    } else {
+        setSearchResults(tutors);
+    }
+    }, [searchTerm]);
+  
+    const handleChange = event => {
+      setSearchTerm(event.target.value);
+    };
 // const findUniqueCourses = (tutor_id) => {
 //     let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
 //     let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id)?.course_name);
@@ -182,24 +199,26 @@ const renewTutors = async () => {
                         </svg>
                     </button>
 
-<a 
-    href="/allTutors" 
-    style={{
-        display: 'inline-block',
-        marginTop: '10px',
-        padding: '10px 20px',
-        backgroundColor: '#007BFF', // Change this to match your theme color
-        color: 'white',
-        textDecoration: 'none',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        fontSize: '16px',
-        transition: 'all 0.3s ease'
-    }}
->
-    View Tutor Profiles
-</a>                </div>
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <a 
+        href="/allTutors" 
+        style={{
+            display: 'inline-block',
+            marginTop: '10px',
+            padding: '10px 20px',
+            backgroundColor: '#007BFF', // Change this to match your theme color
+            color: 'white',
+            textDecoration: 'none',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            transition: 'all 0.3s ease'
+        }}
+    >
+        View Tutor Profiles
+    </a>  
+</div>              </div>
             }>
                    <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="date-picker-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', maxHeight: '75px', marginTop: '10px', marginBottom: '10px' }}>
@@ -228,6 +247,8 @@ const renewTutors = async () => {
                             placeholder="Search..." 
                             variant="outlined" 
                             size="small" 
+                            value={searchTerm}
+                            onChange={handleChange}
                             style={{ marginRight: '10px' }}
                         />
                     </div>
@@ -275,7 +296,7 @@ const renewTutors = async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tutors && tutors.map((tutor, index) => (
+                    {tutors && searchResults.map((tutor, index) => (
                         <React.Fragment key={index}>
                             <tr >
                                 <td className="registration__table-row-element">
