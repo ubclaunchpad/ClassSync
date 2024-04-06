@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from "moment";
+import moment from "moment-timezone";
 
 const ParentDashCalendar = ({students}) => {
-const localizer = momentLocalizer(moment);
+  moment.locale("en-GB");
+  const localizer = momentLocalizer(moment);
 const [eventsData, setEventsData] = useState([]);
 const events = [];
 
@@ -25,7 +26,8 @@ const ColorEnum = {
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-            data[0].search_enrollments_by_student_id.enrollments.map(enrollment => {
+            data[0].get_enrollments_by_student_id_2.enrollments.map(enrollment => {
+              const courseTitle = enrollment.course_info.course_difficulty + " " + enrollment.course_info.course_name;
             if (enrollment.bookings != null) {
               enrollment.bookings.map(booking => {
                 events.push({
@@ -33,7 +35,7 @@ const ColorEnum = {
                   end: moment(booking.start_time)
                   .add(booking.session_duration, "minute")
                   .toDate(),
-                  title: `${student.name} Tutoring Session with Tutor ${booking.tutor_id}`,
+                  title: courseTitle,
                   studentName: student.name,
                   color: student.color,
                 })

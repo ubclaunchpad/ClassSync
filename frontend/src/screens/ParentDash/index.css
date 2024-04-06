@@ -45,6 +45,8 @@
     margin: 1rem 1rem;
     font-weight: 600;
     font-size: x-large;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .colour {
