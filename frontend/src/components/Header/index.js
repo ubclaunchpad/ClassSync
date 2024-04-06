@@ -19,7 +19,6 @@ const Header = (props) => {
       navigate("/")
 
     }
-
   }
   
   return (
