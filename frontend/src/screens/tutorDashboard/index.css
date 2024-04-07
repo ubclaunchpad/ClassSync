@@ -1,3 +1,43 @@
-p {
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
 }
+
+h2 {
+    font-size: 1.4rem;
+}
+
+
+@media screen and (max-width: 750px) {
+    .column {
+        width: 100%;
+    }
+}
+
+.content-container {
+    height: 100vh;
+}
+
+/*header toggles*/
+  a {
+    text-decoration: none;
+    color: #103DA2;
+  }
+
+  .nav-banner {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .nav-banner a {
+    padding: 1rem 2rem;
+  }
+
+  .nav-banner a:hover,
+  .nav-banner a.active {
+    font-weight: bold; /* Bold the active tab */
+  }

@@ -53,8 +53,7 @@ function PrivateRoute({ Component, roles }) {
 function App() {
   return (
     <div className="App">
-            <BrowserRouter>
-
+      <BrowserRouter>
       <AuthProvider>
       <Layout>
         <Routes>
