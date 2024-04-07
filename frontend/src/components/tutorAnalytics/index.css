@@ -81,8 +81,19 @@ h2 {
     margin-right: auto;
 }
 
-.subtitle button {
+.subtitle button, select {
     margin-left: auto;
+    border-radius: 15px;
+    background-color: transparent;
+    border: 1.5px solid #103DA2;
+    cursor: pointer;
+    color: #103DA2;
+    padding: 3px 15px;
+}
+
+textarea {
+    height: 100%;
+    margin: 0 15px;
 }
 
 /*Grid element content*/
@@ -97,16 +108,32 @@ h2 {
     margin-bottom: 20px;
 }
 
+.feedback-content {
+    background-color: #B3DEFC;
+    border-radius: 15px;
+    margin: 15px 15px;
+    text-align: left;
+    padding: 0 15px;
+    overflow-y: auto;
+}
+
 .text-content {
     background-color: #B3DEFC;
     border-radius: 15px;
     margin-left: 15px;
     margin-right: 15px;
     height: 100%;
+    text-align: left;
+    padding: 0 15px;
+    overflow-y: auto;
 }
 
 .pie-content {
     display: flex;
     flex-direction: column;
     height: 100%;
+}
+
+.scroll-feedback {
+    overflow-y: auto;
 }

@@ -6,31 +6,38 @@ import "./index.css";
 /* PIE CHART CONFIG */
 
 export const PieData = [
-  ["Task", "Hours per Day"],
-  ["Work", 11],
-  ["Eat", 2],
-  ["Commute", 2],
-  ["Watch TV", 2],
+  ["Course", "Hours Taught"],
+  ["Python", 11],
+  ["Java", 2],
+  ["JS", 2],
+  ["Scratch", 2],
 ];
 
 export const PieOptions = {
-  title: "none",
-  colors: ['#7A8CA6', '#ACB6C6', '#343434', '#103DA2']
+  title: "",
+  colors: ['#7A8CA6', '#ACB6C6', '#343434', '#103DA2'],
+  legend: {
+    position: 'right', // Set legend position to bottom
+    alignment: 'center', // Optionally, center align the legend
+  },
 };
 
 /* LINE CHART CONFIG */
 
 export const LineData = [
-  ["Task", "Hours per Day"],
-  ["Work", 11],
-  ["Eat", 2],
-  ["Commute", 2],
-  ["Watch TV", 2],
-  ["Sleep", 7],
+  ["Month", "Hours Taught"],
+  ["Jan", 9],
+  ["Feb", 5],
+  ["Mar", 20],
+  ["Apr", 9],
+  ["May", 7],
+  ["Jun", 2],
+  ["Jul", 8]
 ];
 
 export const LineOptions = {
-  title: "My Daily Activities",
+  title: "",
+  legend: "none",
 };
 
 export const tutorBio = `
@@ -47,25 +54,80 @@ Jasmine is not just a tutor but a mentor. Our child has learned to code,
 `;
 
 export const TutorAnalytics = () => {
+  // Define state to manage the bio content, allow editing
+  const [bioContent, setBioContent] = useState(tutorBio);
+  const [editMode, setEditMode] = useState(false);
+  const [tempBioContent, setTempBioContent] = useState('');
+
+  const handleEditClick = () => {
+    setTempBioContent(bioContent);
+    setEditMode(true); 
+  };
+
+  const handleInputChange = (event) => {
+    setTempBioContent(event.target.value); 
+  };
+
+  const handleSaveClick = () => {
+    setBioContent(tempBioContent); 
+    setEditMode(false); 
+  };
+
+  const handleCancelClick = () => {
+    setTempBioContent(bioContent); // Restore original bio content
+    setEditMode(false); // Exit edit mode
+  };
+
+  // change calculation based on timeframe
+  const totalHours = PieData.slice(1).reduce((sum, [, hours]) => sum + hours, 0);
+  const [timeframe, setTimeframe] = useState('Week');
+  const handleTimeframeChange = (event) => {
+    setTimeframe(event.target.value);
+  };
+
   return (
     <div className='analytics-grid'>
       <div className='grid-item bio-container'>
         <div className='subtitle'>
-            <h2>Bio</h2>
-            <button>Edit</button>
+        <h2>Bio</h2>
+            {!editMode && <button onClick={handleEditClick}>Edit</button>}
+            {editMode && (
+              <div>
+                <button onClick={handleSaveClick}>Save</button>
+                <button onClick={handleCancelClick}>Cancel</button>
+              </div>
+            )}
         </div>
-        <p>{tutorBio}</p>
+        {editMode ? (
+          <textarea
+            value={tempBioContent}
+            onChange={handleInputChange}
+          />
+        ) : (
+          <p>{bioContent}</p>
+        )}
       </div>
+
       <div className='grid-item feedback-container'>
         <div className='subtitle'>
             <h2>Feedback</h2>
-            <button>Edit</button>
+            <select>
+              <option value="Parent">Parent</option>
+              <option value="Student">Student</option>
+            </select>
         </div>
-        <div className='text-content'>
-          <h4>Alex parennt</h4>
-          <p>{sampleFeedback}</p>
+        <div className='scroll-feedback'>
+          <div className='feedback-content'>
+            <h4>Alex (parent)</h4>
+            <p>{sampleFeedback}</p>
+          </div>
+          <div className='feedback-content'>
+            <h4>Alex (parent)</h4>
+            <p>{sampleFeedback}</p>
+          </div>
         </div>
       </div>
+
       <div className='grid-item impact-container'>
         <div className='subtitle'>
             <h2>Impact Overview</h2>
@@ -93,6 +155,7 @@ export const TutorAnalytics = () => {
               </div>
             </div>
       </div>
+
       <div className='grid-item line-chart-container'>
         <div className='subtitle'>
             <h2>Lessons Taught</h2>
@@ -107,10 +170,15 @@ export const TutorAnalytics = () => {
           />
         </div>
       </div>
+
       <div className='grid-item pie-chart-container'>
         <div className='subtitle'>
             <h2>Hours Taught</h2>
-            <button>Edit</button>
+            <select value={timeframe} onChange={handleTimeframeChange}>
+              <option value="Year">Year</option>
+              <option value="Month">Month</option>
+              <option value="Week">Week</option>
+            </select>
         </div>
         <div className='pie-content'>
           <Chart
@@ -121,7 +189,8 @@ export const TutorAnalytics = () => {
             height={"45vh"}
           />
           <div className='text-content'>
-            <p>lorem ipsem</p>
+          <p>Total Hours Taught this {timeframe}:</p>
+            <h2>{totalHours}</h2>
           </div>
         </div>
       </div>
