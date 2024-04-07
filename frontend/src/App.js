@@ -106,11 +106,11 @@ function App() {
                 }
               />
               <Route
-                path="/courseCurriculum/:id"
+                path="/course/:id"
                 element={
                   <PrivateRoute
                     Component={CourseCurriculumView}
-                    roles={["admin", "tutor", "guardian"]}
+                    roles={["admin", "tutor"]}
                   />
                 }
               />

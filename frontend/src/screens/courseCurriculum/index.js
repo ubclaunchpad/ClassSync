@@ -6,6 +6,7 @@ import "./courseCurriculum.css";
 import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { CourseFilesTab } from "../../components/CourseFilesTab";
+import {useParams} from 'react-router-dom'
 const url = "http://localhost:8080";
 
 const sampleData = {
@@ -79,8 +80,10 @@ const sampleData = {
   ],
 };
 
-export const CourseCurriculumView = ({ course_id = 4 }) => {
+export const CourseCurriculumView = () => {
   const [fileList, setFileList] = useState([]);
+  const {id} = useParams()
+  const course_id = id
   const [goals, setGoals] = useState(["No Description Available"]);
   const [courseValues, setCourseValues] = useState({
     name: "",
@@ -120,13 +123,14 @@ export const CourseCurriculumView = ({ course_id = 4 }) => {
         }
 
         setCourseValues({
-          name: data.course_name,
+          name: data.course_difficulty + " " + data.course_name,
           age: data.target_age,
           color: data.color,
           prerequisites: data.prerequisites,
           description: data.course_description,
           image: data.image,
           difficulty: data.course_difficulty,
+          info_page: data.info_page
         });
 
         setFileList(data.files == null ? [] : data.files);
@@ -144,6 +148,7 @@ export const CourseCurriculumView = ({ course_id = 4 }) => {
               className="course-curriculum__avatar"
               image={courseValues.image}
               size="Medium"
+              style={{width: 'auto'}}
             />
           </div>
           <div className="course-curriculum__details">
@@ -181,12 +186,18 @@ export const CourseCurriculumView = ({ course_id = 4 }) => {
                 <div className="curriculum-concepts__title ">
                   Learning goals
                 </div>
+                
                 <ul className="curriculum__list">
                   {console.log("These are the goals --->", goals)}
                   {goals?.map((goal) => {
                     return <li className="curriculum-learning-goal">{goal}</li>;
                   })}
                 </ul>
+                <div dangerouslySetInnerHTML={{ __html: courseValues.info_page }} />
+
+
+
+
               </div>
             </div>
           </div>
