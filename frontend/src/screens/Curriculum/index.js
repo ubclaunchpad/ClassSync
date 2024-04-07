@@ -1,14 +1,10 @@
-import './index.css';
 import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
-import { MainContentLayout } from '../../components/MainContentLayout';
-import { useAuth } from '../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-const ShopCourses = () => {
+
+const Curriculum = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
-
 
 
     const fetchData = async () => {
@@ -101,11 +97,7 @@ const ShopCourses = () => {
     }
 
     return (
-
-        <MainContentLayout>
-
-            <div className="courses-container"style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h2>Browse Courses</h2>
+            <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {courses && courses.map((course, index) => (
                     <div key={index}
                         style={{
@@ -127,21 +119,6 @@ const ShopCourses = () => {
                             <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
                             <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
                         </div>
-                        <button
-                            style={{
-                                backgroundColor: '#103DA2',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                padding: '10px 20px',
-                                cursor: 'pointer',
-                                alignSelf: 'center',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                            }} onClick={() => {
-                                setCourse(course);
-                                openModal();
-                            }}>Register</button>
                         <Modal
                             isOpen={modalIsOpen}
                             onRequestClose={closeModal}
@@ -229,7 +206,6 @@ const ShopCourses = () => {
 
                 ))}
             </div>
-        </MainContentLayout>
     );
 }
-export default ShopCourses;
+export default Curriculum;

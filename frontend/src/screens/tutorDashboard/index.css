@@ -18,8 +18,11 @@ h2 {
     }
 }
 
-.content-container {
-    height: 100vh;
+.tutor-content-container {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 /*header toggles*/

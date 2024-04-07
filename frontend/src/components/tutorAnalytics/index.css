@@ -6,7 +6,7 @@ h2 {
 .analytics-grid {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 30% 25% 70vh;
+    grid-template-rows: 35vh 25vh 70vh;
     column-gap: 10px;
     row-gap: 10px;
     height: 100%;

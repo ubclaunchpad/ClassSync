@@ -1,10 +1,9 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 
-import AppointmentCalendar from "../booking";
-import TutorCalendar from "../tutorBookings";
-import AdminCalendar from "../adminBooking";
+import TutorDashCal from "../../components/TutorDashCal";
 import TutorAnalytics from "../../components/tutorAnalytics";
+import Curriculum from "../Curriculum";
 
 import "./index.css"; 
 
@@ -33,11 +32,10 @@ export const TutorDashboard = ({ name, ...props }) => {
             {/* Curriculum link */}
             <a href="#" onClick={() => handleNavLinkClick("Curriculum")} className={activeLink === "Curriculum" ? "active" : ""}>Curriculum</a>
           </div>
-          <div className="content-container">
-            {/* Render different content based on the active link */}
+          <div className="tutor-content-container">
             {activeLink === "Dashboard" && <TutorAnalytics />}
-            {activeLink === "Schedule" && <TutorCalendar />}
-            {activeLink === "Curriculum" && <AdminCalendar />}
+            {activeLink === "Schedule" && <TutorDashCal />}
+            {activeLink === "Curriculum" && <Curriculum />}
           </div>
       </div>
   );

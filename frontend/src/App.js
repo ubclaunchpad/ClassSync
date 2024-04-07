@@ -86,7 +86,7 @@ function App() {
           <Route path="/tutors" element={<PrivateRoute Component={TutorsList} roles={['admin']} />} />
           <Route path="/shop" element={<PrivateRoute Component={ShopCourses} roles={['guardian']} />} />          
           <Route path="/allTutors" element={<PrivateRoute Component={ViewAllTutors} roles={['admin','tutor', 'guardian']} />} />   
-          <Route path="/tutorDash" element={<TutorDashboard />} />
+          <Route path="/tutorDash" element={<PrivateRoute Component={TutorDashboard} roles={['admin','tutor']} />} />  
 <Route path="/class/:id" element={<PrivateRoute Component={ClassRecordForm} roles={['tutor', 'guardian']} />} />
 
 
