@@ -174,6 +174,17 @@ export default class adminController {
             .catch((err) => Promise.reject(err));
     }
 
+    async getTutorCourses() {
+        const tutorsmodel = new tutor();
+        return tutorsmodel.getTutorCourses()
+            .then((tutors) => {
+                return tutors;
+            })
+            .catch((err) => {
+                console.log("Error getting tutors ", err);
+                throw (err);
+            });
+    }
     async getAllTutors() {
         const tutorsmodel = new tutor();
         return tutorsmodel.getAllTutors()

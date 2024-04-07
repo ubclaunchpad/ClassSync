@@ -7,12 +7,11 @@ import { Button } from "primereact/button";
 import { Redirect } from "react-router-dom";
 import { clsx } from "clsx";
 
-export const TutorInfoCard = ({ tutorId }) => {
-  const [tutorName, setTutorName] = useState("");
-  const [university, setUniversity] = useState("");
-  const [description, setDescription] = useState("");
-  const [about, setAbout] = useState("");
-  const [courses, setCourses] = useState([]);
+export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
+const tutorName = tutor.firstname + " " + tutor.lastname;
+const university = tutor.university;
+const description = tutor.description;
+const about = tutor.bio;
   const [offerings, setOfferings] = useState([]);
   const [showMore, setShowMore] = useState(false);
   //   console.log(courses);
@@ -60,15 +59,8 @@ export const TutorInfoCard = ({ tutorId }) => {
         );
         setOfferings(filteredOptions);
 
-        setUniversity(profileData.university);
-        setAbout(profileData.bio);
-        setDescription(profileData.description);
-        setTutorName(
-          `${profileData.firstName ? profileData.firstName : ""} ${
-            profileData.lastName ? profileData.lastName : ""
-          }`
-        );
-        console.log("Tutor Name", tutorName.trim().length);
+        
+        // console.log("Tutor Name", tutorName.trim().length);
       } catch (error) {
         console.error("Failed to fetch data", error);
       }
@@ -84,7 +76,7 @@ export const TutorInfoCard = ({ tutorId }) => {
         <div className="tutor-info-card__avatar-container">
           <Avatar
             className="tutor-info-card__avatar"
-            image="/TestProfileImage.png"
+            image={tutor.image}
             size="large"
             // shape="square"
           />
@@ -92,17 +84,15 @@ export const TutorInfoCard = ({ tutorId }) => {
         <div className="tutor-info-card__details">
           {
             <div className="tutor-info-card__name">
-              {tutorName.trim().length > 0
-                ? tutorName
-                : `${sampleData.firstName} ${sampleData.lastName}`}
+              {tutorName}
             </div>
           }
           <div className="tutor-info-card__description">
-            {description ? description : sampleData.description}
+            {description}
           </div>
           <div className="tutor__courses__container">
             <img className="tutor-info-card__icon" src="/book.svg" alt="g" />
-            <span className="tutor-info-card__text">{sampleData.courses}</span>
+            <span className="tutor-info-card__text">Teaches {courses}</span>
           </div>
           <div className="tutor__languages__container">
             <img
@@ -111,7 +101,7 @@ export const TutorInfoCard = ({ tutorId }) => {
               alt="g"
             />
             <span className="tutor-info-card__text">
-              {sampleData.languages}
+              {tutor.languages}
             </span>
           </div>
           <div className="tutor__languages__container">

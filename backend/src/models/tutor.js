@@ -2,13 +2,44 @@ import con from "../../index.js";
 
 export class tutor {
     
-
+async getTutorCourses() {
+  const client = await con.connect();
+  try {
+    return new Promise((resolve, reject) => {
+      client.query(
+        `SELECT
+          tutor_id,
+          STRING_AGG(
+            DISTINCT LOWER(REGEXP_REPLACE(c.course_name, '\\s+$', '', 'g')),
+            ', '
+          ) AS courses
+        FROM
+          tutor_offerings t
+        JOIN
+          courses c ON c.course_id = t.course_id
+        GROUP BY
+          tutor_id;`,
+        (error, results) => {
+          if (error) {
+            console.error('Error:', error);
+            reject(error);
+          } else {
+            console.log(results.rows);
+            resolve(results.rows);
+          }
+        }
+      );
+    });
+  } finally {
+    client.release();
+  }
+}
     async getAllTutors() {
         const client = await con.connect();
         try {
             return new Promise((resolve, reject) => {
                 client.query(
-                    "select t.*, u.firstname, u.lastname from tutors t join users u on u.user_id = t.tutor_id",
+                    "select t.*, u.firstname, u.lastname, u.image from tutors t join users u on u.user_id = t.tutor_id",
                     (error, results) => {
                         if (error) {
                             console.error('Error:', error);
