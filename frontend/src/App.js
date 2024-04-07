@@ -72,8 +72,8 @@ function App() {
 
           {/* <Route path="/add-tutor" element={<AddTutor />} /> */}
           <Route path="/viewTutor/:id" element={<PrivateRoute Component={TutorView} roles={['admin', 'tutor', 'guardian']} />} />         
-          <Route path="/tutor/availability/recurring" element={<PrivateRoute Component={ScheduleSelectorRecurring} roles={['tutor']} />} />
-          <Route path="/schedule/:id" element={<PrivateRoute Component={ScheduleSelector} roles={['tutor']} />} />
+          <Route path="/tutor/availability" element={<PrivateRoute Component={ScheduleSelectorRecurring} roles={['tutor']} />} />
+          <Route path="/schedule" element={<PrivateRoute Component={ScheduleSelector} roles={['tutor']} />} />
           <Route path="/appointment/:id" element={<PrivateRoute Component={AppointmentCalendar} roles={['guardian']} />} />          
           <Route path="/tutor/appointments" element={<PrivateRoute Component={TutorCalendar} roles={['tutor']} />} />          
           <Route path="/student/:id" element={<PrivateRoute Component={StudentDashboard} roles={['guardian']} />} />          

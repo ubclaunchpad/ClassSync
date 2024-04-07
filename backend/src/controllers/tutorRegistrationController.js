@@ -221,7 +221,7 @@ export default class tutorRegistrationController {
           const firstName = res.firstName;
           const lastName = res.lastName;
           if (email) {
-            return comparePassword(password, hashedPassword).then((result) => {
+            return comparePassword(password, hashedPassword).then(async (result) => {
               if (result) {
                 const token = jwt.sign(
                   {
@@ -236,7 +236,9 @@ export default class tutorRegistrationController {
                 );
 
                 // console.log("Printing token: " + token);
+                const dates = await this.tutor.getDatesByTutor(userId); // Call getDatesByTutor with userId
 
+                console.log(dates)
                 resolve({
                   email: email,
                   role: "tutor",
@@ -248,7 +250,9 @@ export default class tutorRegistrationController {
                     name: firstName + " " + lastName,
                     role: "tutor",
                     picture: res.picture,
-                    courses: res.courses
+                    courses: res.courses,
+                    startdate: dates.startdate,
+                    enddate: dates.enddate
                   
                   }
                 });

@@ -40,6 +40,8 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                         <li><a href="/tutor">Dashboard</a></li>
                         <li><a href="/tutorprofile">Profile</a></li>
                         <li>
+                        </li>                        <li><a href="/tutor/availability">Availability</a></li>
+
                     <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
                     <ul className="courses-sublinks">
                         {user.courses.map((course) => (
@@ -48,7 +50,6 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                             </li>
                         ))}
                     </ul>
-                </li>                        <li><a href="/tutor/availability/recurring">Availability</a></li>
                         <li><a href="/tutor/appointments">Appointments</a></li>
                         <li><a href="/help">Help</a></li>
 
