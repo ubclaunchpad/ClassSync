@@ -1,0 +1,60 @@
+.course-files-tab-container {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 100%;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  min-height: 120px;
+  overflow: hidden;
+}
+.course-files-tab__information {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
+  padding: 1rem;
+}
+.course-files-tab__name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #103da2;
+}
+
+.course-files-tab__age {
+  font-size: 12px;
+}
+
+.course-files-tab__prerequisite {
+  font-size: 12px;
+}
+
+.course-files-tab-button__container {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center;
+  align-items: center; */
+  height: 100%;
+  min-width: 70px;
+  background-color: #103da2;
+}
+
+.file-tab-button {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.course-files-tab-button__img {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+  transform: rotate(270deg);
+}
