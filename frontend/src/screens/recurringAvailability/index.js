@@ -6,6 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // import "./index.css"; // Import your custom styles
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { textAlign } from "@mui/system";
+import {useNavigate} from "react-router-dom"
 
 
 
@@ -16,6 +17,7 @@ export default function ScheduleSelectorRecurring() {
     const [maxDate, setMaxDate] = useState(new Date());
     const userid = localStorage.getItem("userID");
     const startDate = startOfWeek(new Date(), { weekStartsOn: 0 });
+    const navigate = useNavigate()
 
     console.log(startDate);
 
@@ -169,7 +171,11 @@ export default function ScheduleSelectorRecurring() {
             .catch(error => console.error('There was an error!', error));
         loadAvailability();
     }, []); // Empty dependency array means this effect runs once on mount
-
+    const navigateToToday = () => {
+        const today = new Date();
+        const todayStartDate = startOfWeek(today, { weekStartsOn: 0 });
+        navigate(`/schedule/${todayStartDate.toISOString().split('T')[0]}`);
+    };
 
 
     return (
@@ -182,7 +188,9 @@ export default function ScheduleSelectorRecurring() {
 
                         <p>Enhance your tutoring experience by setting recurring availability for your classes! Streamline your schedule and make it easy for students to book sessions with you regularly. </p>
                         <p>Simply click and drag to select the days and times you are available for tutoring and click submit. </p>
-                        <p>You can always update your recurring availability or change your availability for a week if needed.</p>                    </div>
+                        <p>You can always update your recurring availability or change your availability for a week if needed.</p>   
+                        <button onClick={navigateToToday} >Weekly Availability</button>
+                                         </div>
                 }>
 
                 <div className="App">

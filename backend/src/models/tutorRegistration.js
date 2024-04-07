@@ -182,6 +182,30 @@ async renewTutors(tutors, enddate) {
     }
   }
 
+async getDatesByTutor(id) {
+  const client = await con.connect();
+  try {
+    return new Promise((resolve, reject) => {
+      client.query(
+        "SELECT startdate, enddate FROM tutors WHERE tutor_id = $1",
+        [id],
+        (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows[0]); // Resolve the promise with the query results
+          }
+        }
+      );
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.release();
+  }
+}
+
   async deleteAllOfferings(userID) {
     const client = await con.connect();
     try {

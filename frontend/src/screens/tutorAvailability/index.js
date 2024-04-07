@@ -6,6 +6,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { MainContentLayout } from "../../components/MainContentLayout";
+import { useAuth } from "../../contexts/AuthContext";
 import "./index.css"; // Import your custom styles
 
 
@@ -14,7 +15,8 @@ import "./index.css"; // Import your custom styles
 export default function ScheduleSelector() {
     const [isLoading, setIsLoading] = useState(false);
     const [calendar, setCalendar] = useState([]);
-    const [maxDate, setMaxDate] = useState(new Date());
+    const {user} = useAuth()
+    const maxDate = new Date(user.enddate);
     const { id } = useParams();
     const userID = localStorage.getItem("userID");
     const [isLoaded, setIsLoaded] = useState(false);
@@ -120,6 +122,7 @@ export default function ScheduleSelector() {
     };
 
     const navigateToNextWeek = () => {
+        console.log("Start Date ", startDate, " Max Date ", maxDate)
         const nextWeekStartDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
         setStartDate(nextWeekStartDate);
         navigate(`/schedule/${nextWeekStartDate.toISOString().split('T')[0]}`);
@@ -210,17 +213,7 @@ export default function ScheduleSelector() {
     }
 
 
-    useEffect(() => {
-        getDates()
-            .then(dates => {
-                let date = new Date(dates.end_date);
-
-                setMaxDate(date);
-                console.log("Max Date", maxDate);
-            })
-            .catch(error => console.error('There was an error!', error));
-    }, []); // Empty dependency array means this effect runs once on mount
-
+  
     const clearAvailability = async () => {
         console.log("Clearing Availability")
 
@@ -285,12 +278,16 @@ export default function ScheduleSelector() {
                     <div className="main-container">
                         <div className="button-group">
                             <button className="theme-button" onClick={navigateToToday}>Today</button>
-                            <button className="img-btn" onClick={navigateToPreviousWeek}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg></button>
-                            <button className="img-btn" onClick={navigateToNextWeek}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" /></svg></button>
-                        </div>
+                            <button className="img-btn" onClick={navigateToPreviousWeek} disabled={startDate < new Date()}><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg></button>
+                            <button className="img-btn" onClick={navigateToNextWeek} disabled={endOfWeek(startDate) >= maxDate}>
+  <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+  </svg>
+</button>                        </div>
 
                         <div className="date-picker-container">
-                            <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate} />
+                            <DatePicker value={startDate} onChange={handleChange} minDate={minDate} maxDate={maxDate}  />
                         </div>
 
                         <div className="symbol-group">
