@@ -277,6 +277,7 @@ if (newBooking === 1) {
     const tutorsOptions = respData.map((course) => ({
       value: course.tutor_id,
       label: course.tutor_name,
+      image: course.tutor_picture
     }));
 
     console.log("Available Tutors ", tutorsOptions)

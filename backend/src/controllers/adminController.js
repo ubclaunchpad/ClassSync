@@ -27,6 +27,22 @@ export default class adminController {
 
     }
 
+    getTutorImages() {
+        const admin_ = new admin()
+        
+return admin_.getTutorImages().then((res) => {
+  const hashMap = res.reduce((map, obj) => {
+    map[obj.user_id] = obj.image;
+    return map;
+  }, {});
+  return hashMap;
+})       .catch((err) => {
+           throw err
+        })
+
+
+    }
+
     validateToken(token) {
         const admin_ = new admin()
 

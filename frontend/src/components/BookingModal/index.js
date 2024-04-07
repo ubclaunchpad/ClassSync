@@ -58,8 +58,7 @@ const Modal = ({ selectedSlot, availablePeople, onBook, onClose }) => {
   window.open(`/viewTutor/${person.value}`, '_blank')
 }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#ccc', marginRight: '10px' }} />
-                                    <p style={{ margin: '0', fontWeight: '500', color: '#333', textDecoration: 'none' }}>
+<img src={person.image} style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />                                    <p style={{ margin: '0', fontWeight: '500', color: '#333', textDecoration: 'none' }}>
   {person.label}
 </p>                                </div>
                                 <button style={{ padding: '12px 24px', backgroundColor: '#B3DEFC', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.3s ease', fontSize: '15px' }} onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#007BFF'; e.currentTarget.style.color = '#fff'; }} onMouseLeave={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#B3DEFC'; e.currentTarget.style.color = '#000'; }} onClick={(e) => { e.stopPropagation(); onBook(person); }}>

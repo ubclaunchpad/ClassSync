@@ -569,6 +569,17 @@ router.put("/registrations/:id/:status", (req, res) => {
 }
 );
 
+router.get("/images/tutors", (req, res) => {
+    return admin.getTutorImages()
+    .then((tutors1) => {
+        console.log("Tutors ", tutors1);
+        res.status(200).json(tutors1);
+    })
+    .catch((err) => {
+        console.log("Error getting tutors ", err);
+        res.status(500).json(err);
+    });
+})
 router.get("/tutor-courses", (req, res) => {
     return admin.getTutorCourses()
     .then((tutors1) => {

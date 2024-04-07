@@ -130,7 +130,11 @@ export default function ReactBigCalendar() {
             setOpenSlots(openSlots)
             console.log(data);
 
-            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
+            url = `http://localhost:8080/images/tutors`
+            const imageResponse = await fetch(url);
+            const imageData = await imageResponse.json();
+
+            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label, image: imageData[value] }));
             setTutorIDS(tutorOptions)
             setIsLoaded(true)
 
