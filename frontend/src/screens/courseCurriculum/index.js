@@ -142,8 +142,8 @@ export const CourseCurriculumView = ({ course_id = 6 }) => {
           <div className="course-curriculum__avatar-container">
             <Avatar
               className="course-curriculum__avatar"
-              image="/TestProfileImage.png"
-              size="large"
+              image={courseValues.image}
+              size="Medium"
             />
           </div>
           <div className="course-curriculum__details">
