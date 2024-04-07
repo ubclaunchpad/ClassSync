@@ -160,6 +160,18 @@ export default class tutorRegistrationController {
         });
     });
   }
+  async getFullProfile(userID) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .getFullProfile(userID)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
   async getProfile(userID) {
     return new Promise((resolve, reject) => {
       return this.tutor
