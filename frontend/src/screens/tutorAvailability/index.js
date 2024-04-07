@@ -22,12 +22,12 @@ export default function ScheduleSelector() {
     const [isLoaded, setIsLoaded] = useState(false);
 
     console.log("id = " + id);
-    const [year, month, day] = id.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    console.log("Date", date);
+    // const [year, month, day] = id.split('-').map(Number);
+    // const date = new Date(year, month - 1, day);
+    // console.log("Date", date);
 
     // const date = new Date(id);
-    const [startDate, setStartDate] = useState(startOfWeek(date, { weekStartsOn: 0 }));
+    const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 0 }));
     console.log("Schedule Start ", startDate);
     async function getAvailability() {
         const response = await fetch(`http://localhost:8080/tutor/availability/schedule?userID=${userID}&startDate=${startDate.toISOString().split('T')[0]}`, {
@@ -111,21 +111,21 @@ export default function ScheduleSelector() {
     const navigateToPreviousWeek = () => {
         const previousWeekStartDate = new Date(startDate.getTime() - 7 * 24 * 60 * 60 * 1000);
         setStartDate(previousWeekStartDate);
-        navigate(`/schedule/${previousWeekStartDate.toISOString().split('T')[0]}`);
+        // navigate(`/schedule/${previousWeekStartDate.toISOString().split('T')[0]}`);
     };
 
     const navigateToToday = () => {
         const today = new Date();
         const todayStartDate = startOfWeek(today, { weekStartsOn: 0 });
         setStartDate(todayStartDate);
-        navigate(`/schedule/${todayStartDate.toISOString().split('T')[0]}`);
+        // navigate(`/schedule/${todayStartDate.toISOString().split('T')[0]}`);
     };
 
     const navigateToNextWeek = () => {
         console.log("Start Date ", startDate, " Max Date ", maxDate)
         const nextWeekStartDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
         setStartDate(nextWeekStartDate);
-        navigate(`/schedule/${nextWeekStartDate.toISOString().split('T')[0]}`);
+        // navigate(`/schedule/${nextWeekStartDate.toISOString().split('T')[0]}`);
     };
 
     const handleChange = (newDate) => {
@@ -138,7 +138,7 @@ export default function ScheduleSelector() {
         setStartDate(newDateStartOfWeek);
         console.log('Updated startDate:', startDate);
 
-        navigate(`/schedule/${newDateStartOfWeek.toISOString().split('T')[0]}`);
+        // navigate(`/schedule/${newDateStartOfWeek.toISOString().split('T')[0]}`);
     }
 
     async function handleSubmitCalendar(newSchedule) {
@@ -260,18 +260,14 @@ export default function ScheduleSelector() {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns} >
-            <MainContentLayout
+            {/* <MainContentLayout
 
                 rightColumnContent={
                     <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
-                        <h3> Set Weekly Availability</h3>
-
-                        <p>Need to adjust your schedule for a specific week? No problem! You can easily change your availability for any week. </p>
-                        <p>Just navigate to the week you want to change, then click and drag to select the new times you are available. When you're done, click the 'Submit' button to save your changes. </p>
-                        <p style={{ marginBottom: "-10px" }}>Remember, you can always reset to your recurring availability or clear your availability for a week if needed.</p>
+                       
                     </div>
                 }
-            >
+            > */}
 
                 <div className="App">
                     {console.log("id = " + startDate)}
@@ -310,7 +306,7 @@ export default function ScheduleSelector() {
                         )}
                     </div>
                 </div>
-            </MainContentLayout>
+            {/* </MainContentLayout> */}
         </LocalizationProvider >
     );
 }
