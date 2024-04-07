@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { sampleData } from "./fakeData";
 import { Rating } from "primereact/rating";
 import { Button } from "primereact/button";
-import { Redirect } from "react-router-dom";
+import { Redirect, useNavigate } from "react-router-dom";
 import { clsx } from "clsx";
 
 export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
@@ -17,13 +17,14 @@ const about = tutor.bio;
   //   console.log(courses);
   const url = "http://localhost:8080";
   const frontEndUrl = "http://localhost:3000";
+  const navigate = useNavigate()
 
   //   console.log(tutorId);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const id = 46;
+        const id = tutorId;
         // Fetch courses data
         // const courses = await fetch(`${url}/tutorProfile/courses?userId=${id}`);
         // const coursesData = await courses.json();
@@ -43,9 +44,7 @@ const about = tutor.bio;
         }));
 
         // Fetch profile data
-        const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
-        const profileData = await profileResponse.json();
-        // console.log("Profile Data", profileData);
+     
 
         // Fetch Offerings data
 
@@ -101,7 +100,7 @@ const about = tutor.bio;
               alt="g"
             />
             <span className="tutor-info-card__text">
-              {tutor.languages}
+              Speaks {tutor.languages}
             </span>
           </div>
           <div className="tutor__languages__container">
@@ -142,8 +141,7 @@ const about = tutor.bio;
                 <Button
                   className="tutor-info__learn-more"
                   label="Learn More"
-                  onClick={() => {}}
-                />
+          />
               </a>
             </div>
           </div>

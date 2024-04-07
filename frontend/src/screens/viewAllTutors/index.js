@@ -53,7 +53,7 @@ console.log("Courses ", coursesMap);
               {allTutors.map((tutor) => {
                 return (
                   <div>
-                    <TutorInfoCard tutorId={tutor.tutorId} tutor={tutor} courses={courses[tutor.tutor_id]} />
+                    <TutorInfoCard tutorId={tutor.tutor_id} tutor={tutor} courses={courses[tutor.tutor_id]} />
                   </div>
                 );
               })}

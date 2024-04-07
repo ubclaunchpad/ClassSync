@@ -124,6 +124,16 @@ router.get("/profile", (req, res) => {
         res.status(500).send({ error: err.detail });
     });
 });
+router.get("/fullprofile", (req, res) => {
+    const userID = req.query.id;
+
+
+    tutor.getFullProfile(userID).then((result) => {
+        res.status(200).json(result);
+    }).catch((err) => {
+        res.status(500).send({ error: err.detail });
+    });
+});
 
 router.get("/allTutors", (req, res)=>{
     tutor.getAllTutors().then((result)=>{
