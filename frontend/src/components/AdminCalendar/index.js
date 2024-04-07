@@ -615,32 +615,32 @@ if (newBooking === 1) {
     const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
     const timeFormat = "HH:mm";
     const currentTimeSlot = moment(date).format(timeFormat);
-    const prevTimeSlot = moment(currentTimeSlot, "HH:mm")
-      .subtract(30, "minutes")
-      .format("HH:mm");
-      if (selectedSlot) {
-        const selectedSlotStart = moment(selectedSlot.start, timeFormat);
-        const selectedSlotDay = moment(selectedSlot.start).day();
-        const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
-    
-        if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
-          return {
-            className: "active",
-          };
-        }
+  
+    const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+    const currentDate = new Date();
+    const diffTime = date - currentDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+    if (selectedSlot) {
+      const selectedSlotStart = moment(selectedSlot.start, timeFormat);
+      const selectedSlotDay = moment(selectedSlot.start).day();
+      const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
+  
+      if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
+        return {
+          className: "active",
+        };
       }
-    if (
-      openSlots[dayOfWeek] &&
-      (openSlots[dayOfWeek].includes(currentTimeSlot) ||
-        openSlots[dayOfWeek].includes(prevTimeSlot))
-    ) {
+    }
+  
+    if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
       return {
         className: "available",
       };
     } else {
       return {
-        className: "unavailable",
-      };
+        className: "unavailable"
+      }
     }
   };
 
@@ -719,7 +719,7 @@ if (newBooking === 1) {
 
     if (
       openSlots[dayOfWeek] &&
-      (openSlots[dayOfWeek].includes(currentTimeSlot) ||
+      (openSlots[dayOfWeek].includes(currentTimeSlot) &&
         openSlots[dayOfWeek].includes(nextTimeSlot))
     ) {
       setSelectedSlot(event)

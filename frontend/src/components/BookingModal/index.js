@@ -9,7 +9,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 const Modal = ({ selectedSlot, availablePeople, onBook, onClose }) => {
-    const navigate = useNavigate()
 
     return (
         <div className="modal-container">
