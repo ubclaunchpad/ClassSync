@@ -115,7 +115,7 @@ function App() {
                 }
               />
               <Route
-                path="/tutor/availability/recurring"
+                path="/tutor/availability"
                 element={
                   <PrivateRoute
                     Component={ScheduleSelectorRecurring}
@@ -124,7 +124,7 @@ function App() {
                 }
               />
               <Route
-                path="/schedule/:id"
+                path="/schedule"
                 element={
                   <PrivateRoute
                     Component={ScheduleSelector}

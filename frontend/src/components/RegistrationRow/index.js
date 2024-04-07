@@ -159,7 +159,9 @@ export default function RegistrationRow({
         <div
           className="registration__row-expand-content"
           style={{ backgroundColor: data.paid ? "#inherit" : "inherit" }}
+
         >
+          Email: {data.email}
           <div className="registration__row-expand-title">All Bookings</div>
           <table className="registration__row-expand-table">
             <tr className="registration__row-expand-row">
