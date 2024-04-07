@@ -29,8 +29,9 @@ const Banner = ({ smallText, mainText, smallTextBelow, role, user }) => {
         <div className="banner-text-container">
           <p className="banner-subtitle">Tutor Dashboard</p>
           <h1 className="banner-title">Welcome {user.name}!</h1>
-          {smallTextBelow && <p className="banner-subtitle">TBD - Start date end date</p>}
-        </div>
+<p className="banner-subtitle">
+  {new Date(user.startdate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} - {new Date(user.enddate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+</p>        </div>
       </div>
     );
   } else if (user.role === 'admin') {

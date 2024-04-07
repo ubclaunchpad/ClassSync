@@ -3,7 +3,6 @@ import ScheduleSelector from 'react-schedule-selector';
 import { addDays, startOfWeek } from 'date-fns';
 
 const Calendar = (props) => {
-    console.log("Calendar props ", props.calendar);
     const [schedule, setSchedule] = useState(props.calendar);
 
     const handleChange = (newSchedule) => {
