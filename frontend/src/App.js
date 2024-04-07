@@ -204,7 +204,7 @@ function App() {
                 element={
                   <PrivateRoute
                     Component={ClassRecordForm}
-                    roles={["tutor", "guardian"]}
+                    roles={["tutor", "admin"]}
                   />
                 }
               />
