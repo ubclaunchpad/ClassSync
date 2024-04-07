@@ -79,7 +79,7 @@ const sampleData = {
   ],
 };
 
-export const CourseCurriculumView = ({ course_id = 6 }) => {
+export const CourseCurriculumView = ({ course_id = 4 }) => {
   const [fileList, setFileList] = useState([]);
   const [goals, setGoals] = useState(["No Description Available"]);
   const [courseValues, setCourseValues] = useState({
