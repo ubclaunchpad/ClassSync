@@ -507,6 +507,17 @@ router.get("/appointments", (req, res) => {
         });
 });
 
+router.post("/renew", (req, res) => {
+    const tutors = req.body.selectedTutors;
+    const enddate = req.body.endDate;
+
+    const tutor = new tutorRegistrationController()
+    return tutor.renewTutors(tutors, enddate).then(() => {
+        res.status(200).end();
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+})
 
 router.get("/courses", (req, res) => {
     return admin.getCourses()
@@ -573,7 +584,7 @@ router.get("/tutors", (req, res) => {
 router.get("/tutor_offerings", (req, res) => {
   return admin.getTutorOfferings()
       .then((offerings) => {
-          console.log("Tutor Offerings ", offerings);
+        //   console.log("Tutor Offerings ", offerings);
           res.status(200).json(offerings);
       })
       .catch((err) => {

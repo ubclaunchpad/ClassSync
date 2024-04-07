@@ -49,6 +49,30 @@ export default class studentProfileController {
     });
   }
 
+  getBookingsByStudentId(student_id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getBookingsByStudentId(student_id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
+
+  getBookingsByGuardianId(guardian_id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getBookingsByGuardianId(guardian_id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
+
   getStudents() {
     const studentProfileModel = new StudentProfile();
 
@@ -83,7 +107,12 @@ export default class studentProfileController {
         first_name: req.body.f_name,
         last_name: req.body.l_name,
         birthday: req.body.dob,
+        grade: req.body.grade,
+        city: req.body.city,
+        province: req.body.province,
+        pronouns: req.body.pronouns,
         accommodations: req.body.accommodations,
+        color: req.body.color,
         fk_parent_id: req.body.fk_guardian_id
       };
 

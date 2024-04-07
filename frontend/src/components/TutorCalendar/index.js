@@ -5,7 +5,7 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 import { endOfWeek, set, startOfWeek } from "date-fns";
 import Select from "react-select";
 
@@ -561,7 +561,7 @@ export default function ReactBigCalendar(props) {
     }
 
     return (
-        <TutorDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
                     <h4 style={{ color: '#333', marginBottom: '10px' }}>Select student</h4>
@@ -703,6 +703,6 @@ export default function ReactBigCalendar(props) {
             </div>
 
 
-        </ TutorDashboardLayout >
+        </ MainContentLayout >
     );
 }

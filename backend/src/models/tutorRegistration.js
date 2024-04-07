@@ -1,6 +1,36 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
+async renewTutors(tutors, enddate) {
+ 
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        let query = `UPDATE public.tutors
+        SET enddate = '${enddate}'
+        WHERE tutor_id = ANY(ARRAY[${tutors.join(',')}]);`;
+
+
+        client.query(
+          `UPDATE public.tutors
+          SET enddate = $1
+          WHERE tutor_id = ANY($2::int[]);`,
+          [enddate, tutors],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log("Success")
+              resolve();
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
   async getTutorOfferings(userID) {
     console.log("User ID ", userID);
 
@@ -107,8 +137,8 @@ export class tutorRegistration {
     try {
       return new Promise((resolve, reject) => {
         client.query(
-          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6)",
-          [email, role, null, null, null, null],
+          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6, $7)",
+          [email, role, null, null, null, null, null],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
@@ -118,12 +148,29 @@ export class tutorRegistration {
               const user_id = results.rows[0]._user_id;
               const firstName = results.rows[0]._firstname;
               const lastName = results.rows[0]._lastname;
-              resolve({
-                hashedPassword: hashedPassword,
-                user_id: user_id,
-                firstName: firstName,
-                lastName: lastName,
-              });
+              const picture = results.rows[0]._picture;
+
+              // Execute another SQL query
+              client.query(
+                "SELECT t.course_id, CONCAT(c.course_name, ' - ', c.course_difficulty) AS name FROM tutor_offerings t JOIN courses c ON t.course_id = c.course_id WHERE t.tutor_id = $1",
+                [user_id],
+                (error, courseResults) => {
+                  if (error) {
+                    console.error("Error:", error);
+                    reject(error);
+                  } else {
+                    // Resolve the promise with an object containing all the user data
+                    resolve({
+                      hashedPassword: hashedPassword,
+                      user_id: user_id,
+                      firstName: firstName,
+                      lastName: lastName,
+                      picture: picture,
+                      courses: courseResults.rows, // Add the results of the second query to the object
+                    });
+                  }
+                }
+              );
             }
           }
         );

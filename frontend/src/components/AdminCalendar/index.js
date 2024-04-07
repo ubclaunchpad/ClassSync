@@ -5,7 +5,7 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 import { differenceInHours, endOfWeek, set, startOfWeek } from "date-fns";
 import Select from "react-select";
 import AdminTutorCalendar from "../AdminTutorCalendar";
@@ -18,8 +18,6 @@ import trashIcon from "../../assets/trashBin.svg";
 import editIcon from "../../assets/edit.svg";
 import saveIcon from "../../assets/save.svg";
 
-moment.locale("en-GB");
-const localizer = momentLocalizer(moment);
 
 export default function AdminCalendar() {
   const [eventsData, setEventsData] = useState(events);
@@ -49,43 +47,13 @@ export default function AdminCalendar() {
   const [availablePeople, setAvailablePeople] = useState([])
   const [bookingChange, setBookingChange] = useState(0)
 
+  moment.locale("en-GB");
+  const localizer = momentLocalizer(moment);
   const loadData = async () => {
-    // let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem(
-    //   "userID"
-    // )}&startDate=${startDate.toISOString().split("T")[0]}`;
+    
 
     try {
-      // const response = await fetch(url);
-
-      // if (!response.ok) {
-      //   console.log("Failed to fetch data");
-      //   throw new Error("Network response was not ok");
-      // }
-
-      // const data = await response.json();
-      // console.log("Response is ", data);
-
-      // const filteredData = {};
-
-      // Object.entries(data[0]).forEach(([day, slots]) => {
-      //   slots.sort(); // Ensure the slots are sorted in ascending order
-      //   filteredData[day] = slots.filter((slot, index) => {
-      //     const nextSlot = slots[index + 1];
-      //     if (!nextSlot) return false; // If there's no next slot, exclude the current slot
-      //     const currentSlotHour = parseInt(slot.split(":")[0]);
-      //     const currentSlotMinute = parseInt(slot.split(":")[1]);
-      //     const nextSlotHour = parseInt(nextSlot.split(":")[0]);
-      //     const nextSlotMinute = parseInt(nextSlot.split(":")[1]);
-      //     // If the next slot is within the same hour or the next half hour, include the current slot
-      //     return (
-      //       nextSlotHour === currentSlotHour ||
-      //       (nextSlotHour === currentSlotHour + 1 &&
-      //         nextSlotMinute < currentSlotMinute)
-      //     );
-      //   });
-      // });
-
-      // setOpenSlots(filteredData);
+      
       let url = `http://localhost:8080/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
@@ -729,6 +697,26 @@ if (newBooking === 1) {
     loadData()
   }
 
+
+  const selectSlot = (event) => {
+
+    const dayOfWeek = moment(event.start).day(); // 0 for Sunday, 1 for Monday, etc.
+    const timeFormat = "HH:mm";
+    const currentTimeSlot = moment(event.start).format(timeFormat);
+    const nextTimeSlot = moment(currentTimeSlot, "HH:mm")
+      .add(30, "minutes")
+      .format("HH:mm");
+
+    if (
+      openSlots[dayOfWeek] &&
+      (openSlots[dayOfWeek].includes(currentTimeSlot) ||
+        openSlots[dayOfWeek].includes(nextTimeSlot))
+    ) {
+      setSelectedSlot(event)
+    getAvailableTutors(event, 1)
+    setSelectingTutor(true)}
+    }
+  
   const handleSelectedTutor = async () => {
     setSelectingTutor(false);
     // await loadData();
@@ -736,7 +724,7 @@ if (newBooking === 1) {
   };
 
   return (
-    <div>
+    <>
       {/* {selectingTutor ? (
      <TutorDashboardLayout
      rightColumnContent={  bookingError ? (
@@ -1150,11 +1138,12 @@ if (newBooking === 1) {
           </div>
         </TutorDashboardLayout>
       )} */}
-<TutorDashboardLayout 
+<MainContentLayout 
 rightColumnContent={
   selectingTutor ? (
     bookingError ? (
       <div style={{ color: "red", marginTop: "10px" }}>{bookingError} 
+      
             <div className="back-enrollment-container">
             <button className="back-enrollment" 
             onClick={()=>{setSelectingTutor(false)
@@ -1319,15 +1308,8 @@ rightColumnContent={
         </div>
       )
     ) : (
-      <div
-        style={{
-          backgroundColor: "#f5f5f5",
-          borderRadius: "10px",
-          padding: "20px",
-          marginTop: "16px",
-          boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-        }}
-      >
+      <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
+
         <h4 style={{ color: "#333", marginBottom: "10px" }}>
           Select student
         </h4>
@@ -1517,10 +1499,7 @@ Clear Search
                 max={new Date(2020, 1, 0, 19, 0, 0)}
                 style={{ height: "75vh", width: "90vw" }}
                 onSelectEvent={editEvent}
-                onSelectSlot={(event) => {
-                  setSelectedSlot(event)
-                getAvailableTutors(event, 1)
-                setSelectingTutor(true)}}
+                onSelectSlot={selectSlot}
                 slotPropGetter={slotPropGetter}
                 onNavigate={(date) => {
                   setSelectedSlot(null);
@@ -1529,8 +1508,8 @@ Clear Search
               />
             )}
           </div>
-        </TutorDashboardLayout>
+        </MainContentLayout>
 
-    </div>
+    </>
   );
 }

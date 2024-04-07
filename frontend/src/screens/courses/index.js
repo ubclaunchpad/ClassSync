@@ -4,7 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css'
 import 'react-dropzone-uploader/dist/styles.css'
 
-import { TutorDashboardLayout } from '../../components/TutorDashboardLayout';
+import { MainContentLayout } from '../../components/MainContentLayout';
 import { AddCourseModal } from '../../components/AddCourseModal';
 import { EditCourseModal } from '../../components/EditCourseModal';
 
@@ -147,7 +147,7 @@ const Courses = () => {
 
 
     return (
-        <TutorDashboardLayout
+        <MainContentLayout
             smallText="Admin Dashboard"
             rightColumnContent={
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
@@ -230,7 +230,7 @@ const Courses = () => {
                     })}
                 </tbody>
             </table>
-        </TutorDashboardLayout >
+        </MainContentLayout >
 
     );
 

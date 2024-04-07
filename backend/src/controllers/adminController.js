@@ -118,20 +118,16 @@ export default class adminController {
             })
 
     }
-    getCourses() {
-        const admin_ = new admin();
 
-        return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
-    }
 
     getCourses() {
         const admin_ = new admin();
 
         return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
+.then((res) => {
+    return res
+    
+})            .catch((err) => Promise.reject(err));
     }
 
     getTutorOfferings() {

@@ -24,40 +24,184 @@ import TutorsList from "./screens/tutorsList";
 import { ViewAllTutors } from "./screens/viewAllTutors";
 import ClassRecordForm from "./screens/classRecord";
 import { CourseCurriculumView } from "./screens/courseCurriculum";
+import Layout from "./screens/Layout/Layout";
+import { AuthProvider } from "./contexts/AuthContext";
+
+import { useAuth } from "./contexts/AuthContext";
+import { Navigate } from "react-router-dom";
+import LogPage from "./components/LogPage";
+
+function PrivateRoute({ Component, roles }) {
+  const { user, loading } = useAuth();
+  let path = "/";
+
+  if (roles.includes("guardian")) {
+    path = "/";
+  } else if (roles.includes("tutor")) {
+    path = "/tutor/login";
+  } else if (roles.includes("admin")) {
+    path = "/admin/login";
+  }
+
+  if (loading) {
+    return <p>Loading</p>; // or return a loading indicator
+  }
+
+  return user && roles.includes(user.role) ? (
+    <Component />
+  ) : (
+    <Navigate to={path} />
+  );
+}
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/confirmation" element={<Confirmation />} />
-          <Route path="/parentDash" element={<ParentDash />} />
-          <Route path="/addStudent" element={<AddStudent />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/tutorProfile" element={<TutorProfile />} />
-          <Route path="/tutor/login" element={<TutorLogin />} />
-          <Route path="/registerTutor" element={<RegisterTutor />} />
-          <Route path="/add-tutor" element={<AddTutor />} />
-          <Route path="/viewTutor/:id" element={<TutorView />} />
-          <Route
-            path="/tutor/availability/recurring"
-            element={<ScheduleSelectorRecurring />}
-          />
-          <Route path="/schedule/:id" element={<ScheduleSelector />} />
-          <Route path="/appointment/:id" element={<AppointmentCalendar />} />
-          <Route path="/tutor/appointments" element={<TutorCalendar />} />
-          <Route path="/admin/appointments" element={<AdminCalendar />} />
-          <Route path="/student/:id" element={<StudentDashboard />} />
-          <Route path="/registrations" element={<Registrations />} />
-          <Route path="/shop" element={<ShopCourses />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/tutors" element={<TutorsList />} />
-          <Route path="/allTutors" element={<ViewAllTutors />} />
-          <Route path="/class/:id" element={<ClassRecordForm />} />
-          <Route path="/course/:id" element={<CourseCurriculumView />} />
-        </Routes>
+        <AuthProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              {/* <Route path="/test" element={<Test> <p>Hello World</p></Test>}/> */}
+              <Route path="/signup" element={<SignUp />} />
+              {/* <Route path="/confirmation" element={<Confirmation />} /> */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/tutor/login" element={<TutorLogin />} />
+              <Route
+                path="/registertutor/3f2916a7-02a4-4e7a-942c-402b3e396fa4"
+                element={<RegisterTutor admin={true} />}
+              />
+              <Route
+                path="/registertutor/:token"
+                element={<RegisterTutor admin={false} />}
+              />
+
+              <Route
+                path="/parentDash"
+                element={
+                  <PrivateRoute Component={ParentDash} roles={["guardian"]} />
+                }
+              />
+              <Route
+                path="/addStudent"
+                element={
+                  <PrivateRoute Component={AddStudent} roles={["guardian"]} />
+                }
+              />
+              <Route
+                path="/tutorProfile"
+                element={
+                  <PrivateRoute Component={TutorProfile} roles={["tutor"]} />
+                }
+              />
+
+              {/* <Route path="/add-tutor" element={<AddTutor />} /> */}
+              <Route
+                path="/viewTutor/:id"
+                element={
+                  <PrivateRoute
+                    Component={TutorView}
+                    roles={["admin", "tutor", "guardian"]}
+                  />
+                }
+              />
+              <Route
+                path="/tutor/availability/recurring"
+                element={
+                  <PrivateRoute
+                    Component={ScheduleSelectorRecurring}
+                    roles={["tutor"]}
+                  />
+                }
+              />
+              <Route
+                path="/schedule/:id"
+                element={
+                  <PrivateRoute
+                    Component={ScheduleSelector}
+                    roles={["tutor"]}
+                  />
+                }
+              />
+              <Route
+                path="/appointment/:id"
+                element={
+                  <PrivateRoute
+                    Component={AppointmentCalendar}
+                    roles={["guardian"]}
+                  />
+                }
+              />
+              <Route
+                path="/tutor/appointments"
+                element={
+                  <PrivateRoute Component={TutorCalendar} roles={["tutor"]} />
+                }
+              />
+              <Route
+                path="/student/:id"
+                element={
+                  <PrivateRoute
+                    Component={StudentDashboard}
+                    roles={["guardian"]}
+                  />
+                }
+              />
+              <Route
+                path="/admin/appointments"
+                element={
+                  <PrivateRoute Component={AdminCalendar} roles={["admin"]} />
+                }
+              />
+
+              <Route
+                path="/logs"
+                element={<PrivateRoute Component={LogPage} roles={["admin"]} />}
+              />
+
+              <Route
+                path="/registrations"
+                element={
+                  <PrivateRoute Component={Registrations} roles={["admin"]} />
+                }
+              />
+              <Route
+                path="/courses"
+                element={<PrivateRoute Component={Courses} roles={["admin"]} />}
+              />
+              <Route
+                path="/tutors"
+                element={
+                  <PrivateRoute Component={TutorsList} roles={["admin"]} />
+                }
+              />
+              <Route
+                path="/shop"
+                element={
+                  <PrivateRoute Component={ShopCourses} roles={["guardian"]} />
+                }
+              />
+              <Route
+                path="/allTutors"
+                element={
+                  <PrivateRoute
+                    Component={ViewAllTutors}
+                    roles={["admin", "tutor", "guardian"]}
+                  />
+                }
+              />
+              <Route
+                path="/class/:id"
+                element={
+                  <PrivateRoute
+                    Component={ClassRecordForm}
+                    roles={["tutor", "guardian"]}
+                  />
+                }
+              />
+            </Routes>
+          </Layout>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

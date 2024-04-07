@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async renewTutors(tutors, enddate) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .renewTutors(tutors, enddate)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async updateNotes(booking_id, notes) {
     return new Promise((resolve, reject) => {
       return this.course
@@ -231,6 +244,13 @@ export default class tutorRegistrationController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: "tutor",
+                    picture: res.picture,
+                    courses: res.courses
+                  
+                  }
                 });
               } else {
                 reject("Incorrect password");

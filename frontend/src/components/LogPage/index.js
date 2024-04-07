@@ -14,11 +14,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import TablePagination from "@mui/material/TablePagination";
 import Chip from '@mui/material/Chip';
 import { Card, CardContent } from '@material-ui/core';
-import Modal from 'react-modal';
+import './index.css'
+import { MainContentLayout } from '../MainContentLayout';
 
 
-
-export default function LogModal({isOpen, onRequestClose}) {
+export default function LogPage() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -105,42 +105,11 @@ const handleChangePage = (event, newPage) => {
 
 
   return (
-<Modal
-  isOpen={isOpen}
-  onRequestClose={onRequestClose}
-  style={{
-    content: {
-      width: 'auto',
-      maxHeight: '90%',
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      overflowY: 'scroll'
-    }
-  }}
->
-<div style={{ position: 'relative' }}>
+    <MainContentLayout>
 
-<button
-                style={{
-                    position: 'absolute',
-                    top: '0.5rem',
-                    right: '0.5rem',
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '1.5rem',
-                    color: '#666',
-                    cursor: 'pointer',
-                    position: 'fixed'
+<div style={{ position: 'relative' }} className='log-div'>
 
-                }}
-                onClick={onRequestClose}
-            >
-                &times;
-            </button>
+
       
         <h3 style={{ 
             color: '#fff', 
@@ -151,8 +120,8 @@ const handleChangePage = (event, newPage) => {
             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)'
         }}>
             Tutor Activity Log
-        </h3>      <TableContainer style={{width: 'fit-content'}}>
-        <Table aria-label="collapsible table" style={{width: 'fit-content'}}>
+        </h3>      <TableContainer style={{ justifyContent: 'center'}}>
+        <Table aria-label="collapsible table" >
           <TableHead>
             <TableRow>
               <TableCell style={{ width: 'fit-content' }} />
@@ -178,6 +147,6 @@ const handleChangePage = (event, newPage) => {
         />
       </TableContainer>
       </div>
-    </Modal>
+      </MainContentLayout>
   );
 }
