@@ -4,14 +4,13 @@
   flex-direction: column;
   min-height: 900px;
   margin-top: 40px;
-  padding-left: 15rem;
-  padding-right: 15rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
 }
 
 .course-curriculum__overview {
   margin-top: 50px;
   display: flex;
-  /* align-items: center; */
 }
 
 .p-avatar-image {
@@ -26,7 +25,6 @@
 }
 
 .course-curriculum__details {
-  /* padding-top: 25px; */
   margin-left: 35px;
   display: flex;
   flex-direction: column;
@@ -41,28 +39,25 @@
   margin-top: 2rem;
 }
 
-/* .tutor-overview__description {
-  font-size: 16px;
-} */
-
 .curriculum-age-prereq__container {
   margin-top: 0.5rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   font-size: 14px;
 }
 .tutor__languages__container {
-  /* margin-top: 5px; */
   display: flex;
   align-items: center;
 }
 
 .curriculum-overview__text--age {
   font-size: 14px;
+  margin-bottom: 0.5rem;
 }
 .curriculum-overview__text--prereq {
-  margin-left: 3rem;
   font-size: 14px;
+  margin-bottom: 0.5rem;
 }
 .curriculum-taught-by__container {
   margin-top: 5px;
@@ -100,14 +95,14 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  /* padding-right: 5rem; */
 }
 .curriculum-concepts-projects-container {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  text-align: left;
   margin-top: 2rem;
 }
 
@@ -127,6 +122,7 @@
   font-weight: bold;
   color: black;
   text-align: left;
+  margin-bottom: 1rem;
 }
 .curriculum-learning-goal {
   text-align: left;
@@ -148,6 +144,7 @@
   font-weight: bold;
   color: black;
   text-align: left;
+  margin-bottom: 0.5rem;
 }
 .curriculum-project {
   text-align: left;
@@ -159,30 +156,33 @@
   padding-top: none;
 }
 
-.curriculum-reccomended-container {
+.course-files-container {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  align-items: flex-start;
   align-items: center;
   padding: 2rem 1rem 1rem 1rem;
-  width: 50%;
+  width: 45%;
+  min-width: 150px;
+  min-height: 300px;
   border: 1px solid black;
   border-radius: 1rem;
   margin-left: 5rem;
   margin-top: 1rem;
+  overflow-y: scroll;
+  max-height: 500px;
 }
-.curriculum-reccomended-title {
+.course-files-title {
   font-size: 20px;
   font-weight: bold;
   color: black;
 }
-.curriculum-reccomended-tabs {
+.course-files-tabs {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  /* padding: 1rem; */
   margin-top: 1rem;
 }
 

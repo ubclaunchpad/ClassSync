@@ -1,8 +1,8 @@
-.reccommended-tab-container {
+.course-files-tab-container {
   border: 1px solid black;
   border-radius: 10px;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 0rem;
   margin-bottom: 1rem;
   display: flex;
   flex-direction: row;
@@ -12,7 +12,7 @@
   min-height: 120px;
   overflow: hidden;
 }
-.reccomended-tab__information {
+.course-files-tab__information {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -20,32 +20,41 @@
   height: 100%;
   padding: 1rem;
 }
-.reccommended-tab__name {
+.course-files-tab__name {
   font-size: 16px;
   font-weight: bold;
   color: #103da2;
 }
 
-.reccommended-tab__age {
+.course-files-tab__age {
   font-size: 12px;
 }
 
-.reccommended-tab__prerequisite {
+.course-files-tab__prerequisite {
   font-size: 12px;
 }
 
-.reccomended-tab-button__container {
+.course-files-tab-button__container {
   display: flex;
+  flex-direction: row;
+  /* justify-content: center;
+  align-items: center; */
+  height: 100%;
+  min-width: 70px;
+  background-color: #103da2;
+}
+
+.file-tab-button {
+  display: flex;
+  height: 100%;
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 20%;
-  background-color: #103da2;
 }
-.reccomended-tab-button__img {
+.course-files-tab-button__img {
   width: 1.5rem;
   height: 1.5rem;
   color: white;
-  transform: rotate(180deg);
+  transform: rotate(270deg);
 }

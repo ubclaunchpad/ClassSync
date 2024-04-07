@@ -106,6 +106,15 @@ function App() {
                 }
               />
               <Route
+                path="/courseCurriculum/:id"
+                element={
+                  <PrivateRoute
+                    Component={CourseCurriculumView}
+                    roles={["admin", "tutor", "guardian"]}
+                  />
+                }
+              />
+              <Route
                 path="/tutor/availability/recurring"
                 element={
                   <PrivateRoute

@@ -5,7 +5,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "./courseCurriculum.css";
 import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
-import { ReccomendedCourseTab } from "../../components/ReccomendedCourseTab";
+import { CourseFilesTab } from "../../components/CourseFilesTab";
 const url = "http://localhost:8080";
 
 const sampleData = {
@@ -16,7 +16,24 @@ const sampleData = {
   color: "blue",
   prerequisites: "None",
   image: "/TestProfileImage.png",
-  files: ["testFile1", "testFile2"],
+  files: [
+    {
+      name: "Generate-Image.html",
+      link: "https://class-sync.s3.us-east-2.amazonaws.com/Screenshot%202024-02-14%20213738.png",
+    },
+    {
+      name: "download.html",
+      link: "https://class-sync.s3.us-east-2.amazonaws.com/Screenshot%202024-02-14%20213738.png",
+    },
+    {
+      name: "Generate-Image.html",
+      link: "https://class-sync.s3.us-east-2.amazonaws.com/Screenshot%202024-02-14%20213738.png",
+    },
+    {
+      name: "download.html",
+      link: "https://class-sync.s3.us-east-2.amazonaws.com/Screenshot%202024-02-14%20213738.png",
+    },
+  ],
   tutors: ["John Danaher", "Miki Okudera", "Tifa Lockhart"],
   learning_goals: [
     "Game design & animations",
@@ -62,40 +79,62 @@ const sampleData = {
   ],
 };
 
-export const CourseCurriculumView = ({
-  name,
-  age,
-  description,
-  color,
-  prerequisites,
-  image,
-  info_page,
-  files,
-  learning_goals,
-  difficulty,
-  tutors,
-}) => {
-  const [courseDescription, setCourseDescription] = useState([]);
+export const CourseCurriculumView = ({ course_id = 6 }) => {
   const [fileList, setFileList] = useState([]);
-  const [goals, setGoals] = useState([]);
-  const id = 4;
-  useEffect(() => {
-    // Getting the learning goals
-    fetch(`http://localhost:8080/learninggoals?id=${id}`)
-      .then((response) => response.json())
-      .then((data) => setGoals(data))
-      .catch((error) => console.error("Error:", error));
+  const [goals, setGoals] = useState(["No Description Available"]);
+  const [courseValues, setCourseValues] = useState({
+    name: "",
+    age: "",
+    color: "",
+    prerequisites: "",
+    description: ["No Description Available"],
+    image: "",
+    difficulty: "",
+  });
 
-    // Getting the files
-    fetch(`http://localhost:8080/course/files?id=${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setFileList(data);
-        console.log("Files loaded");
+  useEffect(() => {
+    fetch(`http://localhost:8080/course/view?id=${course_id}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.text().then((text) => {
+            return text ? JSON.parse(text) : {};
+          });
+        } else {
+          throw new Error("Server response not OK");
+        }
       })
-      .catch((error) => console.error("Error:", error));
-  }, []); // Empty dependency array to run the effect only once after the initial render
-  console.log(courseDescription);
+      .then((data) => {
+        console.log("Data is ", data);
+        if (data.learning_goals != null && data.learning_goals.length > 0) {
+          console.log(
+            "Setting learning goals ---> " + data.learning_goals.join("\n")
+          );
+          let trimmedValues = data.learning_goals
+            .join("\n")
+            .split("\n")
+            .map((val) => val.trim())
+            .filter((val) => val.length > 0);
+          setGoals(trimmedValues);
+        } else {
+          setGoals(["No learning goals available"]);
+        }
+
+        setCourseValues({
+          name: data.course_name,
+          age: data.target_age,
+          color: data.color,
+          prerequisites: data.prerequisites,
+          description: data.course_description,
+          image: data.image,
+          difficulty: data.course_difficulty,
+        });
+
+        setFileList(data.files == null ? [] : data.files);
+      });
+  }, [course_id, goals]);
+
+  console.log("These are the file lists", fileList);
+
   return (
     <div>
       <div className="course-curriculum__view">
@@ -109,66 +148,53 @@ export const CourseCurriculumView = ({
           </div>
           <div className="course-curriculum__details">
             <div className="course-curriculum__name">
-              {name ? name : sampleData.name}
+              {courseValues?.name ? courseValues.name : sampleData.name}
             </div>
             <div className="curriculum-age-prereq__container">
               <span className="curriculum-overview__text--age">
-                Target Age: {age ? age : sampleData.age}
+                Target Age:{" "}
+                {courseValues?.age ? courseValues.age : sampleData.age}
               </span>
               <span className="curriculum-overview__text--prereq">
                 Prerequisites:{" "}
-                {prerequisites ? prerequisites : sampleData.prerequisites}
+                {courseValues.prerequisites
+                  ? courseValues.prerequisites
+                  : sampleData.prerequisites}
+              </span>
+              <span className="curriculum-overview__text--prereq">
+                Difficulty: {courseValues.difficulty}
               </span>
             </div>
           </div>
         </div>
-        {/* <Divider className="curriculum-divider" /> */}
         <hr className="curriculum-divider"></hr>
         <div className="curriculum-view-body">
           <div className="curriculum-more-information">
-            <div className="curriculum-description">
-              {courseDescription.map((line) => {
-                return <p>{line}</p>;
-              })}
+            <div classname="curriculum-projects__container">
+              <div className="curriculum-projects__title ">
+                Course Description
+              </div>
+              {courseValues.description}
             </div>
             <div className="curriculum-concepts-projects-container">
               <div classname="curriculum-concepts__container">
                 <div className="curriculum-concepts__title ">
-                  Concepts Covered
+                  Learning goals
                 </div>
                 <ul className="curriculum__list">
-                  {sampleData.learning_goals.map((goal) => {
+                  {console.log("These are the goals --->", goals)}
+                  {goals?.map((goal) => {
                     return <li className="curriculum-learning-goal">{goal}</li>;
-                  })}
-                </ul>
-              </div>
-              <div classname="curriculum-projects__container">
-                <div className="curriculum-projects__title ">
-                  Projects You'll Make:
-                </div>
-                <ul className="curriculum__list">
-                  {sampleData.projects.map((project) => {
-                    return <li className="curriculum-project">{project}</li>;
                   })}
                 </ul>
               </div>
             </div>
           </div>
-          <div className="curriculum-reccomended-container">
-            <div className="curriculum-reccomended-title">
-              Reccommended Courses:
-            </div>
-            <div className="curriculum-reccomended-tabs">
-              {sampleData.reccomended_courses.map((course) => {
-                return (
-                  <ReccomendedCourseTab
-                    key={course.course_id}
-                    name={course.name}
-                    prerequisites={course.prerequisites}
-                    course_id={course.course_id}
-                    age={course.age}
-                  />
-                );
+          <div className="course-files-container">
+            <div className="course-files-title">Files:</div>
+            <div className="course-files-tabs">
+              {fileList.map((file) => {
+                return <CourseFilesTab name={file.name} link={file.url} />;
               })}
             </div>
           </div>
