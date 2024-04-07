@@ -618,7 +618,17 @@ if (newBooking === 1) {
     const prevTimeSlot = moment(currentTimeSlot, "HH:mm")
       .subtract(30, "minutes")
       .format("HH:mm");
-
+      if (selectedSlot) {
+        const selectedSlotStart = moment(selectedSlot.start, timeFormat);
+        const selectedSlotDay = moment(selectedSlot.start).day();
+        const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
+    
+        if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
+          return {
+            className: "active",
+          };
+        }
+      }
     if (
       openSlots[dayOfWeek] &&
       (openSlots[dayOfWeek].includes(currentTimeSlot) ||
