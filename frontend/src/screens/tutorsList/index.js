@@ -313,7 +313,7 @@ const renewTutors = async () => {
                     {tutors && searchResults && searchResults.map((tutor, index) => (
                         <React.Fragment key={index}>
                             <tr >
-                                <td className="registration__table-row-element">
+                                <td className="tutor__table-row-element">
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }} >
                                        {expandedRow === index ? (
     <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="KeyboardArrowUpIcon" onClick={() => toggleExpandRow(index)}>
@@ -330,8 +330,8 @@ const renewTutors = async () => {
                                 style={{ marginRight: '2px' }} 
                             />                                    </div>
                                 </td>
-                                <td className="registration__table-row-element">{tutor.tutor_id}</td>
-                                <td className="registration__table-row-element">{tutor.tutor_name}</td>
+                                <td className="tutor__table-row-element">{tutor.tutor_id}</td>
+                                <td className="tutor__table-row-element">{tutor.tutor_name}</td>
 <td className="registration__table-row-element">
 {new Date(tutor.startdate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
 </td>                                
