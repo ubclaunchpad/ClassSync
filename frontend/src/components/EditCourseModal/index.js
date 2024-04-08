@@ -26,21 +26,7 @@ export const EditCourseModal = ({
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const editCourse = async (e) => {
     e.preventDefault();
-    let difficulty;
-    switch (selectedIndex) {
-      case 1:
-        difficulty = "Beginner";
-        break;
-      case 2:
-        difficulty = "Intermediate";
-        break;
-      case 3:
-        difficulty = "Advanced";
-        break;
-      default:
-        difficulty = "Beginner";
-        break;
-    }
+   
 
     let learning_goals = learningGoals
       .split("\n")
@@ -60,7 +46,7 @@ export const EditCourseModal = ({
       info_page: html,
       files: uploadedFiles,
       learning_goals: learning_goals,
-      difficulty: difficulty,
+      difficulty: selectedDifficulty,
     };
 
     const URL = "http://localhost:8080/course/edit";
@@ -147,7 +133,7 @@ export const EditCourseModal = ({
     console.log(transformedData);
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     if (acceptedFiles?.length) {
       setFiles((previousFiles) => [
@@ -172,7 +158,7 @@ export const EditCourseModal = ({
   const handleNextStep = (event) => {
     // event.preventDefault();
     console.log(formValues);
-    console.log(selectedIndex);
+    console.log(selectedDifficulty);
 
     setStep(step + 1);
   };
@@ -183,11 +169,11 @@ export const EditCourseModal = ({
   };
 
   const handleMouseOver = (index) => {
-    setSelectedIndex(index);
+    setSelectedDifficulty(index);
   };
 
   const handleMouseOut = () => {
-    setSelectedIndex(null);
+    setSelectedDifficulty(null);
   };
 
   const [learningGoals, setLearningGoals] = useState("");
@@ -268,12 +254,8 @@ export const EditCourseModal = ({
         setFiles(data.files == null ? [] : data.files);
         setUploadedFiles(data.files == null ? [] : data.files);
 
-        setSelectedIndex(
-          data.course_difficulty === "Beginner"
-            ? 1
-            : data.course_difficulty === "Intermediate"
-            ? 2
-            : 3
+        setSelectedDifficulty(
+         data.course_difficulty
         );
 
         setHTML(data.info_page);
@@ -605,41 +587,28 @@ export const EditCourseModal = ({
                 <span style={{ display: "block", marginBottom: "5px" }}>
                   Difficulty:
                 </span>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  {[1, 2, 3].map((index) => (
-                    <svg
-                      key={index}
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      width="20"
-                      fill={
-                        index <= hoveredIndex
-                          ? "#00B0F1" // color when hovered
-                          : index <= selectedIndex
-                          ? "#00B0F1" // color when selected
-                          : "none" // default color
-                      }
-                      style={{ cursor: "pointer", marginRight: "5px" }}
-                      onMouseOver={() => {
-                        setHoveredIndex(index);
-                      }}
-                      onMouseOut={() => {
-                        setHoveredIndex(null);
-                      }}
-                      onClick={() => {
-                        handleMouseOver(index);
-                      }}
-                    >
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path d="M0 0h24v24H0z" fill="none" />
-                      <path
-                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                        stroke="lightgrey"
-                      />
-                    </svg>
-                  ))}
-                </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+    <select
+        style={{ 
+            padding: "10px", 
+            borderRadius: "5px", 
+            border: "1px solid #ccc", 
+            marginBottom: "10px", 
+            fontSize: "14px", 
+            cursor: "pointer", 
+            marginRight: "5px" 
+        }}
+        value={selectedDifficulty}
+        onChange={(e) => {
+            handleMouseOver(e.target.value);
+        }}
+    >
+        <option value="">Select difficulty</option>
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+    </select>
+</div>
               </label>
             </div>
             <div style={{ flex: 1, marginLeft: "10px" }}>
