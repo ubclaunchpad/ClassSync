@@ -59,44 +59,6 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-<<<<<<< HEAD
-        <AuthProvider>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Login />} />
-              {/* <Route path="/test" element={<Test> <p>Hello World</p></Test>}/> */}
-              <Route path="/signup" element={<SignUp />} />
-              {/* <Route path="/confirmation" element={<Confirmation />} /> */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/tutor/login" element={<TutorLogin />} />
-              <Route
-                path="/registertutor/3f2916a7-02a4-4e7a-942c-402b3e396fa4"
-                element={<RegisterTutor admin={true} />}
-              />
-              <Route
-                path="/registertutor/:token"
-                element={<RegisterTutor admin={false} />}
-              />
-
-              <Route
-                path="/parentDash"
-                element={
-                  <PrivateRoute Component={ParentDash} roles={["guardian"]} />
-                }
-              />
-              <Route
-                path="/addStudent"
-                element={
-                  <PrivateRoute Component={AddStudent} roles={["guardian"]} />
-                }
-              />
-              <Route
-                path="/tutorProfile"
-                element={
-                  <PrivateRoute Component={TutorProfile} roles={["tutor"]} />
-                }
-              />
-=======
       <AuthProvider>
       <Layout>
         <Routes>
@@ -112,7 +74,6 @@ function App() {
           <Route path="/parentDash" element={<PrivateRoute Component={ParentDash} roles={['guardian']} />} />
           <Route path="/addStudent" element={<PrivateRoute Component={AddStudent} roles={['guardian']} />} />
           <Route path="/tutorProfile" element={<PrivateRoute Component={TutorProfile} roles={['tutor']} />} />
->>>>>>> 3c7768a (tutor analytics dashboard layout)
 
               {/* <Route path="/add-tutor" element={<AddTutor />} /> */}
               <Route
@@ -182,12 +143,6 @@ function App() {
                 }
               />
 
-<<<<<<< HEAD
-              <Route
-                path="/logs"
-                element={<PrivateRoute Component={LogPage} roles={["admin"]} />}
-              />
-=======
           <Route path="/logs" element={<PrivateRoute Component={LogPage} roles={['admin']} />} />
 
           <Route path="/registrations" element={<PrivateRoute Component={Registrations} roles={['admin']} />} />
@@ -201,50 +156,7 @@ function App() {
 
         </Routes>
         </Layout>
->>>>>>> 2d84a0d (tutor dashboard pages)
 
-              <Route
-                path="/registrations"
-                element={
-                  <PrivateRoute Component={Registrations} roles={["admin"]} />
-                }
-              />
-              <Route
-                path="/courses"
-                element={<PrivateRoute Component={Courses} roles={["admin"]} />}
-              />
-              <Route
-                path="/tutors"
-                element={
-                  <PrivateRoute Component={TutorsList} roles={["admin"]} />
-                }
-              />
-              <Route
-                path="/shop"
-                element={
-                  <PrivateRoute Component={ShopCourses} roles={["guardian"]} />
-                }
-              />
-              <Route
-                path="/allTutors"
-                element={
-                  <PrivateRoute
-                    Component={ViewAllTutors}
-                    roles={["admin", "tutor", "guardian"]}
-                  />
-                }
-              />
-              <Route
-                path="/class/:id"
-                element={
-                  <PrivateRoute
-                    Component={ClassRecordForm}
-                    roles={["tutor", "admin"]}
-                  />
-                }
-              />
-            </Routes>
-          </Layout>
         </AuthProvider>
       </BrowserRouter>
     </div>
