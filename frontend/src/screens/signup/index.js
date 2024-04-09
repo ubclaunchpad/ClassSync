@@ -5,14 +5,14 @@ import "./index.css";
 import RegisterUserForm from "../../components/RegisterUserForm";
 import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 
-const Signup = async () => {
+const Signup = () => {
 
 
   return (
 
 <div className="screen-container">
-<Header />
-  <Banner />
+{/* <Header />
+  <Banner /> */}
 <div className='register-tutor-container'>
 <RegisterUserForm role='guardian' redirect='/' />
 </div >

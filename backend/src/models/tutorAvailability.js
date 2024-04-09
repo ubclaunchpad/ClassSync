@@ -72,12 +72,40 @@ export class tutorAvailability {
     }
   }
 
+  async getTutorByEnrollment(course_id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        con.query(
+          `SELECT * 
+          FROM get_tutors_for_course(
+              (SELECT course_id 
+              FROM enrollments 
+              WHERE enrollment_id = $1)
+          );`,
+          [course_id],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              resolve(results.rows);
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
+
   async getTutorByCourse(course_id) {
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
         con.query(
-          "SELECT * FROM get_tutors_for_course($1)",
+          `SELECT * 
+          FROM get_tutors_for_course($1);`,
           [course_id],
           (error, results) => {
             if (error) {
@@ -97,10 +125,8 @@ export class tutorAvailability {
   async getSelectedTutorsAvailability(start_date, tutorIds) {
     const client = await con.connect();
     console.log("Getting availability");
-    // console.log(start_date, tutorIds);
+    console.log(start_date, tutorIds);
 
-    let date = "12-31-2023";
-    let tutor_array = [1, 2, 3];
     try {
       return new Promise((resolve, reject) => {
         con.query(
@@ -111,7 +137,7 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              // console.log("Got availability ", results);
+              console.log("Got availability ", results.rows);
               resolve(results.rows);
             }
           }
@@ -264,6 +290,54 @@ export class tutorAvailability {
       client.release();
     }
   }
+  async getAppointmentsByStudent(id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        con.query(
+          "SELECT * FROM get_appointments_by_student($1)",          
+          [id],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log("Got appointments ", results.rows);
+              resolve(results.rows);
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
+
+
+  async getAppointmentsByDate(startDate) {
+    console.log(startDate)
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        con.query(
+          "SELECT * FROM get_appointments_by_date($1)",          
+          [startDate],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log("Got appointments ", results.rows);
+              resolve(results.rows);
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
+
 
     async getAppointmentsByTutor(tutorId, startDate) {
     const client = await con.connect();

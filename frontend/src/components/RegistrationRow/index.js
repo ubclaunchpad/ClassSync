@@ -23,6 +23,9 @@ export default function RegistrationRow({
     let url = `http://localhost:8080/classes?enrollment_id=${data.enrollment_id}`;
     const response = await fetch(url);
     const classes = await response.json();
+    classes.sort(function (book1, book2) {
+      return book1.booking_id - book2.booking_id;
+    });
     setEnrollmentData(classes);
   };
 
@@ -32,16 +35,52 @@ export default function RegistrationRow({
 
   return (
     <>
-      <div className="registration__table-row-element">
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
         {data.enrollment_id}
       </div>
-      <div className="registration__table-row-element">{data.guardian}</div>
-      <div className="registration__table-row-element">{data.student}</div>
-      <div className="registration__table-row-element">{data.course}</div>
-      <div className="registration__table-row-element">
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
+        {data.guardian}
+      </div>
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
+        {data.student}
+      </div>
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
+        {data.course}
+      </div>
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
         {new Date(data.registration_date).toLocaleDateString()}
       </div>
-      <div className="registration__table-row-element">
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
         <Switch
           checked={data.paid}
           onChange={(val) => handleChange(data.enrollment_id, val)}
@@ -58,7 +97,12 @@ export default function RegistrationRow({
           id="material-switch"
         />
       </div>
-      <div className="registration__table-row-element">
+      <div
+        className="registration__table-row-element"
+        style={{
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
+      >
         <div style={{ display: "flex", alignItems: "center" }}>
           {[...Array(Math.min(data.completed, 5))].map((_, i) => (
             <div
@@ -102,13 +146,22 @@ export default function RegistrationRow({
       </div>
       <div
         className="registration__table-row-element"
-        style={{ textAlign: "center", cursor: "pointer" }}
+        style={{
+          textAlign: "center",
+          cursor: "pointer",
+          backgroundColor: data.paid ? "inherit" : "rgb(255, 204, 204)",
+        }}
         onClick={expandRow}
       >
         {curExpand == data.enrollment_id ? "▲" : "▼"}
       </div>
       {curExpand == data.enrollment_id && (
-        <div className="registration__row-expand-content">
+        <div
+          className="registration__row-expand-content"
+          style={{ backgroundColor: data.paid ? "#inherit" : "inherit" }}
+
+        >
+          Email: {data.email}
           <div className="registration__row-expand-title">All Bookings</div>
           <table className="registration__row-expand-table">
             <tr className="registration__row-expand-row">
@@ -119,7 +172,9 @@ export default function RegistrationRow({
             </tr>
             {enrollmentData.map((classInfo, index) => (
               <tr className="registration__row-expand-row">
-                <th className="registration__expand-row-element">{index}</th>
+                <th className="registration__expand-row-element">
+                  {index + 1}
+                </th>
                 <th className="registration__expand-row-element">
                   {classInfo.tutor_name}
                 </th>

@@ -8,6 +8,19 @@ export default class tutorRegistrationController {
     this.course = new courses();
   }
 
+  async renewTutors(tutors, enddate) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .renewTutors(tutors, enddate)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   async updateNotes(booking_id, notes) {
     return new Promise((resolve, reject) => {
       return this.course
@@ -147,6 +160,18 @@ export default class tutorRegistrationController {
         });
     });
   }
+  async getFullProfile(userID) {
+    return new Promise((resolve, reject) => {
+      return this.tutor
+        .getFullProfile(userID)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
   async getProfile(userID) {
     return new Promise((resolve, reject) => {
       return this.tutor
@@ -208,7 +233,7 @@ export default class tutorRegistrationController {
           const firstName = res.firstName;
           const lastName = res.lastName;
           if (email) {
-            return comparePassword(password, hashedPassword).then((result) => {
+            return comparePassword(password, hashedPassword).then(async (result) => {
               if (result) {
                 const token = jwt.sign(
                   {
@@ -223,7 +248,9 @@ export default class tutorRegistrationController {
                 );
 
                 // console.log("Printing token: " + token);
+                const dates = await this.tutor.getDatesByTutor(userId); // Call getDatesByTutor with userId
 
+                console.log(dates)
                 resolve({
                   email: email,
                   role: "tutor",
@@ -231,6 +258,15 @@ export default class tutorRegistrationController {
                   token: token,
                   firstName: firstName,
                   lastName: lastName,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: "tutor",
+                    picture: res.picture,
+                    courses: res.courses,
+                    startdate: dates.startdate,
+                    enddate: dates.enddate
+                  
+                  }
                 });
               } else {
                 reject("Incorrect password");

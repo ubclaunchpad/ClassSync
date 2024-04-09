@@ -15,6 +15,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 // import "primereact/resources/themes/lara-light-blue/theme.css";
 
 import { StudentLessonTab } from "../../components/StudentLessonTab";
+import { MainContentLayout } from "../../components/MainContentLayout";
 
 const StudentDashboard = () => {
   const { id } = useParams();
@@ -82,6 +83,7 @@ const StudentDashboard = () => {
         };
 
   return (
+    <MainContentLayout>
     <div className="student-dashboard__page">
       <div className="student-dashboard__student-information">
         <div className="student-information__profile">
@@ -91,10 +93,10 @@ const StudentDashboard = () => {
               console.log("Clicked the back button");
             }}
           >
-            <i
+            {/* <i
               className="pi pi-arrow-left student-profile__icon"
               style={{ fontSize: "1.5em" }}
-            ></i>
+            ></i> */}
           </button>
 
           <div className="student-information__profile-name">
@@ -195,6 +197,7 @@ const StudentDashboard = () => {
         </TabView>
       </div>
     </div>
+    </MainContentLayout>
   );
 };
 

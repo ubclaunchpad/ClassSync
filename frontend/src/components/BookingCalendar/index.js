@@ -9,6 +9,7 @@ import "./index.css";
 import { endOfWeek, startOfWeek } from "date-fns";
 import Select from "react-select";
 import { ParentDashboardLayout } from "../ParentDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -42,11 +43,11 @@ export default function ReactBigCalendar() {
 
 
 
-        let url = `http://localhost:8080/tutor/courses?course_id=${id}`
+        let url = `http://localhost:8080/tutor/enrollment?course_id=${id}`
 
         const tutors = await fetch(url);
         const tutorsData = await tutors.json();
-        // console.log("Course Data", courseData)
+        console.log("Course Data", tutorsData)
 
         const tutorsOptions = tutorsData.map(course => ({
             value: course.tutor_id,
@@ -60,7 +61,7 @@ export default function ReactBigCalendar() {
         if (tutorIds === "") {
             tutorIds = tutorsOptions.map(option => option.value).join(',');
         }
-        console.log("Tutor ids ", tutorIds);
+        console.log("Tutor ids ", tutorsData);
 
 
 
@@ -129,7 +130,11 @@ export default function ReactBigCalendar() {
             setOpenSlots(openSlots)
             console.log(data);
 
-            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
+            url = `http://localhost:8080/images/tutors`
+            const imageResponse = await fetch(url);
+            const imageData = await imageResponse.json();
+
+            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label, image: imageData[value] }));
             setTutorIDS(tutorOptions)
             setIsLoaded(true)
 
@@ -144,7 +149,7 @@ export default function ReactBigCalendar() {
     useEffect(() => {
         // This code will run whenever `startDate` changes
         console.log('Start date has changed:', startDate);
-        setIsLoaded(false)
+        // setIsLoaded(false)
         loadData()
 
     }, [startDate]); // Add `startDate` as a dependency
@@ -281,7 +286,8 @@ export default function ReactBigCalendar() {
 
 
 
-            if (response.status === 200) {
+            if (response.ok) {
+                console.log("Booking successful")
                 // let events = []
                 // const newEvents = data.map(booking => {
                 //     const bookingSlot = booking.insert_booking;
@@ -306,7 +312,7 @@ export default function ReactBigCalendar() {
                         end: selectedSlot.end,
                         title: title,
                         id: data,
-                        tutor_id: id.value
+                        tutor_id: tutor.value
                     },
                 ]);
 
@@ -315,7 +321,7 @@ export default function ReactBigCalendar() {
                 const times = [selectedTime, thirtyMinsLater];
 
                 let body = JSON.stringify({
-                    tutor_id: id.value,
+                    tutor_id: tutor.value,
                     start_date: startDate.toISOString().split('T')[0],
                     end_date: endOfWeek(startDate).toISOString().split('T')[0],
                     day: selectedSlot.start.getDay(),
@@ -370,27 +376,38 @@ export default function ReactBigCalendar() {
         6: ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Saturday
     };
 
-    const slotPropGetter = (date) => {
-        const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
-        const timeFormat = "HH:mm";
-        const currentTimeSlot = moment(date).format(timeFormat);
-        const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
-        const currentDate = new Date();
-        const diffTime = date - currentDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+const slotPropGetter = (date) => {
+  const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
+  const timeFormat = "HH:mm";
+  const currentTimeSlot = moment(date).format(timeFormat);
 
-        if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
-            return {
-                className: "available",
-            };
-        } else {
-            return {
-                className: "unavailable"
-            }
+  const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+  const currentDate = new Date();
+  const diffTime = date - currentDate;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        }
+  if (selectedSlot) {
+    const selectedSlotStart = moment(selectedSlot.start, timeFormat);
+    const selectedSlotDay = moment(selectedSlot.start).day();
+    const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
+
+    if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
+      return {
+        className: "active",
+      };
+    }
+  }
+
+  if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+    return {
+      className: "available",
     };
-
+  } else {
+    return {
+      className: "unavailable"
+    }
+  }
+};
     useEffect(() => {
         loadData()
         console.log("Updated Availability")
@@ -475,7 +492,7 @@ export default function ReactBigCalendar() {
     }));
 
     return (
-        <ParentDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 bookingError ? (
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
@@ -558,6 +575,6 @@ export default function ReactBigCalendar() {
                     </div>
                 )}
             </div>
-        </ParentDashboardLayout>
+        </MainContentLayout>
     )
 }

@@ -2,16 +2,19 @@ import Header from "../../components/Header";
 import Banner from "../../components/Banner";
 import TutorLoginForm from "../../components/TutorLoginForm";
 import "./index.css";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import LoginForm from "../../components/LoginForm";
 
 const TutorLogin = () => {
 
 
+
+
   return (
     <div className="screen-container">
-      <Header />
-      <Banner />
       <div className="content-container">
-        <TutorLoginForm />
+      <LoginForm role="tutor" />
 
       </div>
     </div>

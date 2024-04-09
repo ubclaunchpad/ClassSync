@@ -33,6 +33,9 @@
     /* Change cursor to not-allowed */
 }
 
+.rbc-day-slot .active {
+    background-color: #ff7f50; /* Pastel yellow */
+}
 .rbc-day-slot .unavailable {
     background-color: #FFD6D6;
     background-color: #f6f4f4;
