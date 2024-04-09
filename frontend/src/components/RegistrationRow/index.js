@@ -156,11 +156,7 @@ export default function RegistrationRow({
         {curExpand == data.enrollment_id ? "▲" : "▼"}
       </div>
       {curExpand == data.enrollment_id && (
-        <div
-          className="registration__row-expand-content"
-          style={{ backgroundColor: data.paid ? "#inherit" : "inherit" }}
-
-        >
+        <div className="registration__row-expand-content">
           Email: {data.email}
           <div className="registration__row-expand-title">All Bookings</div>
           <table className="registration__row-expand-table">
