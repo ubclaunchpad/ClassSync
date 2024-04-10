@@ -3,6 +3,17 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
+
+  getStudentEnrollment(id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getStudentEnrollment(id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      // return err;
+    });
+  }
   getStudentsByGuardian(id) {
     const studentProfileModel = new StudentProfile();
     return studentProfileModel.getStudentsByGuardian(id).then((response) => {

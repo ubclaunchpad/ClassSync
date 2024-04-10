@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Select from 'react-select';
 import moment from "moment";
+import { Link, useNavigate } from 'react-router-dom';
+
 
 
 
@@ -51,11 +53,14 @@ const Modal = ({ selectedSlot, availablePeople, onBook, onClose }) => {
                     <p style={{ marginBottom: '10px', fontWeight: '500', color: '#333' }}>Available Tutors:</p>
                     <div style={{ maxHeight: '55vh', overflowY: 'auto', overflowX: 'hidden' }}>
                         {availablePeople.map((person) => (
-                            <div key={person.value} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '5px', transition: 'transform 0.3s ease-in-out', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'} onClick={(e) => { e.stopPropagation(); onBook(person); }}>
+                            <div key={person.value} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '5px', transition: 'transform 0.3s ease-in-out', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'} onClick={(e) => { 
+  e.stopPropagation();
+  window.open(`/viewTutor/${person.value}`, '_blank')
+}}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', backgroundColor: '#ccc', marginRight: '10px' }} />
-                                    <p style={{ margin: '0', fontWeight: '500', color: '#333' }}>{person.label}</p>
-                                </div>
+<img src={person.image} style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '10px' }} />                                    <p style={{ margin: '0', fontWeight: '500', color: '#333', textDecoration: 'none' }}>
+  {person.label}
+</p>                                </div>
                                 <button style={{ padding: '12px 24px', backgroundColor: '#B3DEFC', color: '#000', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.3s ease', fontSize: '15px' }} onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#007BFF'; e.currentTarget.style.color = '#fff'; }} onMouseLeave={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = '#B3DEFC'; e.currentTarget.style.color = '#000'; }} onClick={(e) => { e.stopPropagation(); onBook(person); }}>
                                     Book
                                 </button>

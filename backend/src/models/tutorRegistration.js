@@ -59,6 +59,37 @@ async renewTutors(tutors, enddate) {
     }
   }
 
+async getFullProfile(userID) {
+  const client = await con.connect();
+  try {
+    console.log("User ID ", userID);
+    const tutorProfilePromise = client.query(
+      "SELECT t.*, u.firstname, u.lastname, u.image FROM tutors t JOIN users u ON u.user_id = t.tutor_id WHERE tutor_id = $1  ",
+      [userID]
+    );
+
+    const coursesPromise = client.query(
+      "SELECT STRING_AGG(DISTINCT LOWER(REGEXP_REPLACE(c.course_name, '\\s+$', '', 'g')), ', ') AS course_list FROM courses c JOIN tutor_offerings o ON o.course_id = c.course_id WHERE o.tutor_id = $1",
+      [userID]
+    );
+
+    const [tutorProfileResult, coursesResult] = await Promise.all([tutorProfilePromise, coursesPromise]);
+
+    if (tutorProfileResult.rows.length > 0 && coursesResult.rows.length > 0) {
+      const tutorProfile = tutorProfileResult.rows[0];
+   const course_list = coursesResult.rows[0].course_list;
+const newObject = { ...tutorProfile, course_list };
+console.log(newObject);
+return newObject;    } else {
+      throw new Error('No data found');
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
   async getProfile(userID) {
     const client = await con.connect();
     try {

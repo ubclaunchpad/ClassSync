@@ -10,7 +10,7 @@ import { EditCourseModal } from '../../components/EditCourseModal';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
-
+import Chip from '@mui/material/Chip';
 
 const Courses = () => {
     const [courses, setCourses] = useState([])
@@ -71,6 +71,9 @@ const Courses = () => {
 
     const [sortedByEnrollments, setSortedByEnrollments] = useState(false);
     const [sortedByTutors, setSortedByTutors] = useState(false);
+    const [sortedByDifficulty, setSortedByDifficulty] = useState(false)
+    const [sortedByTitle, setSortedByTitle] = useState(false)
+
     const transformedCourses = courses.map(course => ({
         course_id: course.course_id,
         title: `${course.course_difficulty} ${course.course_name}`
@@ -100,9 +103,65 @@ const Courses = () => {
         });
         setCourses(sortedCourses);
     };
+const handleSortByDifficulty = () => {
+    resetSort();
+    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortDirection(newSortDirection);
+    setSortedByDifficulty(true);
+
+
+    const difficultyMap = {
+        "Beginner": 1,
+        "Intermediate": 2,
+        "Advanced": 3
+    };
+
+    const sortedCourses = [...courses];
+sortedCourses.sort((a, b) => {
+    const aDifficulty = difficultyMap[a.course_difficulty] || 0;
+    const bDifficulty = difficultyMap[b.course_difficulty] || 0;
+    if (aDifficulty === bDifficulty) {
+        // If difficulties are equal, sort by course_name alphabetically
+        return a.course_name.localeCompare(b.course_name);
+    }
+    return newSortDirection === "asc"
+      ? aDifficulty - bDifficulty
+      : bDifficulty - aDifficulty;
+});
+    setCourses(sortedCourses);
+};
+
+const handleSortByTitle = () => {
+    resetSort();
+    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    setSortDirection(newSortDirection);
+    setSortedByTitle(true);
+
+    const difficultyMap = {
+        "Beginner": 1,
+        "Intermediate": 2,
+        "Advanced": 3
+    };
+
+    const sortedCourses = [...courses];
+    sortedCourses.sort((a, b) => {
+        const titleComparison = a.course_name.localeCompare(b.course_name);
+        if (titleComparison !== 0) {
+            // If course names are not equal, sort by course_name
+            return newSortDirection === "asc" ? titleComparison : -titleComparison;
+        }
+        // If course names are equal, sort by difficulty
+        const aDifficulty = difficultyMap[a.course_difficulty] ;
+        const bDifficulty = difficultyMap[b.course_difficulty] ;
+        return  aDifficulty - bDifficulty
+    });
+    setCourses(sortedCourses);
+};
     const resetSort = () => {
         setSortedByTutors(false)
         setSortedByEnrollments(false)
+        setSortedByDifficulty(false)
+        setSortedByTitle(false)
     };
 
     const getDifficultyIndex = (difficulty) => {
@@ -118,32 +177,43 @@ const Courses = () => {
         }
     };
 
-    const getDifficultyStars = (difficulty) => {
-        const maxStars = 3; // You can adjust this based on your preference
-        // const difficultyLevel = difficulty.toLowerCase();
 
-        const difficultyLevel = getDifficultyIndex(difficulty)
-        // console.log('Difficulty level is ', getDifficultyIndex(difficulty))
-        const stars = Array.from({ length: maxStars }, (_, index) => (
-            <span
-                key={index}
-                style={{
-                    display: 'inline-block',
-                    width: '20px', // Adjust the size of the stars as needed
-                    height: '20px',
-                }}
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill={index < difficultyLevel ? '#00B0F1' : 'none'}>
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" stroke='lightgrey' />
-                </svg>
-            </span>
-        ));
+const getDifficultyChip = (difficulty) => {
 
-        return stars;
-    };
 
+    let label = '';
+    let color = '';
+
+    switch (getDifficultyIndex(difficulty)) {
+        case 1:
+            label = 'Beginner';
+            color = '#A2DED0 ';
+            break;
+        case 2:
+            label = 'Intermediate';
+            color = '#FFD699';
+            break;
+        case 3:
+            label = 'Advanced';
+            color = '#FF9AA2 ';
+            break;
+        default:
+            label = 'Unknown';
+            color = 'grey';
+    }
+
+   return (
+    <Chip
+        label={label}
+        style={{
+            backgroundColor: color,
+            color: 'black',
+            minWidth: '100px', // adjust this value as needed
+            justifyContent: 'center',
+        }}
+    />
+);
+};
 
 
     return (
@@ -180,11 +250,22 @@ const Courses = () => {
             <table key={courses} style={{ width: '90%', borderCollapse: 'collapse', marginTop: '20px', marginLeft: '30px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
                 <thead>
                     <tr style={{ borderBottom: '1px solid #000', backgroundColor: '#103da2', color: '#fff' }}>
-                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}></th>
-
-                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>Title</th>
-
-                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>Difficulty</th>
+                        <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" fill='white'><rect fill="none" height="24" width="24"/><path d="M3,10h11v2H3V10z M3,8h11V6H3V8z M3,16h7v-2H3V16z M18.01,12.87l0.71-0.71c0.39-0.39,1.02-0.39,1.41,0l0.71,0.71 c0.39,0.39,0.39,1.02,0,1.41l-0.71,0.71L18.01,12.87z M17.3,13.58l-5.3,5.3V21h2.12l5.3-5.3L17.3,13.58z"/></svg></th>
+                        <th
+                            style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}
+                            onClick={handleSortByDifficulty}
+                        >
+                            Difficulty
+                            {sortedByDifficulty ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
+                        </th>
+<th
+    style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}
+    onClick={handleSortByTitle}
+>
+    Title
+    {sortedByTitle ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
+</th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', width: '80px' }}>Age</th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>Pre-requisites</th>
                         <th
@@ -219,8 +300,14 @@ const Courses = () => {
                                         </div>
                                     )}
                                 </td>
-                                <td style={{ padding: '10px', textAlign: 'left' }}>{course.course_name}</td>
-                                <td style={{ padding: '10px', textAlign: 'left' }}>{getDifficultyStars(course.course_difficulty)}</td>
+                           
+                                <td style={{ padding: '10px', textAlign: 'left' }}>
+                    {getDifficultyChip(course.course_difficulty)}                                    </td>
+                    <td style={{ padding: '10px', textAlign: 'left' }}>        {course.course_name}
+
+
+                               
+</td>
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{course.target_age}</td>
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{course.prerequisites}</td>
                                 <td style={{ padding: '10px', textAlign: 'center' }}>{course.enrollments}</td>
