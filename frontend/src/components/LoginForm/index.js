@@ -22,7 +22,7 @@
           navigate("/registrations");
           break
         case "tutor":
-          navigate("/tutorprofile");
+          navigate("/tutorDash");
           break
       }
     } else {
@@ -92,7 +92,7 @@
           courses: [],
         }; // Example user data
         login(result.user);
-        navigate("/tutorprofile");
+        navigate("/tutorDash");
       }
     };
 
