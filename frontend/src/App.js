@@ -202,6 +202,14 @@ function App() {
                   />
                 }
               />
+              <Route 
+                path="/tutorDash" 
+                  element={
+                    <PrivateRoute Component={TutorDashboard} 
+                    roles={['admin','tutor']} 
+                  />
+                } 
+              />
               <Route
                 path="/class/:id"
                 element={
