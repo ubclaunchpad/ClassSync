@@ -114,7 +114,7 @@ function App() {
                     roles={["admin", "tutor"]}
                   />
                 }
-            
+              />
               <Route
                 path="/tutor/availability"
                 element={
@@ -124,6 +124,8 @@ function App() {
                   />
                 }
               />
+                        <Route path="/tutorDash" element={<PrivateRoute Component={TutorDashboard} roles={['admin','tutor']} />} />  
+
               <Route
                 path="/schedule"
                 element={
