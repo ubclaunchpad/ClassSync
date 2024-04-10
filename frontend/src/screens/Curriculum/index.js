@@ -114,6 +114,7 @@ const navigate = useNavigate()
                             boxSizing: 'border-box',
                             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                             backgroundColor: '#f9f9f9',
+                            cursor: 'pointer'
                         }}
                         onClick={() => {navigate("/course/" + course.course_id)}}
                         >
