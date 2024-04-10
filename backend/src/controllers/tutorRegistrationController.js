@@ -130,12 +130,12 @@ export default class tutorRegistrationController {
       return this.course
         .getLearningGoalProgress(enrollmentId)
         .then((result) => {
-          // console.log(result)
+          console.log(result)
 
           const { learning_goals, completed } = result;
 
-          result = learning_goals[0].map((goal, index) => {
-              const isCompleted = completed[0].includes(index);
+          result = learning_goals.map((goal, index) => {
+              const isCompleted = completed.includes(index);
               return { goal, completed: isCompleted };
           });
           resolve(result);

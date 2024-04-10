@@ -328,6 +328,7 @@ router.post("/learninggoals", (req, res) => {
 })
 router.get("/learninggoals", (req, res) => {
     const enrollmentId = req.query.id;
+    console.log("Id is ", enrollmentId)
     const tutor = new tutorRegistrationController()
     tutor.getLearningGoalsProgress(enrollmentId)
         .then((response) => {
