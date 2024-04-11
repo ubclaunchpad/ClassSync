@@ -376,6 +376,7 @@ export default function ReactBigCalendar() {
         6: ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Saturday
     };
 
+
 const slotPropGetter = (date) => {
   const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
   const timeFormat = "HH:mm";
@@ -397,8 +398,7 @@ const slotPropGetter = (date) => {
       };
     }
   }
-
-  if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
+        if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
     return {
       className: "available",
     };
@@ -440,13 +440,21 @@ const slotPropGetter = (date) => {
 
     const CustomToolbar = ({ label, onNavigate, onView }) => {
         let currWeek = new Date()
+        //added new date type
+        let monthsahead = new Date();
+        monthsahead.setDate(monthsahead.getDate() + 50);
         let isButtonDisabled = startDate < currWeek
+        let isAfter60Days = startDate > monthsahead;
+
+        console.log(monthsahead)
+        console.log(isAfter60Days)
 
         return (
             <div className="rbc-toolbar">
                 <span className="rbc-btn-group">
-                    <button type="button" onClick={() => onNavigate('TODAY')}>
+                    <button type="button" onClick={() => onNavigate('TODAY')}> 
                         Today
+                        
                     </button>
                     <button type="button"
                         className={isButtonDisabled ? 'disabled-button' : ''}
@@ -454,9 +462,15 @@ const slotPropGetter = (date) => {
                         onClick={!isButtonDisabled ? () => onNavigate('PREV') : null}
                     >
                         Back
+
                     </button>
-                    <button type="button" onClick={() => onNavigate('NEXT')}>
+                    <button type="button" 
+                    className={isAfter60Days ? 'disabled-button' : ''}
+                    disabled={isAfter60Days}
+                    onClick={!isAfter60Days ? () => onNavigate('NEXT') : null}
+                    >
                         Next
+                        
                     </button>
                 </span>
                 <span className="rbc-toolbar-label">{label}</span>
