@@ -50,14 +50,14 @@ export default function AdminCalendar() {
   moment.locale("en-GB");
   const localizer = momentLocalizer(moment);
   const loadData = async () => {
-    
+
 
     try {
-      
+
       let url = `http://localhost:8080/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
-      console.log("Appt " ,appointmentsData)
+      console.log("Appt ", appointmentsData)
 
       url = "http://localhost:8080/students";
       const studentsResponse = await fetch(url);
@@ -75,7 +75,7 @@ export default function AdminCalendar() {
         color: course.color,
       }));
 
-   
+
       // Filter selectedOptions based on offeringsData
 
 
@@ -88,7 +88,7 @@ export default function AdminCalendar() {
           .add(booking.duration, "minute")
           .toDate();
 
-          
+
         appointments.push({
           start: new Date(booking.start),
           end: end,
@@ -139,24 +139,24 @@ export default function AdminCalendar() {
     // })
     // console.log(filteredTutorIdNameMap)
     const overlaps = eventsData.some(event =>
-        (start < event.end && end > event.start)
+      (start < event.end && end > event.start)
     );
     // Check if the start time and the next time slot are in the array for the day of the week.
     const isSlotAvailable = openSlots[dayOfWeek] && openSlots[dayOfWeek].includes(startTime) && !overlaps && diffDays >= 7;
 
     if (isSlotAvailable) {
-        setSelectedSlot({ start, end });
+      setSelectedSlot({ start, end });
 
-        const ids = availabilityHashmap[dayOfWeek][startTime];
+      const ids = availabilityHashmap[dayOfWeek][startTime];
 
 
-        const selected = tutorIDs.filter(item => ids.includes(Number(item.value)));
-        setAvailableTutors(selected)
+      const selected = tutorIDs.filter(item => ids.includes(Number(item.value)));
+      setAvailableTutors(selected)
     } else {
-        setSelectedSlot(null);
-        console.log("This slot is not available.");
+      setSelectedSlot(null);
+      console.log("This slot is not available.");
     }
-};
+  };
 
   const fetchAppointmentInfo = async (id) => {
     try {
@@ -176,8 +176,8 @@ export default function AdminCalendar() {
       console.log("In here 1")
       setIsLoaded(false);
 
-    loadData();
-    }  else {
+      loadData();
+    } else {
       console.log("In here 2")
     }
   }, [startDate]); // Add `startDate` as a dependency
@@ -224,41 +224,41 @@ export default function AdminCalendar() {
   };
 
   const editEvent = async (event) => {
- 
- 
+
+
     // setCourseId(event.course_id)
     fetchAppointmentInfo(event.id);
- 
+
     getAvailableTutors(event, 0);
     setSelectedBooking(event);
   };
 
   const getAvailableTutors = async (event, newBooking) => {
     const selectedTime = event.start
-    .toTimeString()
-    .split(" ")[0]
-    .substring(0, 5);
-  const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000)
-    .toTimeString()
-    .split(" ")[0]
-    .substring(0, 5);
-  const times = [selectedTime, thirtyMinsLater];
+      .toTimeString()
+      .split(" ")[0]
+      .substring(0, 5);
+    const thirtyMinsLater = new Date(event.start.getTime() + 30 * 60000)
+      .toTimeString()
+      .split(" ")[0]
+      .substring(0, 5);
+    const times = [selectedTime, thirtyMinsLater];
     console.log("Event is ", event)
     console.log(courses)
 
-console.log(event.title);
+    console.log(event.title);
 
 
 
 
-console.log("Course id is ", courseId)
+    console.log("Course id is ", courseId)
 
-let cId;
-if (newBooking === 1) {
-  cId = courseId.value
-} else {
-  cId = event.course_id
-}
+    let cId;
+    if (newBooking === 1) {
+      cId = courseId.value
+    } else {
+      cId = event.course_id
+    }
     // API call for tutor availability
     let response = await fetch(
       `http://localhost:8080/tutor/courses?course_id=${cId}`
@@ -268,12 +268,12 @@ if (newBooking === 1) {
     const ids = data.map(item => item.tutor_id);
     console.log("ids are ", ids)
 
-    response = await fetch(`http://localhost:8080/tutor/time?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${ids}&day=${event.start.getDay()}&time1=${times[0]}&time2=${times[1]}`);    
+    response = await fetch(`http://localhost:8080/tutor/time?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${ids}&day=${event.start.getDay()}&time1=${times[0]}&time2=${times[1]}`);
     const respData = await response.json()
 
     console.log("response is ", respData)
 
-    
+
     const tutorsOptions = respData.map((course) => ({
       value: course.tutor_id,
       label: course.tutor_name,
@@ -315,16 +315,16 @@ if (newBooking === 1) {
       console.log('thirtyMinsLater:', thirtyMinsLater);
       console.log('times:', times);
 
-      console.log("Adding for " ,event.tutor_id)
-      console.log("Removing for " ,changeNewTutor.value)
+      console.log("Adding for ", event.tutor_id)
+      console.log("Removing for ", changeNewTutor.value)
 
 
       let body = JSON.stringify({
-          tutor_id: event.tutor_id,
-          start_date: startDate.toISOString().split('T')[0],
-          end_date: endOfWeek(startDate).toISOString().split('T')[0],
-          day: event.start.getDay(),
-          times: times
+        tutor_id: event.tutor_id,
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endOfWeek(startDate).toISOString().split('T')[0],
+        day: event.start.getDay(),
+        times: times
       });
 
       console.log("Body is ", body)
@@ -332,26 +332,26 @@ if (newBooking === 1) {
       let URL = "http://localhost:8080/availability/add"
 
       await fetch(URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: body
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body
       });
 
       body = JSON.stringify({
-          tutor_id: changeNewTutor.value,
-          start_date: startDate.toISOString().split('T')[0],
-          end_date: endOfWeek(startDate).toISOString().split('T')[0],
-          day: event.start.getDay(),
-          times: times
+        tutor_id: changeNewTutor.value,
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endOfWeek(startDate).toISOString().split('T')[0],
+        day: event.start.getDay(),
+        times: times
       });
 
       console.log("New body is ", body)
 
       let url = "http://localhost:8080/availability/remove"
       await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: body
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body
       });
 
       setAppointmentInfo({ ...appointmentInfo, tutor: changeNewTutor.label });
@@ -365,40 +365,40 @@ if (newBooking === 1) {
 
   useEffect(() => {
     const fetchData = async () => {
-        setIsLoaded(false);
+      setIsLoaded(false);
 
-        let url = `http://localhost:8080/appointments/student/${studentId.value}`;
-        const appointmentsResponse = await fetch(url);
-        const appointmentsData = await appointmentsResponse.json();
-        console.log("Appt ", appointmentsData);
+      let url = `http://localhost:8080/appointments/student/${studentId.value}`;
+      const appointmentsResponse = await fetch(url);
+      const appointmentsData = await appointmentsResponse.json();
+      console.log("Appt ", appointmentsData);
 
-        let appts = [];
-        appointmentsData.forEach((booking) => {
-          const end = moment(booking.start)
-            .add(booking.duration, "minute")
-            .toDate();
+      let appts = [];
+      appointmentsData.forEach((booking) => {
+        const end = moment(booking.start)
+          .add(booking.duration, "minute")
+          .toDate();
 
-          appts.push({
-            start: new Date(booking.start),
-            end: end,
-            title: booking.title,
-            id: booking.booking,
-            tutor_id: booking.tutor,
-            enrollment_id: booking.enrollment,
-            course_id: booking.course_id,
-          });
+        appts.push({
+          start: new Date(booking.start),
+          end: end,
+          title: booking.title,
+          id: booking.booking,
+          tutor_id: booking.tutor,
+          enrollment_id: booking.enrollment,
+          course_id: booking.course_id,
         });
+      });
 
-        setEventsData(appts);
-        setIsLoaded(true);
+      setEventsData(appts);
+      setIsLoaded(true);
     };
 
-  if (enrollmentId !== null) {
-       fetchData(); 
+    if (enrollmentId !== null) {
+      fetchData();
 
 
 
-  }
+    }
   }, [enrollmentId]);
 
   useEffect(() => {
@@ -411,13 +411,13 @@ if (newBooking === 1) {
         value: course.tutor_id,
         label: course.tutor_name
       }));
-      
+
 
       // setFilterOptions(tutorsOptions)
 
       // let tutorIds = selectedTutors.map(tutor => tutor.value).join(',');
       // if (tutorIds === "") {
-        const tutorIds = tutorsOptions.map(option => option.value).join(',');
+      const tutorIds = tutorsOptions.map(option => option.value).join(',');
       // }
       console.log("Tutor ids ", tutorsData);
 
@@ -437,11 +437,11 @@ if (newBooking === 1) {
           openSlots[day] = Object.keys(slots);
         });
         const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
-      setTutorIDS(tutorOptions)
+        setTutorIDS(tutorOptions)
         setAvailabilityHashmap(data.availabilityHashmap);
 
 
-       
+
         setOpenSlots(openSlots)
       } catch (error) {
         console.error("Error:", error);
@@ -450,7 +450,7 @@ if (newBooking === 1) {
 
     if (enrollmentId !== null) {
       getAvailabilities();
-    } 
+    }
   }, [enrollmentId, startDate, bookingChange]);
   const deleteEvent = async (event) => {
 
@@ -500,7 +500,7 @@ if (newBooking === 1) {
         console.log("Added availability");
         // loadData();
         if (studentId && courseId) searchEnrollments();
-        setBookingChange(bookingChange+1)
+        setBookingChange(bookingChange + 1)
       } else {
         console.log("Error adding availability");
       }
@@ -553,7 +553,7 @@ if (newBooking === 1) {
           ...eventsData,
           {
             start: selectedSlot.start,
-            end: new Date(selectedSlot.start.getTime() + 60*60000), // Add 60 minutes
+            end: new Date(selectedSlot.start.getTime() + 60 * 60000), // Add 60 minutes
             title: title,
             id: data,
             tutor_id: id.value,
@@ -616,24 +616,24 @@ if (newBooking === 1) {
     const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
     const timeFormat = "HH:mm";
     const currentTimeSlot = moment(date).format(timeFormat);
-  
+
     const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
     const currentDate = new Date();
     const diffTime = date - currentDate;
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
+
     if (selectedSlot) {
       const selectedSlotStart = moment(selectedSlot.start, timeFormat);
       const selectedSlotDay = moment(selectedSlot.start).day();
       const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
-  
+
       if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
         return {
           className: "active",
         };
       }
     }
-  
+
     if (openSlots[dayOfWeek] && diffDays >= 7 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
       return {
         className: "available",
@@ -663,7 +663,7 @@ if (newBooking === 1) {
     const response = await fetch(url);
     const bookingsResponse = await response.json();
 
-    let id = localStorage.getItem("userID");
+    let id = localStorage.getItem("userId");
     if (response.ok) {
       let appointments = [];
 
@@ -689,7 +689,7 @@ if (newBooking === 1) {
       console.log(enrollmentId);
       console.log("Appointments are ", appointments);
 
-     
+
       setLessons(appointments);
       setBookings(true);
       // setSelectingTutor(true);
@@ -724,10 +724,11 @@ if (newBooking === 1) {
         openSlots[dayOfWeek].includes(nextTimeSlot))
     ) {
       setSelectedSlot(event)
-    getAvailableTutors(event, 1)
-    setSelectingTutor(true)}
+      getAvailableTutors(event, 1)
+      setSelectingTutor(true)
     }
-  
+  }
+
   const handleSelectedTutor = async () => {
     setSelectingTutor(false);
     // await loadData();
@@ -1149,377 +1150,378 @@ if (newBooking === 1) {
           </div>
         </TutorDashboardLayout>
       )} */}
-<MainContentLayout 
-rightColumnContent={
-  selectingTutor ? (
-    bookingError ? (
-      <div style={{ color: "red", marginTop: "10px" }}>{bookingError} 
-      
-            <div className="back-enrollment-container">
-            <button className="back-enrollment" 
-            onClick={()=>{setSelectingTutor(false)
-            setBookingError(null)
-            }}
-            >
-              <img src={backArrow} width={20} />
-              <span>Back</span>
-            </button>
-          </div></div>
-    ) : (
-      selectedSlot != null && (
-        <div className="modal-container">
-          <Modal
-            selectedSlot={selectedSlot.start.toString()}
-            availablePeople={availableTutors}
-            onBook={handleBook}
-            onClose={() => {
-              setSelectedSlot(null);
-              setBookingError(null); // Clear the error when closing the modal
-            }}
-          />
-          <div className="back-enrollment-container">
-            <button className="back-enrollment" 
-            onClick={()=>{setSelectingTutor(false)}}
-            >
-              <img src={backArrow} width={20} />
-              <span>Back</span>
-            </button>
-          </div>
-        </div>
-      )
-    )
-  ) : (
-    selectedBooking ? (
-      appointmentInfo && (
-        <div
-          style={{
-            backgroundColor: "#f5f5f5",
-            borderRadius: "10px",
-            padding: "12px",
-            marginTop: "16px",
-            boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "12px",
-          }}
-        >
-          <div className="admin-calendar__course-info-header">
-            Appointment
-          </div>
-          <div className="admin-calendar__course-info-body">
-            <img src={timeIcon} alt="time icon" />
-            {selectedBooking.start.toLocaleString([], {
-              dateStyle: "medium",
-              timeStyle: "short",
-            })}
-            {" -"}
-            <br />
-            {selectedBooking.end.toLocaleString([], {
-              dateStyle: "medium",
-              timeStyle: "short",
-            })}{" "}
-            (
-            {differenceInHours(
-              selectedBooking.end,
-              selectedBooking.start
-            )}{" "}
-            hour
-            {differenceInHours(
-              selectedBooking.end,
-              selectedBooking.start
-            ) > 1 && "s"}
-            )
-          </div>
-          <div className="admin-calendar__course-info-body">
-            <img src={studentIcon} alt="student icon" />
-            {appointmentInfo.student}
-          </div>
-          <div className="admin-calendar__course-info-body">
-            <img src={tutorIcon} alt="tutor icon" width={24} />
-            {editting ? (
-              <Select
-                options={availableTutors}
-                className="admin-calendar__tutor-select"
-                onChange={(e) => {
-                  setChangeNewTutor(e);
-                }}
-              />
-            ) : changeNewTutor ? (
-              changeNewTutor.label
-            ) : (
-              appointmentInfo.tutor
-            )}
-          </div>
-          <div className="admin-calendar__course-info-body">
-            <img src={courseIcon} alt="course icon" width={24} />
-            {selectedBooking.title}
-          </div>
-          <div className="admin-calendar__course-numbers-list">
-            {[...Array(5)].map((x, index) => (
-              <div
-                className="admin-calendar__course-number"
-                style={
-                  index < appointmentInfo.class
-                    ? { backgroundColor: "#103da2" }
-                    : { backgroundColor: "#B3DEFC" }
-                }
-              ></div>
-            ))}
-          </div>
-          <div className="admin-calendar__back-container">
-            <div className="admin-calendar__change-appointment-container">
-              <button
-                className="admin-calendar__change"
-                onClick={() => {
-                  editting && setChangeNewTutor(null);
-                  console.log("Start date " ,startDate.toISOString().split("T")[0])
-                  setEditting(!editting);
-                }}
-              >
-                <img src={editIcon} alt="edit" width={18} />
-                <span>{editting ? "Stop Edit" : "Edit"}</span>
-              </button>
-              {editting ? (
-                <button
-                  className="admin-calendar__change"
-                  onClick={() => {
-                    changeTutor(selectedBooking);
-                    setEditting(false);
-                  }}
-                >
-                  <img src={saveIcon} alt="delete" width={20} />
-                  <span>Save</span>
-                </button>
-              ) : (
-                <button
-                  className="admin-calendar__change"
-                  onClick={() => {
-                    deleteEvent(selectedBooking);
-                    setSelectedBooking(null);
-                    setEditting(false);
-                  }}
-                >
-                  <img src={trashIcon} alt="delete" width={20} />
-                  <span>Delete</span>
-                </button>
-              )}
-            </div>
+      <MainContentLayout
+        rightColumnContent={
+          selectingTutor ? (
+            bookingError ? (
+              <div style={{ color: "red", marginTop: "10px" }}>{bookingError}
 
-            <button
-              className="admin-calendar__back"
-              onClick={() => {
-                setSelectedBooking(null);
-                setEditting(false);
-              }}
-            >
-              <img src={backArrow} width={20} />
-              <span>Back</span>
-            </button>
-          </div>
-        </div>
-      )
-    ) : (
-      <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
-
-        <h4 style={{ color: "#333", marginBottom: "10px" }}>
-          Select student
-        </h4>
-        <Select
-          className="basic-single"
-          classNamePrefix="select"
-          isClearable={true}
-          isSearchable={true}
-          name="color"
-          value={studentId}
-          onChange={setStudentId}
-          options={students.map((student) => ({
-            value: student._id,
-            label: student._name,
-            guardian: student._guardian,
-          }))}
-          formatOptionLabel={({ label, guardian }) => (
-            <div>
-              <div>{label}</div>
-              <small
-                style={{ fontSize: "0.8em", color: "gray" }}
-              >{`Guardian: ${guardian}`}</small>
-            </div>
-          )}
-        />
-
-        <h4
-          style={{
-            color: "#333",
-            marginTop: "20px",
-            marginBottom: "10px",
-          }}
-        >
-          Select course
-        </h4>
-        <Select
-          className="basic-single"
-          classNamePrefix="select"
-          isClearable={true}
-          isSearchable={true}
-          name="color"
-          value={courseId}
-          onChange={setCourseId}
-          options={courses}
-        />
-
-        <input
-          type="submit"
-          value="Search Enrollments"
-          onClick={searchEnrollments}
-          style={{
-            display: "block",
-            marginTop: "20px",
-            padding: "10px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        />
-          <p
-style={{
-color: "grey",
-marginLeft: "10px",
-cursor: "pointer",
-display: 'flex'
-}}
-onClick={clearSearch}
->
-Clear Search
-</p>
-        {bookingError && (
-          <div
-            style={{
-              marginTop: "20px",
-              padding: "10px",
-              backgroundColor: "#DC3545",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            {bookingError}
-
-      
-          </div>
-        )}
-        {bookings && (
-          <div>
-            <h2 style={{ color: "#333", marginTop: "30px" }}>
-              Bookings
-            </h2>
-            <table
-              style={{
-                width: "100%",
-                marginTop: "10px",
-                textAlign: "left",
-                borderCollapse: "collapse",
-                fontFamily: "Arial, sans-serif",
-                border: "1px solid #ddd",
-                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <tbody key={lessons}>
-                {lessons.map((appointment, index) => (
-                  <tr
-                    key={index}
-                    style={{
-                      borderBottom: "1px solid #ddd",
+                <div className="back-enrollment-container">
+                  <button className="back-enrollment"
+                    onClick={() => {
+                      setSelectingTutor(false)
+                      setBookingError(null)
                     }}
                   >
-                    <td
-                      style={{
-                        padding: "10px",
-                        fontSize: "16px",
-                        color: "#333",
-                      }}
-                    >
-                      {new Date(appointment.start).toLocaleDateString(
-                        "en-US",
-                        { month: "short", day: "2-digit" }
-                      )}{" "}
-                    </td>
-                    <td
-                      style={{
-                        padding: "10px",
-                        fontSize: "16px",
-                        color: "#333",
-                      }}
-                    >
-                      {appointment.time}
-                    </td>
-                    <td
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <button
-                        style={{
-                          border: "none",
-                          borderRadius: "5px",
-                          cursor: "pointer",
-                          fontFamily: "Arial, sans-serif",
-                          fontSize: "16px",
-                          padding: "5px 10px",
-                        }}
-                        onClick={() => deleteEvent(appointment)}
-                      >
-                        ❌
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {lessons.length < 5 ? (
-              <div style={{ marginTop: "8px", color: "green" }}>
-                Select a time and book a lesson!
-              </div>
+                    <img src={backArrow} width={20} />
+                    <span>Back</span>
+                  </button>
+                </div></div>
             ) : (
-              <div style={{ color: "orange", marginTop: "8px" }}>
-                Notice: You already have 5 classes booked
+              selectedSlot != null && (
+                <div className="modal-container">
+                  <Modal
+                    selectedSlot={selectedSlot.start.toString()}
+                    availablePeople={availableTutors}
+                    onBook={handleBook}
+                    onClose={() => {
+                      setSelectedSlot(null);
+                      setBookingError(null); // Clear the error when closing the modal
+                    }}
+                  />
+                  <div className="back-enrollment-container">
+                    <button className="back-enrollment"
+                      onClick={() => { setSelectingTutor(false) }}
+                    >
+                      <img src={backArrow} width={20} />
+                      <span>Back</span>
+                    </button>
+                  </div>
+                </div>
+              )
+            )
+          ) : (
+            selectedBooking ? (
+              appointmentInfo && (
+                <div
+                  style={{
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "10px",
+                    padding: "12px",
+                    marginTop: "16px",
+                    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
+                  <div className="admin-calendar__course-info-header">
+                    Appointment
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={timeIcon} alt="time icon" />
+                    {selectedBooking.start.toLocaleString([], {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}
+                    {" -"}
+                    <br />
+                    {selectedBooking.end.toLocaleString([], {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}{" "}
+                    (
+                    {differenceInHours(
+                      selectedBooking.end,
+                      selectedBooking.start
+                    )}{" "}
+                    hour
+                    {differenceInHours(
+                      selectedBooking.end,
+                      selectedBooking.start
+                    ) > 1 && "s"}
+                    )
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={studentIcon} alt="student icon" />
+                    {appointmentInfo.student}
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={tutorIcon} alt="tutor icon" width={24} />
+                    {editting ? (
+                      <Select
+                        options={availableTutors}
+                        className="admin-calendar__tutor-select"
+                        onChange={(e) => {
+                          setChangeNewTutor(e);
+                        }}
+                      />
+                    ) : changeNewTutor ? (
+                      changeNewTutor.label
+                    ) : (
+                      appointmentInfo.tutor
+                    )}
+                  </div>
+                  <div className="admin-calendar__course-info-body">
+                    <img src={courseIcon} alt="course icon" width={24} />
+                    {selectedBooking.title}
+                  </div>
+                  <div className="admin-calendar__course-numbers-list">
+                    {[...Array(5)].map((x, index) => (
+                      <div
+                        className="admin-calendar__course-number"
+                        style={
+                          index < appointmentInfo.class
+                            ? { backgroundColor: "#103da2" }
+                            : { backgroundColor: "#B3DEFC" }
+                        }
+                      ></div>
+                    ))}
+                  </div>
+                  <div className="admin-calendar__back-container">
+                    <div className="admin-calendar__change-appointment-container">
+                      <button
+                        className="admin-calendar__change"
+                        onClick={() => {
+                          editting && setChangeNewTutor(null);
+                          console.log("Start date ", startDate.toISOString().split("T")[0])
+                          setEditting(!editting);
+                        }}
+                      >
+                        <img src={editIcon} alt="edit" width={18} />
+                        <span>{editting ? "Stop Edit" : "Edit"}</span>
+                      </button>
+                      {editting ? (
+                        <button
+                          className="admin-calendar__change"
+                          onClick={() => {
+                            changeTutor(selectedBooking);
+                            setEditting(false);
+                          }}
+                        >
+                          <img src={saveIcon} alt="delete" width={20} />
+                          <span>Save</span>
+                        </button>
+                      ) : (
+                        <button
+                          className="admin-calendar__change"
+                          onClick={() => {
+                            deleteEvent(selectedBooking);
+                            setSelectedBooking(null);
+                            setEditting(false);
+                          }}
+                        >
+                          <img src={trashIcon} alt="delete" width={20} />
+                          <span>Delete</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <button
+                      className="admin-calendar__back"
+                      onClick={() => {
+                        setSelectedBooking(null);
+                        setEditting(false);
+                      }}
+                    >
+                      <img src={backArrow} width={20} />
+                      <span>Back</span>
+                    </button>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
+
+                <h4 style={{ color: "#333", marginBottom: "10px" }}>
+                  Select student
+                </h4>
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="color"
+                  value={studentId}
+                  onChange={setStudentId}
+                  options={students.map((student) => ({
+                    value: student._id,
+                    label: student._name,
+                    guardian: student._guardian,
+                  }))}
+                  formatOptionLabel={({ label, guardian }) => (
+                    <div>
+                      <div>{label}</div>
+                      <small
+                        style={{ fontSize: "0.8em", color: "gray" }}
+                      >{`Guardian: ${guardian}`}</small>
+                    </div>
+                  )}
+                />
+
+                <h4
+                  style={{
+                    color: "#333",
+                    marginTop: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Select course
+                </h4>
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="color"
+                  value={courseId}
+                  onChange={setCourseId}
+                  options={courses}
+                />
+
+                <input
+                  type="submit"
+                  value="Search Enrollments"
+                  onClick={searchEnrollments}
+                  style={{
+                    display: "block",
+                    marginTop: "20px",
+                    padding: "10px",
+                    backgroundColor: "#007BFF",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                />
+                <p
+                  style={{
+                    color: "grey",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                    display: 'flex'
+                  }}
+                  onClick={clearSearch}
+                >
+                  Clear Search
+                </p>
+                {bookingError && (
+                  <div
+                    style={{
+                      marginTop: "20px",
+                      padding: "10px",
+                      backgroundColor: "#DC3545",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {bookingError}
+
+
+                  </div>
+                )}
+                {bookings && (
+                  <div>
+                    <h2 style={{ color: "#333", marginTop: "30px" }}>
+                      Bookings
+                    </h2>
+                    <table
+                      style={{
+                        width: "100%",
+                        marginTop: "10px",
+                        textAlign: "left",
+                        borderCollapse: "collapse",
+                        fontFamily: "Arial, sans-serif",
+                        border: "1px solid #ddd",
+                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <tbody key={lessons}>
+                        {lessons.map((appointment, index) => (
+                          <tr
+                            key={index}
+                            style={{
+                              borderBottom: "1px solid #ddd",
+                            }}
+                          >
+                            <td
+                              style={{
+                                padding: "10px",
+                                fontSize: "16px",
+                                color: "#333",
+                              }}
+                            >
+                              {new Date(appointment.start).toLocaleDateString(
+                                "en-US",
+                                { month: "short", day: "2-digit" }
+                              )}{" "}
+                            </td>
+                            <td
+                              style={{
+                                padding: "10px",
+                                fontSize: "16px",
+                                color: "#333",
+                              }}
+                            >
+                              {appointment.time}
+                            </td>
+                            <td
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <button
+                                style={{
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  fontFamily: "Arial, sans-serif",
+                                  fontSize: "16px",
+                                  padding: "5px 10px",
+                                }}
+                                onClick={() => deleteEvent(appointment)}
+                              >
+                                ❌
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    {lessons.length < 5 ? (
+                      <div style={{ marginTop: "8px", color: "green" }}>
+                        Select a time and book a lesson!
+                      </div>
+                    ) : (
+                      <div style={{ color: "orange", marginTop: "8px" }}>
+                        Notice: You already have 5 classes booked
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        )}
-      </div>
-    )
-  )
-}>
-<div className="calendar-container">
-            {isLoaded && (
-              <Calendar
-                key={eventsData + openSlots}
-                views={["week"]}
-                selectable
-                localizer={localizer}
-                defaultDate={startDate}
-                defaultView="week"
-                components={{ event: EventComponent }}
-                events={eventsData}
-                min={new Date(2020, 1, 0, 7, 0, 0)}
-                max={new Date(2020, 1, 0, 19, 0, 0)}
-                style={{ height: "75vh", width: "90vw" }}
-                onSelectEvent={editEvent}
-                onSelectSlot={selectSlot}
-                slotPropGetter={slotPropGetter}
-                onNavigate={(date) => {
-                  setSelectedSlot(null);
-                  setStartDate(startOfWeek(date));
-                }}
-              />
-            )}
-          </div>
-        </MainContentLayout>
+            )
+          )
+        }>
+        <div className="calendar-container">
+          {isLoaded && (
+            <Calendar
+              key={eventsData + openSlots}
+              views={["week"]}
+              selectable
+              localizer={localizer}
+              defaultDate={startDate}
+              defaultView="week"
+              components={{ event: EventComponent }}
+              events={eventsData}
+              min={new Date(2020, 1, 0, 7, 0, 0)}
+              max={new Date(2020, 1, 0, 19, 0, 0)}
+              style={{ height: "75vh", width: "90vw" }}
+              onSelectEvent={editEvent}
+              onSelectSlot={selectSlot}
+              slotPropGetter={slotPropGetter}
+              onNavigate={(date) => {
+                setSelectedSlot(null);
+                setStartDate(startOfWeek(date));
+              }}
+            />
+          )}
+        </div>
+      </MainContentLayout>
 
     </>
   );

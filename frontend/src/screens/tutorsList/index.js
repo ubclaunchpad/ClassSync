@@ -5,7 +5,9 @@ import { Chip, Menu, MenuList, alpha } from '@material-ui/core';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { Checkbox, TextField, Box, Button, MenuItem, Dialog,DialogActions,DialogContent,DialogTitle,InputLabel,OutlinedInput,FormControl,Select } from '@mui/material';
-
+import IconButton from "@mui/material/IconButton";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -31,36 +33,32 @@ const TutorsList = () => {
             const teacherListResponse = await fetch(urlTutors);
             const teacherListData = await teacherListResponse.json();
             console.log(teacherListData)
-            
+
             setTutors(teacherListData);
 
-           
+
             // Getting all tutor offerings
             let urlTutorOfferings = "http://localhost:8080/tutor_offerings"
             const offeringsListResponse = await fetch(urlTutorOfferings);
             const offeringsListData = await offeringsListResponse.json();
             setOfferings(offeringsListData);
 
-              // Getting all courses
-              let urlCourses = "http://localhost:8080/courses"
-              const coursesListResponse = await fetch(urlCourses);
-              const coursesListData = await coursesListResponse.json();
-              console.log(coursesListData)
+            // Getting all courses
+            let urlCourses = "http://localhost:8080/courses"
+            const coursesListResponse = await fetch(urlCourses);
+            const coursesListData = await coursesListResponse.json();
+            console.log(coursesListData)
 
-              const coursesMap = coursesListData.reduce((map, course) => {
+            const coursesMap = coursesListData.reduce((map, course) => {
                 map[course.course_id] = {
                     course_name: course.course_name,
                     course_difficulty: course.course_difficulty,
-                    color: course.color 
+                    color: course.color
                 };
                 return map;
-                }, {});
-    
-              setCourses(coursesMap);
-              console.log("CourseMap: ",coursesMap);
+            }, {});
 
-       
-
+            setCourses(coursesMap);
 
         } catch (error) {
             console.error('Failed to fetch data', error);
@@ -68,10 +66,10 @@ const TutorsList = () => {
     };
 
     const findCourses = (tutor_id) => {
- let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
-       let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
-       
-       return tutorCourseIds 
+        let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+        let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
+
+        return tutorCourseIds
     }
 
     const handleSelectTutor = (id) => {
@@ -85,8 +83,8 @@ const TutorsList = () => {
 
     const getCourseNames = (tutor_id) => {
         let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
-                let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
-                console.log("Courses are ", tutorOfferings)
+        let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
+        console.log("Courses are ", tutorOfferings)
         let courseNames = new Set();
         tutorCourseIds.forEach(id => {
             let course = courses[id];
@@ -94,52 +92,52 @@ const TutorsList = () => {
                 courseNames.add(course.course_name.trim());
             }
         });
-        console.log("Names ", courseNames)  
-                return Array.from(courseNames)
+        console.log("Names ", courseNames)
+        return Array.from(courseNames)
     }
 
     const handleSelectAll = () => {
-setSelectedTutors(selectAll ? [] : tutors.map(tutor => tutor.tutor_id));
-setSelectAll(!selectAll)
+        setSelectedTutors(selectAll ? [] : tutors.map(tutor => tutor.tutor_id));
+        setSelectAll(!selectAll)
 
     }
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState(tutors);
-  
+
     useEffect(() => {
 
         if (tutors) {
-        if (searchTerm !== '') {
-            const results = tutors.filter(tutor =>
-                tutor.tutor_name.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-      setSearchResults(results);
-      console.log("Tutors are ", results)
-    } else {
-        setSearchResults(tutors);
-    }
-}
+            if (searchTerm !== '') {
+                const results = tutors.filter(tutor =>
+                    tutor.tutor_name.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                setSearchResults(results);
+                console.log("Tutors are ", results)
+            } else {
+                setSearchResults(tutors);
+            }
+        }
     }, [searchTerm, tutors]);
-  
+
     const handleChange = event => {
-      setSearchTerm(event.target.value);
+        setSearchTerm(event.target.value);
     };
-// const findUniqueCourses = (tutor_id) => {
-//     let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
-//     let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id)?.course_name);
-    
-//     let uniqueCourseList = [...new Set(courseList)];
-//     console.log(uniqueCourseList)
-    
-//     return uniqueCourseList;
-// }
+    // const findUniqueCourses = (tutor_id) => {
+    //     let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+    //     let courseList = tutorOfferings?.map(offering => courses?.find(course => course.course_id === offering.course_id)?.course_name);
+
+    //     let uniqueCourseList = [...new Set(courseList)];
+    //     console.log(uniqueCourseList)
+
+    //     return uniqueCourseList;
+    // }
     const copyToken = async () => {
         try {
             const response = await fetch('http://localhost:8080/token');
             const data = await response.json();
 
             // Now you have the token in `data`, you can copy it to clipboard
-            navigator.clipboard.writeText(url+data);
+            navigator.clipboard.writeText(url + data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -159,29 +157,30 @@ setSelectAll(!selectAll)
         setCourseButtonName('Add Course');
     };
 
-const renewTutors = async () => {
-    const url = "http://localhost:8080/renew";
-    const data = {
-        selectedTutors: selectedTutors,
-        endDate: new Date(endDate)
-    };
+    const renewTutors = async () => {
+        const url = "http://localhost:8080/renew";
+        const pstDate = new Date(new Date(endDate).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+        const data = {
+            selectedTutors: selectedTutors,
+            endDate: `${pstDate.getFullYear()}-${String(pstDate.getMonth() + 1).padStart(2, '0')}-${String(pstDate.getDate()).padStart(2, '0')}`
+        };
 
-    console.log(data.endDate)
-    try {
-        await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+        console.log("Date is ", data.endDate)
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-        // const result = await response.json();
-        await fetchData();
-    } catch (error) {
-        console.error('Error:', error);
+            // const result = await response.json();
+            await fetchData();
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-}
 
 
 // Consts for AddCourse DialogBox
@@ -282,7 +281,7 @@ const upateChanges= () => {
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
                     <h3>List of all Tutors</h3>
                     <p>This dashboard allows administrators to manage Tutors. View and edit Tutors by clicking on View More.</p>
-                    <button 
+                    <button
                         style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -299,15 +298,15 @@ const upateChanges= () => {
                         onClick={copyToken}
                     >
                         Tutor Invite Link (Single-Use)
-                        <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            height="16" 
-                            viewBox="0 0 24 24" 
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="16"
+                            viewBox="0 0 24 24"
                             width="16"
                             style={{ marginLeft: '10px' }}
                         >
-                            <path d="M0 0h24v24H0z" fill="none"/>
-                            <path fill='white' d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <path fill='white' d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
                         </svg>
                     </button>
 
@@ -359,47 +358,47 @@ const upateChanges= () => {
 
                    <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="date-picker-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', maxHeight: '75px', marginTop: '10px', marginBottom: '10px' }}>
+
                     <div style={{ marginBottom: '0px', display: 'flex', alignItems: 'center' }}>
-                        <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center',
-                                justifyContent: 'flex-start',
-                                // backgroundColor: '#E1F5FE', // lighter blue
-                                color: '#103da2', // dark blue
-                                // borderRadius: '20px', 
-                                padding: '5px 10px 0px 10px', 
-                                fontSize: '14px',
-                                fontWeight: 'bold'
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            // backgroundColor: '#E1F5FE', // lighter blue
+                            color: '#103da2', // dark blue
+                            // borderRadius: '20px', 
+                            padding: '5px 10px 0px 10px',
+                            fontSize: '14px',
+                            fontWeight: 'bold'
                         }}>
-                            <Checkbox 
-                                checked={selectAll} 
-                                onChange={handleSelectAll} 
-                                style={{ marginRight: '2px' }} 
+                            <Checkbox
+                                checked={selectAll}
+                                onChange={handleSelectAll}
+                                style={{ marginRight: '2px' }}
                             />
                             Select Tutors
                             {/* 5 Tutors Selected */}
                         </div>
-                        <TextField 
-                            type="text" 
-                            placeholder="Search..." 
-                            variant="outlined" 
-                            size="small" 
+                        <TextField
+                            type="text"
+                            placeholder="Search..."
+                            variant="outlined"
+                            size="small"
                             value={searchTerm}
                             onChange={handleChange}
                             style={{ marginRight: '10px' }}
                         />
                     </div>
-                    <div style={{display: 'flex', alignItems: 'center', paddingRight: '10px' }}>
-                        <DatePicker 
+                    <div style={{ display: 'flex', alignItems: 'center', paddingRight: '10px' }}>
+                        <DatePicker
                             label="End Date"
-                            value={endDate} 
-                            onChange={setEndDate} 
-                            slotProps={{textField: {size:'small'}}}
-                            // renderInput={(params) => <TextField {...params} variant="outlined" size="small" style={{ width: '200px', height: '1.4375em' }} />} // Set width
+                            value={endDate}
+                            onChange={setEndDate}
+                            slotProps={{ textField: { size: 'small' } }}
                         />
                     </div>
-                    <div style={{  display: 'flex', alignItems: 'center' }}>
-                        <button 
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <button
                             style={{
                                 padding: '10px 10px',
                                 margin: '5px',
@@ -419,17 +418,17 @@ const upateChanges= () => {
                     </div>
                 </div>
             </LocalizationProvider>
-         
+
             {/* <div style={{ marginTop: '20px' }}> */}
 
             <table key={tutors + courses} style={{ width: '90%', borderCollapse: 'collapse', marginLeft: '30px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
                 <thead>
-                    <tr style={{ borderBottom: '1px solid #000', backgroundColor: '#103da2', color: '#fff' }}>
+                    <tr style={{ borderBottom: '1px solid rgb(221, 221, 221)', backgroundColor: '#103da2', color: '#fff' }}>
                         <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold' }}></th> {/* Checkbox */}
                         <th style={{ padding: '10px', textAlign: 'center', }}>ID</th>
                         <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}>Name</th>
-<th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', width: '125px' }}>Start Date</th> {/* Start Date */}
-<th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', width: '125px' }}>End Date</th> {/* End Date */}                        <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}>Courses</th>
+                        <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', width: '125px' }}>Start Date</th> {/* Start Date */}
+                        <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', width: '125px' }}>End Date</th> {/* End Date */}                        <th style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}>Courses</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -438,33 +437,31 @@ const upateChanges= () => {
                             <tr >
                                 <td className="tutor__table-row-element">
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }} >
-                                       {expandedRow === index ? (
-    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="KeyboardArrowUpIcon" onClick={() => toggleExpandRow(index)}>
-        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"></path>
-    </svg>
-) : (
-    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="KeyboardArrowDownIcon" onClick={() => toggleExpandRow(index)}>
-        <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"></path>
-    </svg>
-)}
- <Checkbox 
-                                checked={selectedTutors.includes(tutor.tutor_id)} 
-                                onChange={() => handleSelectTutor(tutor.tutor_id)} 
-                                style={{ marginRight: '2px' }} 
-                            />                                    </div>
+                                        <IconButton
+                                            aria-label="expand row"
+                                            size="small"
+                                            onClick={() => toggleExpandRow(index)}
+                                        >
+                                            {expandedRow === index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                                        </IconButton>
+                                        <Checkbox
+                                            checked={selectedTutors.includes(tutor.tutor_id)}
+                                            onChange={() => handleSelectTutor(tutor.tutor_id)}
+                                            style={{ marginRight: '2px' }}
+                                        />
+                                    </div>
                                 </td>
                                 <td className="tutor__table-row-element">{tutor.tutor_id}</td>
                                 <td className="tutor__table-row-element">{tutor.tutor_name}</td>
-<td className="registration__table-row-element">
-{new Date(tutor.startdate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-</td>                                
+                                <td className="registration__table-row-element">
+                                    {new Date(tutor.startdate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </td>
 
-<td className="registration__table-row-element">
-{new Date(tutor.enddate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-</td>
-                             <td className="registration__table-row-element">
-{offerings && getCourseNames(tutor.tutor_id)?.join(', ')}
-</td>
+                                <td className="registration__table-row-element">
+                                    {new Date(tutor.enddate).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', day: 'numeric', month: 'short', year: 'numeric' })}                                </td>
+                                <td className="registration__table-row-element">
+                                    {offerings && getCourseNames(tutor.tutor_id)?.join(', ')}
+                                </td>
                             </tr>
                             {expandedRow === index && (
                                 <tr>
@@ -522,8 +519,8 @@ const upateChanges= () => {
                     </div>
 
 
-                  
-                </td>
+
+                                    </td>
                                 </tr>
                             )}
                         </React.Fragment>

@@ -1,6 +1,6 @@
 .course-container {
     background-color: #fff;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid rgb(221, 221, 221);
     padding: 10px;
     display: flex;
     align-items: center;
@@ -8,7 +8,7 @@
 
 .tutor__table-row-element {
     padding: 10px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid rgb(221, 221, 221);
     text-align: center;
 }
 
@@ -20,18 +20,18 @@
     width: 100%;
     align-items: center;
     padding: 20px 0px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid rgb(221, 221, 221);
 }
 
 
 .registration__row-expand-table {
     width: 80%;
     border-collapse: collapse;
-    border-top: 1px solid #000;
+    border-top: 1px solid rgb(221, 221, 221);
 }
 
 .registration__row-expand-row {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid rgb(221, 221, 221);
 }
 
 .registration__row-expand-header {

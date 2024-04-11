@@ -1,17 +1,15 @@
 .registrations__table {
-    width: 100%;
-    padding: 20px 20px 20px 30px;
-    display: grid;
-    grid-template-columns: repeat(8, auto);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    /* width: 90%; */
+    margin: 20px 20px 20px 30px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
 .registration__table-header-element {
     padding: 10px;
-    font-weight: 600;
-    border-bottom: 1px solid #000;
-    text-align: left;
-    background-color: #f2f2f2;
+    font-weight: bold;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    text-align: center;
+    color: white;
+    background-color: rgb(16, 61, 162);
     cursor: pointer;
 }

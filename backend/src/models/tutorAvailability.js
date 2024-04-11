@@ -351,7 +351,28 @@ export class tutorAvailability {
               console.error("Error:", error);
               reject(error);
             } else {
-              // console.log("Got appointments ", results);
+              resolve(results.rows);
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
+
+  async getAppointmentsByTutorId(tutorId) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        con.query(
+          "SELECT * FROM get_appointments_by_tutor($1)",
+          [tutorId],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
               resolve(results.rows);
             }
           }

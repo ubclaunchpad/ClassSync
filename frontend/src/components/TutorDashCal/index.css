@@ -1,0 +1,12 @@
+.student-info-container {
+    display: flex;
+flex-direction: column;
+}
+.tutor-cal-container {
+    border-style: solid;
+    border-radius: 15px;
+    border-color: #103DA2;
+    padding: 20px 50px;
+    width: 100%;
+    margin: 0 15px;
+}

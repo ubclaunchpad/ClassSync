@@ -1,7 +1,7 @@
 .registration__table-row-element {
     padding: 10px;
-    border-bottom: 1px solid #000;
-    text-align: left;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    text-align: start;
 }
 
 .registration__row-expand-content {
@@ -12,26 +12,31 @@
     width: 100%;
     align-items: center;
     padding: 20px 0px;
-    border-bottom: 1px solid #000;
-    background-color: #f2f2f2;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    background-color: white;
 }
 
 .registration__row-expand-table {
     width: 80%;
     border-collapse: collapse;
-    border-top: 1px solid #000;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .registration__row-expand-row {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid rgb(221, 221, 221);
+
 }
 
-.registration__row-expand-header {
+.registration__row-expand-header { 
     padding: 8px;
     font-weight: 600;
     text-align: left;
     background-color: #f2f2f2;
     cursor: pointer;
+    background-color: rgb(16, 61, 162);
+    color: white;
+
 }
 
 .registration__row-expand-title {
@@ -40,7 +45,7 @@
 }
 
 .registration__expand-row-element {
-    padding: 10px;
+    padding: 10px; 
     text-align: left;
     font-weight: 400;
 }
