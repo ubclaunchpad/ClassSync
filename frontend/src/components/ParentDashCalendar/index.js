@@ -46,7 +46,6 @@ const [eventsData, setEventsData] = useState([]);
             }
           })
         }}))
-
         setEventsData(events);
 
       } catch (err) {

@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans");
 
-.student-info-container {
+.course-info-container {
     color: #103da2;
     margin: 0 0.5rem;
     margin-top: 0.5rem;
@@ -14,7 +14,7 @@
     height: 60%;
 }
 
-.student-info-header {
+.course-info-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between; 
@@ -30,7 +30,7 @@
     height: 1.5rem;
 }
 
-.existing-students-row {
+.existing-course-row {
     display: flex;
     flex-direction: row;
 }
