@@ -158,12 +158,13 @@ const TutorsList = () => {
 
     const renewTutors = async () => {
         const url = "http://localhost:8080/renew";
+        const pstDate = new Date(new Date(endDate).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
         const data = {
             selectedTutors: selectedTutors,
-            endDate: new Date(endDate)
+            endDate: `${pstDate.getFullYear()}-${String(pstDate.getMonth() + 1).padStart(2, '0')}-${String(pstDate.getDate()).padStart(2, '0')}`
         };
 
-        console.log(data.endDate)
+        console.log("Date is ", data.endDate)
         try {
             await fetch(url, {
                 method: 'POST',
@@ -275,7 +276,6 @@ const TutorsList = () => {
                             value={endDate}
                             onChange={setEndDate}
                             slotProps={{ textField: { size: 'small' } }}
-                        // renderInput={(params) => <TextField {...params} variant="outlined" size="small" style={{ width: '200px', height: '1.4375em' }} />} // Set width
                         />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -339,8 +339,7 @@ const TutorsList = () => {
                                 </td>
 
                                 <td className="registration__table-row-element">
-                                    {new Date(tutor.enddate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                </td>
+                                    {new Date(tutor.enddate).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', day: 'numeric', month: 'short', year: 'numeric' })}                                </td>
                                 <td className="registration__table-row-element">
                                     {offerings && getCourseNames(tutor.tutor_id)?.join(', ')}
                                 </td>
