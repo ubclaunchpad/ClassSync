@@ -6,7 +6,7 @@ import "./courseCurriculum.css";
 import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { CourseFilesTab } from "../../components/CourseFilesTab";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 const url = "http://localhost:8080";
 
 const sampleData = {
@@ -82,8 +82,8 @@ const sampleData = {
 
 export const CourseCurriculumView = () => {
   const [fileList, setFileList] = useState([]);
-  const {id} = useParams()
-  const course_id = id
+  const { id } = useParams();
+  const course_id = id;
   const [goals, setGoals] = useState(["No Description Available"]);
   const [courseValues, setCourseValues] = useState({
     name: "",
@@ -130,7 +130,7 @@ export const CourseCurriculumView = () => {
           description: data.course_description,
           image: data.image,
           difficulty: data.course_difficulty,
-          info_page: data.info_page
+          info_page: data.info_page,
         });
 
         setFileList(data.files == null ? [] : data.files);
@@ -148,7 +148,7 @@ export const CourseCurriculumView = () => {
               className="course-curriculum__avatar"
               image={courseValues.image}
               size="Medium"
-              style={{width: 'auto'}}
+              style={{ width: "auto" }}
             />
           </div>
           <div className="course-curriculum__details">
@@ -161,7 +161,6 @@ export const CourseCurriculumView = () => {
                 {courseValues?.age ? courseValues.age : sampleData.age}
               </span>
               <span className="curriculum-overview__text--prereq">
-                Prerequisites:{" "}
                 {courseValues.prerequisites
                   ? courseValues.prerequisites
                   : sampleData.prerequisites}
@@ -186,18 +185,16 @@ export const CourseCurriculumView = () => {
                 <div className="curriculum-concepts__title ">
                   Learning goals
                 </div>
-                
+
                 <ul className="curriculum__list">
                   {console.log("These are the goals --->", goals)}
                   {goals?.map((goal) => {
                     return <li className="curriculum-learning-goal">{goal}</li>;
                   })}
                 </ul>
-                <div dangerouslySetInnerHTML={{ __html: courseValues.info_page }} />
-
-
-
-
+                <div
+                  dangerouslySetInnerHTML={{ __html: courseValues.info_page }}
+                />
               </div>
             </div>
           </div>

@@ -31,6 +31,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { useAuth } from "./contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import LogPage from "./components/LogPage";
+import { ViewAllCourses } from "./components/BrowseCourses";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
@@ -107,6 +108,17 @@ function App() {
                 }
               />
               <Route
+                path="/curriculum"
+                element={
+                  <PrivateRoute
+                    Component={ViewAllCourses}
+                    roles={["tutor", "admin"]}
+                  />
+                }
+              />
+
+
+              <Route
                 path="/course/:id"
                 element={
                   <PrivateRoute
@@ -124,7 +136,15 @@ function App() {
                   />
                 }
               />
-                        <Route path="/tutorDash" element={<PrivateRoute Component={TutorDashboard} roles={['admin','tutor']} />} />  
+              <Route
+                path="/tutorDash"
+                element={
+                  <PrivateRoute
+                    Component={TutorDashboard}
+                    roles={["admin", "tutor"]}
+                  />
+                }
+              />
 
               <Route
                 path="/schedule"
@@ -202,13 +222,14 @@ function App() {
                   />
                 }
               />
-              <Route 
-                path="/tutorDash" 
-                  element={
-                    <PrivateRoute Component={TutorDashboard} 
-                    roles={['admin','tutor']} 
+              <Route
+                path="/tutorDash"
+                element={
+                  <PrivateRoute
+                    Component={TutorDashboard}
+                    roles={["admin", "tutor"]}
                   />
-                } 
+                }
               />
               <Route
                 path="/class/:id"
