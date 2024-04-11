@@ -202,6 +202,18 @@ export default class adminController {
                 throw (err);
             });
     }
+
+    async getTutorAndCourse(id) {
+        const admin_ = new admin();
+        return admin_.getTutorandCourse(id)
+            .then((tutor) => {
+                return tutor;
+            })
+            .catch((err) => {
+                console.log("Error getting tutor ", err);
+                throw (err);
+            });
+    }
 }
 
 

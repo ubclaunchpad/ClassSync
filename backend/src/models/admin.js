@@ -340,12 +340,30 @@ export class admin {
 
     addReview(body) {
         return new Promise((resolve, reject) => {
-            con.query(`INSERT INTO reviews (description, guardian_id, tutor_id, course_name, date) VALUES ($1, $2, $3, $4, $5)`, [body.description, body.guardian_id, body.tutor_id, body.course_name, body.date], (err, res) => {
+            con.query(`INSERT INTO reviews (description, guardian_id, tutor_id, course_name, date, course_id) VALUES ($1, $2, $3, $4, $5, $6)`, [body.description, body.guardian_id, body.tutor_id, body.course_name, body.date, body.course_id], (err, res) => {
                 if (err) {
                     console.log("error: ", err);
                     reject(err);
                 } else {
                     resolve(res);
+                }
+            });
+        });
+    }
+
+    getTutorandCourse(id) {
+        return new Promise((resolve, reject) => {
+            con.query(`SELECT tutor_id, c.course_id, CONCAT(u.firstname, ' ', u.lastname) AS tutor_name, CONCAT(c.course_difficulty, ' ', c.course_name) AS course_name
+                FROM enrollments e
+                JOIN bookings b ON b.enrollment_id = e.enrollment_id
+                JOIN users u ON u.user_id = b.tutor_id
+                JOIN courses c ON c.course_id = e.course_id
+                WHERE e.guardian_id = $1;`, [id], (err, res) => {
+                if (err) {
+                    console.log("error: ", err);
+                    reject(err);
+                } else {
+                    resolve(res.rows);
                 }
             });
         });

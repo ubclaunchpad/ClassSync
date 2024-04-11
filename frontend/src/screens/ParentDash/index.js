@@ -22,9 +22,9 @@ const events = [
 
 const ParentDash = (props) => {
     const navigate = useNavigate();
+    const guardian_id = localStorage.getItem('userId');
     const [students, setStudents] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [guardian_id, setGuardianId] = useState(-1);
 
     const handleTileClick = (studentId) => {
         navigate(`/student/${studentId}`);
@@ -74,8 +74,7 @@ const ParentDash = (props) => {
         fetchStudents();
     }, [])
 
-    const handleReviewClick = (id) => {
-        setGuardianId(id)
+    const handleReviewClick = () => {
         setShowModal(true);
     };
 

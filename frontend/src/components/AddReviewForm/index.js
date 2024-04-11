@@ -5,12 +5,13 @@ import Modal from 'react-modal';
 
 const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
     const navigate = useNavigate();
+    const [courses, setCourses] = useState([]);
+    const [tutors, setTutors] = useState([]);
 
     const [formState, setFormState] = useState({
-        fname: '',
-        lname: '',
-        dob: '',
-        accommdations: '',
+        description: '',
+        tutor_id: '',
+        course_id: '',
     })
     const handleFormChange = (e) => {
         const { name, value } = e.target;
@@ -21,16 +22,20 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const course = courses.find(course => String(course.id) === String(formState.course_id));
+
         const reviewData = {
             description: formState.description,
             guardian_id: guardianId,
             tutor_id: formState.tutor_id,
-            course_name: formState.course_name,
-            date: Date.now(),
+            course_id: formState.course_id,
+            date: new Date().toISOString(),
+            course_name: course ? course.name : '',
         };
+
         try {
             const res = await fetch(
-                "http://localhost:8080/review",
+                "http://localhost:8080/reviews",
                 {
                     body: JSON.stringify(
                         reviewData),
@@ -40,14 +45,44 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     method: "POST",
                 }
             );
-            console.log(res.body);
         } catch (error) {
             console.log(error);
         }
     }
     console.log(formState);
-    const tutors = [{ id: 1, name: "Tutor 1" }, { id: 2, name: "Tutor 2" }]
-    const courses = [{ id: 1, name: "Course 1" }, { id: 2, name: "Course 2" }];
+    //given guardian id, find tutors id and name and courses id and nametheir children took
+    useEffect(() => {
+        const getTutorandCourse = async () => {
+            try {
+                const res = await fetch(
+                    `http://localhost:8080/tutorandcourse?id=${guardianId}`,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        method: "GET",
+                    }
+                );
+                const data = await res.json();
+                console.log(data);
+                setTutors(data.map(row => ({ id: row.tutor_id, name: row.tutor_name })));
+                setTutors(data.reduce((uniqueTutors, row) => {
+                    return uniqueTutors.findIndex(tutor => tutor.id === row.tutor_id) < 0
+                        ? [...uniqueTutors, { id: row.tutor_id, name: row.tutor_name }]
+                        : uniqueTutors;
+                }, []));
+                setCourses(data.reduce((uniqueCourses, row) => {
+                    return uniqueCourses.findIndex(course => course.id === row.course_id) < 0
+                        ? [...uniqueCourses, { id: row.course_id, name: row.course_name }]
+                        : uniqueCourses;
+                }, []));
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getTutorandCourse();
+    }, [guardianId]);
+
     return (
         <Modal
             isOpen={showModal}
@@ -90,9 +125,9 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     </label>
                     <label>
                         Courses
-                        <select name="course_name" type="text" value={formState.course_name} onChange={handleFormChange}>
+                        <select name="course_id" type="text" value={formState.course_id} onChange={handleFormChange}>
                             {courses.map((course) => (
-                                <option key={course.id} value={course.id}>
+                                <option key={course.id} value={course.id} >
                                     {course.name}
                                 </option>
                             ))}
