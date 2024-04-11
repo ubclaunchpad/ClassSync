@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+.main-tutor-row {
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
+
+.left {
+    background-color: #103DA2;
+}
+
+
+.middle {
+    display: flex;
+    flex-direction: column; 
+}
+
+.right-middle {
+    display: flex;
+    flex-direction: column; 
+}
+
+
+@media screen and (max-width: 750px) {
+    .column {
+        width: 100%;
+    }
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+}
+
+.add-student-header {
+    margin: 0;
+}
+
+.header-button {
+    color: #103DA2;
+    background-color: #B3DEFC;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    height: 1.5rem;
+    padding: 0 .8rem;
+}
+
+.student-info-container {
+    color: #103DA2;
+    margin: 0 .5rem;
+    margin-top: .5rem;
+    border-radius: 15px;
+    padding: .25rem 2rem;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #B3DEFC;
+    min-height: 200px;
+}
+
+
+.line {
+    background: linear-gradient(to right, #103DA2 60%, #00B0F1 40%);
+    border-radius: 10px;
+    height: 3px;
+}
+
+.right-container {
+    box-sizing: border-box;
+    padding: 0 1rem;
+    color: white;
+    background-color: #103DA2;
+    height: 15rem;
+    margin: 0 .5rem;
+    margin-top: .5rem;
+    border-radius: 15px;
+    border: none;
+}
+
+.left-header,
+.right-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    max-width: 100%;
+    color: white;
+}
+
+.right-buttons {
+    display: flex;
+    gap: .15rem;
+    /* Adjust the spacing as needed */
+}
+
+.header-button-round {
+    color: #103DA2;
+    background-color: #B3DEFC;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.bagImage {
+    height: 1rem;
+}
+
+.shop-courses {
+    padding-right: 2.5rem;
+}
+
+/*indenting the sublinks*/
+ul li ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 1rem; /* Adjust the indentation as needed */
+  }
+  
+  ul li ul li {
+    margin-left: 0.5rem; /* Adjust the indentation as needed */
+    font-size: .8rem
+  }
+
+  ul li:hover > ul {
+    display: block;
+  }
+
+  .courses-sublinks {
+    display: none;
+  }

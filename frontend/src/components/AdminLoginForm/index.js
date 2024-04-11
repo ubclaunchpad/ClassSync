@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AdminLoginForm = () => {
   const {
@@ -11,6 +12,7 @@ const AdminLoginForm = () => {
     mode: "onBlur",
   });
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -40,13 +42,16 @@ const AdminLoginForm = () => {
       localStorage.setItem("firstName", data.firstName);
       localStorage.setItem("lastName", data.lastName);
 
+      const userData = { name: data.firstName + " " + data.lastName, role: 'admin' }; // Example user data
+      login(data.user);    
+
       navigate("/registrations");
     }
   };
 
   return (
     <div className="login-form-container">
-      <h4 className="login-form-title">Login</h4>
+      <h4 className="login-form-title">Administrator Login</h4>
       <form
         className="login-input-form"
         onSubmit={handleSubmit(handleUserSubmit)}
@@ -82,13 +87,7 @@ const AdminLoginForm = () => {
           </p>
         </div>
         <div className="login-checkbox-container">
-          <input
-            type="checkbox"
-            className="login-checkbox"
-            id="remember-me"
-            {...register("remember-me")}
-          />
-          <label htmlFor="remember-me">Remember Me</label>
+         
         </div>
         <button type="submit" className="login-submit-button">
           Log In

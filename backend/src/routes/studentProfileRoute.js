@@ -9,9 +9,34 @@ router.get("/pingcheck", (_, res) => {
     res.status(200).json({ message: "pong" });
 });
 
-router.get("/", (_, res) => {
+router.get("/enrollment", (req, res) => {
   studentProfileController
-    .getStudentProfile()
+  .getStudentEnrollment(req.query.enrollment_id)
+  .then((response) => {
+    res.status(200).json(response);
+  })
+  .catch((err) => {
+    res.status(404).json(err);
+  });
+});
+
+
+
+
+router.get("/bookings/student/:studentId", (req, res) => {
+  studentProfileController
+    .getBookingsByStudentId(req.params.studentId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      res.status(404).json(err);
+    });
+});
+
+router.get("/bookings/guardian/:guardianId", (req, res) => {
+  studentProfileController
+    .getBookingsByGuardianId(req.params.guardianId)
     .then((response) => {
       res.status(200).json(response);
     })
@@ -40,6 +65,17 @@ router.post("/", (req, res) => {
   router.delete("/:studentId", (req, res) => { // authorize()
     studentProfileController
       .deleteStudentProfile(req.params.studentId)
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((err) => {
+        res.status(404).json(err);
+      });
+  });
+
+  router.get("/", (_, res) => {
+    studentProfileController
+      .getStudentProfile()
       .then((response) => {
         res.status(200).json(response);
       })

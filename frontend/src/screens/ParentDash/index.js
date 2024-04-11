@@ -1,11 +1,16 @@
 import "./index.css";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
+import ParentDashCalendar from "../../components/ParentDashCalendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import { useState, useEffect } from "react";
 import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 import { useNavigate } from "react-router-dom";
+import { MainContentLayout } from "../../components/MainContentLayout";
+import { NavLink } from 'react-router-dom';
+import moment from 'moment';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+
+
 import { Button } from '@mui/material';
 import AddReviewForm from '../../components/AddReviewForm';
 
@@ -26,8 +31,27 @@ const ParentDash = (props) => {
     const [students, setStudents] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
-    const handleTileClick = (studentId) => {
-        navigate(`/student/${studentId}`);
+
+    const handleTileClick = async (studentId) => {
+        const url = `http://localhost:8080/student/${studentId}/courses`;
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.length == 0) {
+                navigate(`/shop`);
+            } else {
+                navigate(`/student/${studentId}`);
+            }
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
     };
 
     const fetchStudents = async () => {
@@ -42,31 +66,10 @@ const ParentDash = (props) => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setStudents(data); // Assuming the response is the array of students
+            setStudents(data);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }
-        // const data = [
-        //   {
-        //     id: 1,
-        //     fname: "Alice", 
-        //     lname: "Lee",
-        //     age: 20,
-        //   }, 
-        //   {
-        //     id: 2,
-        //     fname: "Bob", 
-        //     lname: "Smith",
-        //     age: 22
-        //   }, 
-        //   {
-        //     id: 3,
-        //     fname: "Charlie",
-        //     lname: "Brown", 
-        //     age: 24
-        //   }
-        // ];
-        // setStudents(data);
     }
 
 
@@ -82,7 +85,7 @@ const ParentDash = (props) => {
         setShowModal(false);
     };
     return (
-        <ParentDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
                     <button style={{
@@ -137,7 +140,7 @@ const ParentDash = (props) => {
                 </div>
             </div>
 
-        </ParentDashboardLayout>
+        </MainContentLayout>
     );
 };
 

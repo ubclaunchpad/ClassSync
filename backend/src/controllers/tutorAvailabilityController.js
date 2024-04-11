@@ -4,10 +4,30 @@ export default class tutorAvailabilityController {
     constructor() {
         this.tutor = new tutorAvailability();
     }
-
+    async getAppointmentsByStudent(id) {
+        return this.tutor.getAppointmentsByStudent(id).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
+    async getAppointmentsByDate(date) {
+        return this.tutor.getAppointmentsByDate(date).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
 
     async getAppointmentsByTutor(tutor_id, date) {
         return this.tutor.getAppointmentsByTutor(tutor_id, date).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
+    async getAppointmentsByTutorId(tutor_id) {
+        return this.tutor.getAppointmentsByTutorId(tutor_id).then((result) => {
             return result;
         }).catch((err) => {
             console.log("Error getting appointments ", err)
@@ -37,6 +57,16 @@ export default class tutorAvailabilityController {
             return result;
         }).catch((err) => {
             throw (err);
+        });
+    }
+
+    async getTutorByEnrollment(enrollment_id) {
+        return this.tutor.getTutorByEnrollment(enrollment_id).then((tutors) => {
+
+            return tutors;
+        }
+        ).catch((err) => {
+            console.log("Error getting schedule ", err)
         });
     }
 
@@ -102,6 +132,34 @@ export default class tutorAvailabilityController {
             return { availabilityHashmap, tutorIdNameMap };
         });
     }
+
+    
+    async getSelectedTutorsAvailabilityByTime(startDate, tutor_ids, day, time1, time2) {
+        return this.tutor.getSelectedTutorsAvailability(startDate, tutor_ids).then((availabilityData) => {
+            const filteredData = availabilityData.filter(item => 
+                Array.isArray(item.availability_times[day]) &&
+                item.availability_times[day].includes(time1) &&
+                item.availability_times[day].includes(time2)
+            );
+
+            availabilityData.map((item) => {
+                console.log(item.tutor_name + " - " + item.availability_times[day])
+            })
+
+            console.log("Filtered data ", filteredData);
+            const result = filteredData.map(item => ({
+                tutor_id: item.tutor_id,
+                tutor_name: item.tutor_name,
+                tutor_picture: item.tutor_picture
+            }));
+
+            console.log(result);
+            return result;
+        });
+    }
+
+           
+    
 
     async getSelectedTutorsAvailability(startDate, tutor_ids) {
         return this.tutor.getSelectedTutorsAvailability(startDate, tutor_ids).then((availabilityData) => {

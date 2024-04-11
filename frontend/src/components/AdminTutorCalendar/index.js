@@ -6,7 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import backArrow from "../../assets/leftArrow.svg";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 import { endOfWeek, startOfWeek } from "date-fns";
 
 moment.locale("en-GB");
@@ -161,6 +161,7 @@ export default function AdminTutorCalendar(props) {
     // This code will run whenever `startDate` changes
     console.log("Start date has changed:", startDate);
     setIsLoaded(false);
+    
     loadData();
     console.log("Selected Slot is ", selectedSlot);
     // handleSelect({start:selectedSlot.start});
@@ -311,7 +312,7 @@ export default function AdminTutorCalendar(props) {
 
         if (response.ok) {
           console.log("Removed availability");
-          loadData();
+          await loadData();
         } else {
           console.log("Error removing availability");
         }
@@ -428,7 +429,7 @@ export default function AdminTutorCalendar(props) {
   };
 
   return (
-    <TutorDashboardLayout
+    <MainContentLayout
       rightColumnContent={
         bookingError ? (
           <div style={{ color: "red", marginTop: "10px" }}>{bookingError}</div>
@@ -481,6 +482,6 @@ export default function AdminTutorCalendar(props) {
           <div>Finding avaliable tutors</div>
         )}
       </div>
-    </TutorDashboardLayout>
+    </MainContentLayout>
   );
 }

@@ -6,24 +6,40 @@ import Banner from "../../components/Banner";
 
 export const ViewAllTutors = () => {
   const [allTutors, setAllTutors] = useState([]);
+  const [courses, setCourses] = useState({})
   const url = "http://localhost:8080";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tutorsResponse = await fetch(`${url}/tutor/all`);
+        const tutorsResponse = await fetch(`${url}/tutors/all`);
         const tutorsData = await tutorsResponse.json();
         console.log(tutorsData);
+        setAllTutors(tutorsData);
+
+        const coursesResponse = await fetch(`${url}/tutor-courses`);
+        const coursesJSON = await coursesResponse.json()
+        console.log("Courses ", coursesJSON);
+
+const coursesMap = coursesJSON.reduce((map, course) => {
+  map[course.tutor_id] = course.courses;
+  return map;
+}, {});        
+console.log("Courses ", coursesMap);
+
+
+        setCourses(coursesMap);
+
+
       } catch (error) {
         console.error("Failed to fetch data", error);
       }
+      
     };
-    // fetchData();
-    setAllTutors(FakeTutors);
+    fetchData();
   }, []);
   console.log(allTutors);
   return (
     <div>
-      <Banner smallText="Parent Dashboard" mainText="Hello, Richard!"></Banner>
       <div className="view-tutors__page">
         <div className="view-tutors__container">
           <div className="all-tutors__header">
@@ -37,7 +53,7 @@ export const ViewAllTutors = () => {
               {allTutors.map((tutor) => {
                 return (
                   <div>
-                    <TutorInfoCard tutorId={tutor.tutorId} />
+                    <TutorInfoCard tutorId={tutor.tutor_id} tutor={tutor} courses={courses[tutor.tutor_id]} />
                   </div>
                 );
               })}

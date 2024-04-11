@@ -9,6 +9,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./viewTutor.css";
 import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom'
 import { get } from 'react-hook-form';
 const url = "http://localhost:8080";
 
@@ -53,6 +54,10 @@ export const TutorView = () => {
     const [about, setAbout] = useState("");
     const [courses, setCourses] = useState([]);
     const [offerings, setOfferings] = useState([]);
+    const [profileData, setProfileData] = useState({})
+    const { id } = useParams();
+
+
     const [reviews, setReviews] = useState([]);
     const [profile, setProfile] = useState({});
     console.log(courses);
@@ -60,7 +65,6 @@ export const TutorView = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const id = 46;
                 // Fetch courses data
                 // const courses = await fetch(`${url}/tutorProfile/courses?userId=${id}`);
                 // const coursesData = await courses.json();
@@ -80,16 +84,16 @@ export const TutorView = () => {
                 }));
 
                 // Fetch profile data
-                const profileResponse = await fetch(`${url}/tutor/profile?id=${id}`);
+                const profileResponse = await fetch(`${url}/tutor/fullprofile?id=${id}`);
                 const profileData = await profileResponse.json();
-                setProfile(profileData);
                 console.log("Profile Data", profileData);
+                setProfileData(profileData)
 
                 // Fetch Offerings data
 
                 const offeringsResponse = await fetch(`${url}/tutor/offering?id=${id}`);
                 const offeringsData = await offeringsResponse.json();
-                setOfferings(offeringsData);
+                // setOfferings(offeringsData);
 
                 // Filter selectedOptions based on offeringsData
                 const filteredOptions = options.filter((option) =>
@@ -114,30 +118,28 @@ export const TutorView = () => {
     }, []); // Empty dependency array to run the effect only once after the initial render
     //   console.log(courses);
     console.log(offerings);
-
     return (
         <div>
-            <Banner smallText="Parent Dashboard" mainText="Hello, Richard!" />
-            <div className="tutor-profile__view">
+            <div className="tutor-profile__view" key={profileData}>
                 <div className="tutor-profile__overview">
                     <div className="tutor-profile__avatar-container">
                         <Avatar
                             className="tutor-profile__avatar"
-                            image="/TestProfileImage.png"
+                            image={profileData.image}
                             size="large"
                         // shape="square"
                         />
                     </div>
                     <div className="tutor-overview__details">
                         <div className="tutor-overview__name">
-                            {sampleData.firstName} {sampleData.lastName}
+                            {profileData.firstname} {profileData.lastname}
                         </div>
                         <div className="tutor-overview__description">
-                            {description ? description : sampleData.description}
+                            {profileData.description}
                         </div>
                         <div className="tutor__courses__container">
                             <img className="tutor-overview__icon" src="/book.svg" alt="g" />
-                            <span className="tutor-overview__text">{sampleData.courses}</span>
+                            <span className="tutor-overview__text">Teaches {profileData.course_list}</span>
                         </div>
                         <div className="tutor__languages__container">
                             <img
@@ -146,7 +148,7 @@ export const TutorView = () => {
                                 alt="g"
                             />
                             <span className="tutor-overview__text">
-                                {sampleData.languages}
+                                Speaks {profileData.languages}
                             </span>
                         </div>
                         <div className="tutor__languages__container">
@@ -156,7 +158,7 @@ export const TutorView = () => {
                                 alt="g"
                             />
                             <span className="tutor-overview__text">
-                                Studies at {university ? university : sampleData.education}
+                                Studies at {profileData.university}
                             </span>
                         </div>
                     </div>
@@ -166,15 +168,33 @@ export const TutorView = () => {
                         <TabPanel className="tab-panel" header="About Me ">
                             <p className="m-0 tutor-profile__about-me">
                                 {" "}
-                                {about ? about : sampleData.aboutMe}{" "}
+                                {profileData.bio}{" "}
                             </p>
                         </TabPanel>
                         <TabPanel className="tab-panel" header="My Courses">
-                            {offerings.map((course) => {
-                                return (
-                                    <div className="tutor-profile__courses">{course.label}</div>
-                                );
-                            })}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+                                {offerings.map((course) => {
+                                    return (
+                                        <div className="course-card" style={{
+                                            backgroundColor: '#fff',
+                                            borderRadius: '10px',
+                                            padding: '20px',
+                                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                            transition: '0.3s'
+                                        }}>
+                                            <div style={{
+                                                width: '100%',
+                                                height: '50px',
+                                                backgroundColor: course.color,
+                                                borderRadius: '10px 10px 0 0',
+                                                marginBottom: '15px'
+                                            }} />
+                                            <h2 style={{ fontSize: '18px', fontWeight: 'bold' }}>{course.label}</h2>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
                         </TabPanel>
                         <TabPanel className="tab-panel" header="Reviews">
                             <div className="tutor-profile__review">
@@ -202,6 +222,7 @@ export const TutorView = () => {
                                         </div>
                                     );
                                 })}
+
                             </div>
                         </TabPanel>
                     </TabView>

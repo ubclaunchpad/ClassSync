@@ -50,6 +50,12 @@ export default class parentAuthController {
                   firstName: firstName,
                   lastName: lastName,
                   userId: userId,
+                  user: {
+                    name: firstName + " " + lastName,
+                    role: 'guardian',
+                    children: res.children,
+                    picture: res.picture
+                  }
                 });
               } else {
                 reject("Incorrect password");

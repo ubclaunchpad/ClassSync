@@ -1,6 +1,36 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
+async renewTutors(tutors, enddate) {
+ 
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        let query = `UPDATE public.tutors
+        SET enddate = '${enddate}'
+        WHERE tutor_id = ANY(ARRAY[${tutors.join(',')}]);`;
+
+
+        client.query(
+          `UPDATE public.tutors
+          SET enddate = $1
+          WHERE tutor_id = ANY($2::int[]);`,
+          [enddate, tutors],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log("Success")
+              resolve();
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
+    }
+  }
   async getTutorOfferings(userID) {
     console.log("User ID ", userID);
 
@@ -29,6 +59,37 @@ export class tutorRegistration {
     }
   }
 
+async getFullProfile(userID) {
+  const client = await con.connect();
+  try {
+    console.log("User ID ", userID);
+    const tutorProfilePromise = client.query(
+      "SELECT t.*, u.firstname, u.lastname, u.image FROM tutors t JOIN users u ON u.user_id = t.tutor_id WHERE tutor_id = $1  ",
+      [userID]
+    );
+
+    const coursesPromise = client.query(
+      "SELECT STRING_AGG(DISTINCT LOWER(REGEXP_REPLACE(c.course_name, '\\s+$', '', 'g')), ', ') AS course_list FROM courses c JOIN tutor_offerings o ON o.course_id = c.course_id WHERE o.tutor_id = $1",
+      [userID]
+    );
+
+    const [tutorProfileResult, coursesResult] = await Promise.all([tutorProfilePromise, coursesPromise]);
+
+    if (tutorProfileResult.rows.length > 0 && coursesResult.rows.length > 0) {
+      const tutorProfile = tutorProfileResult.rows[0];
+   const course_list = coursesResult.rows[0].course_list;
+const newObject = { ...tutorProfile, course_list };
+console.log(newObject);
+return newObject;    } else {
+      throw new Error('No data found');
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
   async getProfile(userID) {
     const client = await con.connect();
     try {
@@ -107,8 +168,8 @@ export class tutorRegistration {
     try {
       return new Promise((resolve, reject) => {
         client.query(
-          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6)",
-          [email, role, null, null, null, null],
+          "CALL get_user_by_email_and_role($1, $2, $3, $4, $5, $6, $7)",
+          [email, role, null, null, null, null, null],
           (error, results) => {
             if (error) {
               console.error("Error:", error);
@@ -118,12 +179,29 @@ export class tutorRegistration {
               const user_id = results.rows[0]._user_id;
               const firstName = results.rows[0]._firstname;
               const lastName = results.rows[0]._lastname;
-              resolve({
-                hashedPassword: hashedPassword,
-                user_id: user_id,
-                firstName: firstName,
-                lastName: lastName,
-              });
+              const picture = results.rows[0]._picture;
+
+              // Execute another SQL query
+              client.query(
+                "SELECT t.course_id, CONCAT(c.course_name, ' - ', c.course_difficulty) AS name FROM tutor_offerings t JOIN courses c ON t.course_id = c.course_id WHERE t.tutor_id = $1",
+                [user_id],
+                (error, courseResults) => {
+                  if (error) {
+                    console.error("Error:", error);
+                    reject(error);
+                  } else {
+                    // Resolve the promise with an object containing all the user data
+                    resolve({
+                      hashedPassword: hashedPassword,
+                      user_id: user_id,
+                      firstName: firstName,
+                      lastName: lastName,
+                      picture: picture,
+                      courses: courseResults.rows, // Add the results of the second query to the object
+                    });
+                  }
+                }
+              );
             }
           }
         );
@@ -134,6 +212,30 @@ export class tutorRegistration {
       client.release();
     }
   }
+
+async getDatesByTutor(id) {
+  const client = await con.connect();
+  try {
+    return new Promise((resolve, reject) => {
+      client.query(
+        "SELECT startdate, enddate FROM tutors WHERE tutor_id = $1",
+        [id],
+        (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows[0]); // Resolve the promise with the query results
+          }
+        }
+      );
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.release();
+  }
+}
 
   async deleteAllOfferings(userID) {
     const client = await con.connect();

@@ -16,6 +16,33 @@ export default class adminController {
 
     }
 
+    getClasses(enrollmentId) {
+        const admin_ = new admin()
+        
+        return admin_.getClasses(enrollmentId).then((res) => res)
+        .catch((err) => {
+           throw err
+        })
+
+
+    }
+
+    getTutorImages() {
+        const admin_ = new admin()
+        
+return admin_.getTutorImages().then((res) => {
+  const hashMap = res.reduce((map, obj) => {
+    map[obj.user_id] = obj.image;
+    return map;
+  }, {});
+  return hashMap;
+})       .catch((err) => {
+           throw err
+        })
+
+
+    }
+
     validateToken(token) {
         const admin_ = new admin()
 
@@ -107,20 +134,16 @@ export default class adminController {
             })
 
     }
-    getCourses() {
-        const admin_ = new admin();
 
-        return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
-    }
 
     getCourses() {
         const admin_ = new admin();
 
         return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
+.then((res) => {
+    return res
+    
+})            .catch((err) => Promise.reject(err));
     }
 
     getTutorOfferings() {
@@ -167,6 +190,17 @@ export default class adminController {
             .catch((err) => Promise.reject(err));
     }
 
+    async getTutorCourses() {
+        const tutorsmodel = new tutor();
+        return tutorsmodel.getTutorCourses()
+            .then((tutors) => {
+                return tutors;
+            })
+            .catch((err) => {
+                console.log("Error getting tutors ", err);
+                throw (err);
+            });
+    }
     async getAllTutors() {
         const tutorsmodel = new tutor();
         return tutorsmodel.getAllTutors()
