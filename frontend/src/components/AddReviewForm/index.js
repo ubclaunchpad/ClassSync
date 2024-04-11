@@ -138,7 +138,7 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     <label>
                         Review
                     </label>
-                    <textarea style={{ borderRadius: "10px", marginTop: "5px", paddingTop: "10px" }} name="description" type="text" value={formState.description} onChange={handleFormChange} />
+                    <textarea style={{ borderRadius: "10px", marginTop: "5px", paddingTop: "10px", marginLeft: "0px", marginRight: "0px" }} name="description" type="text" value={formState.description} onChange={handleFormChange} />
                 </div>
                 <input type="submit" value="Send Review" />
             </form>
