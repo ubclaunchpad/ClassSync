@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react";
 import "./index.css";
 import { Avatar } from "primereact/avatar";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const ViewAllCourses = () => {
   const [allCourses, setAllCourses] = useState([]);
+  const { user } = useAuth()
+
+
   const url = "http://localhost:8080";
   const frontEndUrl = "http://localhost:3000";
   useEffect(() => {
     const fetchData = async () => {
       try {
         const coursesResponse = await fetch(`${url}/tutor/offerings`);
-        const coursesData = await coursesResponse.json();
+        let coursesData = await coursesResponse.json();
+
+        if (user.role === "tutor") {
+          const offeringsResponse = await fetch(`${url}/tutor/offering?id=${localStorage.getItem("userId")}`);
+          const offeringsData = await offeringsResponse.json();
+          console.log("THESE ARE COURSE DATA ", offeringsData);
+
+
+          coursesData = coursesData.filter(course => offeringsData.includes(course.course_id));
+
+        }
         setAllCourses(coursesData);
         console.log("THESE ARE COURSE DATA ", coursesData);
+
       } catch (error) {
         console.log(error);
       }
-    };
+    }
     fetchData();
   }, []);
   return (

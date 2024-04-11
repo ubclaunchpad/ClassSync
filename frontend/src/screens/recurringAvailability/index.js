@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 // import "./index.css"; // Import your custom styles
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { textAlign } from "@mui/system";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import ScheduleSelector from "../tutorAvailability";
 
 
@@ -17,7 +17,7 @@ export default function ScheduleSelectorRecurring() {
     const [calendar, setCalendar] = useState([]);
     const [isRecurring, setIsRecurring] = useState(true)
     const [maxDate, setMaxDate] = useState(new Date());
-    const userid = localStorage.getItem("userID");
+    const userid = localStorage.getItem("userId");
     const startDate = startOfWeek(new Date(), { weekStartsOn: 0 });
     const navigate = useNavigate()
 
@@ -82,7 +82,7 @@ export default function ScheduleSelectorRecurring() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    userID: localStorage.getItem("userID"),
+                    userID: localStorage.getItem("userId"),
                     isRecurring: true,
                     weeks: JSON.stringify(getWeeks(startDate, maxDate)),
                     availability: availability
@@ -101,7 +101,7 @@ export default function ScheduleSelectorRecurring() {
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
     async function getDates() {
-        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem("userID")}`, {
+        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem("userId")}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -186,79 +186,79 @@ export default function ScheduleSelectorRecurring() {
 
                 rightColumnContent={
                     <div style={{ textAlign: "left", marginTop: "85px", marginRight: "15px" }}>
-  <div style={{ display: 'flex', borderRadius: '5px', overflow: 'hidden' }}>
-  <button onClick={() => setIsRecurring(true)} style={{
-    backgroundColor: isRecurring ? '#103da2' : '#fff',
-    color: isRecurring ? '#fff' : '#555',
-    border: '1px solid #103da2',
-    padding: '10px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    flex: '1',
-    fontSize: '16px',
-    margin: '0',
-    cursor: 'pointer',
-    borderTopLeftRadius: '5px',
-    borderBottomLeftRadius: '5px',
-    transition: 'background-color 0.3s, color 0.3s'
-  }}>
-    Recurring
-  </button>
-  <button onClick={() => setIsRecurring(false)} style={{
-    backgroundColor: !isRecurring ? '#103da2' : '#fff',
-    color: !isRecurring ? '#fff' : '#555',
-    border: '1px solid #103da2',
-    padding: '10px',
-    textAlign: 'center',
-    textDecoration: 'none',
-    flex: '1',
-    fontSize: '16px',
-    margin: '0',
-    cursor: 'pointer',
-    borderTopRightRadius: '5px',
-    borderBottomRightRadius: '5px',
-    transition: 'background-color 0.3s, color 0.3s'
-  }}>
-    Weekly
-  </button>
-</div>
+                        <div style={{ display: 'flex', borderRadius: '5px', overflow: 'hidden' }}>
+                            <button onClick={() => setIsRecurring(true)} style={{
+                                backgroundColor: isRecurring ? '#103da2' : '#fff',
+                                color: isRecurring ? '#fff' : '#555',
+                                border: '1px solid #103da2',
+                                padding: '10px',
+                                textAlign: 'center',
+                                textDecoration: 'none',
+                                flex: '1',
+                                fontSize: '16px',
+                                margin: '0',
+                                cursor: 'pointer',
+                                borderTopLeftRadius: '5px',
+                                borderBottomLeftRadius: '5px',
+                                transition: 'background-color 0.3s, color 0.3s'
+                            }}>
+                                Recurring
+                            </button>
+                            <button onClick={() => setIsRecurring(false)} style={{
+                                backgroundColor: !isRecurring ? '#103da2' : '#fff',
+                                color: !isRecurring ? '#fff' : '#555',
+                                border: '1px solid #103da2',
+                                padding: '10px',
+                                textAlign: 'center',
+                                textDecoration: 'none',
+                                flex: '1',
+                                fontSize: '16px',
+                                margin: '0',
+                                cursor: 'pointer',
+                                borderTopRightRadius: '5px',
+                                borderBottomRightRadius: '5px',
+                                transition: 'background-color 0.3s, color 0.3s'
+                            }}>
+                                Weekly
+                            </button>
+                        </div>
 
 
-                      {isRecurring ? (
-  <>
-    <h3> Set Recurring Availability</h3>
-    <p>Enhance your tutoring experience by setting recurring availability for your classes! Streamline your schedule and make it easy for students to book sessions with you regularly. </p>
-    <p>Simply click and drag to select the days and times you are available for tutoring and click submit. </p>
-    <p>You can always update your recurring availability or change your availability for a week if needed.</p>
-  </>
-) : (
-  <>
-    <h3> Set Weekly Availability</h3>
-    <p>Need to adjust your schedule for a specific week? No problem! You can easily change your availability for any week. </p>
-    <p>Just navigate to the week you want to change, then click and drag to select the new times you are available. When you're done, click the 'Submit' button to save your changes. </p>
-    <p >Remember, you can always reset to your recurring availability or clear your availability for a week if needed.</p>
-  </>
-)}
-                                        </div>
+                        {isRecurring ? (
+                            <>
+                                <h3> Set Recurring Availability</h3>
+                                <p>Enhance your tutoring experience by setting recurring availability for your classes! Streamline your schedule and make it easy for students to book sessions with you regularly. </p>
+                                <p>Simply click and drag to select the days and times you are available for tutoring and click submit. </p>
+                                <p>You can always update your recurring availability or change your availability for a week if needed.</p>
+                            </>
+                        ) : (
+                            <>
+                                <h3> Set Weekly Availability</h3>
+                                <p>Need to adjust your schedule for a specific week? No problem! You can easily change your availability for any week. </p>
+                                <p>Just navigate to the week you want to change, then click and drag to select the new times you are available. When you're done, click the 'Submit' button to save your changes. </p>
+                                <p >Remember, you can always reset to your recurring availability or clear your availability for a week if needed.</p>
+                            </>
+                        )}
+                    </div>
                 }>
 
-              {isRecurring && (
-  <div className="App">
-    <div className="Calendar" style={{ width: '60vw', marginLeft: '-20px' }}>
-      {isLoaded && (
-        <Calendar
-          calendar={calendar}
-          handleSubmitCalendar={handleSubmitCalendar}
-          start_date={startDate}
-          isRecurring={true}
-          dateFormat="ddd"
-        />
-      )}
-    </div>
-  </div>
-)}
+                {isRecurring && (
+                    <div className="App">
+                        <div className="Calendar" style={{ width: '60vw', marginLeft: '-20px' }}>
+                            {isLoaded && (
+                                <Calendar
+                                    calendar={calendar}
+                                    handleSubmitCalendar={handleSubmitCalendar}
+                                    start_date={startDate}
+                                    isRecurring={true}
+                                    dateFormat="ddd"
+                                />
+                            )}
+                        </div>
+                    </div>
+                )}
 
-{!isRecurring && <ScheduleSelector />}
+                {!isRecurring && <ScheduleSelector />}
             </MainContentLayout >
         </LocalizationProvider >
     );
