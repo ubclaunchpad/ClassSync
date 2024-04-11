@@ -9,7 +9,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./viewTutor.css";
 import { useEffect, useState } from "react";
-import {useParams} from 'react-router-dom'
+import { useParams } from "react-router-dom";
 const url = "http://localhost:8080";
 
 const sampleData = {
@@ -56,9 +56,8 @@ export const TutorView = () => {
   const [about, setAbout] = useState("");
   const [courses, setCourses] = useState([]);
   const [offerings, setOfferings] = useState([]);
-  const [profileData, setProfileData] = useState({})
-  const {id} = useParams();
-
+  const [profileData, setProfileData] = useState({});
+  const { id } = useParams();
 
   console.log(courses);
 
@@ -75,6 +74,7 @@ export const TutorView = () => {
         // Fetch courses data
         const coursesResponse = await fetch(`${url}/tutor/offerings`);
         const coursesData = await coursesResponse.json();
+        console.log("THESE ARE COURSE DATA ", coursesData);
 
         // Transform coursesData into options format
         const options = coursesData.map((course) => ({
@@ -84,10 +84,12 @@ export const TutorView = () => {
         }));
 
         // Fetch profile data
-        const profileResponse = await fetch(`${url}/tutor/fullprofile?id=${id}`);
+        const profileResponse = await fetch(
+          `${url}/tutor/fullprofile?id=${id}`
+        );
         const profileData = await profileResponse.json();
         console.log("Profile Data", profileData);
-        setProfileData(profileData)
+        setProfileData(profileData);
 
         // Fetch Offerings data
 
@@ -134,7 +136,9 @@ export const TutorView = () => {
             </div>
             <div className="tutor__courses__container">
               <img className="tutor-overview__icon" src="/book.svg" alt="g" />
-              <span className="tutor-overview__text">Teaches {profileData.course_list}</span>
+              <span className="tutor-overview__text">
+                Teaches {profileData.course_list}
+              </span>
             </div>
             <div className="tutor__languages__container">
               <img
@@ -161,35 +165,44 @@ export const TutorView = () => {
         <div className="tutor-profile__tab-view">
           <TabView>
             <TabPanel className="tab-panel" header="About Me ">
-              <p className="m-0 tutor-profile__about-me">
-                {" "}
-                {profileData.bio}{" "}
-              </p>
+              <p className="m-0 tutor-profile__about-me"> {profileData.bio} </p>
             </TabPanel>
             <TabPanel className="tab-panel" header="My Courses">
-<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px'}}>
-  {offerings.map((course) => {
-    return (
-      <div className="course-card" style={{
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        padding: '20px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        transition: '0.3s'
-      }}>
-        <div style={{ 
-          width: '100%', 
-          height: '50px', 
-          backgroundColor: course.color, 
-          borderRadius: '10px 10px 0 0',
-          marginBottom: '15px'
-        }} />
-        <h2 style={{fontSize: '18px', fontWeight: 'bold'}}>{course.label}</h2>
-      </div>
-    );
-  })}
-</div>
-  
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                  gap: "20px",
+                }}
+              >
+                {offerings.map((course) => {
+                  return (
+                    <div
+                      className="course-card"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "10px",
+                        padding: "20px",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        transition: "0.3s",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          backgroundColor: course.color,
+                          borderRadius: "10px 10px 0 0",
+                          marginBottom: "15px",
+                        }}
+                      />
+                      <h2 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        {course.label}
+                      </h2>
+                    </div>
+                  );
+                })}
+              </div>
             </TabPanel>
             <TabPanel className="tab-panel" header="Reviews">
               <div className="tutor-profile__review">
