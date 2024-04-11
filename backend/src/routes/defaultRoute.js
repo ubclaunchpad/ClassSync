@@ -473,7 +473,7 @@ router.get("/bookings", (req, res) => {
 });
 
 router.get("/appointments/student/:id", (req, res) => {
-    
+
     const tutor = new tutorAvailabilityController();
     return tutor.getAppointmentsByStudent(req.params.id)
         .then((availability) => {
@@ -570,50 +570,67 @@ router.put("/registrations/:id/:status", (req, res) => {
 }
 );
 
+router.post("/EditTutorCourseOffering", (req, res) => {
+    const tutor_id = req.body.tutor_id;
+    const course_id = req.body.course_id;
+    const action = req.body.action;
+    return admin
+        .editOffering(tutor_id, course_id, action)
+        .then((response) => {
+            console.log("Response in defaultRoute.js: YAAAAAAY");
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            console.log("Error in defaultRoute.js: BOOOOOOO");
+            res.status(500).json(err);
+        });
+}
+);
+
 router.get("/images/tutors", (req, res) => {
     return admin.getTutorImages()
-    .then((tutors1) => {
-        console.log("Tutors ", tutors1);
-        res.status(200).json(tutors1);
-    })
-    .catch((err) => {
-        console.log("Error getting tutors ", err);
-        res.status(500).json(err);
-    });
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 })
 router.get("/tutor-courses", (req, res) => {
     return admin.getTutorCourses()
-    .then((tutors1) => {
-        console.log("Tutors ", tutors1);
-        res.status(200).json(tutors1);
-    })
-    .catch((err) => {
-        console.log("Error getting tutors ", err);
-        res.status(500).json(err);
-    });
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 })
 router.get("/tutors/all", (req, res) => {
-  return admin.getAllTutors()
-      .then((tutors1) => {
-          console.log("Tutors ", tutors1);
-          res.status(200).json(tutors1);
-      })
-      .catch((err) => {
-          console.log("Error getting tutors ", err);
-          res.status(500).json(err);
-      });
+    return admin.getAllTutors()
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/tutor_offerings", (req, res) => {
-  return admin.getTutorOfferings()
-      .then((offerings) => {
-        //   console.log("Tutor Offerings ", offerings);
-          res.status(200).json(offerings);
-      })
-      .catch((err) => {
-          console.log("Error getting offerings ", err);
-          res.status(500).json(err);
-      });
+    return admin.getTutorOfferings()
+        .then((offerings) => {
+            //   console.log("Tutor Offerings ", offerings);
+            res.status(200).json(offerings);
+        })
+        .catch((err) => {
+            console.log("Error getting offerings ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/users", (req, res) => {
@@ -661,6 +678,7 @@ router.get('/tutorandcourse', (req, res) => {
             console.log("Error getting tutor and course ", err);
             res.status(500).json(err);
         });
+
 });
 
 export default router;

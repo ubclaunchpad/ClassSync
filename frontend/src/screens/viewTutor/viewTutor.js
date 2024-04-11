@@ -9,8 +9,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import "./viewTutor.css";
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom'
-import { get } from 'react-hook-form';
+import { useParams } from "react-router-dom";
 const url = "http://localhost:8080";
 
 const sampleData = {
@@ -49,98 +48,158 @@ const sampleData = {
 };
 
 export const TutorView = () => {
-    const [university, setUniversity] = useState("");
-    const [description, setDescription] = useState("");
-    const [about, setAbout] = useState("");
-    const [courses, setCourses] = useState([]);
-    const [offerings, setOfferings] = useState([]);
-    const [profileData, setProfileData] = useState({})
-    const { id } = useParams();
+  const [university, setUniversity] = useState("");
+  const [description, setDescription] = useState("");
+  const [about, setAbout] = useState("");
+  const [courses, setCourses] = useState([]);
+  const [offerings, setOfferings] = useState([]);
+  const [profileData, setProfileData] = useState({});
+  const { id } = useParams();
+
+  const [reviews, setReviews] = useState([]);
+  const [profile, setProfile] = useState({});
+   	
 
 
-    const [reviews, setReviews] = useState([]);
-    const [profile, setProfile] = useState({});
-    console.log(courses);
+  console.log(courses);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch courses data
-                // const courses = await fetch(`${url}/tutorProfile/courses?userId=${id}`);
-                // const coursesData = await courses.json();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+     	const coursesResponse = await fetch(`${url}/tutor/offerings`);
+        const coursesData = await coursesResponse.json();
+        console.log("THESE ARE COURSE DATA ", coursesData);
 
-                // setCourses(coursesData);
-                // const id = localStorage.getItem("userID");
+        // Transform coursesData into options format
+        const options = coursesData.map((course) => ({
+          value: course.course_id,
+          label: `${course.course_difficulty} ${course.course_name}`,
+          color: course.color,
+        }));
 
-                // Fetch courses data
-                const coursesResponse = await fetch(`${url}/tutor/offerings`);
-                const coursesData = await coursesResponse.json();
+        // Fetch profile data
+        const profileResponse = await fetch(
+          `${url}/tutor/fullprofile?id=${id}`
+        );
+        const profileData = await profileResponse.json();
+        console.log("Profile Data", profileData);
+        setProfileData(profileData);
 
-                // Transform coursesData into options format
-                const options = coursesData.map((course) => ({
-                    value: course.course_id,
-                    label: `${course.course_difficulty} ${course.course_name}`,
-                    color: course.color,
-                }));
+        // Fetch Offerings data
 
-                // Fetch profile data
-                const profileResponse = await fetch(`${url}/tutor/fullprofile?id=${id}`);
-                const profileData = await profileResponse.json();
-                console.log("Profile Data", profileData);
-                setProfileData(profileData)
+        const offeringsResponse = await fetch(`${url}/tutor/offering?id=${id}`);
+        const offeringsData = await offeringsResponse.json();
 
-                // Fetch Offerings data
+        // Filter selectedOptions based on offeringsData
+        const filteredOptions = options.filter((option) =>
+          offeringsData.includes(option.value)
+        );
+        setOfferings(filteredOptions);
 
-                const offeringsResponse = await fetch(`${url}/tutor/offering?id=${id}`);
-                const offeringsData = await offeringsResponse.json();
-                // setOfferings(offeringsData);
-
-                // Filter selectedOptions based on offeringsData
-                const filteredOptions = options.filter((option) =>
-                    offeringsData.includes(option.value)
-                );
-                setOfferings(filteredOptions);
-
-                const reviewsResponse = await fetch(`${url}/reviews?id=${id}`);
+               const reviewsResponse = await fetch(`${url}/reviews?id=${id}`);
                 const reviewsData = await reviewsResponse.json();
                 console.log(`Reviews Data: ${reviewsData}`)
                 setReviews(reviewsData);
 
-                setUniversity(profileData.university);
-                setAbout(profileData.bio);
-                setDescription(profileData.description);
-            } catch (error) {
-                console.error("Failed to fetch data", error);
-            }
-        };
+            
 
-        fetchData();
-    }, []); // Empty dependency array to run the effect only once after the initial render
-    //   console.log(courses);
-    console.log(offerings);
-    return (
-        <div>
-            <div className="tutor-profile__view" key={profileData}>
-                <div className="tutor-profile__overview">
-                    <div className="tutor-profile__avatar-container">
-                        <Avatar
-                            className="tutor-profile__avatar"
-                            image={profileData.image}
-                            size="large"
-                        // shape="square"
-                        />
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array to run the effect only once after the initial render
+  //   console.log(courses);
+  console.log(offerings);
+  return (
+    <div>
+      <div className="tutor-profile__view" key={profileData}>
+        <div className="tutor-profile__overview">
+          <div className="tutor-profile__avatar-container">
+            <Avatar
+              className="tutor-profile__avatar"
+              image={profileData.image}
+              size="large"
+              // shape="square"
+            />
+          </div>
+          <div className="tutor-overview__details">
+            <div className="tutor-overview__name">
+              {profileData.firstname} {profileData.lastname}
+            </div>
+            <div className="tutor-overview__description">
+              {profileData.description}
+            </div>
+            <div className="tutor__courses__container">
+              <img className="tutor-overview__icon" src="/book.svg" alt="g" />
+              <span className="tutor-overview__text">
+                Teaches {profileData.course_list}
+              </span>
+            </div>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-overview__icon"
+                src="/language.svg"
+                alt="g"
+              />
+              <span className="tutor-overview__text">
+                Speaks {profileData.languages}
+              </span>
+            </div>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-overview__icon"
+                src="/graduation1.svg"
+                alt="g"
+              />
+              <span className="tutor-overview__text">
+                Studies at {profileData.university}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="tutor-profile__tab-view">
+          <TabView>
+            <TabPanel className="tab-panel" header="About Me ">
+              <p className="m-0 tutor-profile__about-me"> {profileData.bio} </p>
+            </TabPanel>
+            <TabPanel className="tab-panel" header="My Courses">
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                  gap: "20px",
+                }}
+              >
+                {offerings.map((course) => {
+                  return (
+                    <div
+                      className="course-card"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "10px",
+                        padding: "20px",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                        transition: "0.3s",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "50px",
+                          backgroundColor: course.color,
+                          borderRadius: "10px 10px 0 0",
+                          marginBottom: "15px",
+                        }}
+                      />
+                      <h2 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        {course.label}
+                      </h2>
                     </div>
-                    <div className="tutor-overview__details">
-                        <div className="tutor-overview__name">
-                            {profileData.firstname} {profileData.lastname}
-                        </div>
-                        <div className="tutor-overview__description">
-                            {profileData.description}
-                        </div>
-                        <div className="tutor__courses__container">
-                            <img className="tutor-overview__icon" src="/book.svg" alt="g" />
-                            <span className="tutor-overview__text">Teaches {profileData.course_list}</span>
-                        </div>
+                  );
+                })}
+              </div>            
                         <div className="tutor__languages__container">
                             <img
                                 className="tutor-overview__icon"

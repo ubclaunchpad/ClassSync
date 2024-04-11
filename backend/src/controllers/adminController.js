@@ -18,26 +18,26 @@ export default class adminController {
 
     getClasses(enrollmentId) {
         const admin_ = new admin()
-        
+
         return admin_.getClasses(enrollmentId).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
 
 
     }
 
     getTutorImages() {
         const admin_ = new admin()
-        
-return admin_.getTutorImages().then((res) => {
-  const hashMap = res.reduce((map, obj) => {
-    map[obj.user_id] = obj.image;
-    return map;
-  }, {});
-  return hashMap;
-})       .catch((err) => {
-           throw err
+
+        return admin_.getTutorImages().then((res) => {
+            const hashMap = res.reduce((map, obj) => {
+                map[obj.user_id] = obj.image;
+                return map;
+            }, {});
+            return hashMap;
+        }).catch((err) => {
+            throw err
         })
 
 
@@ -140,10 +140,10 @@ return admin_.getTutorImages().then((res) => {
         const admin_ = new admin();
 
         return admin_.getCourses()
-.then((res) => {
-    return res
-    
-})            .catch((err) => Promise.reject(err));
+            .then((res) => {
+                return res
+
+            }).catch((err) => Promise.reject(err));
     }
 
     getTutorOfferings() {
@@ -248,6 +248,14 @@ return admin_.getTutorImages().then((res) => {
                 throw (err);
             });
     }
+    async editOffering(tutor_id, course_id, action) {
+        const admin_ = new admin();
+
+        return admin_.editTutorOfferings(tutor_id, course_id, action)
+            .then((res) => res)
+            .catch((err) => Promise.reject(err));
+    }
+
 }
 
 
