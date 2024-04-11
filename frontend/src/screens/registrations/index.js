@@ -213,104 +213,84 @@ const Registrations = () => {
         </div>
       </div>
 
-      <div className="registrations__table">
-        <div
-          className="registration__table-header-element"
-          style={{ borderTopLeftRadius: "10px" }}
-        >
-          ID
-        </div>
-        <div
-          className="registration__table-header-element"
-          onClick={handleSortByGuardian}
-        >
-          Guardian{" "}
-          {sortedByGuardian ? (
-            sortDirection === "asc" ? (
-              " ▲"
-            ) : (
-              " ▼"
-            )
-          ) : (
-            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
-          )}
-        </div>
-        <div
-          className="registration__table-header-element"
-          onClick={handleSortByStudent}
-        >
-          Student{" "}
-          {sortedByStudent ? (
-            sortDirection === "asc" ? (
-              " ▲"
-            ) : (
-              " ▼"
-            )
-          ) : (
-            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
-          )}
-        </div>
-        <div
-          className="registration__table-header-element"
-          onClick={handleSortByCourse}
-        >
-          Course{" "}
-          {sortedByCourse ? (
-            sortDirection === "asc" ? (
-              " ▲"
-            ) : (
-              " ▼"
-            )
-          ) : (
-            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
-          )}
-        </div>
-        <div
-          className="registration__table-header-element"
-          onClick={handleSortByDate}
-        >
-          Registration Date{" "}
-          {sortedByDate ? (
-            sortDirection === "asc" ? (
-              " ▲"
-            ) : (
-              " ▼"
-            )
-          ) : (
-            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
-          )}
-        </div>
-        <div
-          className="registration__table-header-element"
-          onClick={handleByPaid}
-        >
-          Paid{" "}
-          {sortedByPaid ? (
-            sortDirection === "asc" ? (
-              " ▲"
-            ) : (
-              " ▼"
-            )
-          ) : (
-            <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
-          )}
-        </div>
-        <div className="registration__table-header-element">Progress</div>
-        <div
-          className="registration__table-header-element"
-          style={{ borderTopRightRadius: "10px" }}
-        >
-          Expand
-        </div>
-        {registrations.map((data) => (
-          <RegistrationRow
-            data={data}
-            handleChange={handleChange}
-            curExpand={curExpand}
-            setCurExpand={setCurExpand}
-          />
-        ))}
-      </div>
+      <table style={{ borderSpacing: '0', borderCollapse: 'collapse' }} className="registrations__table">
+        <thead>
+          <tr style={{ backgroundColor: '#103da2', color: '#fff' }}>
+            <th style={{ textAlign: 'center', borderTopLeftRadius: "10px", padding: '10px' }}>ID</th>
+            <th style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', padding: '10px' }} onClick={handleSortByGuardian}>
+              Guardian{" "}
+              {sortedByGuardian ? (
+                sortDirection === "asc" ? (
+                  " ▲"
+                ) : (
+                  " ▼"
+                )
+              ) : (
+                <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+              )}
+            </th>
+            <th style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', padding: '10px' }} onClick={handleSortByStudent}>
+              Student{" "}
+              {sortedByStudent ? (
+                sortDirection === "asc" ? (
+                  " ▲"
+                ) : (
+                  " ▼"
+                )
+              ) : (
+                <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+              )}
+            </th>
+            <th style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', padding: '10px' }} onClick={handleSortByCourse}>
+              Course{" "}
+              {sortedByCourse ? (
+                sortDirection === "asc" ? (
+                  " ▲"
+                ) : (
+                  " ▼"
+                )
+              ) : (
+                <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+              )}
+            </th>
+            <th style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', padding: '10px' }} onClick={handleSortByDate}>
+              Registration Date{" "}
+              {sortedByDate ? (
+                sortDirection === "asc" ? (
+                  " ▲"
+                ) : (
+                  " ▼"
+                )
+              ) : (
+                <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+              )}
+            </th>
+            <th style={{ textAlign: 'center', fontWeight: 'bold', cursor: 'pointer', padding: '10px' }} onClick={handleByPaid}>
+              Paid{" "}
+              {sortedByPaid ? (
+                sortDirection === "asc" ? (
+                  " ▲"
+                ) : (
+                  " ▼"
+                )
+              ) : (
+                <FontAwesomeIcon icon={faSort} style={{ paddingLeft: "5px" }} />
+              )}
+            </th>
+            <th style={{ textAlign: 'center', borderTopRightRadius: "10px", padding: '10px' }}>Progress</th>
+          </tr>
+        </thead>
+        <tbody>
+          {registrations.map((data) => (
+            <RegistrationRow
+              data={data}
+              handleChange={handleChange}
+              curExpand={curExpand}
+              setCurExpand={setCurExpand}
+            />
+          ))}
+        </tbody>
+      </table>
     </MainContentLayout>
   );
 };
