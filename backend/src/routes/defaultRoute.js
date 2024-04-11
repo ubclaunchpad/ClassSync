@@ -569,6 +569,23 @@ router.put("/registrations/:id/:status", (req, res) => {
 }
 );
 
+router.post("/EditTutorCourseOffering", (req, res) => {
+    const tutor_id = req.body.tutor_id;
+    const course_id = req.body.course_id;
+    const action = req.body.action;
+    return admin
+        .editOffering(tutor_id, course_id, action)
+        .then((response) => {
+            console.log("Response in defaultRoute.js: YAAAAAAY");
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            console.log("Error in defaultRoute.js: BOOOOOOO");
+            res.status(500).json(err);
+        });
+}
+);
+
 router.get("/images/tutors", (req, res) => {
     return admin.getTutorImages()
     .then((tutors1) => {

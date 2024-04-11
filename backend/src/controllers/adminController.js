@@ -213,6 +213,14 @@ return admin_.getTutorImages().then((res) => {
             });
     }
 
+    async editOffering(tutor_id, course_id, action) {
+        const admin_ = new admin();
+
+        return admin_.editOffering(tutor_id, course_id, action)
+            .then((res) => res)
+            .catch((err) => Promise.reject(err));
+    }
+
 }
 
 

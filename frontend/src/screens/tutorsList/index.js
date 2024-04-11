@@ -1,14 +1,17 @@
 import './index.css';
 import { MainContentLayout } from '../../components/MainContentLayout';
 import React, { useState, useEffect } from 'react';
-import { Chip, alpha } from '@material-ui/core';
+import { Chip, Menu, MenuList, alpha } from '@material-ui/core';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { Checkbox, TextField, Button } from '@mui/material';
+import { Checkbox, TextField, Box, Button, MenuItem, Dialog,DialogActions,DialogContent,DialogTitle,InputLabel,OutlinedInput,FormControl,Select } from '@mui/material';
+
 
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { set } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import { border, style } from '@mui/system';
 
 const TutorsList = () => {
     const [endDate, setEndDate] = useState(Date.now())
@@ -54,6 +57,7 @@ const TutorsList = () => {
                 }, {});
     
               setCourses(coursesMap);
+              console.log("CourseMap: ",coursesMap);
 
        
 
@@ -80,18 +84,18 @@ const TutorsList = () => {
     }
 
     const getCourseNames = (tutor_id) => {
-            let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
-                  let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
-                  console.log("Courses are ", tutorOfferings)
-let courseNames = new Set();
-tutorCourseIds.forEach(id => {
-    let course = courses[id];
-    if (course) {
-        courseNames.add(course.course_name.trim());
-    }
-});
-console.log("Names ", courseNames)  
-           return Array.from(courseNames)
+        let tutorOfferings = offerings?.filter(offering => offering.tutor_id === tutor_id);
+                let tutorCourseIds = tutorOfferings?.map(offering => offering.course_id);
+                console.log("Courses are ", tutorOfferings)
+        let courseNames = new Set();
+        tutorCourseIds.forEach(id => {
+            let course = courses[id];
+            if (course) {
+                courseNames.add(course.course_name.trim());
+            }
+        });
+        console.log("Names ", courseNames)  
+                return Array.from(courseNames)
     }
 
     const handleSelectAll = () => {
@@ -151,6 +155,8 @@ setSelectAll(!selectAll)
         } else {
             setExpandedRow(rowId); // Expand the clicked row
         }
+        setOpenBox(false);
+        setCourseButtonName('Add Course');
     };
 
 const renewTutors = async () => {
@@ -175,6 +181,98 @@ const renewTutors = async () => {
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+
+// Consts for AddCourse DialogBox
+const [openBox, setOpenBox] = useState(false);
+const [courseButtonName, setCourseButtonName] = useState('Add Course');
+const [currTutor, setCurrTutor] = useState(null);
+const [nonSelectedCourses, setNonSelectedCourses] = useState({});
+const handleAddCourse = (tutorid) => {
+    try {
+        if (openBox) {
+            setOpenBox(false);
+            setCourseButtonName('Add Course');
+            setCurrTutor(null);
+            setNonSelectedCourses(null);
+        } else {
+            setOpenBox(true);
+            setCourseButtonName('Done Editing');
+            setCurrTutor(tutorid);
+            console.log("Selected courses are ", findCourses(tutorid));
+            const tutorcourses = findCourses(tutorid);
+            console.log("Non selected courses are ", Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
+            setNonSelectedCourses(Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
+
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+const [state, setState] = useState(null);
+
+const handleTutorCourseEdits = async(tutor_id, course_id, action) => {
+    try {
+        upateChanges();
+        if (action === 'add') {
+
+            if (!findCourses(tutor_id)?.includes(course_id)) {
+                // Send request to add course to tutor
+                try {
+                    await fetch("http://localhost:8080/EditTutorCourseOffering", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({tutor_id: tutor_id, course_id: course_id, action: action})
+                    });
+            
+                    // const result = await response.json();
+                    await fetchData();
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+
+
+                console.log('Add tutor course', tutor_id, course_id, action);
+                setOfferings([...offerings, { tutor_id, course_id }]);
+                setNonSelectedCourses(nonSelectedCourses.filter(courseid => courseid !== course_id));
+            } else {
+                console.log('Tutor already has this course');
+            }
+    
+        } else if (action === 'delete') {
+            // Send request to remove course from tutor
+            try {
+                await fetch("http://localhost:8080/EditTutorCourseOffering", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({tutor_id: tutor_id, course_id: course_id, action: action})
+                });
+        
+                // const result = await response.json();
+                await fetchData();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+
+            console.log('Removed tutor course', tutor_id, course_id, action);
+            setOfferings(offerings.filter(offering => !(offering.tutor_id === tutor_id && offering.course_id === course_id)));
+            setNonSelectedCourses([...nonSelectedCourses, course_id]);
+        } else {
+            console.error('Invalid action', action);
+        }
+    } catch (error) {
+        console.log('Error:', error);
+    }
+}
+const upateChanges= () => {
+    console.log("Changes made");
+    setState(state);
 }
 
     return (
@@ -232,8 +330,33 @@ const renewTutors = async () => {
     >
         View Tutor Profiles
     </a>  
-</div>              </div>
+</div>
+
+{openBox && <Box
+      height={200}
+      width={200}
+      my={2}
+      display="flex"
+      alignItems="center"
+      sx={{ border: '2px solid grey' }}
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow:'scroll', height:'50%', width:'90%'}}
+    >
+      <MenuList>
+        {nonSelectedCourses.map((course_id) => (
+            <MenuItem 
+            style={{outline:'1px solid black', width:'100%'}}
+            
+            onClick={() => handleTutorCourseEdits(currTutor, course_id, 'add')}>{`${courses[course_id].course_name}, ${courses[course_id].course_difficulty}`}</MenuItem>
+        ))}
+      </MenuList>
+    </Box>}
+</div>
+
+            
             }>
+
+                
+
                    <LocalizationProvider dateAdapter={AdapterDateFns}>
             <div className="date-picker-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', maxHeight: '75px', marginTop: '10px', marginBottom: '10px' }}>
                     <div style={{ marginBottom: '0px', display: 'flex', alignItems: 'center' }}>
@@ -380,16 +503,18 @@ const renewTutors = async () => {
                                 <strong>Courses</strong>
                                 {findCourses(tutor.tutor_id)?.map((id) => (
                                     <Chip 
-                                        label={`${courses[id].course_name}, ${courses[id].course_difficulty}`} 
+                                        label={`${courses[id]?.course_name}, ${courses[id]?.course_difficulty}`} 
                                         color='default' 
-                                        style={{backgroundColor:alpha(courses[id].color, 0.5), margin: '5px'}} 
-                                        variant='outlined' />
+                                        style={{backgroundColor:alpha(courses[id]?.color, 0.5), margin: '5px'}} 
+                                        variant='outlined' 
+                                        onDelete={() => handleTutorCourseEdits(tutor.tutor_id, id, 'delete')}
+                                    />
                                 ))}
                                 <Chip 
-                                    label="Add Course"
+                                    label={courseButtonName}
                                     color='default'
                                     style={{margin: '5px'}}
-                                    onClick={() => console.log('Add course')}
+                                    onClick={() => handleAddCourse(tutor.tutor_id)}
                                     clickable
                                 />
                             </div>
