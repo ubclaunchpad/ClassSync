@@ -139,8 +139,19 @@ export default class studentProfileController {
   deleteStudentProfile(id) {
     return new Promise((resolve, reject) => {
       const studentProfileModel = new StudentProfile();
-
       studentProfileModel.deleteStudentProfile(id, (err, result) => {
+        if (err) {
+          reject({ error: err });
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  getStudentName(id) {
+    return new Promise((resolve, reject) => {
+      const studentProfileModel = new StudentProfile();
+      studentProfileModel.getStudentName(id, (err, result) => {
         if (err) {
           reject({ error: err });
         }
