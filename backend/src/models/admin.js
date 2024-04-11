@@ -119,6 +119,28 @@ export class admin {
         });
     }
 
+    getTutorImages() {
+        return new Promise((resolve, reject) => {
+       const query = `
+    SELECT
+    user_id,
+    image
+FROM
+    users
+WHERE
+    role = 'tutor'
+`;
+            con.query(query)
+                .then(result => {
+                    resolve(result.rows);
+                })
+                .catch(err => {
+                    console.error(err);
+                    reject(err);
+                });
+        });
+    }
+
     getCourseTutorMap() {
         return new Promise((resolve, reject) => {
             const query = `

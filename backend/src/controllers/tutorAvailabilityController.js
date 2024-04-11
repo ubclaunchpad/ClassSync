@@ -145,9 +145,12 @@ export default class tutorAvailabilityController {
             availabilityData.map((item) => {
                 console.log(item.tutor_name + " - " + item.availability_times[day])
             })
+
+            console.log("Filtered data ", filteredData);
             const result = filteredData.map(item => ({
                 tutor_id: item.tutor_id,
-                tutor_name: item.tutor_name
+                tutor_name: item.tutor_name,
+                tutor_picture: item.tutor_picture
             }));
 
             console.log(result);

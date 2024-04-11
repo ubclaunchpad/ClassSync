@@ -1,6 +1,7 @@
 import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom'
 
 const Curriculum = () => {
     const [courses, setCourses] = useState(null);
@@ -40,7 +41,7 @@ const Curriculum = () => {
     const [registrationError, setRegistrationError] = useState(null);
 
     const [selectedCourse, setCourse] = useState(null); // Replace with actual course data
-
+const navigate = useNavigate()
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -113,7 +114,10 @@ const Curriculum = () => {
                             boxSizing: 'border-box',
                             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                             backgroundColor: '#f9f9f9',
-                        }}>
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => {navigate("/course/" + course.course_id)}}
+                        >
                         <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
                         <div style={{ flex: 1 }}>
                             <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>

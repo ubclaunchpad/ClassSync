@@ -35,27 +35,25 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
             )}
 
 
-                {user.role === 'tutor' && (
-                    <>
-                        <li><a href="/tutor">Dashboard</a></li>
-                        <li><a href="/tutorprofile">Profile</a></li>
-                        <li>
-                        </li>                        <li><a href="/tutor/availability">Availability</a></li>
-
-                    <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
-                    <ul className="courses-sublinks">
-                        {user.courses.map((course) => (
-                            <li key={course.course_id}>
-                                <a href={`/course/${course.course_id}`}>{course.name}</a>
-                            </li>
-                        ))}
-                    </ul>
-                        <li><a href="/tutor/appointments">Appointments</a></li>
-                        <li><a href="/help">Help</a></li>
-
-                    </>
-                )}
-
+             {user.role === 'tutor' && (
+    <>
+        <li><a href="/tutorDash">Dashboard</a></li>
+        <li><a href="/tutorprofile">Profile</a></li>
+        <li>
+            <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
+            <ul className="courses-sublinks">
+                {user.courses.map((course) => (
+                    <li key={course.course_id}>
+                        <a href={`/course/${course.course_id}`}>{course.name}</a>
+                    </li>
+                ))}
+            </ul>
+        </li>
+        <li><a href="/tutor/availability">Availability</a></li>
+        <li><a href="/tutor/appointments">Appointments</a></li>
+        <li><a href="/help">Help</a></li>
+    </>
+)}
 
                 {user.role === 'admin' && (
                     <>
