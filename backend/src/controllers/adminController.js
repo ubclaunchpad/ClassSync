@@ -213,6 +213,41 @@ export default class adminController {
             });
     }
 
+    async getTutorReviews(id) {
+        const admin_ = new admin();
+        return admin_.getTutorReviews(id)
+            .then((reviews) => {
+                return reviews;
+            })
+            .catch((err) => {
+                console.log("Error getting reviews ", err);
+                throw (err);
+            });
+    }
+
+    async addReview(body) {
+        const admin_ = new admin();
+        return admin_.addReview(body)
+            .then((reviews) => {
+                return reviews;
+            })
+            .catch((err) => {
+                console.log("Error adding review ", err);
+                throw (err);
+            });
+    }
+
+    async getTutorAndCourse(id) {
+        const admin_ = new admin();
+        return admin_.getTutorandCourse(id)
+            .then((tutor) => {
+                return tutor;
+            })
+            .catch((err) => {
+                console.log("Error getting tutor ", err);
+                throw (err);
+            });
+    }
     async editOffering(tutor_id, course_id, action) {
         const admin_ = new admin();
 

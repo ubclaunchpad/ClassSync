@@ -645,4 +645,40 @@ router.get("/users", (req, res) => {
         });
 });
 
+router.get("/reviews", (req, res) => {
+    return admin.getTutorReviews(req.query.id)
+        .then((reviews) => {
+            console.log("Reviews ", reviews);
+            res.status(200).json(reviews);
+        })
+        .catch((err) => {
+            console.log("Error getting reviews ", err);
+            res.status(500).json(err);
+        });
+});
+
+router.post("/reviews", (req, res) => {
+    return admin
+        .addReview(req.body)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            console.log("Error adding review ", err);
+            res.status(500).json(err);
+        });
+});
+
+router.get('/tutorandcourse', (req, res) => {
+    return admin.getTutorAndCourse(req.query.id)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            console.log("Error getting tutor and course ", err);
+            res.status(500).json(err);
+        });
+
+});
+
 export default router;

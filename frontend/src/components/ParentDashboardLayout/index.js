@@ -1,61 +1,61 @@
 import Header from "../Header";
 import Banner from "../Banner";
 import ProfilePic from "../../assets/parentProfile.png"
-import { NavLink } from "react-router-dom"; 
+import { NavLink } from "react-router-dom";
 
 import "./index.css";
 
-export const ParentDashboardLayout = (props) => { 
+export const ParentDashboardLayout = ({ rightColumnContent, ...props }) => {
     // Function to toggle the visibility of the Children sublinks
     const toggleChildrenDropdown = () => {
         const childrenSublinks = document.querySelector(".children-sublinks");
         childrenSublinks.style.display = childrenSublinks.style.display === "block" ? "none" : "block";
-        };
+    };
 
     // Function to toggle the visibility of the Courses sublinks
     const toggleCoursesDropdown = () => {
-      const coursesSublinks = document.querySelector(".courses-sublinks");
-      coursesSublinks.style.display = coursesSublinks.style.display === "block" ? "none" : "block";
+        const coursesSublinks = document.querySelector(".courses-sublinks");
+        coursesSublinks.style.display = coursesSublinks.style.display === "block" ? "none" : "block";
     };
 
     // Function to toggle the visibility of the Tutor sublinks
     const toggleTutorSublinks = () => {
         const tutorSublinks = document.querySelector(".tutor-sublinks");
         tutorSublinks.style.display = tutorSublinks.style.display === "block" ? "none" : "block";
-      };
+    };
     return (
         <div className="page-container">
-            <Header/>
-            <div class="main-row">
+            <Header />
+            <div className="main-row">
 
-                <div class="column left-span">
-                    <div class="left-header">
+                <div className="column left-span">
+                    <div className="left-header">
                         <img className="profile-pic"
                             src={ProfilePic} />
                         <p>Adam Bennett</p>
                     </div>
-                    
+
                     <div className="table-of-contents">
                         <ul>
                             <li>
-                            <a href="#" onClick={toggleChildrenDropdown}>Children</a>
-                            <ul className="children-sublinks">
-                                <li><a href="#">Alex Bennett</a></li>
-                                <li><a href="#">Laura Bennett</a></li>
-                            </ul>
+                                <a href="#" onClick={toggleChildrenDropdown}>Children</a>
+                                <ul className="children-sublinks">
+                                    <li><a href="#">Alex Bennett</a></li>
+                                    <li><a href="#">Laura Bennett</a></li>
+                                </ul>
                             </li>
                             <li>
-                            <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
-                            <ul className="courses-sublinks">
-                                <li><a href="#">Java</a></li>
-                                <li><a href="#">Python</a></li>
-                            </ul>
+                                <a href="#" onClick={toggleCoursesDropdown}>Courses</a>
+                                <ul className="courses-sublinks">
+                                    <li><a href="#">Java</a></li>
+                                    <li><a href="#">Python</a></li>
+                                </ul>
                             </li>
                             <li>
-                            <a href="#" onClick={toggleTutorSublinks}>Tutors</a>
-                            <ul className="tutor-sublinks">
-                                <li><a href="#">Jasmine May</a></li>
-                            </ul>
+                                <a href="#" onClick={toggleTutorSublinks}>Tutors</a>
+                                <ul className="tutor-sublinks">
+                                    <li><a href="#">Jasmine May</a></li>
+                                </ul>
                             </li>
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Help</a></li>
@@ -63,7 +63,7 @@ export const ParentDashboardLayout = (props) => {
                     </div>
                 </div>
 
-                <div class="column middle-right">
+                <div className={rightColumnContent ? "column inner-middle" : "column right-middle"}>
                     <Banner
                         smallText="Parent Dashboard"
                         mainText="Welcome Back!"
@@ -73,11 +73,10 @@ export const ParentDashboardLayout = (props) => {
                             {props.children}
                         </div>
                         <div className="column inner-right">
-                            {props.rightColumnContent}
+                            {rightColumnContent}
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );
