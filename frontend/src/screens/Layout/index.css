@@ -143,6 +143,10 @@ ul li ul {
     display: block;
   }
 
+  .middle-right {
+    display: flex;
+    flex-direction: column;
+}
   .courses-sublinks {
     display: none;
   }

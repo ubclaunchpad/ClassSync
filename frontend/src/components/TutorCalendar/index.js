@@ -5,7 +5,7 @@ import events from "./events";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Modal from "../BookingModal";
 import "./index.css";
-import { TutorDashboardLayout } from "../TutorDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 import { endOfWeek, set, startOfWeek } from "date-fns";
 import Select from "react-select";
 
@@ -37,7 +37,7 @@ export default function ReactBigCalendar(props) {
 
     const loadData = async () => {
         // console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem("userID")}&startDate=${startDate.toISOString().split('T')[0]}`
+        let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem("userId")}&startDate=${startDate.toISOString().split('T')[0]}`
 
         try {
             const response = await fetch(url);
@@ -257,8 +257,8 @@ export default function ReactBigCalendar(props) {
             });
             loadData()
             if (studentId && courseId)
-            searchEnrollments()
-         
+                searchEnrollments()
+
 
 
         } else {
@@ -282,27 +282,27 @@ export default function ReactBigCalendar(props) {
 
         console.log("Body is ", body)
 
-   let url = "http://localhost:8080/availability/add"
+        let url = "http://localhost:8080/availability/add"
 
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: body
-            });
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        });
 
-            console.log("Deleting event here ", event)
+        console.log("Deleting event here ", event)
 
-           
-            if (response.ok) {
-                console.log("Added availability");
-                loadData()
-               
-                if (studentId && courseId)
-                    searchEnrollments()
-            } else {
 
-                console.log("Error adding availability");
-            }
+        if (response.ok) {
+            console.log("Added availability");
+            loadData()
+
+            if (studentId && courseId)
+                searchEnrollments()
+        } else {
+
+            console.log("Error adding availability");
+        }
     }
 
     const [data, setData] = useState({
@@ -315,7 +315,7 @@ export default function ReactBigCalendar(props) {
 
     useEffect(() => {
         if (data.change_time && data.tutor_id && data.event_time && data.enrollment) {
-           console.log("Sending Log Data ", data)
+            console.log("Sending Log Data ", data)
             fetch('http://localhost:8080/tutor/log', {
                 method: 'POST',
                 headers: {
@@ -324,9 +324,9 @@ export default function ReactBigCalendar(props) {
                 body: JSON.stringify({ data: data })
 
             })
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch((error) => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch((error) => console.error('Error:', error));
         }
     }, [data]);
 
@@ -421,8 +421,8 @@ export default function ReactBigCalendar(props) {
 
             if (response.ok) {
                 console.log("Removed availability");
-                console.log(name ," has booked a new appointment for enrollment ", enrollmentId , " at ", start)
-               
+                console.log(name, " has booked a new appointment for enrollment ", enrollmentId, " at ", start)
+
                 loadData()
                 searchEnrollments()
 
@@ -504,14 +504,14 @@ export default function ReactBigCalendar(props) {
                 padding: '10px 20px', // Padding
                 fontSize: '1em', // Text size
                 cursor: 'pointer' // Cursor style on hover
-            }} 
-            onClick={() => {
-                deleteEvent(event);
+            }}
+                onClick={() => {
+                    deleteEvent(event);
 
-                if (window.confirm('Would you like to restore your availability?')) {  
-                    restoreAvailability(event)
-                } 
-            }}>                Delete
+                    if (window.confirm('Would you like to restore your availability?')) {
+                        restoreAvailability(event)
+                    }
+                }}>                Delete
             </button>
         </div>
     );
@@ -561,7 +561,7 @@ export default function ReactBigCalendar(props) {
     }
 
     return (
-        <TutorDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 <div style={{ width: '90%', backgroundColor: '#f5f5f5', borderRadius: '10px', padding: '20px', margin: '10px', boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2)' }}>
                     <h4 style={{ color: '#333', marginBottom: '10px' }}>Select student</h4>
@@ -652,11 +652,11 @@ export default function ReactBigCalendar(props) {
                                                         onClick={() => {
                                                             deleteEvent(appointment);
 
-                                                            if (window.confirm('Would you like to restore the availability or keep the current settings?')) {  
+                                                            if (window.confirm('Would you like to restore the availability or keep the current settings?')) {
 
                                                                 restoreAvailability(appointment)
-                                                                                                                      
-                                                                                                                      }
+
+                                                            }
                                                         }}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>
@@ -703,6 +703,6 @@ export default function ReactBigCalendar(props) {
             </div>
 
 
-        </ TutorDashboardLayout >
+        </ MainContentLayout >
     );
 }

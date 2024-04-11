@@ -3,6 +3,17 @@ import { StudentProfile } from "../models/studentProfile.js";
 
 export default class studentProfileController {
 
+
+  getStudentEnrollment(id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getStudentEnrollment(id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      // return err;
+    });
+  }
   getStudentsByGuardian(id) {
     const studentProfileModel = new StudentProfile();
     return studentProfileModel.getStudentsByGuardian(id).then((response) => {
@@ -49,6 +60,30 @@ export default class studentProfileController {
     });
   }
 
+  getBookingsByStudentId(student_id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getBookingsByStudentId(student_id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
+
+  getBookingsByGuardianId(guardian_id) {
+    const studentProfileModel = new StudentProfile();
+    return studentProfileModel.getBookingsByGuardianId(guardian_id).then((response) => {
+      return response;
+    }
+    ).catch((err) => {
+      console.log(err);
+      throw err;
+      // return err;
+    });
+  }
+
   getStudents() {
     const studentProfileModel = new StudentProfile();
 
@@ -83,7 +118,12 @@ export default class studentProfileController {
         first_name: req.body.f_name,
         last_name: req.body.l_name,
         birthday: req.body.dob,
+        grade: req.body.grade,
+        city: req.body.city,
+        province: req.body.province,
+        pronouns: req.body.pronouns,
         accommodations: req.body.accommodations,
+        color: req.body.color,
         fk_parent_id: req.body.fk_guardian_id
       };
 
@@ -99,8 +139,19 @@ export default class studentProfileController {
   deleteStudentProfile(id) {
     return new Promise((resolve, reject) => {
       const studentProfileModel = new StudentProfile();
-
       studentProfileModel.deleteStudentProfile(id, (err, result) => {
+        if (err) {
+          reject({ error: err });
+        }
+        resolve(result);
+      });
+    });
+  }
+
+  getStudentName(id) {
+    return new Promise((resolve, reject) => {
+      const studentProfileModel = new StudentProfile();
+      studentProfileModel.getStudentName(id, (err, result) => {
         if (err) {
           reject({ error: err });
         }

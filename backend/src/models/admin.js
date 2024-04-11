@@ -91,15 +91,45 @@ export class admin {
     getTutors() {
         return new Promise((resolve, reject) => {
             const query = `
-                SELECT DISTINCT
-                    offr.tutor_id,
-                    CONCAT(U.firstname, ' ', U.lastname) AS tutor_name
-                FROM
-                    tutor_offerings offr
-                JOIN
-                    users U ON offr.tutor_id = U.user_id
+            SELECT
+            t.tutor_id,	
+            t.startdate,
+            t.enddate,
+            t.max_hours,
+            t.university,
+            t.link,
+            t.languages,
+            t.major,
+            CONCAT(U.firstname, ' ', U.lastname) AS tutor_name,
+            u.email
+        FROM
+            tutors t
+        JOIN
+            users U ON t.tutor_id = U.user_id
             `;
 
+            con.query(query)
+                .then(result => {
+                    resolve(result.rows);
+                })
+                .catch(err => {
+                    console.error(err);
+                    reject(err);
+                });
+        });
+    }
+
+    getTutorImages() {
+        return new Promise((resolve, reject) => {
+       const query = `
+    SELECT
+    user_id,
+    image
+FROM
+    users
+WHERE
+    role = 'tutor'
+`;
             con.query(query)
                 .then(result => {
                     resolve(result.rows);
@@ -339,5 +369,48 @@ export class admin {
 
         //get the availability of tutor by id
 
+    }
+
+
+    async editTutorOfferings(tutor_id, course_id, action) {
+        const client = await con.connect();
+        try {
+            return new Promise((resolve, reject) => {
+              if (action === 'add') {
+                client.query(
+                  "INSERT INTO public.tutor_offerings (tutor_id, course_id) VALUES ($1, $2)",
+                  [tutor_id, course_id],
+                  (error, results) => {
+                    if (error) {
+                      console.error('Error:', error);
+                      reject(error);
+                    } else {
+                      console.log(results.rows);
+                      console.log("Successfully Added");
+                      resolve(results.rows);
+                    }
+                  }
+                );
+              } else if (action === 'delete') {
+                client.query(
+                  "DELETE FROM public.tutor_offerings WHERE tutor_id = $1 AND course_id = $2",
+                  [tutor_id, course_id],
+                  (error, results) => {
+                    if (error) {
+                      console.error('Error:', error);
+                      reject(error);
+                    } else {
+                      console.log(results.rows);
+                      console.log("Successfully Deleted");
+                      resolve(results.rows);
+                    }
+                  }
+                );
+              } else{
+                reject('Invalid action');
+              }});
+        } finally {
+            client.release();
+        }
     }
 }

@@ -100,5 +100,15 @@ router.get("/bookings", (req, res) => {
         });
 });
 
+router.get("/bookings/:tutorId", (req, res) => {
+    console.log("tutor id: ", req.params.tutorId);
+    tutor.getAppointmentsByTutorId(req.params.tutorId).then((appointments) => {
+        res.status(200).send(appointments);
+    }).catch((err) => {
+        res.status(500).send("Availability not found");
+    })
+});
+
+
 
 export default router;

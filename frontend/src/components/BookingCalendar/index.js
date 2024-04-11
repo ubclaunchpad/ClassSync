@@ -9,6 +9,7 @@ import "./index.css";
 import { endOfWeek, startOfWeek } from "date-fns";
 import Select from "react-select";
 import { ParentDashboardLayout } from "../ParentDashboardLayout";
+import { MainContentLayout } from "../MainContentLayout";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -129,7 +130,11 @@ export default function ReactBigCalendar() {
             setOpenSlots(openSlots)
             console.log(data);
 
-            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label }));
+            url = `http://localhost:8080/images/tutors`
+            const imageResponse = await fetch(url);
+            const imageData = await imageResponse.json();
+
+            const tutorOptions = Object.entries(data.tutorIdNameMap).map(([value, label]) => ({ value, label, image: imageData[value] }));
             setTutorIDS(tutorOptions)
             setIsLoaded(true)
 
@@ -141,13 +146,13 @@ export default function ReactBigCalendar() {
             console.error('There has been a problem with your fetch operation:', error);
         }
     }
-    // useEffect(() => {
-    //     // This code will run whenever `startDate` changes
-    //     console.log('Start date has changed:', startDate);
-    //     // setIsLoaded(false)
-    //     loadData()
+    useEffect(() => {
+        // This code will run whenever `startDate` changes
+        console.log('Start date has changed:', startDate);
+        // setIsLoaded(false)
+        loadData()
 
-    // }, [startDate]); // Add `startDate` as a dependency
+    }, [startDate]); // Add `startDate` as a dependency
 
     useEffect(() => {
         const handleResize = () => {
@@ -371,29 +376,38 @@ export default function ReactBigCalendar() {
         6: ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30"], // Saturday
     };
 
-    const slotPropGetter = (date) => {
-        const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
-        const timeFormat = "HH:mm";
-        const currentTimeSlot = moment(date).format(timeFormat);
-        const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
-        const currentDate = new Date();
-        const diffTime = date - currentDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+const slotPropGetter = (date) => {
+  const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
+  const timeFormat = "HH:mm";
+  const currentTimeSlot = moment(date).format(timeFormat);
+
+  const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+  const currentDate = new Date();
+  const diffTime = date - currentDate;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (selectedSlot) {
+    const selectedSlotStart = moment(selectedSlot.start, timeFormat);
+    const selectedSlotDay = moment(selectedSlot.start).day();
+    const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
+
+    if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
+      return {
+        className: "active",
+      };
+    }
+  }
         if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
-           //added new restriction to date
-            
-            return {
-                className: "available"
-            };
-        } else {
-            return {
-                className: "unavailable"
-            }
-
-        }
+    return {
+      className: "available",
     };
-
+  } else {
+    return {
+      className: "unavailable"
+    }
+  }
+};
     useEffect(() => {
         loadData()
         console.log("Updated Availability")
@@ -492,7 +506,7 @@ export default function ReactBigCalendar() {
     }));
 
     return (
-        <ParentDashboardLayout
+        <MainContentLayout
             rightColumnContent={
                 bookingError ? (
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
@@ -575,6 +589,6 @@ export default function ReactBigCalendar() {
                     </div>
                 )}
             </div>
-        </ParentDashboardLayout>
+        </MainContentLayout>
     )
 }

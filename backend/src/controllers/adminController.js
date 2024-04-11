@@ -3,25 +3,41 @@ import { admin } from "../models/admin.js";
 import { tutor } from "../models/tutor.js";
 import { v4 as uuidv4 } from 'uuid';
 
-export default class adminController {    
+export default class adminController {
     getToken() {
         const admin_ = new admin()
         const token = uuidv4(); // Generate a new token
-        
+
         return admin_.saveToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
 
 
     }
 
     getClasses(enrollmentId) {
         const admin_ = new admin()
-        
+
         return admin_.getClasses(enrollmentId).then((res) => res)
-        .catch((err) => {
-           throw err
+            .catch((err) => {
+                throw err
+            })
+
+
+    }
+
+    getTutorImages() {
+        const admin_ = new admin()
+
+        return admin_.getTutorImages().then((res) => {
+            const hashMap = res.reduce((map, obj) => {
+                map[obj.user_id] = obj.image;
+                return map;
+            }, {});
+            return hashMap;
+        }).catch((err) => {
+            throw err
         })
 
 
@@ -31,9 +47,9 @@ export default class adminController {
         const admin_ = new admin()
 
         return admin_.validateToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
     }
 
     deleteToken(token) {
@@ -41,9 +57,9 @@ export default class adminController {
         const admin_ = new admin()
 
         return admin_.deleteToken(token).then((res) => res)
-        .catch((err) => {
-           throw err
-        })
+            .catch((err) => {
+                throw err
+            })
     }
 
     addTutorsToCourse(course_id, tutor_ids) {
@@ -118,20 +134,16 @@ export default class adminController {
             })
 
     }
-    getCourses() {
-        const admin_ = new admin();
 
-        return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
-    }
 
     getCourses() {
         const admin_ = new admin();
 
         return admin_.getCourses()
-            .then((res) => res)
-            .catch((err) => Promise.reject(err));
+            .then((res) => {
+                return res
+
+            }).catch((err) => Promise.reject(err));
     }
 
     getTutorOfferings() {
@@ -178,6 +190,17 @@ export default class adminController {
             .catch((err) => Promise.reject(err));
     }
 
+    async getTutorCourses() {
+        const tutorsmodel = new tutor();
+        return tutorsmodel.getTutorCourses()
+            .then((tutors) => {
+                return tutors;
+            })
+            .catch((err) => {
+                console.log("Error getting tutors ", err);
+                throw (err);
+            });
+    }
     async getAllTutors() {
         const tutorsmodel = new tutor();
         return tutorsmodel.getAllTutors()
@@ -188,6 +211,14 @@ export default class adminController {
                 console.log("Error getting tutors ", err);
                 throw (err);
             });
+    }
+
+    async editOffering(tutor_id, course_id, action) {
+        const admin_ = new admin();
+
+        return admin_.editTutorOfferings(tutor_id, course_id, action)
+            .then((res) => res)
+            .catch((err) => Promise.reject(err));
     }
 
 }

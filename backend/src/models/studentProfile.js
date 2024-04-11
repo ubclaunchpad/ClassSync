@@ -5,6 +5,34 @@ import con from "../../index.js";
 
 export class StudentProfile {
 
+ async getStudentEnrollment(id) {
+  const client = await con.connect();
+
+  try {
+    return new Promise((resolve, reject) => {
+      client.query(
+        `SELECT booking_id, link, start_time 
+         FROM bookings b 
+         JOIN enrollments e ON e.enrollment_id = b.enrollment_id
+         JOIN tutors t ON b.tutor_id = t.tutor_id
+         WHERE e.enrollment_id = $1`, 
+        [id], 
+        (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows);
+          }
+        }
+      );
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.release();
+  }
+}
 
   async getStudentsByGuardian(id) {
     const client = await con.connect();
@@ -98,6 +126,51 @@ export class StudentProfile {
       client.release();
     }
   }
+
+  async getBookingsByStudentId(student_id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query("SELECT * FROM get_enrollments_by_student_id_2($1)",
+          [student_id], (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log(results.rows);
+              resolve(results.rows);
+            }
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
+    }
+  }
+
+  async getBookingsByGuardianId(guardian_id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query("SELECT * FROM get_enrollments_by_guardian_id($1)",
+          [guardian_id], (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              console.log(results.rows);
+              resolve(results.rows);
+            }
+          });
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
+    }
+  }
+
   async getStudents() {
     const client = await con.connect();
     try {
@@ -118,8 +191,21 @@ export class StudentProfile {
       client.release();
     }
   }
+
+  getStudentName(id, result) {
+    return con.query(`SELECT f_name, l_name FROM students WHERE student_id = $1;`, [id], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+      } else {
+        result(null, res.rows[0]);
+      }
+    });
+  }
+
+
   getStudentProfiles(result) {
-    con.query("SELECT * FROM loadStudentProfiles()", (err, res) => {
+    return con.query("SELECT * FROM loadStudentProfiles()", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -131,12 +217,17 @@ export class StudentProfile {
   }
 
   insertStudentProfile(newStudentProfile, result) {
-    con.query(
-      "CALL insertStudent($1, $2, $3, $4, $5)",
+    return con.query(
+      "CALL insertstudent1($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
       [
         newStudentProfile.first_name,
         newStudentProfile.last_name,
         newStudentProfile.birthday,
+        newStudentProfile.grade,
+        newStudentProfile.city,
+        newStudentProfile.province,
+        newStudentProfile.pronouns,
+        newStudentProfile.color,
         newStudentProfile.accommodations,
         newStudentProfile.fk_parent_id,
       ],
@@ -154,7 +245,7 @@ export class StudentProfile {
   }
 
   deleteStudentProfile(id, result) {
-    con.query(`CALL deleteStudent($1)`, [id], (err, res) => {
+    return con.query(`CALL deleteStudent($1)`, [id], (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -166,7 +257,7 @@ export class StudentProfile {
 
   //  update function, replicate for each student profile field
   updateFirstName(studentProfile, result) {
-    con.query(
+    return con.query(
       "CALL update_first_name(?, ?)",
       [
         studentProfile.student_id,
