@@ -27,8 +27,8 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
         const reviewData = {
             description: formState.description,
             guardian_id: guardianId,
-            tutor_id: formState.tutor_id,
-            course_id: formState.course_id,
+            tutor_id: String(formState.tutor_id),
+            course_id: String(formState.course_id),
             date: new Date().toISOString(),
             course_name: course ? course.name : '',
         };
@@ -49,7 +49,6 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
             console.log(error);
         }
     }
-    console.log(formState);
     //given guardian id, find tutors id and name and courses id and nametheir children took
     useEffect(() => {
         const getTutorandCourse = async () => {
@@ -85,6 +84,7 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
 
     return (
         <Modal
+            ariaHideApp={false}
             isOpen={showModal}
             onRequestClose={handleCloseModal}
             style={{
@@ -116,6 +116,7 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     <label>
                         Tutor
                         <select name="tutor_id" type="text" value={formState.tutor_id} onChange={handleFormChange}>
+                            <option value="">Select a tutor</option>
                             {tutors.map((tutor) => (
                                 <option key={tutor.id} value={tutor.id}>
                                     {tutor.name}
@@ -126,6 +127,7 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     <label>
                         Courses
                         <select name="course_id" type="text" value={formState.course_id} onChange={handleFormChange}>
+                            <option value="">Select a course</option>
                             {courses.map((course) => (
                                 <option key={course.id} value={course.id} >
                                     {course.name}
