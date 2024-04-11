@@ -86,17 +86,6 @@ BEGIN
 END;
 $$;
 
--- Procedure to get appointments by tutor.
-CREATE OR REPLACE PROCEDURE get_appointments_by_tutor(
-    _tutor_id VARCHAR(50)
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    SELECT * FROM appointments WHERE tutor_id = _tutor_id;
-END;
-$$;
-
 -- Procedure to get appointments by student.
 CREATE OR REPLACE PROCEDURE get_appointments_by_student(
     _student_id VARCHAR(50)
