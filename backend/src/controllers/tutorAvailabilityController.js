@@ -26,6 +26,13 @@ export default class tutorAvailabilityController {
             console.log("Error getting appointments ", err)
         });
     }
+    async getAppointmentsByTutorId(tutor_id) {
+        return this.tutor.getAppointmentsByTutorId(tutor_id).then((result) => {
+            return result;
+        }).catch((err) => {
+            console.log("Error getting appointments ", err)
+        });
+    }
     async deleteBooking(booking_id) {
         return this.tutor.deleteBooking(booking_id).then((result) => {
             return result;

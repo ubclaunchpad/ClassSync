@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import React, { useState } from 'react';
 
-import TutorDashCal from "../../components/TutorDashCal";
+import TutorDashSchedule from "../../components/TutorDashSchedule";
 import TutorAnalytics from "../../components/tutorAnalytics";
 import Curriculum from "../Curriculum";
 
@@ -34,7 +34,7 @@ export const TutorDashboard = ({ name, ...props }) => {
           </div>
           <div className="tutor-content-container">
             {activeLink === "Dashboard" && <TutorAnalytics />}
-            {activeLink === "Schedule" && <TutorDashCal />}
+            {activeLink === "Schedule" && <TutorDashSchedule />}
             {activeLink === "Curriculum" && <Curriculum />}
           </div>
       </div>

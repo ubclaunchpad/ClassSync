@@ -33,10 +33,6 @@ const [eventsData, setEventsData] = useState([]);
          
             if (enrollment.bookings != null) {
               enrollment.bookings.map(booking => {
-                console.log("start time here: ", new Date(booking.start_time));
-                console.log("end time here: ", moment(booking.start_time)
-                .add(booking.session_duration, "minute")
-                .toDate());
                 events.push({
                   start: moment(booking.start_time).toDate(),
                   end: moment(booking.start_time)
@@ -46,14 +42,11 @@ const [eventsData, setEventsData] = useState([]);
                   studentName: student.name,
                   color: student.color,
                 })
-
-                console.log(new Date(booking.start_time))
               })
             }
           })
         }}))
 
-        console.log("Pushing ", events)
         setEventsData(events);
 
       } catch (err) {

@@ -1,3 +1,7 @@
+.student-info-container {
+    display: flex;
+flex-direction: column;
+}
 .tutor-cal-container {
     border-style: solid;
     border-radius: 15px;
