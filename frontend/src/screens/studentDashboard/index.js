@@ -85,7 +85,7 @@ const StudentDashboard = () => {
       console.log(bookingData)
       let sortedBookingData = sortBookingsByDate(bookingData)
       console.log(sortedBookingData)
-      if(sortedBookingData != null && sortedBookingData.length > 0) {
+      if (sortedBookingData != null && sortedBookingData.length > 0) {
         startDate = new Date(sortedBookingData[0].start_time);
         endDate = new Date(sortedBookingData[sortedBookingData.length - 1].start_time)
         const lgResponse = await fetch(`http://localhost:8080/learninggoals?id=${sortedBookingData[0].booking_id}`);
@@ -112,7 +112,7 @@ const StudentDashboard = () => {
     const sortedBookingsWithFiles = await Promise.all(sortedBookingData.map(async (booking, index) => {
       const startDate = new Date(booking.start_time);
       const meetingLink = booking.link.startsWith("http") ? booking.link : `https://${booking.link}`;
-      const complete = startDate > Date.now();
+      const complete = startDate < Date.now();
       const sharedFilesResponse = await fetch(`http://localhost:8080/sharedfiles?id=${booking.booking_id}`);
       const sharedFiles = await sharedFilesResponse.json();
 

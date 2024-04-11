@@ -19,7 +19,7 @@ export const StudentLessonTab = ({ course }) => {
   const [selectedLessonName, setSelectedLessonName] = useState("All Lessons");
 
   function getShortDate(date) {
-    if(date == null) 
+    if (date == null)
       return ""
 
     const months = [
@@ -167,9 +167,8 @@ export const StudentLessonTab = ({ course }) => {
                     options={lightOptions}
                   />
                   <div className="class-complete__title">
-                    {`${completedClasses}/${
-                      incompletedClasses + completedClasses
-                    } Classes Complete! `}
+                    {`${completedClasses}/${incompletedClasses + completedClasses
+                      } Classes Complete! `}
                   </div>
                 </div>
 
