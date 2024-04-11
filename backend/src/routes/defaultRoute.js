@@ -207,15 +207,15 @@ router.get("/booking/notes", (req, res) => {
 })
 
 router.post("/notes", (req, res) => {
-  const booking_id = req.body.id
-  const notes = req.body.notes
-//   console.log("Notes are ", notes)
-  const tutor = new tutorRegistrationController()
-  return tutor.updateNotes(booking_id, notes).then(() => {
-    res.status(200);
-  }).catch((err) => {
-    res.status(500).json(err);
-  })
+    const booking_id = req.body.id
+    const notes = req.body.notes
+    //   console.log("Notes are ", notes)
+    const tutor = new tutorRegistrationController()
+    return tutor.updateNotes(booking_id, notes).then(() => {
+        res.status(200);
+    }).catch((err) => {
+        res.status(500).json(err);
+    })
 
 })
 router.get("/class", (req, res) => {
@@ -472,7 +472,7 @@ router.get("/bookings", (req, res) => {
 });
 
 router.get("/appointments/student/:id", (req, res) => {
-    
+
     const tutor = new tutorAvailabilityController();
     return tutor.getAppointmentsByStudent(req.params.id)
         .then((availability) => {
@@ -588,60 +588,60 @@ router.post("/EditTutorCourseOffering", (req, res) => {
 
 router.get("/images/tutors", (req, res) => {
     return admin.getTutorImages()
-    .then((tutors1) => {
-        console.log("Tutors ", tutors1);
-        res.status(200).json(tutors1);
-    })
-    .catch((err) => {
-        console.log("Error getting tutors ", err);
-        res.status(500).json(err);
-    });
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 })
 router.get("/tutor-courses", (req, res) => {
     return admin.getTutorCourses()
-    .then((tutors1) => {
-        console.log("Tutors ", tutors1);
-        res.status(200).json(tutors1);
-    })
-    .catch((err) => {
-        console.log("Error getting tutors ", err);
-        res.status(500).json(err);
-    });
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 })
 router.get("/tutors/all", (req, res) => {
-  return admin.getAllTutors()
-      .then((tutors1) => {
-          console.log("Tutors ", tutors1);
-          res.status(200).json(tutors1);
-      })
-      .catch((err) => {
-          console.log("Error getting tutors ", err);
-          res.status(500).json(err);
-      });
+    return admin.getAllTutors()
+        .then((tutors1) => {
+            console.log("Tutors ", tutors1);
+            res.status(200).json(tutors1);
+        })
+        .catch((err) => {
+            console.log("Error getting tutors ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/tutor_offerings", (req, res) => {
-  return admin.getTutorOfferings()
-      .then((offerings) => {
-        //   console.log("Tutor Offerings ", offerings);
-          res.status(200).json(offerings);
-      })
-      .catch((err) => {
-          console.log("Error getting offerings ", err);
-          res.status(500).json(err);
-      });
+    return admin.getTutorOfferings()
+        .then((offerings) => {
+            //   console.log("Tutor Offerings ", offerings);
+            res.status(200).json(offerings);
+        })
+        .catch((err) => {
+            console.log("Error getting offerings ", err);
+            res.status(500).json(err);
+        });
 });
 
 router.get("/users", (req, res) => {
-  return admin.getUsers()
-      .then((users) => {
-          console.log("Users ", users);
-          res.status(200).json(users);
-      })
-      .catch((err) => {
-          console.log("Error getting users ", err);
-          res.status(500).json(err);
-      });
+    return admin.getUsers()
+        .then((users) => {
+            console.log("Users ", users);
+            res.status(200).json(users);
+        })
+        .catch((err) => {
+            console.log("Error getting users ", err);
+            res.status(500).json(err);
+        });
 });
 
 export default router;
