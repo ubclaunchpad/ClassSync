@@ -7,23 +7,8 @@ import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 import { useNavigate } from "react-router-dom";
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
-import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-
-
-import { Button } from '@mui/material';
 import AddReviewForm from '../../components/AddReviewForm';
 
-const localizer = momentLocalizer(moment);
-const events = [
-    {
-        start: moment().toDate(),
-        end: moment()
-            .add(1, "days")
-            .toDate(),
-        title: "Some title"
-    }
-]
 
 const ParentDash = (props) => {
     const navigate = useNavigate();
@@ -84,6 +69,7 @@ const ParentDash = (props) => {
     const handleCloseModal = () => {
         setShowModal(false);
     };
+
     return (
         <MainContentLayout
             rightColumnContent={
@@ -112,16 +98,17 @@ const ParentDash = (props) => {
                 <div className="student-info-header">
                     <h2>Student</h2>
                     <button class="header-button">
-                        <a href="/addStudent" class="header-button">Add a New Student</a>
-                    </button>
+
+                        <NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
                 </div>
                 <div className="existing-students-row">
                     {
                         students.map((student) => {
+                            const tileColorClass = `student-tile ${student.color}-tile`;
                             return (
-                                <div className="student-tile" onClick={() => handleTileClick(student.student_id)}>
-                                    <div className="colour"></div>
-                                    {student.name}
+                                <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
+                                    <div className="rectangle"></div>
+                                    <div className="name">{student.name}</div>
                                 </div>
                             )
                         })
@@ -129,17 +116,8 @@ const ParentDash = (props) => {
                 </div>
             </div>
             <div className="student-info-container">
-                <div className="App">
-                    <Calendar
-                        localizer={localizer}
-                        defaultDate={new Date()}
-                        defaultView="month"
-                        events={events}
-                        style={{ height: "100vh" }}
-                    />
-                </div>
+                <ParentDashCalendar students={students}></ParentDashCalendar>
             </div>
-
         </MainContentLayout>
     );
 };
