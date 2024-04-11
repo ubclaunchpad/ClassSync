@@ -20,6 +20,30 @@ router.get("/enrollment", (req, res) => {
   });
 });
 
+router.get("/name/:studentId", (req, res) => {
+  console.log(req.params.studentId)
+  studentProfileController
+    .getStudentName(req.params.studentId)
+    .then((response) => {
+      res.status(200).json(response)
+    })
+    .catch((err) => {
+      res.status(404).json(err)
+    })
+})
+
+
+// router.delete("/:studentId", (req, res) => { // authorize()
+//   studentProfileController
+//     .deleteStudentProfile(req.params.studentId)
+//     .then((response) => {
+//       res.status(200).json(response);
+//     })
+//     .catch((err) => {
+//       res.status(404).json(err);
+//     });
+// });
+
 
 
 

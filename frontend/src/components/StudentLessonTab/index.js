@@ -7,6 +7,7 @@ import "./index.css";
 
 export const StudentLessonTab = ({ course }) => {
   const { name, startDate, endDate, lessons, learningGoals } = course;
+  // console.log(startDate)
 
   const [chartData, setChartData] = useState({});
   const [shortStartDate, setShortStartDate] = useState("");
@@ -18,6 +19,9 @@ export const StudentLessonTab = ({ course }) => {
   const [selectedLessonName, setSelectedLessonName] = useState("All Lessons");
 
   function getShortDate(date) {
+    if(date == null) 
+      return ""
+
     const months = [
       "January",
       "February",
@@ -77,7 +81,7 @@ export const StudentLessonTab = ({ course }) => {
     if (lessons.length > 0) {
       // Set Completed Classes
       const completedClasses = lessons.filter(
-        (lesson) => lesson.completed
+        (lesson) => lesson.complete
       ).length;
       setCompletedClasses(completedClasses);
       const incompletedClasses = lessons.length - completedClasses;
@@ -141,7 +145,7 @@ export const StudentLessonTab = ({ course }) => {
                         checked={goal.completed}
                       ></Checkbox>
                     </div>
-                    {goal.name}
+                    {goal.goal}
                   </div>
                 );
               })}
@@ -187,9 +191,9 @@ export const StudentLessonTab = ({ course }) => {
                   lessons.map((lesson) => {
                     return (
                       <div className="next-lesson__date-row">
-                        <div>{getShortDateTime(lesson.dateTime)}</div>
+                        <div>{getShortDateTime(lesson.startdate)}</div>
                         <div>
-                          <a className="meeting-link" href={lesson.meetingLink}>
+                          <a className="meeting-link" href={lesson.meetinglink}>
                             Meeting Link
                           </a>
                         </div>
@@ -245,6 +249,8 @@ export const StudentLessonTab = ({ course }) => {
               )}
               {selectedLessons?.length > 0 &&
                 selectedLessons.map((lesson, index) => {
+                  console.log("LKFJSLKD")
+                  console.log(lesson)
                   return (
                     <div className="lesson-file__container">
                       <div className="lesson-file__title">{`${lesson.name}`}</div>
@@ -252,7 +258,7 @@ export const StudentLessonTab = ({ course }) => {
                         {lesson.files.map((file) => {
                           return (
                             <div className="lesson-file__item">
-                              <a className="lesson-file__link" href={file.link}>
+                              <a className="lesson-file__link" href={file.url}>
                                 <span className="lesson-file__link__text">
                                   {file.name}
                                 </span>

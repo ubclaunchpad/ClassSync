@@ -191,8 +191,21 @@ export class StudentProfile {
       client.release();
     }
   }
+
+  getStudentName(id, result) {
+    return con.query(`SELECT f_name, l_name FROM students WHERE student_id = $1;`, [id], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+      } else {
+        result(null, res.rows[0]);
+      }
+    });
+  }
+
+
   getStudentProfiles(result) {
-    con.query("SELECT * FROM loadStudentProfiles()", (err, res) => {
+    return con.query("SELECT * FROM loadStudentProfiles()", (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -204,7 +217,7 @@ export class StudentProfile {
   }
 
   insertStudentProfile(newStudentProfile, result) {
-    con.query(
+    return con.query(
       "CALL insertstudent1($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
       [
         newStudentProfile.first_name,
@@ -232,7 +245,7 @@ export class StudentProfile {
   }
 
   deleteStudentProfile(id, result) {
-    con.query(`CALL deleteStudent($1)`, [id], (err, res) => {
+    return con.query(`CALL deleteStudent($1)`, [id], (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(err, null);
@@ -244,7 +257,7 @@ export class StudentProfile {
 
   //  update function, replicate for each student profile field
   updateFirstName(studentProfile, result) {
-    con.query(
+    return con.query(
       "CALL update_first_name(?, ?)",
       [
         studentProfile.student_id,
