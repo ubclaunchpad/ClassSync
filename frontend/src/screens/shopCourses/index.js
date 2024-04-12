@@ -56,10 +56,10 @@ const ShopCourses = () => {
 
     const handleRegister = async () => {
         setRegistrationError(null);
-        console.log(`Registered ${selectedStudent.name} (id: ${selectedStudent.id}) for course with id: ${selectedCourse.course_id}`);
+        console.log(`Registered ${selectedStudent.name} (id: ${selectedStudent.student_id}) for course with id: ${selectedCourse.course_id}`);
         let url = "http://localhost:8080/registrations";
         try {
-            console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", selectedStudent.id, " at url: ", url, " with method: POST");
+            console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", selectedStudent.student_id, " at url: ", url, " with method: POST");
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -67,7 +67,7 @@ const ShopCourses = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    student_id: selectedStudent.id,
+                    student_id: selectedStudent.student_id,
                     course_id: selectedCourse.course_id,
                     registration_date: new Date().toISOString().slice(0, 10),
                 }),
@@ -170,10 +170,10 @@ const ShopCourses = () => {
                                 </h2>
                             )}
                             {selectedStudent && <select
-                                value={selectedStudent.id}
+                                value={selectedStudent.student_id}
                                 onChange={(e) => {
                                     const studentId = e.target.value;
-                                    const selected = students.find(student => student.id === Number(studentId));
+                                    const selected = students.find(student => student.student_id === Number(studentId));
                                     setSelectedStudent(selected);
                                 }}
                                 style={{
@@ -184,7 +184,7 @@ const ShopCourses = () => {
                                 }}
                             >
                                 {students && students.map((student, index) => (
-                                    <option key={index} value={student.id}>{student.name}</option>
+                                    <option key={index} value={student.student_id}>{student.name}</option>
                                 ))}
                             </select>}
                             {registrationError && (
