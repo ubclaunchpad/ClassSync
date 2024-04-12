@@ -295,7 +295,7 @@ export class tutorAvailability {
     try {
       return new Promise((resolve, reject) => {
         con.query(
-          "SELECT * FROM get_appointments_by_student($1)",          
+          "SELECT * FROM get_appointments_by_student($1)",
           [id],
           (error, results) => {
             if (error) {
@@ -320,7 +320,7 @@ export class tutorAvailability {
     try {
       return new Promise((resolve, reject) => {
         con.query(
-          "SELECT * FROM get_appointments_by_date($1)",          
+          "SELECT * FROM get_appointments_by_date($1)",
           [startDate],
           (error, results) => {
             if (error) {

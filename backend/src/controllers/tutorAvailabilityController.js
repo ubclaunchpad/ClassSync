@@ -133,10 +133,10 @@ export default class tutorAvailabilityController {
         });
     }
 
-    
+
     async getSelectedTutorsAvailabilityByTime(startDate, tutor_ids, day, time1, time2) {
         return this.tutor.getSelectedTutorsAvailability(startDate, tutor_ids).then((availabilityData) => {
-            const filteredData = availabilityData.filter(item => 
+            const filteredData = availabilityData.filter(item =>
                 Array.isArray(item.availability_times[day]) &&
                 item.availability_times[day].includes(time1) &&
                 item.availability_times[day].includes(time2)
@@ -158,8 +158,8 @@ export default class tutorAvailabilityController {
         });
     }
 
-           
-    
+
+
 
     async getSelectedTutorsAvailability(startDate, tutor_ids) {
         return this.tutor.getSelectedTutorsAvailability(startDate, tutor_ids).then((availabilityData) => {
@@ -181,24 +181,25 @@ export default class tutorAvailabilityController {
                     if (timeSlots !== null) {
                         timeSlots.sort(); // Sort the time slots in ascending order
 
-                    }
 
 
-                    for (let i = 0; i < timeSlots.length - 1; i++) {
-                        // Check if the current time slot and the next one are consecutive
-                        let currentSlot = timeSlots[i];
-                        let nextSlot = timeSlots[i + 1];
-                        let currentSlotDate = new Date(`1970-01-01T${currentSlot}:00`);
-                        let nextSlotDate = new Date(`1970-01-01T${nextSlot}:00`);
-                        let diffMinutes = (nextSlotDate - currentSlotDate) / 1000 / 60;
 
-                        if (diffMinutes === 30) {
-                            if (!(currentSlot in availabilityHashmap[day])) {
-                                availabilityHashmap[day][currentSlot] = new Set();
+                        for (let i = 0; i < timeSlots.length - 1; i++) {
+                            // Check if the current time slot and the next one are consecutive
+                            let currentSlot = timeSlots[i];
+                            let nextSlot = timeSlots[i + 1];
+                            let currentSlotDate = new Date(`1970-01-01T${currentSlot}:00`);
+                            let nextSlotDate = new Date(`1970-01-01T${nextSlot}:00`);
+                            let diffMinutes = (nextSlotDate - currentSlotDate) / 1000 / 60;
+
+                            if (diffMinutes === 30) {
+                                if (!(currentSlot in availabilityHashmap[day])) {
+                                    availabilityHashmap[day][currentSlot] = new Set();
+                                }
+
+                                // Add tutor_id to the set for the given time slot
+                                availabilityHashmap[day][currentSlot].add(tutorData.tutor_id);
                             }
-
-                            // Add tutor_id to the set for the given time slot
-                            availabilityHashmap[day][currentSlot].add(tutorData.tutor_id);
                         }
                     }
                 });

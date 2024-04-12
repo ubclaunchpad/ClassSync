@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 
-const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
+export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [tutors, setTutors] = useState([]);
@@ -147,4 +147,3 @@ const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
         </Modal>
     );
 };
-export default AddReviewForm;

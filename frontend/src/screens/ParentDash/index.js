@@ -7,7 +7,7 @@ import { ParentDashboardLayout } from "../../components/ParentDashboardLayout";
 import { useNavigate } from "react-router-dom";
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
-import AddReviewForm from '../../components/AddReviewForm';
+import { AddReviewForm } from "../../components/AddReviewForm";
 
 
 const ParentDash = (props) => {
@@ -73,7 +73,13 @@ const ParentDash = (props) => {
     return (
         <MainContentLayout
             rightColumnContent={
-                <div style={{ textAlign: "left", marginTop: "20px", marginRight: "15px" }}>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "20px",
+                    marginRight: "15px"
+                }}>
                     <button style={{
                         padding: "10px",
                         backgroundColor: "#007BFF", // Change this to match your theme color
@@ -91,7 +97,6 @@ const ParentDash = (props) => {
                         Add Tutor Review
                     </button>
                     <AddReviewForm showModal={showModal} handleCloseModal={handleCloseModal} guardianId={guardian_id} />
-
                 </div>
             }>
             <div className="student-info-container">
