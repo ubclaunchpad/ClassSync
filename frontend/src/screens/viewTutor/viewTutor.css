@@ -32,6 +32,9 @@
 .p-avatar-image {
   border-radius: 10px;
 }
+.p-avatar-image img {
+  object-fit: cover;
+}
 
 .tutor-profile__avatar {
   width: 170px;

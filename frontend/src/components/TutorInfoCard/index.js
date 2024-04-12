@@ -8,10 +8,10 @@ import { Redirect, useNavigate } from "react-router-dom";
 import { clsx } from "clsx";
 
 export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
-const tutorName = tutor.firstname + " " + tutor.lastname;
-const university = tutor.university;
-const description = tutor.description;
-const about = tutor.bio;
+  const tutorName = tutor.firstname + " " + tutor.lastname;
+  const university = tutor.university;
+  const description = tutor.description;
+  const about = tutor.bio;
   const [offerings, setOfferings] = useState([]);
   const [showMore, setShowMore] = useState(false);
   //   console.log(courses);
@@ -44,7 +44,7 @@ const about = tutor.bio;
         }));
 
         // Fetch profile data
-     
+
 
         // Fetch Offerings data
 
@@ -58,7 +58,7 @@ const about = tutor.bio;
         );
         setOfferings(filteredOptions);
 
-        
+
         // console.log("Tutor Name", tutorName.trim().length);
       } catch (error) {
         console.error("Failed to fetch data", error);
@@ -77,7 +77,7 @@ const about = tutor.bio;
             className="tutor-info-card__avatar"
             image={tutor.image}
             size="large"
-            // shape="square"
+          // shape="square"
           />
         </div>
         <div className="tutor-info-card__details">
@@ -141,7 +141,7 @@ const about = tutor.bio;
                 <Button
                   className="tutor-info__learn-more"
                   label="Learn More"
-          />
+                />
               </a>
             </div>
           </div>

@@ -121,6 +121,7 @@ export const TutorView = () => {
                             className="tutor-profile__avatar"
                             image={profileData.image}
                             size="large"
+
                         // shape="square"
                         />
                     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Chart } from "react-google-charts";
 
-import "./index.css"; 
+import "./index.css";
 
 /* PIE CHART CONFIG */
 
@@ -41,7 +41,7 @@ export const LineOptions = {
 };
 
 export const tutorBio = `
-  Jasmine is a seasoned educator with a deep love for technology 
+  Samantha is a seasoned educator with a deep love for technology 
   and a knack for making coding fun and accessible for young minds. 
   Holding a Bachelor's degree in Computer Science and Education, 
   she brings a unique blend of technical expertise and pedagogical skills 
@@ -49,7 +49,7 @@ export const tutorBio = `
 `;
 
 export const sampleFeedback = `
-Jasmine is not just a tutor but a mentor. Our child has learned to code,
+Samantha is not just a tutor but a mentor. Our child has learned to code,
   developed problem-solving skills, and benefited from her positive influence.
 `;
 
@@ -61,16 +61,16 @@ export const TutorAnalytics = () => {
 
   const handleEditClick = () => {
     setTempBioContent(bioContent);
-    setEditMode(true); 
+    setEditMode(true);
   };
 
   const handleInputChange = (event) => {
-    setTempBioContent(event.target.value); 
+    setTempBioContent(event.target.value);
   };
 
   const handleSaveClick = () => {
-    setBioContent(tempBioContent); 
-    setEditMode(false); 
+    setBioContent(tempBioContent);
+    setEditMode(false);
   };
 
   const handleCancelClick = () => {
@@ -89,14 +89,14 @@ export const TutorAnalytics = () => {
     <div className='analytics-grid'>
       <div className='grid-item bio-container'>
         <div className='subtitle'>
-        <h2>Bio</h2>
-            {!editMode && <button onClick={handleEditClick}>Edit</button>}
-            {editMode && (
-              <div>
-                <button onClick={handleSaveClick}>Save</button>
-                <button onClick={handleCancelClick}>Cancel</button>
-              </div>
-            )}
+          <h2>Bio</h2>
+          {!editMode && <button onClick={handleEditClick}>Edit</button>}
+          {editMode && (
+            <div>
+              <button onClick={handleSaveClick}>Save</button>
+              <button onClick={handleCancelClick}>Cancel</button>
+            </div>
+          )}
         </div>
         {editMode ? (
           <textarea
@@ -110,11 +110,11 @@ export const TutorAnalytics = () => {
 
       <div className='grid-item feedback-container'>
         <div className='subtitle'>
-            <h2>Feedback</h2>
-            <select>
-              <option value="Parent">Parent</option>
-              <option value="Student">Student</option>
-            </select>
+          <h2>Feedback</h2>
+          <select>
+            <option value="Parent">Parent</option>
+            <option value="Student">Student</option>
+          </select>
         </div>
         <div className='scroll-feedback'>
           <div className='feedback-content'>
@@ -130,35 +130,35 @@ export const TutorAnalytics = () => {
 
       <div className='grid-item impact-container'>
         <div className='subtitle'>
-            <h2>Impact Overview</h2>
+          <h2>Impact Overview</h2>
         </div>
         <div className='impact-elements'>
-              <div>
-                <p>Total Hours:</p>
-                <h2>52</h2>
-              </div>
-              <div>
-                <p>Students Taught:</p>
-                <h2>7</h2>
-              </div>
-              <div>
-                <p>Hours This Term:</p>
-                <h2>40</h2>
-              </div>
-              <div>
-                <p>Hours This Month:</p>
-                <h2>20</h2>
-              </div>
-              <div>
-                <p>Classes Taught:</p>
-                <h2>48</h2>
-              </div>
-            </div>
+          <div>
+            <p>Total Hours:</p>
+            <h2>52</h2>
+          </div>
+          <div>
+            <p>Students Taught:</p>
+            <h2>7</h2>
+          </div>
+          <div>
+            <p>Hours This Term:</p>
+            <h2>40</h2>
+          </div>
+          <div>
+            <p>Hours This Month:</p>
+            <h2>20</h2>
+          </div>
+          <div>
+            <p>Classes Taught:</p>
+            <h2>48</h2>
+          </div>
+        </div>
       </div>
 
       <div className='grid-item line-chart-container'>
         <div className='subtitle'>
-            <h2>Lessons Taught</h2>
+          <h2>Lessons Taught</h2>
         </div>
         <div className='line-content'>
           <Chart
@@ -173,12 +173,12 @@ export const TutorAnalytics = () => {
 
       <div className='grid-item pie-chart-container'>
         <div className='subtitle'>
-            <h2>Hours Taught</h2>
-            <select value={timeframe} onChange={handleTimeframeChange}>
-              <option value="Year">Year</option>
-              <option value="Month">Month</option>
-              <option value="Week">Week</option>
-            </select>
+          <h2>Hours Taught</h2>
+          <select value={timeframe} onChange={handleTimeframeChange}>
+            <option value="Year">Year</option>
+            <option value="Month">Month</option>
+            <option value="Week">Week</option>
+          </select>
         </div>
         <div className='pie-content'>
           <Chart
@@ -189,7 +189,7 @@ export const TutorAnalytics = () => {
             height={"45vh"}
           />
           <div className='text-content'>
-          <p>Total Hours Taught this {timeframe}:</p>
+            <p>Total Hours Taught this {timeframe}:</p>
             <h2>{totalHours}</h2>
           </div>
         </div>
