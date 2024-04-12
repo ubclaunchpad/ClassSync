@@ -37,7 +37,7 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .view-courses__container {
@@ -52,7 +52,7 @@
   flex-direction: column;
   /* justify-content: space-between; */
   align-items: flex-start;
-  overflow-x: hidden;
+  overflow: hidden;
   width: 220px;
   height: 270px;
   margin-top: 1rem;

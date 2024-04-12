@@ -1,6 +1,6 @@
 .courses-container {
-    height: 150vh;
-    overflow-y: auto;
+    /* height: 150vh; */
+    /* overflow-y: auto; */
 }
 
 .course-label {
