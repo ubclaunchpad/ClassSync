@@ -23,7 +23,6 @@ h2 {
 }
 
 .left {
-    background-color: #103DA2;
     min-height: 200vh;
 }
 
@@ -53,6 +52,8 @@ h2 {
     margin-bottom: 1.5rem;
     font-weight: bold;
 }
+
+
 
 .add-student-header {
     margin: 0;
