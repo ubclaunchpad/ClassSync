@@ -1,12 +1,19 @@
 import React from 'react';
 import ProfilePic from "../../assets/parentProfile.png"
+import ToggleButton from '@mui/material/ToggleButton';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import "./index.css";
 
 
 const Sidebar = ({ toggleCoursesDropdown, user }) => {
 
+    const [isOpen, setIsOpen] = React.useState(true);
     return (
-        <div className="column left">
+        <div className="column left" style={{backgroundColor: isOpen ? '#103DA2' : 'initial'}}>
+            <ToggleButton className='ToggleSidebarButton' style={{position:'absolute', left:0, color:'lightblue'}} onClick={()=>setIsOpen(!isOpen)}>
+            <FormatAlignCenterIcon />
+            </ToggleButton>
+            {isOpen && <div className='open'>
             <div className="left-header">
                 <img className="profile-pic" src={user.picture} alt="Profile" />
                 <p>{user.name}</p>
@@ -91,6 +98,7 @@ const Sidebar = ({ toggleCoursesDropdown, user }) => {
                 </li> */}
                 </ul>
             </div>
+            </div>}
         </div>
     )
 };
