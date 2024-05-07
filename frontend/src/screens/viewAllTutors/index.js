@@ -7,7 +7,7 @@ import Banner from "../../components/Banner";
 export const ViewAllTutors = () => {
   const [allTutors, setAllTutors] = useState([]);
   const [courses, setCourses] = useState({})
-  const url = "http://localhost:8080";
+  const url = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,11 +20,11 @@ export const ViewAllTutors = () => {
         const coursesJSON = await coursesResponse.json()
         console.log("Courses ", coursesJSON);
 
-const coursesMap = coursesJSON.reduce((map, course) => {
-  map[course.tutor_id] = course.courses;
-  return map;
-}, {});        
-console.log("Courses ", coursesMap);
+        const coursesMap = coursesJSON.reduce((map, course) => {
+          map[course.tutor_id] = course.courses;
+          return map;
+        }, {});
+        console.log("Courses ", coursesMap);
 
 
         setCourses(coursesMap);
@@ -33,7 +33,7 @@ console.log("Courses ", coursesMap);
       } catch (error) {
         console.error("Failed to fetch data", error);
       }
-      
+
     };
     fetchData();
   }, []);

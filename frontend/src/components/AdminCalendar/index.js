@@ -18,7 +18,7 @@ import trashIcon from "../../assets/trashBin.svg";
 import editIcon from "../../assets/edit.svg";
 import saveIcon from "../../assets/save.svg";
 
-
+const URL = process.env.REACT_APP_API_URL
 export default function AdminCalendar() {
   const [eventsData, setEventsData] = useState(events);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -54,17 +54,17 @@ export default function AdminCalendar() {
 
     try {
 
-      let url = `http://localhost:8080/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
+      let url = URL + `/appointments/all?date=${startDate.toISOString().split("T")[0]}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
       console.log("Appt ", appointmentsData)
 
-      url = "http://localhost:8080/students";
+      url = URL + "/students";
       const studentsResponse = await fetch(url);
       const studentsData = await studentsResponse.json();
       setStudents(studentsData);
 
-      url = "http://localhost:8080/tutor/offerings";
+      url = URL + "/tutor/offerings";
       const coursesResponse = await fetch(url);
       const coursesData = await coursesResponse.json();
 
@@ -160,7 +160,7 @@ export default function AdminCalendar() {
 
   const fetchAppointmentInfo = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/booking?id=${id}`);
+      const response = await fetch(URL + `/booking?id=${id}`);
       const appointmentData = await response.json();
       console.log("Appointment info ", appointmentData)
       setAppointmentInfo(appointmentData);
@@ -261,14 +261,14 @@ export default function AdminCalendar() {
     }
     // API call for tutor availability
     let response = await fetch(
-      `http://localhost:8080/tutor/courses?course_id=${cId}`
+      URL + `/tutor/courses?course_id=${cId}`
     );
     const data = await response.json();
     console.log(data)
     const ids = data.map(item => item.tutor_id);
     console.log("ids are ", ids)
 
-    response = await fetch(`http://localhost:8080/tutor/time?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${ids}&day=${event.start.getDay()}&time1=${times[0]}&time2=${times[1]}`);
+    response = await fetch(URL + `/tutor/time?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${ids}&day=${event.start.getDay()}&time1=${times[0]}&time2=${times[1]}`);
     const respData = await response.json()
 
     console.log("response is ", respData)
@@ -292,7 +292,7 @@ export default function AdminCalendar() {
       console.log('changeNewTutor:', changeNewTutor);
       console.log('event:', event);
 
-      await fetch("http://localhost:8080/availability", {
+      await fetch(URL + "/availability", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -329,7 +329,7 @@ export default function AdminCalendar() {
 
       console.log("Body is ", body)
 
-      let URL = "http://localhost:8080/availability/add"
+      let URL = URL + "/availability/add"
 
       await fetch(URL, {
         method: "POST",
@@ -347,7 +347,7 @@ export default function AdminCalendar() {
 
       console.log("New body is ", body)
 
-      let url = "http://localhost:8080/availability/remove"
+      let url = URL + "/availability/remove"
       await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -367,7 +367,7 @@ export default function AdminCalendar() {
     const fetchData = async () => {
       setIsLoaded(false);
 
-      let url = `http://localhost:8080/appointments/student/${studentId.value}`;
+      let url = URL + `/appointments/student/${studentId.value}`;
       const appointmentsResponse = await fetch(url);
       const appointmentsData = await appointmentsResponse.json();
       console.log("Appt ", appointmentsData);
@@ -403,7 +403,7 @@ export default function AdminCalendar() {
 
   useEffect(() => {
     const getAvailabilities = async () => {
-      let url = `http://localhost:8080/tutor/enrollment?course_id=${enrollmentId}`
+      let url = URL + `/tutor/enrollment?course_id=${enrollmentId}`
 
       const tutors = await fetch(url);
       const tutorsData = await tutors.json();
@@ -421,7 +421,7 @@ export default function AdminCalendar() {
       // }
       console.log("Tutor ids ", tutorsData);
 
-      url = `http://localhost:8080/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
+      url = URL + `/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
       console.log("URL is ", url)
       try {
         const response = await fetch(url);
@@ -456,7 +456,7 @@ export default function AdminCalendar() {
 
     console.log(event);
     const response = await fetch(
-      `http://localhost:8080/availability/booking?id=${event.id}`,
+      URL + `/availability/booking?id=${event.id}`,
       {
         method: "DELETE",
         headers: {
@@ -488,7 +488,7 @@ export default function AdminCalendar() {
 
       console.log("Body is ", body);
 
-      let url = "http://localhost:8080/availability/add";
+      let url = URL + "/availability/add";
 
       const response = await fetch(url, {
         method: "POST",
@@ -511,7 +511,7 @@ export default function AdminCalendar() {
 
   const handleBook = async (id) => {
     if (selectedSlot) {
-      const response = await fetch("http://localhost:8080/availability", {
+      const response = await fetch(URL + "/availability", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -580,7 +580,7 @@ export default function AdminCalendar() {
           times: times,
         });
 
-        let url = "http://localhost:8080/availability/remove";
+        let url = url + "/availability/remove";
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -658,7 +658,7 @@ export default function AdminCalendar() {
     setBookings(false);
     setBookingError(null);
     setTitle(courseId.label)
-    let url = `http://localhost:8080/bookings?student_id=${studentId.value}&course_id=${courseId.value}`;
+    let url = URL + `/bookings?student_id=${studentId.value}&course_id=${courseId.value}`;
     console.log("URL is ", url);
     const response = await fetch(url);
     const bookingsResponse = await response.json();

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from 'react-modal';
 
+const URL = process.env.REACT_APP_API_URL
 export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
@@ -35,7 +36,7 @@ export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
 
         try {
             const res = await fetch(
-                "http://localhost:8080/reviews",
+                URL + "/reviews",
                 {
                     body: JSON.stringify(
                         reviewData),
@@ -54,7 +55,7 @@ export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
         const getTutorandCourse = async () => {
             try {
                 const res = await fetch(
-                    `http://localhost:8080/tutorandcourse?id=${guardianId}`,
+                    URL + `/tutorandcourse?id=${guardianId}`,
                     {
                         headers: {
                             "Content-Type": "application/json",

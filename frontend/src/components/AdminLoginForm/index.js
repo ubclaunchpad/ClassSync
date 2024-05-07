@@ -12,7 +12,7 @@ const AdminLoginForm = () => {
     mode: "onBlur",
   });
   const navigate = useNavigate();
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   const handleUserSubmit = async (formData) => {
     // Data will contain email (string), password (string), remember-me (boolean)
@@ -23,7 +23,7 @@ const AdminLoginForm = () => {
       password: formData.password,
     };
 
-    const url = "http://localhost:8080"; // Replace with your actual API endpoint
+    const url = process.env.REACT_APP_API_URL; // Replace with your actual API endpoint
 
     const response = await fetch(url + "/admin/login", {
       method: "POST",
@@ -43,7 +43,7 @@ const AdminLoginForm = () => {
       localStorage.setItem("lastName", data.lastName);
 
       const userData = { name: data.firstName + " " + data.lastName, role: 'admin' }; // Example user data
-      login(data.user);    
+      login(data.user);
 
       navigate("/registrations");
     }
@@ -87,7 +87,7 @@ const AdminLoginForm = () => {
           </p>
         </div>
         <div className="login-checkbox-container">
-         
+
         </div>
         <button type="submit" className="login-submit-button">
           Log In

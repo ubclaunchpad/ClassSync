@@ -11,7 +11,7 @@ const LoginForm = ({ role }) => {
   const [loginError, setLoginError] = useState(null); // New state variable for login error
 
   const [isLoading, setIsLoading] = useState(false);
-  const url = "http://localhost:8080";
+  const url = process.env.REACT_APP_API_URL;
 
   if (user && user.role === role) {
     switch (role) {

@@ -16,7 +16,7 @@ const localizer = momentLocalizer(moment);
 const nextWeekDate = new Date();
 nextWeekDate.setDate(nextWeekDate.getDate() + 7);
 
-
+const URL = process.env.REACT_APP_API_URL
 export default function ReactBigCalendar() {
     const [eventsData, setEventsData] = useState(events);
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -43,7 +43,7 @@ export default function ReactBigCalendar() {
 
 
 
-        let url = `http://localhost:8080/tutor/enrollment?course_id=${id}`
+        let url = URL + `/tutor/enrollment?course_id=${id}`
 
         const tutors = await fetch(url);
         const tutorsData = await tutors.json();
@@ -65,7 +65,7 @@ export default function ReactBigCalendar() {
 
 
 
-        url = `http://localhost:8080/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
+        url = URL + `/tutor/select?start_date=${startDate.toISOString().split('T')[0]}&tutor_ids=${tutorIds}`;
         console.log("URL is ", url)
         try {
             const response = await fetch(url);
@@ -81,7 +81,7 @@ export default function ReactBigCalendar() {
                 openSlots[day] = Object.keys(slots);
             });
 
-            url = `http://localhost:8080/availability/bookings?id=${id}`
+            url = URL + `/availability/bookings?id=${id}`
             const bookingsResponse = await fetch(url);
             const bookingsData = await bookingsResponse.json();
             console.log("Bookings Data", bookingsData)
@@ -130,7 +130,7 @@ export default function ReactBigCalendar() {
             setOpenSlots(openSlots)
             console.log(data);
 
-            url = `http://localhost:8080/images/tutors`
+            url = URL + `/images/tutors`
             const imageResponse = await fetch(url);
             const imageData = await imageResponse.json();
 
@@ -209,7 +209,7 @@ export default function ReactBigCalendar() {
 
     const deleteEvent = async (event) => {
 
-        const response = await fetch(`http://localhost:8080/availability/booking?id=${event.id}`, {
+        const response = await fetch(URL + `/availability/booking?id=${event.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -234,7 +234,7 @@ export default function ReactBigCalendar() {
 
             console.log("Body is ", body)
 
-            let url = "http://localhost:8080/availability/add"
+            let url = URL + "/availability/add"
 
             const response = await fetch(url, {
                 method: "POST",
@@ -263,7 +263,7 @@ export default function ReactBigCalendar() {
         console.log("ID is ", id)
         if (selectedSlot) {
 
-            const response = await fetch('http://localhost:8080/availability', {
+            const response = await fetch(URL + '/availability', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -328,7 +328,7 @@ export default function ReactBigCalendar() {
                     times: times
                 });
 
-                let url = "http://localhost:8080/availability/remove"
+                let url = URL + "/availability/remove"
                 const response = await fetch(url, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -377,37 +377,37 @@ export default function ReactBigCalendar() {
     };
 
 
-const slotPropGetter = (date) => {
-  const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
-  const timeFormat = "HH:mm";
-  const currentTimeSlot = moment(date).format(timeFormat);
+    const slotPropGetter = (date) => {
+        const dayOfWeek = moment(date).day(); // 0 for Sunday, 1 for Monday, etc.
+        const timeFormat = "HH:mm";
+        const currentTimeSlot = moment(date).format(timeFormat);
 
-  const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
-  const currentDate = new Date();
-  const diffTime = date - currentDate;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const prevTimeSlot = moment(currentTimeSlot, "HH:mm").subtract(30, 'minutes').format("HH:mm");
+        const currentDate = new Date();
+        const diffTime = date - currentDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  if (selectedSlot) {
-    const selectedSlotStart = moment(selectedSlot.start, timeFormat);
-    const selectedSlotDay = moment(selectedSlot.start).day();
-    const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
+        if (selectedSlot) {
+            const selectedSlotStart = moment(selectedSlot.start, timeFormat);
+            const selectedSlotDay = moment(selectedSlot.start).day();
+            const selectedSlotStartPlus30 = selectedSlotStart.clone().add(30, 'minutes').format(timeFormat);
 
-    if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
-      return {
-        className: "active",
-      };
-    }
-  }
+            if ((currentTimeSlot === selectedSlotStart.format(timeFormat) || currentTimeSlot === selectedSlotStartPlus30) && dayOfWeek === selectedSlotDay) {
+                return {
+                    className: "active",
+                };
+            }
+        }
         if (openSlots[dayOfWeek] && diffDays >= 7 && diffDays <= 60 && (openSlots[dayOfWeek].includes(currentTimeSlot) || openSlots[dayOfWeek].includes(prevTimeSlot))) {
-    return {
-      className: "available",
+            return {
+                className: "available",
+            };
+        } else {
+            return {
+                className: "unavailable"
+            }
+        }
     };
-  } else {
-    return {
-      className: "unavailable"
-    }
-  }
-};
     useEffect(() => {
         loadData()
         console.log("Updated Availability")
@@ -452,9 +452,9 @@ const slotPropGetter = (date) => {
         return (
             <div className="rbc-toolbar">
                 <span className="rbc-btn-group">
-                    <button type="button" onClick={() => onNavigate('TODAY')}> 
+                    <button type="button" onClick={() => onNavigate('TODAY')}>
                         Today
-                        
+
                     </button>
                     <button type="button"
                         className={isButtonDisabled ? 'disabled-button' : ''}
@@ -464,13 +464,13 @@ const slotPropGetter = (date) => {
                         Back
 
                     </button>
-                    <button type="button" 
-                    className={isAfter60Days ? 'disabled-button' : ''}
-                    disabled={isAfter60Days}
-                    onClick={!isAfter60Days ? () => onNavigate('NEXT') : null}
+                    <button type="button"
+                        className={isAfter60Days ? 'disabled-button' : ''}
+                        disabled={isAfter60Days}
+                        onClick={!isAfter60Days ? () => onNavigate('NEXT') : null}
                     >
                         Next
-                        
+
                     </button>
                 </span>
                 <span className="rbc-toolbar-label">{label}</span>

@@ -12,6 +12,7 @@ import FileUpload from "../FileUpload";
 import LearningGoals from "../LearningGoals";
 
 import { FaRedo } from "react-icons/fa";
+const URL = process.env.REACT_APP_API_URL
 
 export const EditCourseModal = ({
   showModal,
@@ -26,7 +27,7 @@ export const EditCourseModal = ({
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const editCourse = async (e) => {
     e.preventDefault();
-   
+
 
     let learning_goals = learningGoals
       .split("\n")
@@ -49,9 +50,9 @@ export const EditCourseModal = ({
       difficulty: selectedDifficulty,
     };
 
-    const URL = "http://localhost:8080/course/edit";
+    const editURL = URL + "/course/edit";
     try {
-      const response = await fetch(URL, {
+      const response = await fetch(editURL, {
         method: "PUT",
         body: JSON.stringify(body),
         headers: {
@@ -76,7 +77,7 @@ export const EditCourseModal = ({
   const [courseMap, setCourseMap] = useState([]);
   const [allTutors, setAllTutors] = useState([]);
   const loadTutors = async () => {
-    let url = "http://localhost:8080/course/tutor";
+    let url = URL + "/course/tutor";
 
     let response = await fetch(url);
     const map = await response.json();
@@ -84,13 +85,13 @@ export const EditCourseModal = ({
     console.log("Course Map");
     console.log(map);
 
-    url = "http://localhost:8080/tutors";
+    url = URL + "/tutors";
     response = await fetch(url);
     const tutors = await response.json();
     setAllTutors(tutors);
     setTutors(tutors);
 
-    url = `http://localhost:8080/course/checkedtutors?id=${course_id}`;
+    url = URL + `/course/checkedtutors?id=${course_id}`;
     response = await fetch(url);
     const preCheckedTutors = await response.json();
     const checkedTutorsMap = {};
@@ -117,7 +118,7 @@ export const EditCourseModal = ({
       .filter((file) => !uploadedFiles.includes(file))
       .forEach((file, index) => formData.append("images", file));
     console.log("Files are ", files);
-    const URL = "http://localhost:8080/upload/all";
+    const URL = URL + "/upload/all";
     const data = await fetch(URL, {
       method: "POST",
       body: formData,
@@ -220,7 +221,7 @@ export const EditCourseModal = ({
   //
 
   useEffect(() => {
-    fetch(`http://localhost:8080/course/view?id=${course_id}`)
+    fetch(URL + `/course/view?id=${course_id}`)
       .then((response) => {
         if (response.ok) {
           return response.text().then((text) => {
@@ -255,7 +256,7 @@ export const EditCourseModal = ({
         setUploadedFiles(data.files == null ? [] : data.files);
 
         setSelectedDifficulty(
-         data.course_difficulty
+          data.course_difficulty
         );
 
         setHTML(data.info_page);
@@ -286,7 +287,7 @@ export const EditCourseModal = ({
   const handleRemove = async (course_id) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/course/delete?id=${course_id}`,
+        URL + `/course/delete?id=${course_id}`,
         {
           method: "DELETE",
         }
@@ -383,7 +384,7 @@ export const EditCourseModal = ({
     const formData = new FormData();
     formData.append("image", selectedFile, modifiedFileName);
     console.log("Form Data is ", formData);
-    fetch("http://localhost:8080/upload", {
+    fetch(URL + "/upload", {
       method: "POST",
       body: formData,
     })
@@ -406,12 +407,12 @@ export const EditCourseModal = ({
   const addTutors = async (e) => {
     e.preventDefault();
 
-    let url = `http://localhost:8080/course/tutors?id=${course_id}`;
+    let url = URL + `/course/tutors?id=${course_id}`;
     await fetch(url, {
       method: "DELETE",
     });
 
-    url = "http://localhost:8080/course/tutors";
+    url = URL + "/course/tutors";
     const tutorIds = Object.keys(checkedTutors).filter(
       (tutor_id) => checkedTutors[tutor_id]
     );
@@ -587,28 +588,28 @@ export const EditCourseModal = ({
                 <span style={{ display: "block", marginBottom: "5px" }}>
                   Difficulty:
                 </span>
-            <div style={{ display: "flex", alignItems: "center" }}>
-    <select
-        style={{ 
-            padding: "10px", 
-            borderRadius: "5px", 
-            border: "1px solid #ccc", 
-            marginBottom: "10px", 
-            fontSize: "14px", 
-            cursor: "pointer", 
-            marginRight: "5px" 
-        }}
-        value={selectedDifficulty}
-        onChange={(e) => {
-            handleMouseOver(e.target.value);
-        }}
-    >
-        <option value="">Select difficulty</option>
-        <option value="Beginner">Beginner</option>
-        <option value="Intermediate">Intermediate</option>
-        <option value="Advanced">Advanced</option>
-    </select>
-</div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <select
+                    style={{
+                      padding: "10px",
+                      borderRadius: "5px",
+                      border: "1px solid #ccc",
+                      marginBottom: "10px",
+                      fontSize: "14px",
+                      cursor: "pointer",
+                      marginRight: "5px"
+                    }}
+                    value={selectedDifficulty}
+                    onChange={(e) => {
+                      handleMouseOver(e.target.value);
+                    }}
+                  >
+                    <option value="">Select difficulty</option>
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
               </label>
             </div>
             <div style={{ flex: 1, marginLeft: "10px" }}>

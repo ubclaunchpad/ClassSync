@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import "./index.css"; // Import the CSS file for styling
 import { v4 as uuidv4 } from 'uuid';
 
+const URL = process.env.REACT_APP_API_URL
 
 const RegisterUserForm = (props) => {
 
@@ -20,8 +21,8 @@ const RegisterUserForm = (props) => {
     const fileInput = useRef();
 
     const [imageUrl, setImageUrl] = useState(null);
-  
-  
+
+
 
     const handleVerifyEmailChange = (e) => {
         setVerifyEmail(e.target.value);
@@ -38,10 +39,10 @@ const RegisterUserForm = (props) => {
         };
     };
 
-    
-const handleClick = () => {
-    fileInput.current.click();
-};
+
+    const handleClick = () => {
+        fileInput.current.click();
+    };
     const handleUpload = (event) => {
         const selectedFile = event.target.files[0];
 
@@ -56,7 +57,7 @@ const handleClick = () => {
         const formData = new FormData();
         formData.append('image', selectedFile, modifiedFileName);
 
-        fetch('http://localhost:8080/upload', {
+        fetch(URL + '/upload', {
             method: 'POST',
             body: formData,
         })
@@ -87,7 +88,7 @@ const handleClick = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/signup", {
+            const response = await fetch(URL + "/signup", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,11 +108,11 @@ const handleClick = () => {
                 console.log('User account created:', responseData);
                 if (!props.admin && props.token) {
                     try {
-                        await fetch(`http://localhost:8080/token/${props.token}`, {
+                        await fetch(URL + `/token/${props.token}`, {
                             method: 'DELETE',
-                        });                       
+                        });
 
-                    } catch(error) {
+                    } catch (error) {
                         console.log("Token not found");
                         console.error('Error:', error);
                     }
@@ -136,42 +137,42 @@ const handleClick = () => {
 
             <div className="header-row" style={{ justifyContent: 'center' }}>
 
-            <div style={{marginLeft:'-160px'}}>
-      <input type="file" ref={fileInput} onChange={handleUpload} style={{ display: 'none' }} />
-      
+                <div style={{ marginLeft: '-160px' }}>
+                    <input type="file" ref={fileInput} onChange={handleUpload} style={{ display: 'none' }} />
 
-{imageUrl ? (
-      <img 
-        src={imageUrl} 
-        alt="Uploaded" 
-        style={{ 
-            borderRadius: '50%', 
-            width: '100px', 
-            minHeight: '100px', 
-            objectFit: 'cover',
-            border: '2px solid #333',
-            padding: '5px',
-        }} 
-        onClick={handleClick}
 
-      />
-    ) : (
-        <img
-        src='https://t4.ftcdn.net/jpg/05/69/90/73/360_F_569907313_fl7W3gX7YIVw2r05B4Ij1c21ix4xRUqD.jpg'
-        alt="Uploaded"
-        style={{
-            borderRadius: '50%', 
-            width: '100px', 
-            minHeight: '100px', 
-            objectFit: 'cover',
-            border: '2px solid #333',
-            padding: '5px',
-        }}
-        onClick={handleClick}
-      />
-    )}
-  <p style={{ textAlign: 'center', marginTop: '3px', marginBottom:'-5px' }}>Select a profile picture</p>
-</div>
+                    {imageUrl ? (
+                        <img
+                            src={imageUrl}
+                            alt="Uploaded"
+                            style={{
+                                borderRadius: '50%',
+                                width: '100px',
+                                minHeight: '100px',
+                                objectFit: 'cover',
+                                border: '2px solid #333',
+                                padding: '5px',
+                            }}
+                            onClick={handleClick}
+
+                        />
+                    ) : (
+                        <img
+                            src='https://t4.ftcdn.net/jpg/05/69/90/73/360_F_569907313_fl7W3gX7YIVw2r05B4Ij1c21ix4xRUqD.jpg'
+                            alt="Uploaded"
+                            style={{
+                                borderRadius: '50%',
+                                width: '100px',
+                                minHeight: '100px',
+                                objectFit: 'cover',
+                                border: '2px solid #333',
+                                padding: '5px',
+                            }}
+                            onClick={handleClick}
+                        />
+                    )}
+                    <p style={{ textAlign: 'center', marginTop: '3px', marginBottom: '-5px' }}>Select a profile picture</p>
+                </div>
 
             </div>
 

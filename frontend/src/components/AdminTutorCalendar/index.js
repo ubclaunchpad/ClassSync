@@ -12,6 +12,8 @@ import { endOfWeek, startOfWeek } from "date-fns";
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
 
+const URL = process.env.REACT_APP_API_URL
+
 export default function AdminTutorCalendar(props) {
   const [eventsData, setEventsData] = useState(events);
   const [selectedSlot, setSelectedSlot] = useState(props.selectedSlot);
@@ -79,9 +81,8 @@ export default function AdminTutorCalendar(props) {
 
   const loadData = async () => {
     console.log("Loading data for ", startDate.toISOString().split("T")[0]);
-    let url = `http://localhost:8080/availability?date=${
-      startDate.toISOString().split("T")[0]
-    }&course_id=1`;
+    let url = URL + `/availability?date=${startDate.toISOString().split("T")[0]
+      }&course_id=1`;
 
     try {
       const response = await fetch(url);
@@ -96,7 +97,7 @@ export default function AdminTutorCalendar(props) {
         openSlots[day] = Object.keys(slots);
       });
 
-      url = "http://localhost:8080/availability/bookings?id=1";
+      url = URL + "/availability/bookings?id=1";
       const bookingsResponse = await fetch(url);
       const bookingsData = await bookingsResponse.json();
       console.log("Bookings Data", bookingsData);
@@ -161,7 +162,7 @@ export default function AdminTutorCalendar(props) {
     // This code will run whenever `startDate` changes
     console.log("Start date has changed:", startDate);
     setIsLoaded(false);
-    
+
     loadData();
     console.log("Selected Slot is ", selectedSlot);
     // handleSelect({start:selectedSlot.start});
@@ -181,7 +182,7 @@ export default function AdminTutorCalendar(props) {
 
   const deleteEvent = async (event) => {
     const response = await fetch(
-      `http://localhost:8080/availability/booking?id=${event.id}`,
+      URL + `/availability/booking?id=${event.id}`,
       {
         method: "DELETE",
         headers: {
@@ -214,7 +215,7 @@ export default function AdminTutorCalendar(props) {
 
       console.log("Body is ", body);
 
-      let url = "http://localhost:8080/availability/add";
+      let url = URL + "/availability/add";
 
       const response = await fetch(url, {
         method: "POST",
@@ -235,7 +236,7 @@ export default function AdminTutorCalendar(props) {
 
   const handleBook = async (id) => {
     if (selectedSlot) {
-      const response = await fetch("http://localhost:8080/availability", {
+      const response = await fetch(URL + "/availability", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -303,7 +304,7 @@ export default function AdminTutorCalendar(props) {
           times: times,
         });
 
-        let url = "http://localhost:8080/availability/remove";
+        let url = URL + "/availability/remove";
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

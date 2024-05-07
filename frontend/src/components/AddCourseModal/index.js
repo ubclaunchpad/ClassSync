@@ -14,6 +14,8 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
+const URL = process.env.REACT_APP_API_URL
+
 export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(true)
@@ -43,7 +45,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         // const body = JSON.stringify(formValues)
         // body["color"] = formValues.color
 
-        const URL = "http://localhost:8080/course"
+        const URL = `${process.env.REACT_APP_API_URL}/course`;
         try {
             const response = await fetch(URL, {
                 method: 'POST',
@@ -71,7 +73,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [allTutors, setAllTutors] = useState([])
     const loadTutors = async () => {
 
-        let url = "http://localhost:8080/course/tutor"
+        let url = URL + "/course/tutor"
 
         let response = await fetch(url);
         const map = await response.json();
@@ -79,7 +81,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
 
         console.log(map)
 
-        url = "http://localhost:8080/tutors"
+        url = URL + "/tutors"
         response = await fetch(url)
         const tutors = await response.json()
         console.log(tutors)
@@ -103,7 +105,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         const formData = new FormData()
 
         files.forEach((file, index) => formData.append('images', file));
-        const URL = "http://localhost:8080/upload/all"
+        const URL = URL + "upload/all"
         const data = await fetch(URL, {
             method: 'POST',
             body: formData
@@ -325,7 +327,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         const formData = new FormData();
         formData.append('image', selectedFile, modifiedFileName);
 
-        fetch('http://localhost:8080/upload', {
+        fetch(URL + '/upload', {
             method: 'POST',
             body: formData,
         })
@@ -350,7 +352,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
 
     const addTutors = async (e) => {
         e.preventDefault()
-        let url = "http://localhost:8080/course/tutors"
+        let url = URL + "/course/tutors"
         const tutorIds = Object.keys(checkedTutors).filter(tutor_id => checkedTutors[tutor_id]);
 
         const body = {
@@ -457,27 +459,27 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                             <label style={{ color: '#103da2', marginBottom: '10px' }}>
                                 <span style={{ display: 'block', marginBottom: '5px' }}>Difficulty:</span>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <select
-        style={{ 
-            padding: "10px", 
-            borderRadius: "5px", 
-            border: "1px solid #ccc", 
-            marginBottom: "10px", 
-            fontSize: "14px", 
-            cursor: "pointer", 
-            marginRight: "5px" 
-        }}
-        value={selectedDifficulty}
-        onChange={(e) => {
-            console.log("New index is ", e.target.value)
-            setSelectedDifficulty(e.target.value);
-        }}
-    >
-        <option value="">Select difficulty</option>
-        <option value="Beginner">Beginner</option>
-        <option value="Intermediate">Intermediate</option>
-        <option value="Advanced">Advanced</option>
-    </select>
+                                    <select
+                                        style={{
+                                            padding: "10px",
+                                            borderRadius: "5px",
+                                            border: "1px solid #ccc",
+                                            marginBottom: "10px",
+                                            fontSize: "14px",
+                                            cursor: "pointer",
+                                            marginRight: "5px"
+                                        }}
+                                        value={selectedDifficulty}
+                                        onChange={(e) => {
+                                            console.log("New index is ", e.target.value)
+                                            setSelectedDifficulty(e.target.value);
+                                        }}
+                                    >
+                                        <option value="">Select difficulty</option>
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate">Intermediate</option>
+                                        <option value="Advanced">Advanced</option>
+                                    </select>
                                 </div>
 
 
