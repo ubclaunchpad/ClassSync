@@ -1,8 +1,8 @@
 import con from "../../index.js";
 
 export class tutorRegistration {
-async renewTutors(tutors, enddate) {
- 
+  async renewTutors(tutors, enddate) {
+
     const client = await con.connect();
     try {
       return new Promise((resolve, reject) => {
@@ -32,7 +32,6 @@ async renewTutors(tutors, enddate) {
     }
   }
   async getTutorOfferings(userID) {
-    console.log("User ID ", userID);
 
     const client = await con.connect();
     try {
@@ -59,41 +58,40 @@ async renewTutors(tutors, enddate) {
     }
   }
 
-async getFullProfile(userID) {
-  const client = await con.connect();
-  try {
-    console.log("User ID ", userID);
-    const tutorProfilePromise = client.query(
-      "SELECT t.*, u.firstname, u.lastname, u.image FROM tutors t JOIN users u ON u.user_id = t.tutor_id WHERE tutor_id = $1  ",
-      [userID]
-    );
+  async getFullProfile(userID) {
+    const client = await con.connect();
+    try {
+      const tutorProfilePromise = client.query(
+        "SELECT t.*, u.firstname, u.lastname, u.image FROM tutors t JOIN users u ON u.user_id = t.tutor_id WHERE tutor_id = $1  ",
+        [userID]
+      );
 
-    const coursesPromise = client.query(
-      "SELECT STRING_AGG(DISTINCT LOWER(REGEXP_REPLACE(c.course_name, '\\s+$', '', 'g')), ', ') AS course_list FROM courses c JOIN tutor_offerings o ON o.course_id = c.course_id WHERE o.tutor_id = $1",
-      [userID]
-    );
+      const coursesPromise = client.query(
+        "SELECT STRING_AGG(DISTINCT LOWER(REGEXP_REPLACE(c.course_name, '\\s+$', '', 'g')), ', ') AS course_list FROM courses c JOIN tutor_offerings o ON o.course_id = c.course_id WHERE o.tutor_id = $1",
+        [userID]
+      );
 
-    const [tutorProfileResult, coursesResult] = await Promise.all([tutorProfilePromise, coursesPromise]);
+      const [tutorProfileResult, coursesResult] = await Promise.all([tutorProfilePromise, coursesPromise]);
 
-    if (tutorProfileResult.rows.length > 0 && coursesResult.rows.length > 0) {
-      const tutorProfile = tutorProfileResult.rows[0];
-   const course_list = coursesResult.rows[0].course_list;
-const newObject = { ...tutorProfile, course_list };
-console.log(newObject);
-return newObject;    } else {
-      throw new Error('No data found');
+      if (tutorProfileResult.rows.length > 0 && coursesResult.rows.length > 0) {
+        const tutorProfile = tutorProfileResult.rows[0];
+        const course_list = coursesResult.rows[0].course_list;
+        const newObject = { ...tutorProfile, course_list };
+        console.log(newObject);
+        return newObject;
+      } else {
+        throw new Error('No data found');
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      throw error;
+    } finally {
+      client.release();
     }
-  } catch (error) {
-    console.error("Error:", error);
-    throw error;
-  } finally {
-    client.release();
   }
-}
   async getProfile(userID) {
     const client = await con.connect();
     try {
-      console.log("User ID ", userID);
       return new Promise((resolve, reject) => {
         client.query(
           "SELECT * FROM get_profile($1)",
@@ -213,29 +211,29 @@ return newObject;    } else {
     }
   }
 
-async getDatesByTutor(id) {
-  const client = await con.connect();
-  try {
-    return new Promise((resolve, reject) => {
-      client.query(
-        "SELECT startdate, enddate FROM tutors WHERE tutor_id = $1",
-        [id],
-        (error, results) => {
-          if (error) {
-            console.error("Error:", error);
-            reject(error);
-          } else {
-            resolve(results.rows[0]); // Resolve the promise with the query results
+  async getDatesByTutor(id) {
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query(
+          "SELECT startdate, enddate FROM tutors WHERE tutor_id = $1",
+          [id],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              resolve(results.rows[0]); // Resolve the promise with the query results
+            }
           }
-        }
-      );
-    });
-  } catch (err) {
-    console.log(err);
-  } finally {
-    client.release();
+        );
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      client.release();
+    }
   }
-}
 
   async deleteAllOfferings(userID) {
     const client = await con.connect();
@@ -317,7 +315,7 @@ async getDatesByTutor(id) {
             resolve(results.rows);
           }
         });
-        });          
+      });
 
     } finally {
       client.release();
@@ -358,40 +356,40 @@ async getDatesByTutor(id) {
     }
   }
 
-    // $8 add to CALL to make the link
-    async updateBio(user_id, bio) {
-        console.log(user_id, bio);
-        const client = await con.connect();
-        try {
-            return new Promise((resolve, reject) => {
-                client.query(
-                    "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
-                    [
-                        user_id,
-                        bio.about,
-                        bio.university,
-                        bio.major,
-                        bio.maxHours,
-                        bio.startdate,
-                        bio.enddate,
-                        bio.description,
-                        bio.teleport_link,
-                        bio.languages
-                    ],
-                    (error, results) => {
-                        if (error) {
-                            console.error("Error:", error);
-                            reject(error);
-                        } else {
-                            resolve();
-                        }
-                    }
-                );
-            });
-        } finally {
-            client.release();
-        }
-
+  // $8 add to CALL to make the link
+  async updateBio(user_id, bio) {
+    console.log(user_id, bio);
+    const client = await con.connect();
+    try {
+      return new Promise((resolve, reject) => {
+        client.query(
+          "CALL upsert_tutor($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+          [
+            user_id,
+            bio.about,
+            bio.university,
+            bio.major,
+            bio.maxHours,
+            bio.startdate,
+            bio.enddate,
+            bio.description,
+            bio.teleport_link,
+            bio.languages
+          ],
+          (error, results) => {
+            if (error) {
+              console.error("Error:", error);
+              reject(error);
+            } else {
+              resolve();
+            }
+          }
+        );
+      });
+    } finally {
+      client.release();
     }
+
   }
+}
 
