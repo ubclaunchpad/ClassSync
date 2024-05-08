@@ -37,18 +37,6 @@ const s3 = new S3Client({
 });
 
 
-async function listBucketContents(bucketName) {
-    const params = {
-        Bucket: bucketName
-    };
-
-    try {
-        const data = await s3.listObjects(params).promise();
-        console.log('Bucket Contents:', data.Contents);
-    } catch (error) {
-        console.error('Error:', error.message);
-    }
-}
 
 
 
@@ -89,25 +77,7 @@ router.delete('/file', async (req, res) => {
 
 
 
-listBucketContents("class-sync");
 
-async function uploadToS3(base64string) {
-
-    const fileContent = Buffer.from(base64string, 'base64');
-
-    const params = {
-        Bucket: 'class-sync',
-        Key: "test-file3.jpg",
-        Body: fileContent,
-    };
-
-    try {
-        const uploadResult = await s3.upload(params).promise();
-        console.log('File uploaded to S3:', uploadResult.Location);
-    } catch (error) {
-        console.error('Error:', error.message);
-    }
-}
 
 const upload = multer({
     storage: multerS3({
@@ -607,41 +577,8 @@ router.get("/tutor_offerings", (req, res) => {
         });
 });
 
-router.get("/users", (req, res) => {
-    return admin.getUsers()
-        .then((users) => {
-            console.log("Users ", users);
-            res.status(200).json(users);
-        })
-        .catch((err) => {
-            console.log("Error getting users ", err);
-            res.status(500).json(err);
-        });
-});
 
-router.get("/reviews", (req, res) => {
-    return admin.getTutorReviews(req.query.id)
-        .then((reviews) => {
-            console.log("Reviews ", reviews);
-            res.status(200).json(reviews);
-        })
-        .catch((err) => {
-            console.log("Error getting reviews ", err);
-            res.status(500).json(err);
-        });
-});
 
-router.post("/reviews", (req, res) => {
-    return admin
-        .addReview(req.body)
-        .then((response) => {
-            res.status(200).json(response);
-        })
-        .catch((err) => {
-            console.log("Error adding review ", err);
-            res.status(500).json(err);
-        });
-});
 
 router.get('/tutorandcourse', (req, res) => {
     return admin.getTutorAndCourse(req.query.id)

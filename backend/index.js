@@ -10,6 +10,7 @@ import adminAuthRouter from "./src/routes/adminAuthRoute.js"
 import bookingAvailabilityRoute from './src/routes/bookingAvailabilityRoute.js'
 import defaultRouter from "./src/routes/defaultRoute.js";
 import tokenRouter from "./src/routes/tokenRoute.js"
+import reviewRoute from "./src/routes/reviewRoute.js"
 const app = express();
 const port = 8080;
 
@@ -58,7 +59,7 @@ app.use("/availability", bookingAvailabilityRoute)
 app.use("/token", tokenRouter)
 
 
-
+app.use("/reviews", reviewRoute)
 app.use("/communication", volunteerEmailRoute);
 app.use("/", defaultRouter);
 app.listen(port, () => {
