@@ -53,7 +53,7 @@ const AddStudentForm = () => {
     };
     try {
       const res = await fetch(
-        process.env.REACT_APP_API_URL + "/student-profile",
+        process.env.REACT_APP_API_URL + "/students",
         {
           body: JSON.stringify(
             studentData),

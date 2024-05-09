@@ -118,8 +118,8 @@ export const EditCourseModal = ({
       .filter((file) => !uploadedFiles.includes(file))
       .forEach((file, index) => formData.append("images", file));
     console.log("Files are ", files);
-    const URL = URL + "/upload/all";
-    const data = await fetch(URL, {
+    const url = URL + "/upload/all";
+    const data = await fetch(url, {
       method: "POST",
       body: formData,
     }).then((res) => res.json());

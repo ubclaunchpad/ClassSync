@@ -59,7 +59,7 @@ export default function AdminCalendar() {
       const appointmentsData = await appointmentsResponse.json();
       console.log("Appt ", appointmentsData)
 
-      url = URL + "/students";
+      url = URL + "/student";
       const studentsResponse = await fetch(url);
       const studentsData = await studentsResponse.json();
       setStudents(studentsData);
@@ -580,7 +580,7 @@ export default function AdminCalendar() {
           times: times,
         });
 
-        let url = url + "/availability/remove";
+        let url = URL + "/availability/remove";
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

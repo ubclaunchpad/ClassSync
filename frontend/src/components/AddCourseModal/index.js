@@ -14,8 +14,6 @@ import LearningGoals from '../LearningGoals';
 
 import { FaRedo } from 'react-icons/fa';
 
-const URL = process.env.REACT_APP_API_URL
-
 export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [step, setStep] = useState(1);
     const [firstEdit, setFirstEdit] = useState(true)
@@ -45,7 +43,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         // const body = JSON.stringify(formValues)
         // body["color"] = formValues.color
 
-        const URL = `${process.env.REACT_APP_API_URL}/course`;
+        const URL = "http://localhost:8080/course"
         try {
             const response = await fetch(URL, {
                 method: 'POST',
@@ -73,7 +71,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
     const [allTutors, setAllTutors] = useState([])
     const loadTutors = async () => {
 
-        let url = URL + "/course/tutor"
+        let url = "http://localhost:8080/course/tutor"
 
         let response = await fetch(url);
         const map = await response.json();
@@ -81,7 +79,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
 
         console.log(map)
 
-        url = URL + "/tutors"
+        url = "http://localhost:8080/tutors"
         response = await fetch(url)
         const tutors = await response.json()
         console.log(tutors)
@@ -105,7 +103,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         const formData = new FormData()
 
         files.forEach((file, index) => formData.append('images', file));
-        const URL = URL + "upload/all"
+        const URL = "http://localhost:8080/upload/all"
         const data = await fetch(URL, {
             method: 'POST',
             body: formData
@@ -327,7 +325,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         const formData = new FormData();
         formData.append('image', selectedFile, modifiedFileName);
 
-        fetch(URL + '/upload', {
+        fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData,
         })
@@ -352,7 +350,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
 
     const addTutors = async (e) => {
         e.preventDefault()
-        let url = URL + "/course/tutors"
+        let url = "http://localhost:8080/course/tutors"
         const tutorIds = Object.keys(checkedTutors).filter(tutor_id => checkedTutors[tutor_id]);
 
         const body = {
