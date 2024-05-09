@@ -294,7 +294,7 @@ router.get("/booking", (req, res) => {
     })
 })
 
-router.get("/students", (_, res) => {
+router.get("/student", (_, res) => {
     student
         .getStudents()
         .then((response) => {

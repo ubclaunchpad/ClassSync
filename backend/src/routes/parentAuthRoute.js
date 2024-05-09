@@ -26,7 +26,6 @@ router.post("/signup", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  console.log("PARENT LOGIN REQUEST");
   const email = req.body.email;
   const password = req.body.password;
 

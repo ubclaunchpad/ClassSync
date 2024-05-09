@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment-timezone";
+import { redirect } from 'react-router-dom';
 
 const URL = process.env.REACT_APP_API_URL
 const ParentDashCalendar = ({ students }) => {
@@ -25,7 +26,7 @@ const ParentDashCalendar = ({ students }) => {
 
     try {
       await Promise.all(students.map(async (student) => {
-        const url = URL + `/student-profile/bookings/student/${student.student_id}`;
+        const url = URL + `/students/bookings/student/${student.student_id}`;
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
@@ -42,6 +43,7 @@ const ParentDashCalendar = ({ students }) => {
                   title: courseTitle,
                   studentName: student.name,
                   color: student.color,
+                  link: booking.link
                 })
               })
             }
@@ -75,7 +77,7 @@ const ParentDashCalendar = ({ students }) => {
             const backgroundColor = ColorEnum[event.color];
             return { style: { backgroundColor } };
           }}
-        />
+          onSelectEvent={(event) => window.open(event.link, '_blank')} />
 
 
       </div>

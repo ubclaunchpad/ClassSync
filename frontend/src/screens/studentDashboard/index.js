@@ -45,7 +45,7 @@ const StudentDashboard = () => {
     const fetchData = async () => {
       try {
 
-        const nameResponse = await fetch(`http://localhost:8080/student-profile/name/${id}/`);
+        const nameResponse = await fetch(`http://localhost:8080/students/name/${id}/`);
         const nameData = await nameResponse.json()
         setName(nameData)
 
@@ -80,7 +80,7 @@ const StudentDashboard = () => {
       let learningGoals = []
       let bookingArray = []
 
-      const bookingResponse = await fetch(`http://localhost:8080/student-profile/enrollment?enrollment_id=${course.enrollment_id}`)
+      const bookingResponse = await fetch(`http://localhost:8080/students/enrollment?enrollment_id=${course.enrollment_id}`)
       const bookingData = await bookingResponse.json();
       console.log(bookingData)
       let sortedBookingData = sortBookingsByDate(bookingData)

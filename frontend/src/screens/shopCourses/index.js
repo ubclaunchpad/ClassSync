@@ -104,7 +104,7 @@ const ShopCourses = () => {
 
         <MainContentLayout>
 
-            <div className="courses-container"style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <h2>Browse Courses</h2>
                 {courses && courses.map((course, index) => (
                     <div key={index}

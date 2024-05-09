@@ -1,7 +1,7 @@
 import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Curriculum = () => {
     const [courses, setCourses] = useState(null);
@@ -41,7 +41,7 @@ const Curriculum = () => {
     const [registrationError, setRegistrationError] = useState(null);
 
     const [selectedCourse, setCourse] = useState(null); // Replace with actual course data
-const navigate = useNavigate()
+    const navigate = useNavigate()
     const openModal = () => {
         setModalIsOpen(true);
     };
@@ -98,118 +98,118 @@ const navigate = useNavigate()
     }
 
     return (
-            <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {courses && courses.map((course, index) => (
-                    <div key={index}
+        <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {courses && courses.map((course, index) => (
+                <div key={index}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '80%',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '20px',
+                        border: '1px solid #ddd',
+                        borderRadius: '10px',
+                        padding: '20px',
+                        boxSizing: 'border-box',
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                        backgroundColor: '#f9f9f9',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => { navigate("/course/" + course.course_id) }}
+                >
+                    <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
+                    <div style={{ flex: 1 }}>
+                        <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
+                        <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
+                    </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        contentLabel="Register Modal"
                         style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '80%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: '20px',
-                            border: '1px solid #ddd',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            boxSizing: 'border-box',
-                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                            backgroundColor: '#f9f9f9',
-                            cursor: 'pointer'
+                            content: {
+                                top: '50%',
+                                left: '50%',
+                                right: 'auto',
+                                bottom: 'auto',
+                                marginRight: '-50%',
+                                transform: 'translate(-50%, -50%)',
+                                backgroundColor: '#f0f0f0',
+                                borderRadius: '10px',
+                                padding: '20px',
+                                width: '400px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                            },
                         }}
-                        onClick={() => {navigate("/course/" + course.course_id)}}
-                        >
-                        <img src='https://images.squarespace-cdn.com/content/v1/63b64f0411726e490366a3cb/1672892283063-R28O2XMQOO9VTVXFVAKM/class_covers_WEBSITE-Scratch-Bg-.jpg?format=1000w' alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
-                        <div style={{ flex: 1 }}>
-                            <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
-                            <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
-                        </div>
-                        <Modal
-                            isOpen={modalIsOpen}
-                            onRequestClose={closeModal}
-                            contentLabel="Register Modal"
+                    >
+                        {selectedCourse && (
+                            <h2 style={{ marginBottom: '20px' }}>
+                                Register for {selectedCourse.course_difficulty} {selectedCourse.course_name}
+                            </h2>
+                        )}
+                        {selectedStudent && <select
+                            value={selectedStudent.id}
+                            onChange={(e) => {
+                                const studentId = e.target.value;
+                                const selected = students.find(student => student.id === Number(studentId));
+                                setSelectedStudent(selected);
+                            }}
                             style={{
-                                content: {
-                                    top: '50%',
-                                    left: '50%',
-                                    right: 'auto',
-                                    bottom: 'auto',
-                                    marginRight: '-50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    backgroundColor: '#f0f0f0',
-                                    borderRadius: '10px',
-                                    padding: '20px',
-                                    width: '400px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                },
+                                marginBottom: '20px',
+                                padding: '10px',
+                                width: '100%',
+                                fontSize: '16px',
                             }}
                         >
-                            {selectedCourse && (
-                                <h2 style={{ marginBottom: '20px' }}>
-                                    Register for {selectedCourse.course_difficulty} {selectedCourse.course_name}
-                                </h2>
-                            )}
-                            {selectedStudent && <select
-                                value={selectedStudent.id}
-                                onChange={(e) => {
-                                    const studentId = e.target.value;
-                                    const selected = students.find(student => student.id === Number(studentId));
-                                    setSelectedStudent(selected);
-                                }}
+                            {students && students.map((student, index) => (
+                                <option key={index} value={student.id}>{student.name}</option>
+                            ))}
+                        </select>}
+                        {registrationError && (
+                            <div style={{ color: 'red', marginBottom: '10px' }}>
+                                {registrationError}
+                            </div>
+                        )}
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                            <button
+                                onClick={closeModal}
                                 style={{
-                                    marginBottom: '20px',
-                                    padding: '10px',
-                                    width: '100%',
+                                    backgroundColor: '#ddd',
+                                    color: '#333',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer',
                                     fontSize: '16px',
                                 }}
                             >
-                                {students && students.map((student, index) => (
-                                    <option key={index} value={student.id}>{student.name}</option>
-                                ))}
-                            </select>}
-                            {registrationError && (
-                                <div style={{ color: 'red', marginBottom: '10px' }}>
-                                    {registrationError}
-                                </div>
-                            )}
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleRegister}
+                                style={{
+                                    backgroundColor: '#103DA2',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </Modal>
+                </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <button
-                                    onClick={closeModal}
-                                    style={{
-                                        backgroundColor: '#ddd',
-                                        color: '#333',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        padding: '10px 20px',
-                                        cursor: 'pointer',
-                                        fontSize: '16px',
-                                    }}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleRegister}
-                                    style={{
-                                        backgroundColor: '#103DA2',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '5px',
-                                        padding: '10px 20px',
-                                        cursor: 'pointer',
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                    }}
-                                >
-                                    Confirm
-                                </button>
-                            </div>
-                        </Modal>
-                    </div>
-
-                ))}
-            </div>
+            ))}
+        </div>
     );
 }
 export default Curriculum;

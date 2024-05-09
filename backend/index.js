@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import tutorRegistrationRouter from "./src/routes/tutorRegistrationRoute.js";
 import studentProfileRouter from "./src/routes/studentProfileRoute.js";
 import volunteerEmailRoute from "./src/routes/volunteerEmailRoute.js"
-import parentSignupRoute from "./src/routes/parentSignupRoute.js"
+import parentSignupRoute from "./src/routes/parentAuthRoute.js"
 import adminAuthRouter from "./src/routes/adminAuthRoute.js"
 import bookingAvailabilityRoute from './src/routes/bookingAvailabilityRoute.js'
 import defaultRouter from "./src/routes/defaultRoute.js";
@@ -51,15 +51,20 @@ app.get("/", (_, res) => {
     res.send("Hello ClassSync!");
 });
 
-app.use("/student-profile", studentProfileRouter);
+app.use("/students", studentProfileRouter);
 app.use("/tutor", tutorRegistrationRouter);
+app.use("/availability", bookingAvailabilityRoute)
+
+
+
+app.use("/token", tokenRouter)
+app.use("/reviews", reviewRoute)
 app.use("/parent", parentSignupRoute)
 app.use("/admin", adminAuthRouter)
-app.use("/availability", bookingAvailabilityRoute)
-app.use("/token", tokenRouter)
 
 
-app.use("/reviews", reviewRoute)
+
+
 app.use("/communication", volunteerEmailRoute);
 app.use("/", defaultRouter);
 app.listen(port, () => {
