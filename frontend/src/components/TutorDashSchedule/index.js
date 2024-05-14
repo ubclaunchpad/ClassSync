@@ -7,17 +7,18 @@ import { useNavigate } from "react-router-dom";
 
 
 
+const URL = process.env.REACT_APP_API_URL
 
 const TutorDashSchedule = () => {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const fetchBookings = async () => {
     try {
       const tutorId = localStorage.getItem('userID');
-      const url = `http://localhost:8080/availability/bookings/${tutorId}`;
+      const url = URL + `/availability/bookings/${tutorId}`;
       const response = await fetch(url);
       if (response.ok) {
         const bookings = await response.json();
@@ -57,28 +58,28 @@ const TutorDashSchedule = () => {
   return (
     <div>
       <div className="student-info-container">
-      <TutorDashCal bookings={bookings}></TutorDashCal>
-        </div>
-        <div className="student-info-container"> 
+        <TutorDashCal bookings={bookings}></TutorDashCal>
+      </div>
+      <div className="student-info-container">
         <div className="upcoming-classes"><h2>Upcoming Classes</h2></div>
         <div className="existing-students-row">
           {filteredBookings.map((booking) => {
             console.log(booking.color);
             const tileStyle = { backgroundColor: booking.color };
             return (
-              <div style={tileStyle} className={"course-tile"}  onClick={() => handleTileClick(booking.booking_id)}>
+              <div style={tileStyle} className={"course-tile"} onClick={() => handleTileClick(booking.booking_id)}>
                 <div className="rectangle"></div>
                 <div className="name">
-                    {booking.title}
-                <div className="student-name">{booking.f_name} {booking.l_name}</div>
-                    </div>
+                  {booking.title}
+                  <div className="student-name">{booking.f_name} {booking.l_name}</div>
+                </div>
               </div>
             );
           })}
         </div>
-        </div>
-
       </div>
+
+    </div>
   );
 };
 

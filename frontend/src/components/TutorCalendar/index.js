@@ -11,6 +11,7 @@ import Select from "react-select";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
+const URL = process.env.REACT_APP_API_URL
 
 export default function ReactBigCalendar(props) {
     const [eventsData, setEventsData] = useState(events);
@@ -37,7 +38,7 @@ export default function ReactBigCalendar(props) {
 
     const loadData = async () => {
         // console.log("Loading data for ", startDate.toISOString().split('T')[0]);
-        let url = `http://localhost:8080/tutor/availability/schedule?userID=${localStorage.getItem("userId")}&startDate=${startDate.toISOString().split('T')[0]}`
+        let url = URL + `/tutor/availability/schedule?userID=${localStorage.getItem("userId")}&startDate=${startDate.toISOString().split('T')[0]}`
 
         try {
             const response = await fetch(url);
@@ -75,20 +76,16 @@ export default function ReactBigCalendar(props) {
             //     openSlots[day] = Object.keys(slots);
             // });
 
-            url = `http://localhost:8080/appointments?tutor_id=${localStorage.getItem('userID')}&date=${startOfWeek(new Date()).toISOString().split('T')[0]}`
+            url = URL + `/appointments?tutor_id=${localStorage.getItem('userID')}&date=${startOfWeek(new Date()).toISOString().split('T')[0]}`
             const appointmentsResponse = await fetch(url);
             const appointmentsData = await appointmentsResponse.json();
-            // console.log("Appointments Data", appointmentsData)
-            // url = "http://localhost:8080/availability/bookings?id=1"
-            // const bookingsResponse = await fetch(url);
-            // const bookingsData = await bookingsResponse.json();
 
-            url = "http://localhost:8080/students"
+            url = URL + "/students"
             const studentsResponse = await fetch(url);
             const studentsData = await studentsResponse.json();
             setStudents(studentsData)
 
-            url = "http://localhost:8080/tutor/offerings"
+            url = URL + "/tutor/offerings"
             const coursesResponse = await fetch(url);
             const coursesData = await coursesResponse.json();
 
@@ -103,7 +100,7 @@ export default function ReactBigCalendar(props) {
             }));
 
 
-            const offeringsResponse = await fetch(`http://localhost:8080/tutor/offering?id=${localStorage.getItem('userID')}`);
+            const offeringsResponse = await fetch(URL + `/tutor/offering?id=${localStorage.getItem('userID')}`);
             const offeringsData = await offeringsResponse.json();
 
             // Filter selectedOptions based on offeringsData
@@ -237,7 +234,7 @@ export default function ReactBigCalendar(props) {
     const deleteEvent = async (event) => {
 
 
-        const response = await fetch(`http://localhost:8080/availability/booking?id=${event.id}`, {
+        const response = await fetch(URL + `/availability/booking?id=${event.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -282,7 +279,7 @@ export default function ReactBigCalendar(props) {
 
         console.log("Body is ", body)
 
-        let url = "http://localhost:8080/availability/add"
+        let url = URL + "/availability/add"
 
         const response = await fetch(url, {
             method: "POST",
@@ -316,7 +313,7 @@ export default function ReactBigCalendar(props) {
     useEffect(() => {
         if (data.change_time && data.tutor_id && data.event_time && data.enrollment) {
             console.log("Sending Log Data ", data)
-            fetch('http://localhost:8080/tutor/log', {
+            fetch(URL + '/tutor/log', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -337,7 +334,7 @@ export default function ReactBigCalendar(props) {
         // console.log("Selected Slot is ", selectedSlot)
         console.log(enrollmentId);
 
-        const response = await fetch('http://localhost:8080/availability', {
+        const response = await fetch(URL + '/availability', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -411,7 +408,7 @@ export default function ReactBigCalendar(props) {
                 enrollment: enrollmentId/* value here */,
             });
 
-            let url = "http://localhost:8080/availability/remove"
+            let url = URL + "/availability/remove"
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -522,7 +519,7 @@ export default function ReactBigCalendar(props) {
 
         setBookings(false)
         setBookingError(null)
-        let url = `http://localhost:8080/bookings?student_id=${studentId.value}&course_id=${courseId.value}`;
+        let url = URL + `/bookings?student_id=${studentId.value}&course_id=${courseId.value}`;
         console.log("URL is ", url)
         const response = await fetch(url);
         const bookingsResponse = await response.json();

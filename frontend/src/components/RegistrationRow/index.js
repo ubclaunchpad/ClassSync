@@ -6,6 +6,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import Switch from "react-switch";
 import "./index.css";
+const URL = process.env.REACT_APP_API_URL
 
 export default function RegistrationRow({
   data,
@@ -24,7 +25,7 @@ export default function RegistrationRow({
   };
 
   const searchEnrollment = async () => {
-    let url = `http://localhost:8080/classes?enrollment_id=${data.enrollment_id}`;
+    let url = URL + `/classes?enrollment_id=${data.enrollment_id}`;
     const response = await fetch(url);
     const classes = await response.json();
     classes.sort(function (book1, book2) {

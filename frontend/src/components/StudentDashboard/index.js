@@ -4,13 +4,15 @@ import { useParams } from 'react-router-dom';
 import { addDays, endOfWeek, startOfWeek } from 'date-fns';
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+const URL = process.env.REACT_APP_API_URL
+
 
 const Course = (props) => {
     const [lessons, setLessons] = useState([]);
     const [loaded, setLoaded] = useState(false)
 
     const fetchData = async () => {
-        const url = `http://localhost:8080/availability/bookings?id=${props.id}`;
+        const url = URL + `/availability/bookings?id=${props.id}`;
         const bookingsResponse = await fetch(url);
         const bookingsData = await bookingsResponse.json();
         console.log("Bookings Data", bookingsData);
@@ -50,7 +52,7 @@ const Course = (props) => {
 
     const deleteEvent = async (event) => {
 
-        const response = await fetch(`http://localhost:8080/availability/booking?id=${event.id}`, {
+        const response = await fetch(URL + `/availability/booking?id=${event.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +76,7 @@ const Course = (props) => {
 
             console.log("Body is ", body)
 
-            let url = "http://localhost:8080/availability/add"
+            let url = URL + "/availability/add"
 
             const response = await fetch(url, {
                 method: "POST",
