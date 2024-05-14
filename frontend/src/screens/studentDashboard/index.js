@@ -18,6 +18,8 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import { StudentLessonTab } from "../../components/StudentLessonTab";
 import { MainContentLayout } from "../../components/MainContentLayout";
 
+const URL = process.env.REACT_APP_API_URL
+
 const StudentDashboard = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -45,12 +47,12 @@ const StudentDashboard = () => {
     const fetchData = async () => {
       try {
 
-        const nameResponse = await fetch(`http://localhost:8080/students/name/${id}/`);
+        const nameResponse = await fetch(URL + `/students/name/${id}/`);
         const nameData = await nameResponse.json()
         setName(nameData)
 
         const response = await fetch(
-          `http://localhost:8080/student/${id}/courses`
+          URL + `/student/${id}/courses`
         );
         const data = await response.json();
         setCourses(data);
@@ -80,7 +82,7 @@ const StudentDashboard = () => {
       let learningGoals = []
       let bookingArray = []
 
-      const bookingResponse = await fetch(`http://localhost:8080/students/enrollment?enrollment_id=${course.enrollment_id}`)
+      const bookingResponse = await fetch(URL + `/students/enrollment?enrollment_id=${course.enrollment_id}`)
       const bookingData = await bookingResponse.json();
       console.log(bookingData)
       let sortedBookingData = sortBookingsByDate(bookingData)
@@ -88,7 +90,7 @@ const StudentDashboard = () => {
       if (sortedBookingData != null && sortedBookingData.length > 0) {
         startDate = new Date(sortedBookingData[0].start_time);
         endDate = new Date(sortedBookingData[sortedBookingData.length - 1].start_time)
-        const lgResponse = await fetch(`http://localhost:8080/learninggoals?id=${sortedBookingData[0].booking_id}`);
+        const lgResponse = await fetch(URL + `/learninggoals?id=${sortedBookingData[0].booking_id}`);
         const lgData = await lgResponse.json()
         learningGoals = lgData;
         let bookingObject = await getLessons(sortedBookingData);
@@ -113,7 +115,7 @@ const StudentDashboard = () => {
       const startDate = new Date(booking.start_time);
       const meetingLink = booking.link.startsWith("http") ? booking.link : `https://${booking.link}`;
       const complete = startDate < Date.now();
-      const sharedFilesResponse = await fetch(`http://localhost:8080/sharedfiles?id=${booking.booking_id}`);
+      const sharedFilesResponse = await fetch(URL + `/sharedfiles?id=${booking.booking_id}`);
       const sharedFiles = await sharedFilesResponse.json();
 
       return {

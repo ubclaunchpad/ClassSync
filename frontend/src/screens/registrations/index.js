@@ -5,6 +5,8 @@ import { faSort } from "@fortawesome/free-solid-svg-icons";
 import RegistrationRow from "../../components/RegistrationRow";
 import "./index.css";
 
+const URL = process.env.REACT_APP_API_URL
+
 const Registrations = () => {
   const [registrations, setRegistrations] = useState([]);
   const [sortedByGuardian, setSortedByGuardian] = useState(false);
@@ -15,8 +17,9 @@ const Registrations = () => {
   const [sortedByPaid, setSortedByPaid] = useState(false);
   const [curExpand, setCurExpand] = useState();
 
+
   const fetchRegistrations = async () => {
-    const url = `http://localhost:8080/registrations`;
+    const url = URL + `/registrations`;
     const response = await fetch(url);
     const registrations = await response.json();
     console.log("Registrations", registrations);
@@ -28,7 +31,7 @@ const Registrations = () => {
   }, []);
 
   const handleChange = async (id, paid) => {
-    const url = `http://localhost:8080/registrations/${id}/${paid}`;
+    const url = URL + `/registrations/${id}/${paid}`;
     const response = await fetch(url, {
       method: "PUT",
       headers: {

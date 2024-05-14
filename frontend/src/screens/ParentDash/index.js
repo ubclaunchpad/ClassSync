@@ -9,6 +9,7 @@ import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
 import { AddReviewForm } from "../../components/AddReviewForm";
 
+const URL = process.env.REACT_APP_API_URL
 
 const ParentDash = (props) => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const ParentDash = (props) => {
 
 
     const handleTileClick = async (studentId) => {
-        const url = `http://localhost:8080/student/${studentId}/courses`;
+        const url = URL + `/student/${studentId}/courses`;
         try {
             const response = await fetch(url, {
                 headers: {
@@ -40,7 +41,7 @@ const ParentDash = (props) => {
     };
 
     const fetchStudents = async () => {
-        const url = `http://localhost:8080/guardian/students`;
+        const url = URL + `/guardian/students`;
         try {
             const response = await fetch(url, {
                 headers: {

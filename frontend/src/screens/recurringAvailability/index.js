@@ -11,6 +11,7 @@ import ScheduleSelector from "../tutorAvailability";
 
 
 
+const URL = process.env.REACT_APP_API_URL
 
 export default function ScheduleSelectorRecurring() {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -78,7 +79,7 @@ export default function ScheduleSelectorRecurring() {
                 5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
-            const response = await fetch("http://localhost:8080/tutor/availability", {
+            const response = await fetch(URL + "/tutor/availability", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -101,7 +102,7 @@ export default function ScheduleSelectorRecurring() {
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
     async function getDates() {
-        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem("userId")}`, {
+        const response = await fetch(URL + `/tutor/availability/dates?id=${localStorage.getItem("userId")}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -115,7 +116,7 @@ export default function ScheduleSelectorRecurring() {
 
 
     const loadAvailability = async () => {
-        const response = await fetch(`http://localhost:8080/tutor/availability/recurring?userID=${userid}`, {
+        const response = await fetch(URL + `/tutor/availability/recurring?userID=${userid}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

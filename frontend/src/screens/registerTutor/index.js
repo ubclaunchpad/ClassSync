@@ -4,19 +4,21 @@ import "./index.css"; // Import the CSS file for styling
 import { MainContentLayout } from '../../components/MainContentLayout';
 import RegisterUserForm from '../../components/RegisterUserForm';
 
+const URL = process.env.REACT_APP_API_URL
+
 const RegisterTutor = (props) => {
-    const {token} = useParams();
+    const { token } = useParams();
     const [access, setAccess] = useState(props.admin);
 
     useEffect(() => {
         const fetchData = async () => {
             if (!props.admin && token) {
                 try {
-                    const response = await fetch(`http://localhost:8080/token/${token}`);
+                    const response = await fetch(URL + `/token/${token}`);
                     if (response.ok) {
                         setAccess(true);
                     }
-                } catch(error) {
+                } catch (error) {
                     console.log("Token not found");
                     console.error('Error:', error);
                 }
@@ -31,7 +33,7 @@ const RegisterTutor = (props) => {
                 <div className="screen-container">
 
                     <div className='register-tutor-container'>
-                        <RegisterUserForm role='tutor' redirect='/tutor/login' admin={props.admin} token={token}/>
+                        <RegisterUserForm role='tutor' redirect='/tutor/login' admin={props.admin} token={token} />
                     </div>
                 </div>
             ) : (
