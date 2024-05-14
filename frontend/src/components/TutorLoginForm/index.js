@@ -5,13 +5,13 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const TutorLoginForm = () => {
 
-    
+
   const { user, login, logout } = useAuth();
   const navigate = useNavigate();
 
   if (user && user.role === 'admin') {
     navigate("/tutorprofile");
-  
+
   } else {
     logout()
   }
@@ -35,7 +35,7 @@ const TutorLoginForm = () => {
       password: formData.password,
     };
 
-    const url = "http://localhost:8080"; // Replace with your actual API endpoint
+    const url = process.env.REACT_APP_API_URL
 
     const response = await fetch(url + "/tutor/login", {
       method: "POST",
@@ -58,8 +58,8 @@ const TutorLoginForm = () => {
     localStorage.setItem("firstName", result.firstName);
     localStorage.setItem("lastName", result.lastName);
 
-    const userData = { name: result.firstName + " " + result.lastName, role: 'tutor', courses:[] }; // Example user data
-    login(result.user);    
+    const userData = { name: result.firstName + " " + result.lastName, role: 'tutor', courses: [] }; // Example user data
+    login(result.user);
     navigate("/tutorprofile")
 
   };
@@ -101,7 +101,7 @@ const TutorLoginForm = () => {
             {errors?.password?.message && errors.password.message}
           </p>
         </div>
-     
+
         <button type="submit" className="login-submit-button">
           Log In
         </button>

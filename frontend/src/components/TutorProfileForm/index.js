@@ -13,7 +13,7 @@ const TutorProfileForm = (props) => {
     const [description, setDescription] = useState(props.profileData.description);
     const [teleport_link, setTeleport_link] = useState(props.profileData.link);
     const [languages, setLanguages] = useState(props.profileData.languages);
-    const url = "http://localhost:8080"; // Replace with your actual API endpoint
+    const url = process.env.REACT_APP_API_URL
 
     // console.log("Courses ", courses)
     console.log("Options ", props.offerings)
@@ -114,7 +114,7 @@ const TutorProfileForm = (props) => {
 
 
                 <div className="input-row">
-                    
+
                     <div className="input-column">
                         <label className="input-label">
                             Email
@@ -129,18 +129,18 @@ const TutorProfileForm = (props) => {
 
                             />
                         </label>
-                     
+
                         <label className="input-label">
                             Teleport Link
-                            <input type="text" value={teleport_link} 
-                            onChange={(e) => setTeleport_link(e.target.value)}
-                            
+                            <input type="text" value={teleport_link}
+                                onChange={(e) => setTeleport_link(e.target.value)}
+
                             />
                         </label>
-                      
+
                     </div>
                     <div className="input-column">
-                  
+
                         <label className="input-label">
                             University
                             <input
@@ -167,8 +167,8 @@ const TutorProfileForm = (props) => {
                                 onChange={(e) => setLanguages(e.target.value)}
                             />
                         </label>
-                   
-                
+
+
                         {/* <label className="input-label">
                             About Me
                             <textarea
@@ -178,14 +178,14 @@ const TutorProfileForm = (props) => {
                                 maxLength={1000}
                             ></textarea>
                         </label> */}
-                      
+
                     </div>
                 </div>
                 <div className='input-row'>
 
-                <div className='input-column' style={{width: '100%', marginTop: '-20px'}}>
+                    <div className='input-column' style={{ width: '100%', marginTop: '-20px' }}>
 
-                <label className="input-label">
+                        <label className="input-label">
                             Summary Description (Headline)
                             <textarea
                                 className="description-input"
@@ -194,7 +194,7 @@ const TutorProfileForm = (props) => {
                                 style={{ minHeight: '2em' }}
                             />
                         </label>
-                <label className="input-label">
+                        <label className="input-label">
                             About Me
                             <textarea
                                 className="bio-input"
@@ -203,14 +203,14 @@ const TutorProfileForm = (props) => {
                                 maxLength={1000}
                             ></textarea>
                         </label>
-                        <input 
-                    type="submit" 
-                    value="Submit" 
-                    style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} 
-                />  
-                        </div>
-                        
-                        </div>
+                        <input
+                            type="submit"
+                            value="Submit"
+                            style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
+                        />
+                    </div>
+
+                </div>
                 {/* <label className="input-label" style={{ width: '100%' }}>
                     Course Offerings
                 </label>
@@ -222,9 +222,9 @@ const TutorProfileForm = (props) => {
                     value={selectedOptions}
                     isDisabled={true}
                 /> */}
-                        </div>
-            
-            
+            </div>
+
+
         </form>
 
 

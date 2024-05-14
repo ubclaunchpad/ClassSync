@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "../../components/Calendar/Calendar";
 
+const URL = process.env.REACT_APP_API_URL
+
 export default function ScheduleSelector() {
     const [isLoading, setIsLoading] = useState(false);
     const [calendar, setCalendar] = useState([]);
@@ -36,7 +38,7 @@ export default function ScheduleSelector() {
                 5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
-            const response = await fetch("http://localhost:8080/tutor/availability", {
+            const response = await fetch(URL + "/tutor/availability", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

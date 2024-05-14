@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Chip, Menu, MenuList, alpha } from '@material-ui/core';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { Checkbox, TextField, Box, Button, MenuItem, Dialog,DialogActions,DialogContent,DialogTitle,InputLabel,OutlinedInput,FormControl,Select } from '@mui/material';
+import { Checkbox, TextField, Box, Button, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, OutlinedInput, FormControl, Select } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -14,6 +14,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { set } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { border, style } from '@mui/system';
+const URL = process.env.REACT_APP_API_URL
+
 
 const TutorsList = () => {
     const [endDate, setEndDate] = useState(Date.now())
@@ -29,7 +31,7 @@ const TutorsList = () => {
     const fetchData = async () => {
         try {
             // Getting all tutors
-            let urlTutors = "http://localhost:8080/tutors"
+            let urlTutors = URL + "/tutors"
             const teacherListResponse = await fetch(urlTutors);
             const teacherListData = await teacherListResponse.json();
             console.log(teacherListData)
@@ -38,13 +40,13 @@ const TutorsList = () => {
 
 
             // Getting all tutor offerings
-            let urlTutorOfferings = "http://localhost:8080/tutor_offerings"
+            let urlTutorOfferings = URL + "/tutor_offerings"
             const offeringsListResponse = await fetch(urlTutorOfferings);
             const offeringsListData = await offeringsListResponse.json();
             setOfferings(offeringsListData);
 
             // Getting all courses
-            let urlCourses = "http://localhost:8080/courses"
+            let urlCourses = URL + "/courses"
             const coursesListResponse = await fetch(urlCourses);
             const coursesListData = await coursesListResponse.json();
             console.log(coursesListData)
@@ -133,7 +135,7 @@ const TutorsList = () => {
     // }
     const copyToken = async () => {
         try {
-            const response = await fetch('http://localhost:8080/token');
+            const response = await fetch(URL + '/token');
             const data = await response.json();
 
             // Now you have the token in `data`, you can copy it to clipboard
@@ -158,7 +160,7 @@ const TutorsList = () => {
     };
 
     const renewTutors = async () => {
-        const url = "http://localhost:8080/renew";
+        const url = URL + "/renew";
         const pstDate = new Date(new Date(endDate).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
         const data = {
             selectedTutors: selectedTutors,
@@ -183,50 +185,75 @@ const TutorsList = () => {
     }
 
 
-// Consts for AddCourse DialogBox
-const [openBox, setOpenBox] = useState(false);
-const [courseButtonName, setCourseButtonName] = useState('Add Course');
-const [currTutor, setCurrTutor] = useState(null);
-const [nonSelectedCourses, setNonSelectedCourses] = useState({});
-const handleAddCourse = (tutorid) => {
-    try {
-        if (openBox) {
-            setOpenBox(false);
-            setCourseButtonName('Add Course');
-            setCurrTutor(null);
-            setNonSelectedCourses(null);
-        } else {
-            setOpenBox(true);
-            setCourseButtonName('Done Editing');
-            setCurrTutor(tutorid);
-            console.log("Selected courses are ", findCourses(tutorid));
-            const tutorcourses = findCourses(tutorid);
-            console.log("Non selected courses are ", Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
-            setNonSelectedCourses(Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
+    // Consts for AddCourse DialogBox
+    const [openBox, setOpenBox] = useState(false);
+    const [courseButtonName, setCourseButtonName] = useState('Add Course');
+    const [currTutor, setCurrTutor] = useState(null);
+    const [nonSelectedCourses, setNonSelectedCourses] = useState({});
+    const handleAddCourse = (tutorid) => {
+        try {
+            if (openBox) {
+                setOpenBox(false);
+                setCourseButtonName('Add Course');
+                setCurrTutor(null);
+                setNonSelectedCourses(null);
+            } else {
+                setOpenBox(true);
+                setCourseButtonName('Done Editing');
+                setCurrTutor(tutorid);
+                console.log("Selected courses are ", findCourses(tutorid));
+                const tutorcourses = findCourses(tutorid);
+                console.log("Non selected courses are ", Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
+                setNonSelectedCourses(Object.keys(courses)?.filter(courseid => !tutorcourses.includes(parseInt(courseid))));
 
+            }
+        } catch (error) {
+            console.log('Error:', error);
         }
-    } catch (error) {
-        console.log('Error:', error);
     }
-}
-const [state, setState] = useState(null);
+    const [state, setState] = useState(null);
 
-const handleTutorCourseEdits = async(tutor_id, course_id, action) => {
-    try {
-        upateChanges();
-        if (action === 'add') {
+    const handleTutorCourseEdits = async (tutor_id, course_id, action) => {
+        try {
+            upateChanges();
+            if (action === 'add') {
 
-            if (!findCourses(tutor_id)?.includes(course_id)) {
-                // Send request to add course to tutor
+                if (!findCourses(tutor_id)?.includes(course_id)) {
+                    // Send request to add course to tutor
+                    try {
+                        await fetch(URL + "/EditTutorCourseOffering", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ tutor_id: tutor_id, course_id: course_id, action: action })
+                        });
+
+                        // const result = await response.json();
+                        await fetchData();
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+
+
+                    console.log('Add tutor course', tutor_id, course_id, action);
+                    setOfferings([...offerings, { tutor_id, course_id }]);
+                    setNonSelectedCourses(nonSelectedCourses.filter(courseid => courseid !== course_id));
+                } else {
+                    console.log('Tutor already has this course');
+                }
+
+            } else if (action === 'delete') {
+                // Send request to remove course from tutor
                 try {
-                    await fetch("http://localhost:8080/EditTutorCourseOffering", {
+                    await fetch(URL + "/EditTutorCourseOffering", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({tutor_id: tutor_id, course_id: course_id, action: action})
+                        body: JSON.stringify({ tutor_id: tutor_id, course_id: course_id, action: action })
                     });
-            
+
                     // const result = await response.json();
                     await fetchData();
                 } catch (error) {
@@ -234,45 +261,20 @@ const handleTutorCourseEdits = async(tutor_id, course_id, action) => {
                 }
 
 
-                console.log('Add tutor course', tutor_id, course_id, action);
-                setOfferings([...offerings, { tutor_id, course_id }]);
-                setNonSelectedCourses(nonSelectedCourses.filter(courseid => courseid !== course_id));
+                console.log('Removed tutor course', tutor_id, course_id, action);
+                setOfferings(offerings.filter(offering => !(offering.tutor_id === tutor_id && offering.course_id === course_id)));
+                setNonSelectedCourses([...nonSelectedCourses, course_id]);
             } else {
-                console.log('Tutor already has this course');
+                console.error('Invalid action', action);
             }
-    
-        } else if (action === 'delete') {
-            // Send request to remove course from tutor
-            try {
-                await fetch("http://localhost:8080/EditTutorCourseOffering", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({tutor_id: tutor_id, course_id: course_id, action: action})
-                });
-        
-                // const result = await response.json();
-                await fetchData();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-
-            console.log('Removed tutor course', tutor_id, course_id, action);
-            setOfferings(offerings.filter(offering => !(offering.tutor_id === tutor_id && offering.course_id === course_id)));
-            setNonSelectedCourses([...nonSelectedCourses, course_id]);
-        } else {
-            console.error('Invalid action', action);
+        } catch (error) {
+            console.log('Error:', error);
         }
-    } catch (error) {
-        console.log('Error:', error);
     }
-}
-const upateChanges= () => {
-    console.log("Changes made");
-    setState(state);
-}
+    const upateChanges = () => {
+        console.log("Changes made");
+        setState(state);
+    }
 
     return (
         <MainContentLayout
@@ -310,54 +312,54 @@ const upateChanges= () => {
                         </svg>
                     </button>
 
-<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <a 
-        href="/allTutors" 
-        style={{
-            display: 'inline-block',
-            marginTop: '10px',
-            padding: '10px 20px',
-            backgroundColor: '#007BFF', // Change this to match your theme color
-            color: 'white',
-            textDecoration: 'none',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontSize: '16px',
-            transition: 'all 0.3s ease'
-        }}
-    >
-        View Tutor Profiles
-    </a>  
-</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <a
+                            href="/allTutors"
+                            style={{
+                                display: 'inline-block',
+                                marginTop: '10px',
+                                padding: '10px 20px',
+                                backgroundColor: '#007BFF', // Change this to match your theme color
+                                color: 'white',
+                                textDecoration: 'none',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            View Tutor Profiles
+                        </a>
+                    </div>
 
-{openBox && <Box
-      height={200}
-      width={200}
-      my={2}
-      display="flex"
-      alignItems="center"
-      sx={{ border: '2px solid grey' }}
-      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow:'scroll', height:'50%', width:'90%'}}
-    >
-      <MenuList>
-        {nonSelectedCourses.map((course_id) => (
-            <MenuItem 
-            style={{outline:'1px solid black', width:'100%'}}
-            
-            onClick={() => handleTutorCourseEdits(currTutor, course_id, 'add')}>{`${courses[course_id].course_name}, ${courses[course_id].course_difficulty}`}</MenuItem>
-        ))}
-      </MenuList>
-    </Box>}
-</div>
+                    {openBox && <Box
+                        height={200}
+                        width={200}
+                        my={2}
+                        display="flex"
+                        alignItems="center"
+                        sx={{ border: '2px solid grey' }}
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'scroll', height: '50%', width: '90%' }}
+                    >
+                        <MenuList>
+                            {nonSelectedCourses.map((course_id) => (
+                                <MenuItem
+                                    style={{ outline: '1px solid black', width: '100%' }}
 
-            
+                                    onClick={() => handleTutorCourseEdits(currTutor, course_id, 'add')}>{`${courses[course_id].course_name}, ${courses[course_id].course_difficulty}`}</MenuItem>
+                            ))}
+                        </MenuList>
+                    </Box>}
+                </div>
+
+
             }>
 
-                
 
-                   <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <div className="date-picker-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', maxHeight: '75px', marginTop: '10px', marginBottom: '10px' }}>
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="date-picker-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '20px', maxHeight: '75px', marginTop: '10px', marginBottom: '10px' }}>
 
                     <div style={{ marginBottom: '0px', display: 'flex', alignItems: 'center' }}>
                         <div style={{
@@ -465,58 +467,58 @@ const upateChanges= () => {
                             </tr>
                             {expandedRow === index && (
                                 <tr>
-                                      <td colSpan="7">
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '15px', paddingLeft: '10px', paddingRight: '10px' }} className="registration__row-expand-content">                        
-                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom:'20px' }}>
-                            <div >                                
-                            <strong>Major</strong> <br></br>
-                               {tutor.major}
-                            </div>
-                            <div>                                <strong>University</strong> <br></br>
-                                {tutor.university}
-                            </div>
-                            <div >                                <strong>Languages</strong> <br></br>
-                                {tutor.languages}
-                            </div>
-                            </div>
-                          
-                            <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', width: '100%' }}>
-                            <div style={{ marginBottom: '20px' }}>                                <strong>Teleport Link</strong> <br></br>
-                                <a href='https://teleport.org'>{tutor.link}</a>
-                            </div> 
-                            <div style={{ marginBottom: '20px' }}>                                <strong>Email</strong> <br></br>
-                                <a href='mailto:john.doe@example.com'>{tutor.email}</a>
-                            </div> 
-                            <div style={{ marginBottom: '20px' }}>                            <strong>Dashboard</strong> <br></br>
+                                    <td colSpan="7">
 
-                                <a href='https://teleport.org'>View analytics</a>
-                            </div> 
-                            <div style={{ marginBottom: '20px' }}>                                <strong>Max Hours</strong> <br></br>
-                               {tutor.max_hours}
-                            </div> 
-                            <div >
-                                
-                                <strong>Courses</strong>
-                                {findCourses(tutor.tutor_id)?.map((id) => (
-                                    <Chip 
-                                        label={`${courses[id]?.course_name}, ${courses[id]?.course_difficulty}`} 
-                                        color='default' 
-                                        style={{backgroundColor:alpha(courses[id]?.color, 0.5), margin: '5px'}} 
-                                        variant='outlined' 
-                                        onDelete={() => handleTutorCourseEdits(tutor.tutor_id, id, 'delete')}
-                                    />
-                                ))}
-                                <Chip 
-                                    label={courseButtonName}
-                                    color='default'
-                                    style={{margin: '5px'}}
-                                    onClick={() => handleAddCourse(tutor.tutor_id)}
-                                    clickable
-                                />
-                            </div>
-                        </div>
-                    </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '15px', paddingLeft: '10px', paddingRight: '10px' }} className="registration__row-expand-content">
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '20px' }}>
+                                                <div >
+                                                    <strong>Major</strong> <br></br>
+                                                    {tutor.major}
+                                                </div>
+                                                <div>                                <strong>University</strong> <br></br>
+                                                    {tutor.university}
+                                                </div>
+                                                <div >                                <strong>Languages</strong> <br></br>
+                                                    {tutor.languages}
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', width: '100%' }}>
+                                                <div style={{ marginBottom: '20px' }}>                                <strong>Teleport Link</strong> <br></br>
+                                                    <a href='https://teleport.org'>{tutor.link}</a>
+                                                </div>
+                                                <div style={{ marginBottom: '20px' }}>                                <strong>Email</strong> <br></br>
+                                                    <a href='mailto:john.doe@example.com'>{tutor.email}</a>
+                                                </div>
+                                                <div style={{ marginBottom: '20px' }}>                            <strong>Dashboard</strong> <br></br>
+
+                                                    <a href='https://teleport.org'>View analytics</a>
+                                                </div>
+                                                <div style={{ marginBottom: '20px' }}>                                <strong>Max Hours</strong> <br></br>
+                                                    {tutor.max_hours}
+                                                </div>
+                                                <div >
+
+                                                    <strong>Courses</strong>
+                                                    {findCourses(tutor.tutor_id)?.map((id) => (
+                                                        <Chip
+                                                            label={`${courses[id]?.course_name}, ${courses[id]?.course_difficulty}`}
+                                                            color='default'
+                                                            style={{ backgroundColor: alpha(courses[id]?.color, 0.5), margin: '5px' }}
+                                                            variant='outlined'
+                                                            onDelete={() => handleTutorCourseEdits(tutor.tutor_id, id, 'delete')}
+                                                        />
+                                                    ))}
+                                                    <Chip
+                                                        label={courseButtonName}
+                                                        color='default'
+                                                        style={{ margin: '5px' }}
+                                                        onClick={() => handleAddCourse(tutor.tutor_id)}
+                                                        clickable
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
 
 
 

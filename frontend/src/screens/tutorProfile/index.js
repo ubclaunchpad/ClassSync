@@ -5,7 +5,7 @@ import TutorProfileForm from '../../components/TutorProfileForm';
 
 const TutorProfile = () => {
     const name = localStorage.getItem('fname') || "";
-    const url = "http://localhost:8080";
+    const url = process.env.REACT_APP_API_URL
 
     const [maxHours, setMaxHours] = useState();
     const [university, setUniversity] = useState('');

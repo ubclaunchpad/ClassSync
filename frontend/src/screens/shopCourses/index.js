@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react';
 import { MainContentLayout } from '../../components/MainContentLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+const URL = process.env.REACT_APP_API_URL
+
+
 const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
@@ -13,13 +16,13 @@ const ShopCourses = () => {
 
     const fetchData = async () => {
         try {
-            let url = "http://localhost:8080/tutor/offerings"
+            let url = URL + "/tutor/offerings"
             const coursesResponse = await fetch(url);
             const coursesData = await coursesResponse.json();
             console.log("Courses Data", coursesData);
             setCourses(coursesData);
 
-            url = `http://localhost:8080/guardian/students`
+            url = URL + `/guardian/students`
             const studentsResponse = await fetch(url, {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('token'), // replace 'yourToken' with your actual token
@@ -57,7 +60,7 @@ const ShopCourses = () => {
     const handleRegister = async () => {
         setRegistrationError(null);
         console.log(`Registered ${selectedStudent.name} (id: ${selectedStudent.student_id}) for course with id: ${selectedCourse.course_id}`);
-        let url = "http://localhost:8080/registrations";
+        let url = URL + "/registrations";
         try {
             console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", selectedStudent.student_id, " at url: ", url, " with method: POST");
 

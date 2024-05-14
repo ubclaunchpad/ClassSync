@@ -9,6 +9,7 @@ import { MainContentLayout } from "../../components/MainContentLayout";
 import { useAuth } from "../../contexts/AuthContext";
 import "./index.css"; // Import your custom styles
 
+const URL = process.env.REACT_APP_API_URL
 
 
 
@@ -30,7 +31,7 @@ export default function ScheduleSelector() {
     const [startDate, setStartDate] = useState(startOfWeek(new Date(), { weekStartsOn: 0 }));
     console.log("Schedule Start ", startDate);
     async function getAvailability() {
-        const response = await fetch(`http://localhost:8080/tutor/availability/schedule?userID=${userID}&startDate=${startDate.toISOString().split('T')[0]}`, {
+        const response = await fetch(URL + `/tutor/availability/schedule?userID=${userID}&startDate=${startDate.toISOString().split('T')[0]}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -172,7 +173,7 @@ export default function ScheduleSelector() {
                 5: scheduleByDay[5],
                 6: scheduleByDay[6]
             };
-            const response = await fetch("http://localhost:8080/tutor/availability", {
+            const response = await fetch(URL + "/tutor/availability", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -200,7 +201,7 @@ export default function ScheduleSelector() {
     const minDate = startOfWeek(today, { weekStartsOn: 0 });
 
     async function getDates() {
-        const response = await fetch(`http://localhost:8080/tutor/availability/dates?id=${localStorage.getItem(userID)}`, {
+        const response = await fetch(URL + `/tutor/availability/dates?id=${localStorage.getItem(userID)}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -217,7 +218,7 @@ export default function ScheduleSelector() {
     const clearAvailability = async () => {
         console.log("Clearing Availability")
 
-        let url = `http://localhost:8080/availability/clear`;
+        let url = URL + `/availability/clear`;
         const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -238,7 +239,7 @@ export default function ScheduleSelector() {
     const resetAvailability = async () => {
         console.log("Resetting Availability")
 
-        let url = `http://localhost:8080/availability/reset`;
+        let url = URL + `/availability/reset`;
 
         const response = await fetch(url, {
             method: "POST",

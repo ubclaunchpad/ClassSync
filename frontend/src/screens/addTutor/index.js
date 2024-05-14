@@ -2,6 +2,8 @@ import Header from "../../components/Header";
 import Banner from "../../components/Banner";
 import React, { useState, useEffect } from "react";
 
+const URL = process.env.REACT_APP_API_URL
+
 export default function AddTutor() {
   const [email, setEmail] = useState("");
 
@@ -13,7 +15,7 @@ export default function AddTutor() {
     e.preventDefault();
     try {
       const res = await fetch(
-        "http://localhost:8080/communication/send-email",
+        URL + "/communication/send-email",
         {
           body: JSON.stringify({
             message:
