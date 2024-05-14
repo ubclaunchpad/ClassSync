@@ -11,6 +11,8 @@ import { EditCourseModal } from '../../components/EditCourseModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
 import Chip from '@mui/material/Chip';
+const URL = process.env.REACT_APP_API_URL
+
 
 const Courses = () => {
     const [courses, setCourses] = useState([])
@@ -22,15 +24,15 @@ const Courses = () => {
     const [edited, setEdited] = useState(0);
 
     const fetchCourses = async () => {
-        let url = `http://localhost:8080/courses`;
+        let url = URL + `/courses`;
         const response = await fetch(url);
         const registrations = await response.json();
         console.log("Registrations", registrations);
         setCourses(registrations);
 
-        url = "http://localhost:8080/course/tutor"
+        url = URL + "/course/tutor"
 
-        url = "http://localhost:8080/tutors"
+        url = URL + "/tutors"
     };
 
     useEffect(() => {
@@ -103,60 +105,60 @@ const Courses = () => {
         });
         setCourses(sortedCourses);
     };
-const handleSortByDifficulty = () => {
-    resetSort();
-    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    setSortDirection(newSortDirection);
-    setSortedByDifficulty(true);
+    const handleSortByDifficulty = () => {
+        resetSort();
+        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        setSortDirection(newSortDirection);
+        setSortedByDifficulty(true);
 
 
-    const difficultyMap = {
-        "Beginner": 1,
-        "Intermediate": 2,
-        "Advanced": 3
+        const difficultyMap = {
+            "Beginner": 1,
+            "Intermediate": 2,
+            "Advanced": 3
+        };
+
+        const sortedCourses = [...courses];
+        sortedCourses.sort((a, b) => {
+            const aDifficulty = difficultyMap[a.course_difficulty] || 0;
+            const bDifficulty = difficultyMap[b.course_difficulty] || 0;
+            if (aDifficulty === bDifficulty) {
+                // If difficulties are equal, sort by course_name alphabetically
+                return a.course_name.localeCompare(b.course_name);
+            }
+            return newSortDirection === "asc"
+                ? aDifficulty - bDifficulty
+                : bDifficulty - aDifficulty;
+        });
+        setCourses(sortedCourses);
     };
 
-    const sortedCourses = [...courses];
-sortedCourses.sort((a, b) => {
-    const aDifficulty = difficultyMap[a.course_difficulty] || 0;
-    const bDifficulty = difficultyMap[b.course_difficulty] || 0;
-    if (aDifficulty === bDifficulty) {
-        // If difficulties are equal, sort by course_name alphabetically
-        return a.course_name.localeCompare(b.course_name);
-    }
-    return newSortDirection === "asc"
-      ? aDifficulty - bDifficulty
-      : bDifficulty - aDifficulty;
-});
-    setCourses(sortedCourses);
-};
+    const handleSortByTitle = () => {
+        resetSort();
+        const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        setSortDirection(newSortDirection);
+        setSortedByTitle(true);
 
-const handleSortByTitle = () => {
-    resetSort();
-    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    setSortDirection(newSortDirection);
-    setSortedByTitle(true);
+        const difficultyMap = {
+            "Beginner": 1,
+            "Intermediate": 2,
+            "Advanced": 3
+        };
 
-    const difficultyMap = {
-        "Beginner": 1,
-        "Intermediate": 2,
-        "Advanced": 3
+        const sortedCourses = [...courses];
+        sortedCourses.sort((a, b) => {
+            const titleComparison = a.course_name.localeCompare(b.course_name);
+            if (titleComparison !== 0) {
+                // If course names are not equal, sort by course_name
+                return newSortDirection === "asc" ? titleComparison : -titleComparison;
+            }
+            // If course names are equal, sort by difficulty
+            const aDifficulty = difficultyMap[a.course_difficulty];
+            const bDifficulty = difficultyMap[b.course_difficulty];
+            return aDifficulty - bDifficulty
+        });
+        setCourses(sortedCourses);
     };
-
-    const sortedCourses = [...courses];
-    sortedCourses.sort((a, b) => {
-        const titleComparison = a.course_name.localeCompare(b.course_name);
-        if (titleComparison !== 0) {
-            // If course names are not equal, sort by course_name
-            return newSortDirection === "asc" ? titleComparison : -titleComparison;
-        }
-        // If course names are equal, sort by difficulty
-        const aDifficulty = difficultyMap[a.course_difficulty] ;
-        const bDifficulty = difficultyMap[b.course_difficulty] ;
-        return  aDifficulty - bDifficulty
-    });
-    setCourses(sortedCourses);
-};
     const resetSort = () => {
         setSortedByTutors(false)
         setSortedByEnrollments(false)
@@ -178,42 +180,42 @@ const handleSortByTitle = () => {
     };
 
 
-const getDifficultyChip = (difficulty) => {
+    const getDifficultyChip = (difficulty) => {
 
 
-    let label = '';
-    let color = '';
+        let label = '';
+        let color = '';
 
-    switch (getDifficultyIndex(difficulty)) {
-        case 1:
-            label = 'Beginner';
-            color = '#A2DED0 ';
-            break;
-        case 2:
-            label = 'Intermediate';
-            color = '#FFD699';
-            break;
-        case 3:
-            label = 'Advanced';
-            color = '#FF9AA2 ';
-            break;
-        default:
-            label = 'Unknown';
-            color = 'grey';
-    }
+        switch (getDifficultyIndex(difficulty)) {
+            case 1:
+                label = 'Beginner';
+                color = '#A2DED0 ';
+                break;
+            case 2:
+                label = 'Intermediate';
+                color = '#FFD699';
+                break;
+            case 3:
+                label = 'Advanced';
+                color = '#FF9AA2 ';
+                break;
+            default:
+                label = 'Unknown';
+                color = 'grey';
+        }
 
-   return (
-    <Chip
-        label={label}
-        style={{
-            backgroundColor: color,
-            color: 'black',
-            minWidth: '100px', // adjust this value as needed
-            justifyContent: 'center',
-        }}
-    />
-);
-};
+        return (
+            <Chip
+                label={label}
+                style={{
+                    backgroundColor: color,
+                    color: 'black',
+                    minWidth: '100px', // adjust this value as needed
+                    justifyContent: 'center',
+                }}
+            />
+        );
+    };
 
 
     return (
@@ -251,7 +253,7 @@ const getDifficultyChip = (difficulty) => {
                 <thead>
                     <tr style={{ borderBottom: '1px solid rgb(221, 221, 221)', backgroundColor: '#103da2', color: '#fff' }}>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" fill='white'><rect fill="none" height="24" width="24"/><path d="M3,10h11v2H3V10z M3,8h11V6H3V8z M3,16h7v-2H3V16z M18.01,12.87l0.71-0.71c0.39-0.39,1.02-0.39,1.41,0l0.71,0.71 c0.39,0.39,0.39,1.02,0,1.41l-0.71,0.71L18.01,12.87z M17.3,13.58l-5.3,5.3V21h2.12l5.3-5.3L17.3,13.58z"/></svg></th>
+                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" fill='white'><rect fill="none" height="24" width="24" /><path d="M3,10h11v2H3V10z M3,8h11V6H3V8z M3,16h7v-2H3V16z M18.01,12.87l0.71-0.71c0.39-0.39,1.02-0.39,1.41,0l0.71,0.71 c0.39,0.39,0.39,1.02,0,1.41l-0.71,0.71L18.01,12.87z M17.3,13.58l-5.3,5.3V21h2.12l5.3-5.3L17.3,13.58z" /></svg></th>
                         <th
                             style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}
                             onClick={handleSortByDifficulty}
@@ -259,13 +261,13 @@ const getDifficultyChip = (difficulty) => {
                             Difficulty
                             {sortedByDifficulty ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
                         </th>
-<th
-    style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}
-    onClick={handleSortByTitle}
->
-    Title
-    {sortedByTitle ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
-</th>
+                        <th
+                            style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', cursor: 'pointer' }}
+                            onClick={handleSortByTitle}
+                        >
+                            Title
+                            {sortedByTitle ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
+                        </th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold', width: '80px' }}>Age</th>
                         <th style={{ padding: '10px', textAlign: 'left', fontWeight: 'bold' }}>Pre-requisites</th>
                         <th
@@ -300,14 +302,14 @@ const getDifficultyChip = (difficulty) => {
                                         </div>
                                     )}
                                 </td>
-                           
+
                                 <td style={{ padding: '10px', textAlign: 'left' }}>
-                    {getDifficultyChip(course.course_difficulty)}                                    </td>
-                    <td style={{ padding: '10px', textAlign: 'left' }}>        {course.course_name}
+                                    {getDifficultyChip(course.course_difficulty)}                                    </td>
+                                <td style={{ padding: '10px', textAlign: 'left' }}>        {course.course_name}
 
 
-                               
-</td>
+
+                                </td>
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{course.target_age}</td>
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{course.prerequisites}</td>
                                 <td style={{ padding: '10px', textAlign: 'center' }}>{course.enrollments}</td>

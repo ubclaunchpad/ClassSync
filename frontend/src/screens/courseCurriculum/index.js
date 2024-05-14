@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { CourseFilesTab } from "../../components/CourseFilesTab";
 import { useParams } from "react-router-dom";
-const url = "http://localhost:8080";
+const url = process.env.REACT_APP_API_URL
 
 const sampleData = {
   name: "Beginner Scratch",
@@ -79,6 +79,7 @@ const sampleData = {
     },
   ],
 };
+const URL = process.env.REACT_APP_API_URL
 
 export const CourseCurriculumView = () => {
   const [fileList, setFileList] = useState([]);
@@ -96,7 +97,7 @@ export const CourseCurriculumView = () => {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:8080/course/view?id=${course_id}`)
+    fetch(URL + `/course/view?id=${course_id}`)
       .then((response) => {
         if (response.ok) {
           return response.text().then((text) => {

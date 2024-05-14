@@ -6,6 +6,7 @@ import { Rating } from "primereact/rating";
 import { Button } from "primereact/button";
 import { Redirect, useNavigate } from "react-router-dom";
 import { clsx } from "clsx";
+const URL = process.env.REACT_APP_API_URL
 
 export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
   const tutorName = tutor.firstname + " " + tutor.lastname;
@@ -15,7 +16,7 @@ export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
   const [offerings, setOfferings] = useState([]);
   const [showMore, setShowMore] = useState(false);
   //   console.log(courses);
-  const url = "http://localhost:8080";
+  const url = URL;
   const frontEndUrl = "http://localhost:3000";
   const navigate = useNavigate()
 

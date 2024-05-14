@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core";
 import { MainContentLayout } from "../../components/MainContentLayout";
 
+const URL = process.env.REACT_APP_API_URL
+
 const ClassRecordForm = () => {
   const [learningGoals, setLearningGoals] = useState([]);
   const [selectedTab, setSelectedTab] = useState(2);
@@ -38,14 +40,14 @@ const ClassRecordForm = () => {
   let { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:8080/class?id=${id}`)
+    fetch(URL + `/class?id=${id}`)
       .then((response) => response.json())
       .then((data) => {
         setClassInfo(data);
       })
       .catch((error) => console.error("Error:", error));
 
-    fetch(`http://localhost:8080/booking/notes?id=${id}`)
+    fetch(URL + `/booking/notes?id=${id}`)
       .then((response) => response.json())
       .then((data) => {
         setClassDetails(data);
@@ -55,12 +57,12 @@ const ClassRecordForm = () => {
       })
       .catch((error) => console.error("Error:", error));
 
-    fetch(`http://localhost:8080/learninggoals?id=${id}`)
+    fetch(URL + `/learninggoals?id=${id}`)
       .then((response) => response.json())
       .then((data) => setGoals(data))
       .catch((error) => console.error("Error:", error));
 
-    fetch(`http://localhost:8080/course/files?id=${id}`)
+    fetch(URL + `/course/files?id=${id}`)
       .then((response) => response.json())
       .then((data) => {
         setFileList(data);
@@ -95,7 +97,7 @@ const ClassRecordForm = () => {
     // Call a local API to get shared files
     const getSharedFiles = async () => {
       const response = await fetch(
-        `http://localhost:8080/sharedFiles?id=${id}`
+        URL + `/sharedFiles?id=${id}`
       );
       const data = await response.json();
       console.log("Shared files are ", data);
@@ -107,7 +109,7 @@ const ClassRecordForm = () => {
 
   const handleFileShare = async () => {
     try {
-      const response = await fetch("http://localhost:8080/booking/files", {
+      const response = await fetch(URL + "/booking/files", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -185,7 +187,7 @@ const ClassRecordForm = () => {
 
     console.log("Saving data ", data);
     try {
-      let response = await fetch("http://localhost:8080/classInfo", {
+      let response = await fetch(URL + "/classInfo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -204,7 +206,7 @@ const ClassRecordForm = () => {
   };
 
   return (
-    <MainContentLayout rightColumnContent={  <div
+    <MainContentLayout rightColumnContent={<div
       style={{
         display: "flex",
         flex: 1,
@@ -469,7 +471,7 @@ const ClassRecordForm = () => {
               style={{ marginRight: "10px" }}
             />
             {selectedFiles.length === 0 &&
-            (!sharedFiles || sharedFiles.length === 0) ? (
+              (!sharedFiles || sharedFiles.length === 0) ? (
               <button
                 style={{
                   marginRight: "auto",
@@ -624,8 +626,8 @@ const ClassRecordForm = () => {
         </div>
       </div>
     </div>}>
-      <div style={{ display: "flex"}}>
-    
+      <div style={{ display: "flex" }}>
+
 
         {/* To the right - Red Div */}
         <div
@@ -713,7 +715,7 @@ const ClassRecordForm = () => {
                   ))}
                 </div>
                 {selectedTab ==
-                (classDetails.length > 0 ? classDetails.length - 1 : 0) ? (
+                  (classDetails.length > 0 ? classDetails.length - 1 : 0) ? (
                   <form
                     noValidate
                     autoComplete="off"
