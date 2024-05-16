@@ -41,6 +41,8 @@ const LoginForm = ({ role }) => {
   });
 
   const parentLogin = async (data) => {
+
+    console.log("URL Is ", url)
     const parentResponse = await fetch(url + "/parent/login", {
       method: "POST", // Specify the method
       headers: {
