@@ -1,4 +1,4 @@
-import con from "../../index.js";
+import con from "../../server.js";
 
 export class tutorRegistration {
   async renewTutors(tutors, enddate) {

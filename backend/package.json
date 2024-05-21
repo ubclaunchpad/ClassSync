@@ -8,7 +8,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "start": "nodemon index.js",
+        "start": "node server.js",
         "build": "npm run build",
         "test": "jest"
     },

@@ -1,4 +1,4 @@
-import con from "../../index.js";
+import con from "../../server.js";
 
 export default class adminAuth {
   async createUser(email, hashPassword, fname, lname) {
