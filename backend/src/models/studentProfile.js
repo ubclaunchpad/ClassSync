@@ -1,7 +1,7 @@
 // Database con.query() for studentProfile table
 //import con from "../config/database.js";
 
-import con from "../../server.js";
+import con from "../../app.js";
 
 export class StudentProfile {
 

@@ -8,7 +8,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "start": "node server.js",
+        "start": "node app.js",
         "build": "npm run build",
         "test": "jest"
     },

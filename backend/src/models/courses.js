@@ -1,4 +1,4 @@
-import con from "../../server.js";
+import con from "../../app.js";
 
 export class courses {
 
