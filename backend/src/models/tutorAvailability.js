@@ -1,4 +1,4 @@
-import con from "../../app.js";
+import con from "../../index.js";
 
 export class tutorAvailability {
   async deleteBooking(booking_id) {

@@ -1,4 +1,4 @@
-import con from "../../app.js";
+import con from "../../index.js";
 
 export class courses {
 
@@ -183,7 +183,7 @@ export class courses {
             client.release();
         }
     }
-
+    
     async getLearningGoalProgress(enrollmentId) {
         const client = await con.connect();
         try {
@@ -209,30 +209,30 @@ export class courses {
             client.release();
         }
     }
-    async getBookingInfo(booking_id) {
-        const client = await con.connect();
-        try {
-            return new Promise((resolve, reject) => {
-                client.query(
-                    'SELECT * from public.get_booking_info($1)',
-                    [booking_id],
-                    (error, results) => {
-                        if (error) {
-                            console.error('Error:', error);
-                            reject(error);
-                        } else {
-                            const course = results.rows[0];  // Retrieve course from results
-                            resolve(course);  // Resolve with the returned course
-                        }
+async getBookingInfo(booking_id) {
+    const client = await con.connect();
+    try {
+        return new Promise((resolve, reject) => {
+            client.query(
+                'SELECT * from public.get_booking_info($1)',
+                [booking_id],
+                (error, results) => {
+                    if (error) {
+                        console.error('Error:', error);
+                        reject(error);
+                    } else {
+                        const course = results.rows[0];  // Retrieve course from results
+                        resolve(course);  // Resolve with the returned course
                     }
-                );
-            });
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            client.release();
-        }
+                }
+            );
+        });
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        client.release();
     }
+}
 
     async getAllOfferings() {
         const client = await con.connect();

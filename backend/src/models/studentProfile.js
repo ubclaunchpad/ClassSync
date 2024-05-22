@@ -1,42 +1,42 @@
 // Database con.query() for studentProfile table
 //import con from "../config/database.js";
 
-import con from "../../app.js";
+import con from "../../index.js";
 
 export class StudentProfile {
 
-  async getStudentEnrollment(id) {
-    const client = await con.connect();
+ async getStudentEnrollment(id) {
+  const client = await con.connect();
 
-    try {
-      return new Promise((resolve, reject) => {
-        client.query(
-          `SELECT booking_id, link, start_time 
+  try {
+    return new Promise((resolve, reject) => {
+      client.query(
+        `SELECT booking_id, link, start_time 
          FROM bookings b 
          JOIN enrollments e ON e.enrollment_id = b.enrollment_id
          JOIN tutors t ON b.tutor_id = t.tutor_id
-         WHERE e.enrollment_id = $1`,
-          [id],
-          (error, results) => {
-            if (error) {
-              console.error("Error:", error);
-              reject(error);
-            } else {
-              resolve(results.rows);
-            }
+         WHERE e.enrollment_id = $1`, 
+        [id], 
+        (error, results) => {
+          if (error) {
+            console.error("Error:", error);
+            reject(error);
+          } else {
+            resolve(results.rows);
           }
-        );
-      });
-    } catch (err) {
-      console.log(err);
-    } finally {
-      client.release();
-    }
+        }
+      );
+    });
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.release();
   }
+}
 
   async getStudentsByGuardian(id) {
     const client = await con.connect();
-
+    
     client.query("SELECT * FROM tutors", (error, results) => {
       if (error) {
         console.error("Error:", error);

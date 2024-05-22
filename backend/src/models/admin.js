@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import con from "../../app.js";
+import con from "../../index.js";
 
 export class admin {
     saveToken(token) {
