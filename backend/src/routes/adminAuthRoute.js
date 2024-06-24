@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authorize from "../auth/authentication.js";
 import adminAuthController from "../controllers/adminAuthController.js";
+import adminRoute from "../routes/adminRoute.js";
 const router = Router();
 const admin = new adminAuthController();
 
@@ -56,4 +57,5 @@ router.post("/testing-auth-middleware", authorize("Admin"), (req, res) => {
     );
 });
 
+router.use("/", adminRoute)
 export default router;
