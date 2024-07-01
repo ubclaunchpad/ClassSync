@@ -6,7 +6,7 @@ const router = Router();
 const admin = new adminAuthController();
 
 router.get("/pingcheck", (_, res) => {
-  res.send("pong");
+  res.send("pingpong");
 });
 
 router.post("/signup", (req, res) => {
