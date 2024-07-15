@@ -32,6 +32,7 @@ import { useAuth } from "./contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import LogPage from "./components/LogPage";
 import { ViewAllCourses } from "./components/BrowseCourses";
+import AdminDash from "./components/AdminDash";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
@@ -116,7 +117,15 @@ function App() {
                   />
                 }
               />
-
+              <Route
+                path="/adminDash"
+                element={
+                  <PrivateRoute
+                    Component={AdminDash}
+                    roles={["admin"]}
+                  />
+                }
+              />
 
               <Route
                 path="/course/:id"
