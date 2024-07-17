@@ -27,12 +27,14 @@ import ClassRecordForm from "./screens/classRecord";
 import { CourseCurriculumView } from "./screens/courseCurriculum";
 import Layout from "./screens/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
+import TrialBookingCalendar from "./components/TrialBookingCalendar"
 
 import { useAuth } from "./contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import LogPage from "./components/LogPage";
 import { ViewAllCourses } from "./components/BrowseCourses";
 import AdminDash from "./components/AdminDash";
+import SelectCourses from "./screens/selectCourses";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
@@ -222,6 +224,20 @@ function App() {
                   <PrivateRoute Component={ShopCourses} roles={["guardian"]} />
                 }
               />
+              {/* sid = student id, and cid = course id */}
+              <Route
+                path="book/trial/:sid/course/:cid"
+                element={
+                  <PrivateRoute Component={TrialBookingCalendar} roles={["guardian"]} />
+                }
+              />
+              <Route
+                path="/trial/:id"
+                element={
+                  <PrivateRoute Component={SelectCourses} roles={["guardian"]} />
+                }
+              />
+
               <Route
                 path="/allTutors"
                 element={

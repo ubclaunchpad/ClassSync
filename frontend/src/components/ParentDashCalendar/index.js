@@ -26,27 +26,24 @@ const ParentDashCalendar = ({ students }) => {
 
     try {
       await Promise.all(students.map(async (student) => {
-        const url = URL + `/students/bookings/student/${student.student_id}`;
+        const url = URL + `/students/classes/${student.student_id}`;
         const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
-          data[0].get_enrollments_by_student_id_2.enrollments.map(enrollment => {
-            const courseTitle = enrollment.course_info.course_difficulty + " " + enrollment.course_info.course_name;
+          console.log(data)
 
-            if (enrollment.bookings != null) {
-              enrollment.bookings.map(booking => {
-                events.push({
-                  start: moment(booking.start_time).toDate(),
-                  end: moment(booking.start_time)
-                    .add(booking.session_duration, "minute")
-                    .toDate(),
-                  title: courseTitle,
-                  studentName: student.name,
-                  color: student.color,
-                  link: booking.link
-                })
-              })
-            }
+          data.map(booking => {
+
+            events.push({
+              start: moment(booking.start_time).toDate(),
+              end: moment(booking.start_time)
+                .add(booking.session_duration, "minute")
+                .toDate(),
+              title: booking.title,
+              studentName: student.name,
+              color: student.color,
+              link: booking.link
+            })
           })
         }
       }))

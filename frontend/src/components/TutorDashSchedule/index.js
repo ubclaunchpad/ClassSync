@@ -22,6 +22,7 @@ const TutorDashSchedule = () => {
       const response = await fetch(url);
       if (response.ok) {
         const bookings = await response.json();
+        console.log("Bookings are ", bookings)
         setBookings(bookings);
       }
     } catch (err) {
@@ -40,8 +41,14 @@ const TutorDashSchedule = () => {
     console.log("filtered bookings", filteredBookings);
   };
 
-  const handleTileClick = (classId) => {
-    navigate(`/class/${classId}`);
+  const handleTileClick = (booking) => {
+    if (booking.session_duration === 60) {
+
+      navigate(`/class/${booking.booking_id}`);
+    } else {
+      window.location.href = booking.link;
+
+    }
   };
 
 
@@ -67,7 +74,7 @@ const TutorDashSchedule = () => {
             console.log(booking.color);
             const tileStyle = { backgroundColor: booking.color };
             return (
-              <div style={tileStyle} className={"course-tile"} onClick={() => handleTileClick(booking.booking_id)}>
+              <div style={tileStyle} className={"course-tile"} onClick={() => handleTileClick(booking)}>
                 <div className="rectangle"></div>
                 <div className="name">
                   {booking.title}

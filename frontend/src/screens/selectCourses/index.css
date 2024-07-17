@@ -1,0 +1,28 @@
+.courses-container {
+    /* height: 150vh; */
+    /* overflow-y: auto; */
+}
+
+.course-label {
+    background-color: #8B4513;
+    /* brown */
+    color: #fff;
+    /* white */
+    padding: 5px 10px;
+    margin-right: 10px;
+}
+
+.course-info {
+    flex-grow: 1;
+}
+
+.register-button {
+    background-color: #0000FF;
+    /* blue */
+    color: #fff;
+    /* white */
+    padding: 5px 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
