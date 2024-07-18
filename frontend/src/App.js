@@ -86,7 +86,7 @@ function App() {
 
 
               <Route
-                path="/scholarship/:id/code/:code"
+                path="/funding/:funding/:id/code/:code"
                 element={
                   <PrivateRoute Component={ScholarshipRegistration} roles={["guardian"]} />
                 }

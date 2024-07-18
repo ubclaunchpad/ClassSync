@@ -12,7 +12,7 @@ const URL = process.env.REACT_APP_API_URL
 
 const ScholarshipRegistration = () => {
     const { user } = useAuth()
-    const { id, code } = useParams()
+    const { id, code, funding } = useParams()
     console.log(user)
     console.log(id)
     console.log(code)
@@ -37,7 +37,7 @@ const ScholarshipRegistration = () => {
 
 
             if (!!child) {
-                const response = await fetch(URL + `/token/scholarship/${id}/code/${code}`);
+                const response = await fetch(URL + `/token/scholarship/${funding}/${id}/code/${code}`);
                 if (response.ok) {
                     setAccess(true);
                 }
@@ -84,6 +84,12 @@ const ScholarshipRegistration = () => {
         setRegistrationError(null);
         console.log(`Registered ${child.name} (id: ${child.student_id}) for course with id: ${selectedCourse.course_id}`);
         let url = URL + "/registrations";
+        alert(JSON.stringify({
+            student_id: child.student_id,
+            course_id: selectedCourse.course_id,
+            registration_date: new Date().toISOString().slice(0, 10),
+            paid: funding
+        }))
         try {
             console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", child.student_id, " at url: ", url, " with method: POST");
 
@@ -96,6 +102,7 @@ const ScholarshipRegistration = () => {
                     student_id: child.student_id,
                     course_id: selectedCourse.course_id,
                     registration_date: new Date().toISOString().slice(0, 10),
+                    paid: funding
                 }),
             });
 
@@ -113,7 +120,7 @@ const ScholarshipRegistration = () => {
             console.log("Registered student");
             closeModal();
             try {
-                await fetch(URL + `/token/scholarship/${id}/code/${code}`, {
+                await fetch(URL + `/token/scholarship/${funding}/${id}/code/${code}`, {
                     method: 'DELETE',
                 });
 
