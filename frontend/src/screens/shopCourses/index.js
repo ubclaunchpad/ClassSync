@@ -319,16 +319,7 @@ const ShopCourses = () => {
                     </div>
 
                 ))}
-                {Object.entries(cart).map(([key, valueArray]) => (
-                    <div key={key}>
-                        <h3>{key}</h3>
-                        <ul>
-                            {valueArray.map((item, index) => (
-                                <li key={index}>{item.course_difficulty} {item.course_name}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+
             </div>
         </MainContentLayout>
     );
