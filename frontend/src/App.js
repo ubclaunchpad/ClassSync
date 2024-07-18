@@ -35,6 +35,7 @@ import LogPage from "./components/LogPage";
 import { ViewAllCourses } from "./components/BrowseCourses";
 import AdminDash from "./components/AdminDash";
 import SelectCourses from "./screens/selectCourses";
+import ScholarshipRegistration from "./screens/scholarshipRegistration";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
@@ -79,6 +80,16 @@ function App() {
               <Route
                 path="/registertutor/:token"
                 element={<RegisterTutor admin={false} />}
+              />
+
+
+
+
+              <Route
+                path="/scholarship/:id/code/:code"
+                element={
+                  <PrivateRoute Component={ScholarshipRegistration} roles={["guardian"]} />
+                }
               />
 
               <Route

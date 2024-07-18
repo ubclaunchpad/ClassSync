@@ -3,6 +3,8 @@ import { MainContentLayout } from "../../components/MainContentLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import RegistrationRow from "../../components/RegistrationRow";
+import Select from "react-select";
+
 import "./index.css";
 
 const URL = process.env.REACT_APP_API_URL
@@ -17,13 +19,21 @@ const Registrations = () => {
   const [sortedByPaid, setSortedByPaid] = useState(false);
   const [curExpand, setCurExpand] = useState();
 
+  const [students, setStudents] = useState([]);
+  const [studentId, setStudentId] = useState("");
+
 
   const fetchRegistrations = async () => {
-    const url = URL + `/registrations`;
+    let url = URL + `/registrations`;
     const response = await fetch(url);
     const registrations = await response.json();
     console.log("Registrations", registrations);
     setRegistrations(registrations);
+
+    url = URL + "/student";
+    const studentsResponse = await fetch(url);
+    const studentsData = await studentsResponse.json();
+    setStudents(studentsData);
   };
 
   useEffect(() => {
@@ -116,6 +126,17 @@ const Registrations = () => {
     setRegistrations(sortedRegistrations);
   };
 
+  const copyScholarshipLink = async () => {
+    try {
+      const response = await fetch(URL + '/token/scholarship/new/' + studentId.value);
+      const data = await response.json();
+
+      // Now you have the token in `data`, you can copy it to clipboard
+      navigator.clipboard.writeText("localhost:3000" + "/scholarship/" + data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
   const handleSortByDate = () => {
     resetSort();
     const newSortDirection = sortDirection === "asc" ? "desc" : "asc";
@@ -155,10 +176,58 @@ const Registrations = () => {
           <p>
             Additionally, you can track the progress of each course, seeing how
             many classes are completed, booked, and pending respectively.
-          </p>{" "}
-        </div>
+          </p>
+          <h4 style={{ color: "#333", marginBottom: "10px" }}>
+            Select student
+          </h4>
+          <Select
+            className="basic-single"
+            classNamePrefix="select"
+            isClearable={true}
+            isSearchable={true}
+            name="color"
+            value={studentId}
+            onChange={setStudentId}
+            options={students.map((student) => ({
+              value: student._id,
+              label: student._name,
+              guardian: student._guardian,
+            }))}
+            formatOptionLabel={({ label, guardian }) => (
+              <div>
+                <div>{label}</div>
+                <small
+                  style={{ fontSize: "0.8em", color: "gray" }}
+                >{`Guardian: ${guardian}`}</small>
+              </div>
+            )}
+          />
+
+          <button
+            disabled={!studentId}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: '10px',
+              padding: '10px 20px',
+              backgroundColor: studentId ? '#007BFF' : '#6c757d', // '#6c757d' is a common grey
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: studentId ? 'pointer' : 'default',
+              fontSize: '16px',
+              transition: 'all 0.3s ease'
+            }}
+            onClick={copyScholarshipLink}
+          >          Copy Scholarship Link
+          </button>
+
+
+        </div >
       }
+
     >
+
       <div style={{ display: "flex", marginTop: "20px", marginLeft: "60%" }}>
         <div
           style={{
@@ -294,7 +363,7 @@ const Registrations = () => {
           ))}
         </tbody>
       </table>
-    </MainContentLayout>
+    </MainContentLayout >
   );
 };
 

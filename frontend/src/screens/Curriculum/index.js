@@ -27,6 +27,9 @@ const Curriculum = () => {
             let studentsData = await studentsResponse.json();
             setStudents(studentsData);
 
+
+
+
         } catch (error) {
             console.error('Failed to fetch data', error);
         }
@@ -52,6 +55,7 @@ const Curriculum = () => {
         setModalIsOpen(false);
         setRegistrationError(null);
     };
+
 
     const handleRegister = async () => {
         setRegistrationError(null);
