@@ -5,12 +5,17 @@ import React, { useState, useEffect } from 'react';
 import { MainContentLayout } from '../../components/MainContentLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
 const URL = process.env.REACT_APP_API_URL
 
 
 const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
+    const [cart, setCart] = useState(document.cookie && JSON.parse(document.cookie.split("=")[1]) || {})
+
+
+
 
 
 
@@ -30,7 +35,16 @@ const ShopCourses = () => {
             });
             let studentsData = await studentsResponse.json();
             setStudents(studentsData);
+            console.log(studentsData)
 
+
+            if (Object.keys(cart).length === 0) {
+                let cartObj = {};
+                studentsData.forEach(student => {
+                    cartObj[student.name] = []; // Assuming each student object has a firstName property
+                });
+                setCart(cartObj); // Assuming there's a setCart function to update the cart state or variable
+            }
         } catch (error) {
             console.error('Failed to fetch data', error);
         }
@@ -57,58 +71,119 @@ const ShopCourses = () => {
         setRegistrationError(null);
     };
 
-    const handleRegister = async () => {
-        setRegistrationError(null);
-        console.log(`Registered ${selectedStudent.name} (id: ${selectedStudent.student_id}) for course with id: ${selectedCourse.course_id}`);
-        let url = URL + "/registrations";
-        try {
-            console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", selectedStudent.student_id, " at url: ", url, " with method: POST");
+    const handleRegister = () => {
+        const updatedCart = { ...cart }
+        updatedCart[selectedStudent.name].push(selectedCourse.course_difficulty + " " + selectedCourse.course_name)
+        setCart(updatedCart)
+        closeModal()
+    }
 
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    student_id: selectedStudent.student_id,
-                    course_id: selectedCourse.course_id,
-                    registration_date: new Date().toISOString().slice(0, 10),
-                }),
-            });
 
-            console.log("Response: ", response);
+    // const handleRegister = async () => {
+    //     setRegistrationError(null);
+    //     console.log(`Registered ${selectedStudent.name} (id: ${selectedStudent.student_id}) for course with id: ${selectedCourse.course_id}`);
+    //     let url = URL + "/registrations";
+    //     try {
+    //         console.log("Trying to register student for course id: ", selectedCourse.course_id, " and student id: ", selectedStudent.student_id, " at url: ", url, " with method: POST");
 
-            // console.log(response.error)
+    //         const response = await fetch(url, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 student_id: selectedStudent.student_id,
+    //                 course_id: selectedCourse.course_id,
+    //                 registration_date: new Date().toISOString().slice(0, 10),
+    //             }),
+    //         });
 
-            if (!response.ok) {
-                const data = await response.json();
+    //         console.log("Response: ", response);
 
-                setRegistrationError(data.error);
-                return;
-            }
+    //         console.log(response.error)
 
-            console.log("Registered student");
-            closeModal();
-        } catch (err) {
-            console.error("Error registering student", err);
-            setRegistrationError("An error occurred while registering.");
-        }
-    };
+    //         if (!response.ok) {
+    //             const data = await response.json();
+
+    //             setRegistrationError(data.error);
+    //             return;
+    //         }
+
+    //         console.log("Registered student");
+    //         closeModal();
+    //     } catch (err) {
+    //         console.error("Error registering student", err);
+    //         setRegistrationError("An error occurred while registering.");
+    //     }
+    // };
+
+    const removeFromCart = (key, index) => {
+        const updatedCart = { ...cart }
+        updatedCart[key] = [
+            ...updatedCart[key].slice(0, index),
+            ...updatedCart[key].slice(index + 1)
+        ];
+        setCart(updatedCart)
+    }
 
     useEffect(() => {
         setSelectedStudent(students && students[0]);
     }, [students]);
 
-    const openPopUp = (id, title) => () => {
-        console.log("Opening popup");
-    }
+    useEffect(() => {
+        document.cookie = "cart=" + JSON.stringify(cart)
+    }, [cart]);
+
+
+
+
+
 
     return (
 
-        <MainContentLayout>
+        <MainContentLayout rightColumnContent={
+            <div>
+                <div style={{
+                    backgroundColor: '#fff',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    maxWidth: '600px',
+                    margin: 'auto',
+                    marginTop: '40px',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' // Added shadow
+                }}>
+                    <p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Your Cart</p>
+                    {Object.entries(cart).map(([key, valueArray], index) => (
+                        valueArray.length > 0 && (
+                            <div key={index} style={{ marginBottom: '15px', textAlign: 'left' }}>
+                                <h3 style={{ borderBottom: '2px solid rgb(221, 221, 221)', paddingBottom: '5px', color: '#103da2' }}>{key}</h3>
+                                <ul style={{ listStyleType: 'none', padding: '0' }}>
+                                    {valueArray.map((item, itemIndex) => (
+                                        <li key={itemIndex} style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            padding: '5px 0',
+                                        }}>
+                                            <span onClick={() => removeFromCart(key, index)} title="Remove item" style={{ cursor: 'pointer' }}><b>x</b></span>
+                                            <span style={{ textAlign: 'left' }}>{item}</span>
+                                            <span>$50</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )
+                    ))}
+                    <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) => acc + (valueArray.length * 50), 0)}</p>
+                    <button style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
+                        Checkout
+                    </button>
+                </div>
+
+            </div>
+        }>
 
             <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h2>Browse Courses</h2>
+                <h2>Shop Courses</h2>
                 {courses && courses.map((course, index) => (
                     <div key={index}
                         style={{
@@ -230,6 +305,16 @@ const ShopCourses = () => {
                         </Modal>
                     </div>
 
+                ))}
+                {Object.entries(cart).map(([key, valueArray]) => (
+                    <div key={key}>
+                        <h3>{key}</h3>
+                        <ul>
+                            {valueArray.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
                 ))}
             </div>
         </MainContentLayout>

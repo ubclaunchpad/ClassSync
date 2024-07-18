@@ -11,6 +11,9 @@
     padding: 5px 10px;
     margin-right: 10px;
 }
+li:hover .remove-btn {
+    opacity: 1;
+}
 
 .course-info {
     flex-grow: 1;
