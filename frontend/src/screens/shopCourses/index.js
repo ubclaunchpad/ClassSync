@@ -72,9 +72,17 @@ const ShopCourses = () => {
     };
 
     const handleRegister = () => {
+        console.log("Inside handle 1")
         const updatedCart = { ...cart }
-        updatedCart[selectedStudent.name].push(selectedCourse.course_difficulty + " " + selectedCourse.course_name)
+        const newCourseObject = {
+            course_name: selectedCourse.course_name, // Adjust the property access as per the actual structure of selectedCourse
+            course_difficulty: selectedCourse.course_difficulty, // Adjust as necessary
+            price: selectedCourse.price // Adjust as necessary
+        };
+        updatedCart[selectedStudent.name].push(newCourseObject)
+
         setCart(updatedCart)
+
         closeModal()
     }
 
@@ -116,21 +124,21 @@ const ShopCourses = () => {
     //         setRegistrationError("An error occurred while registering.");
     //     }
     // };
-
     const removeFromCart = (key, index) => {
-        const updatedCart = { ...cart }
+        const updatedCart = { ...cart };
+
         updatedCart[key] = [
             ...updatedCart[key].slice(0, index),
             ...updatedCart[key].slice(index + 1)
         ];
-        setCart(updatedCart)
+        setCart(updatedCart);
     }
-
     useEffect(() => {
         setSelectedStudent(students && students[0]);
     }, [students]);
 
     useEffect(() => {
+        console.log("Inside use effect")
         document.cookie = "cart=" + JSON.stringify(cart)
     }, [cart]);
 
@@ -164,16 +172,19 @@ const ShopCourses = () => {
                                             justifyContent: 'space-between',
                                             padding: '5px 0',
                                         }}>
-                                            <span onClick={() => removeFromCart(key, index)} title="Remove item" style={{ cursor: 'pointer' }}><b>x</b></span>
-                                            <span style={{ textAlign: 'left' }}>{item}</span>
-                                            <span>$50</span>
+                                            <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer' }}><b>x</b></span>
+                                            <span style={{ textAlign: 'left' }}>{item.course_difficulty} {item.course_name}</span>
+                                            <span>${(Number.parseInt(item.price)).toFixed(2)}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                         )
                     ))}
-                    <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) => acc + (valueArray.length * 50), 0)}</p>
+                    <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
+                        Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) =>
+                            acc + valueArray.reduce((subAcc, course) => subAcc + parseInt(course.price), 0), 0).toFixed(2)}
+                    </p>
                     <button style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
                         Checkout
                     </button>
@@ -201,9 +212,11 @@ const ShopCourses = () => {
                             backgroundColor: '#f9f9f9',
                         }}>
                         <img src={course.image} alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, maxWidth: '45%' }}>
                             <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
                             <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
+                            <p style={{ color: '#103DA2', fontWeight: 'bold', marginBottom: '10px' }}>Price: ${(Number.parseFloat(course.price)).toFixed(2)}</p> {/* Display price here */}
+
                         </div>
                         <button
                             style={{
@@ -311,7 +324,7 @@ const ShopCourses = () => {
                         <h3>{key}</h3>
                         <ul>
                             {valueArray.map((item, index) => (
-                                <li key={index}>{item}</li>
+                                <li key={index}>{item.course_difficulty} {item.course_name}</li>
                             ))}
                         </ul>
                     </div>
