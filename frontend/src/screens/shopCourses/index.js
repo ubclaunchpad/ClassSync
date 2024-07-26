@@ -2,20 +2,81 @@ import './index.css';
 import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+
 import { MainContentLayout } from '../../components/MainContentLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const URL = process.env.REACT_APP_API_URL
 
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+
 
 const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
-    const [cart, setCart] = useState(document.cookie && JSON.parse(document.cookie.split("=")[1]) || {})
+    const [cart, setCart] = useState(() => {
+        const cookies = document.cookie.split('; ');
+        const cartCookie = cookies.find(cookie => cookie.startsWith('cart='));
+        try {
+            return cartCookie ? JSON.parse(cartCookie.split('=')[1]) : {};
+        } catch (error) {
+            console.error("Error parsing cart cookie:", error);
+            return {};
+        }
+    });
+
+    const handleCheckout = async () => {
+        const transformed = {};
+
+        Object.values(cart).forEach(userCourses => {
+            userCourses.forEach(({ course_difficulty, course_name, price, course_id }) => {
+                const name = course_difficulty + " " + course_name
+                if (transformed[name]) {
+                    transformed[name].quantity += 1;
+                } else {
+                    transformed[name] = { quantity: 1, price: price, id: course_id };
+                }
+            });
+        });
+
+        let param = {}
+        Object.entries(cart).forEach(([key, value]) => {
+            if (Array.isArray(value) && value.length > 0) {
+                const student = students.find(student => student.name === key);
+                param[student.student_id] = value.map(course => course.course_id);
+            }
+        });
 
 
 
+
+        console.log(transformed)
+
+        const response = await fetch(URL + '/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                line_items: JSON.stringify(transformed),
+                url_param: param
+            })
+        });
+
+        const session = await response.json();
+
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: session.id,
+        });
+
+        if (error) {
+            console.error('Error redirecting to checkout:', error);
+        }
+    };
 
 
 
@@ -77,7 +138,8 @@ const ShopCourses = () => {
         const newCourseObject = {
             course_name: selectedCourse.course_name, // Adjust the property access as per the actual structure of selectedCourse
             course_difficulty: selectedCourse.course_difficulty, // Adjust as necessary
-            price: selectedCourse.price // Adjust as necessary
+            price: selectedCourse.price, // Adjust as necessary
+            course_id: selectedCourse.course_id
         };
         updatedCart[selectedStudent.name].push(newCourseObject)
 
@@ -185,7 +247,7 @@ const ShopCourses = () => {
                         Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) =>
                             acc + valueArray.reduce((subAcc, course) => subAcc + parseInt(course.price), 0), 0).toFixed(2)}
                     </p>
-                    <button style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
+                    <button onClick={() => handleCheckout()} style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
                         Checkout
                     </button>
                 </div>

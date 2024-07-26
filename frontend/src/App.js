@@ -36,10 +36,12 @@ import { ViewAllCourses } from "./components/BrowseCourses";
 import AdminDash from "./components/AdminDash";
 import SelectCourses from "./screens/selectCourses";
 import ScholarshipRegistration from "./screens/scholarshipRegistration";
+import CompleteRegistration from "./screens/completeRegistration";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
   let path = "/";
+
 
   if (roles.includes("guardian")) {
     path = "/";
@@ -77,6 +79,7 @@ function App() {
                 path="/registertutor/3f2916a7-02a4-4e7a-942c-402b3e396fa4"
                 element={<RegisterTutor admin={true} />}
               />
+              <Route path="/completeregistration" element={<CompleteRegistration />} />
               <Route
                 path="/registertutor/:token"
                 element={<RegisterTutor admin={false} />}
