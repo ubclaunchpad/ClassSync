@@ -19,9 +19,11 @@ const Registrations = () => {
   const [sortedByPaid, setSortedByPaid] = useState(false);
   const [curExpand, setCurExpand] = useState();
   const [funding, setFunding] = useState(null)
+  const [editPayment, setEditPayment] = useState(false)
 
   const [students, setStudents] = useState([]);
   const [studentId, setStudentId] = useState("");
+  const [paymentChanges, setPaymentChanges] = useState([])
 
 
   const fetchRegistrations = async () => {
@@ -41,19 +43,28 @@ const Registrations = () => {
     fetchRegistrations();
   }, []);
 
-  const handleChange = async (id, paid) => {
-    const url = URL + `/registrations/${id}/${paid}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ paid: paid }),
-    });
-    if (response.ok) {
-      fetchRegistrations();
-    }
+  const handleChange = async (id, payment) => {
+    setPaymentChanges((prevChanges) => [...prevChanges, { id: id, payment: payment }]);
   };
+
+  const handlePaymentUpdate = async () => {
+
+    if (paymentChanges.length > 0) {
+      const url = URL + `/registrations/payment`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentChanges),
+      });
+      if (response.ok) {
+        fetchRegistrations();
+      }
+    }
+    setEditPayment(false)
+    setPaymentChanges([])
+  }
 
   const resetSort = () => {
     setSortedByGuardian(false);
@@ -253,60 +264,108 @@ const Registrations = () => {
 
     >
 
-      <div style={{ display: "flex", marginTop: "20px", marginLeft: "60%" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+      <div style={{ display: "flex", marginTop: "20px", marginLeft: '10%', alignItems: "left" }}>
+        {editPayment ? (
+          <button
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center', // Center the text horizontally
+              marginTop: '10px',
+              padding: '10px 20px',
+              width: '150px', // Fixed width
+              backgroundColor: '#007BFF', // Primary color
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Box shadow for depth
+            }}
+            onClick={handlePaymentUpdate}
+          >
+            Update
+          </button>
+        ) : (
+          <button
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center', // Center the text horizontally
+              marginTop: '10px',
+              padding: '10px 20px',
+              width: '150px', // Fixed width
+              backgroundColor: '#103da2', // Primary color
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Box shadow for depth
+            }}
+            onClick={() => setEditPayment(true)}
+          >
+            Edit Payment
+          </button>
+        )}
+
+        <div style={{ display: "flex", marginLeft: "40%", }}>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "darkblue",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Completed</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "darkblue",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Completed</div>
+          </div>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "#86d3ff",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Booked</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#86d3ff",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Booked</div>
+          </div>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "#9E9E9E",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Pending</div>
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#9E9E9E",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Pending</div>
+          </div>
         </div>
       </div>
 
@@ -384,6 +443,7 @@ const Registrations = () => {
               handleChange={handleChange}
               curExpand={curExpand}
               setCurExpand={setCurExpand}
+              editPayment={editPayment}
             />
           ))}
         </tbody>

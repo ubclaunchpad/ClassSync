@@ -13,8 +13,11 @@ export default function RegistrationRow({
   handleChange,
   curExpand,
   setCurExpand,
+  editPayment
 }) {
   const [enrollmentData, setEnrollmentData] = useState([]);
+
+
 
   const expandRow = () => {
     if (curExpand == data.enrollment_id) {
@@ -60,9 +63,21 @@ export default function RegistrationRow({
         <td className="registration__table-row-element">{new Date(data.registration_date).toLocaleDateString()}</td>
         <td className="registration__table-row-element">
 
-          <div style={{ alignItems: "center" }}>
-            {data.paid.charAt(0).toUpperCase()}
-          </div>
+          {editPayment ? (
+            <select
+              style={{ alignItems: "center" }}
+              onChange={(e) => handleChange(data.enrollment_id, e.target.value)}
+              defaultValue={data.paid}
+            >
+              <option value="afu">A</option>
+              <option value="scholarship">S</option>
+              <option value="card">C</option>
+            </select>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
+              {data.paid.charAt(0).toUpperCase()}
+            </div>
+          )}
         </td>
         <td className="registration__table-row-element">    <div style={{ display: "flex", alignItems: "center" }}>
           {[...Array(Math.min(data.completed, 5))].map((_, i) => (
