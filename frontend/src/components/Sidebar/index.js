@@ -5,9 +5,12 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import "./index.css";
+import { useAuth } from '../../contexts/AuthContext';
 
 
-const Sidebar = ({ toggleCoursesDropdown, user }) => {
+const Sidebar = ({ toggleCoursesDropdown }) => {
+
+    const { user } = useAuth()
 
     const [isOpen, setIsOpen] = React.useState(true);
     return (
