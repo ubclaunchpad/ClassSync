@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
 import { AddReviewForm } from "../../components/AddReviewForm";
+import { useAuth } from "../../contexts/AuthContext";
 
 const URL = process.env.REACT_APP_API_URL
 
@@ -16,6 +17,7 @@ const ParentDash = (props) => {
     const guardian_id = localStorage.getItem('userId');
     const [students, setStudents] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const { user, login } = useAuth()
 
 
     const handleTileClick = async (studentId) => {
@@ -52,6 +54,13 @@ const ParentDash = (props) => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+
+
+
+            const updatedUser = user
+            updatedUser.children = data
+
+            login(updatedUser)
             setStudents(data);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
@@ -102,7 +111,7 @@ const ParentDash = (props) => {
             }>
             <div className="student-info-container">
                 <div className="student-info-header">
-                    <h2>Student</h2>
+                    <h2>Student(s)</h2>
                     <button class="header-button">
 
                         <NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
