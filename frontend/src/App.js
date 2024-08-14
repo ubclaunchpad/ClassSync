@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./screens/login";
 import SignUp from "./screens/signup";
 import Confirmation from "./screens/confirmation";
@@ -40,6 +40,8 @@ import CompleteRegistration from "./screens/completeRegistration";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
+
   let path = "/";
 
 
@@ -58,7 +60,7 @@ function PrivateRoute({ Component, roles }) {
   return user && roles.includes(user.role) ? (
     <Component />
   ) : (
-    <Navigate to={path} />
+    <Navigate to={path} state={{ from: location }} />
   );
 }
 
