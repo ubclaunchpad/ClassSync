@@ -181,7 +181,7 @@ const Registrations = () => {
             View and sort enrollments by clicking on column headers.
           </p>
           <p>
-            The "Paid" column indicates how the enrollment has been paid for. Payment statuses are represented by different letters: "C" for card, "S" for scholarship, and "A" for AFU. You can identify the payment method by looking at the respective letter in each row.
+            The "Paid" column indicates how the enrollment has been paid for. Payment statuses are represented by different letters: "C" for card, "S" for scholarship, "A" for AFU, and "O" for other. You can identify the payment method by looking at the respective letter in each row.
 
 
 
@@ -236,7 +236,8 @@ const Registrations = () => {
             onChange={setFunding}
             options={[
               { value: 'scholarship', label: 'Scholarship' },
-              { value: 'afu', label: 'AFU' }
+              { value: 'afu', label: 'AFU' },
+              { value: 'other', label: 'Other' }
             ]}
           />
           <button
