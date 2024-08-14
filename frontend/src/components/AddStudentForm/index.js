@@ -1,6 +1,6 @@
 import "./index.css";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft } from 'react-bootstrap-icons'
 
 const AddStudentForm = () => {
@@ -64,16 +64,22 @@ const AddStudentForm = () => {
         }
       );
       console.log(res.body);
-      navigate('/parentDash');
+      goBack()
     } catch (error) {
       console.log(error);
     }
   }
   const colors = ["orange", "green", "purple", "pink", "yellow"];
+  const location = useLocation();
 
   const goBack = () => {
-    navigate('/parentDash');
-  }
+    const from = location.state?.from?.pathname;
+    if (from) {
+      navigate(from);
+    } else {
+      navigate('/parentDash');
+    }
+  };
   console.log(formState);
   return (
     <form className="student-info-form" onSubmit={handleSubmit}>

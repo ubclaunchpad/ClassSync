@@ -17,6 +17,8 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
+    const navigate = useNavigate();
+
     const [cart, setCart] = useState(() => {
         const cookies = document.cookie.split('; ');
         const cartCookie = cookies.find(cookie => cookie.startsWith('cart='));
@@ -127,9 +129,15 @@ const ShopCourses = () => {
         setModalIsOpen(true);
     };
 
+    const handleAdd = () => {
+        navigate('/addstudent', { state: { from: { pathname: window.location.pathname + window.location.hash } } });
+
+
+    }
     const closeModal = () => {
         setModalIsOpen(false);
         setRegistrationError(null);
+        window.location.hash = '';
     };
 
     const handleRegister = () => {
@@ -205,6 +213,21 @@ const ShopCourses = () => {
     }, [cart]);
 
 
+    useEffect(() => {
+        // Function to check URL hash and open modal if course is found
+        const checkHashAndOpenModal = () => {
+            const hash = window.location.hash.substring(1);
+            if (hash && courses) {
+                const course = courses.find(course => course.course_id == hash);
+                setCourse(course);
+                openModal();
+            }
+        };
+
+        // Check hash on initial load and when courses array is updated
+        checkHashAndOpenModal();
+    }, [courses]);
+
 
 
 
@@ -234,7 +257,7 @@ const ShopCourses = () => {
                                             justifyContent: 'space-between',
                                             padding: '5px 0',
                                         }}>
-                                            <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer' }}><b>x</b></span>
+                                            <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer', marginRight: '2px' }}><b>x</b></span>
                                             <span style={{ textAlign: 'left' }}>{item.course_difficulty} {item.course_name}</span>
                                             <span>${(Number.parseInt(item.price)).toFixed(2)}</span>
                                         </li>
@@ -259,6 +282,7 @@ const ShopCourses = () => {
                 <h2>Shop Courses</h2>
                 {courses && courses.map((course, index) => (
                     <div key={index}
+                        id={course.course_id}
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -291,9 +315,13 @@ const ShopCourses = () => {
                                 alignSelf: 'center',
                                 fontSize: '16px',
                                 fontWeight: 'bold',
-                            }} onClick={() => {
+                            }}
+                            value={course}
+                            onClick={() => {
                                 setCourse(course);
                                 openModal();
+
+                                window.location.hash = course.course_id;
                             }}>Register</button>
                         <Modal
                             isOpen={modalIsOpen}
@@ -340,11 +368,14 @@ const ShopCourses = () => {
                                     <option key={index} value={student.student_id}>{student.name}</option>
                                 ))}
                             </select>}
-                            {registrationError && (
+
+                            <a className='styled-link' onClick={handleAdd}> Add a new student </a>                            {registrationError && (
                                 <div style={{ color: 'red', marginBottom: '10px' }}>
                                     {registrationError}
                                 </div>
                             )}
+
+
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                 <button
@@ -383,7 +414,7 @@ const ShopCourses = () => {
                 ))}
 
             </div>
-        </MainContentLayout>
+        </MainContentLayout >
     );
 }
 export default ShopCourses;
