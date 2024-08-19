@@ -13,17 +13,60 @@ h2 {
 .main-tutor-row {
     display: grid;
     grid-template-columns: 75% 25%;
+    width: 100%;
 }
 
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #103da2;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bottom-bar-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.3s ease;
+    font-size: 12px;
+  }
+.bottom-bar-link:hover {
+    background-color: #555; /* Change to your desired hover background color */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
 @media (max-width: 450px) {
     .main-tutor-row {
-        grid-template-columns: 0% 100% 0% !important; /* Default to a single column */
+        grid-template-columns: 0% 100% !important; /* Default to a single column */
+        width: 100%;
+    }
+    .grid-container {
+        display: block !important;
+    }
+
+    body {
+        overflow-x: hidden;
     }
 }
 @media (min-width: 451px) {
     .main-tutor-row {
-        grid-template-columns: 75% 25% ; /* Default to a single column */
+        grid-template-columns: 15% 85% ; /* Default to a single column */
+        width: 100%;
     }
+
 }
 .left {
     background-color: #103DA2;
@@ -102,6 +145,38 @@ h2 {
     margin-top: .5rem;
     border-radius: 15px;
     border: none;
+}
+@media (min-width: 1024px) {
+    .pc {
+        visibility: visible;
+        position: static;
+        height: auto;
+        width: auto;
+    }
+
+    .mb {
+        visibility: hidden;
+        position: absolute;
+        height: 0;
+        width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .pc {
+        visibility: hidden;
+        position: absolute;
+        height: 0;
+        width: 0;
+    }
+
+ 
+    .mb {
+        visibility: visible;
+        position: static;
+        height: auto;
+        width: auto;
+    }
 }
 
 .left-header,
