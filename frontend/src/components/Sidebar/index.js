@@ -21,6 +21,7 @@ const Sidebar = ({ toggleCoursesDropdown }) => {
 
 
             <button
+                className='pc'
                 style={{
                     position: 'absolute',
                     left: 0,
