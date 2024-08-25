@@ -3,6 +3,12 @@ img {
   max-height: 100%;
 }
 
+@media (min-width: 1152px) {
+  .menu {
+    /* Add your styles for .menu here */
+    display: none; /* Example: Hide the menu on smaller screens */
+  }
+}
 .banner-container {
   width: 100%;
   height: 19vh;
@@ -16,6 +22,20 @@ img {
   /* Center vertically */
   max-height: 200px;
 }
+
+@media (max-width: 450px) {
+
+  .banner-container {
+    height: 10vh;
+  }
+}
+@media (min-width: 451px) and (max-width: 1023px) {
+
+  .banner-container {
+    height: 15vh;
+  }
+}
+
 
 .left-shape {
   position: absolute;
@@ -46,6 +66,12 @@ img {
   line-height: 5px;
   padding-top: 30px;
   padding-bottom: 30px;
+}
+
+@media (max-width: 480px)  {
+  .banner-text-container {
+    text-align: left;
+  }
 }
 
 .banner-title {
