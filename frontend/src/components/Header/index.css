@@ -8,6 +8,18 @@
   align-items: center;
 }
 
+
+@media (max-width: 480px) {
+  .header-container {
+    height: 35px;
+  }
+
+  .header-logo-container {
+    height: 100%;
+  }
+}
+
+
 .header-logo-container {
   display: flex;
   align-items: center;
@@ -26,8 +38,15 @@
   height: 85%;
   width: 100%;
   object-fit: contain;
-  margin-left: 94vw;
   cursor: pointer;
+  justify-content: flex-end;
+}
+
+@media (min-width: 1152px) {
+  .tag {
+    /* Add your styles for .menu here */
+    display: none; /* Example: Hide the menu on smaller screens */
+  }
 }
 
 .navbar {
