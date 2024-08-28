@@ -4,7 +4,7 @@ import moment from "moment-timezone";
 import { redirect } from 'react-router-dom';
 
 const URL = process.env.REACT_APP_API_URL
-const ParentDashCalendar = ({ students }) => {
+const ParentDashCalendar = ({ students, defaultView = "month", views = ["month", "week", "day", "agenda"] }) => {
   // moment.tz.setDefault('America/Los_Angeles');
   moment.locale("en-GB");
 
@@ -65,7 +65,8 @@ const ParentDashCalendar = ({ students }) => {
         <Calendar
           localizer={localizer}
           defaultDate={new Date()}
-          defaultView="month"
+          defaultView={defaultView}
+          views={views}
           events={eventsData}
           style={{ height: "100vh" }}
           min={new Date(2020, 1, 0, 7, 0, 0)}
