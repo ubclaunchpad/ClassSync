@@ -71,83 +71,157 @@ export const TutorInfoCard = ({ tutorId, tutor, courses }) => {
   //   console.log(courses);
   //   console.log(offerings);
   return (
-    <div className="tutor-info-card__container">
-      <div className="tutor-info-card__overview">
-        <div className="tutor-info-card__avatar-container">
-          <Avatar
-            className="tutor-info-card__avatar"
-            image={tutor.image}
-            size="large"
-          // shape="square"
-          />
-        </div>
-        <div className="tutor-info-card__details">
-          {
-            <div className="tutor-info-card__name">
-              {tutorName}
-            </div>
-          }
-          <div className="tutor-info-card__description">
-            {description}
-          </div>
-          <div className="tutor__courses__container">
-            <img className="tutor-info-card__icon" src="/book.svg" alt="g" />
-            <span className="tutor-info-card__text">Teaches {courses}</span>
-          </div>
-          <div className="tutor__languages__container">
-            <img
-              className="tutor-info-card__icon"
-              src="/language.svg"
-              alt="g"
+    <>
+      <div className="pc tutor-info-card__container">
+        <div className="tutor-info-card__overview">
+          <div className="tutor-info-card__avatar-container">
+            <Avatar
+              className="tutor-info-card__avatar"
+              image={tutor.image}
+              size="large"
+              shape="circle"
+            // shape="square"
             />
-            <span className="tutor-info-card__text">
-              Speaks {tutor.languages}
-            </span>
           </div>
-          <div className="tutor__languages__container">
-            <img
-              className="tutor-info-card__icon"
-              src="/graduation1.svg"
-              alt="g"
-            />
-            <span className="tutor-info-card__text">
-              Studies at {university ? university : sampleData.education}
-            </span>
-          </div>
-          <div className="tutor-info-card__about-me">
-            <div
-              className={clsx(
-                showMore && "show-more__container--visible",
-                !showMore && "show-more__container--hidden"
-              )}
-            >
-              <p className="m-0 ">{about ? about : sampleData.aboutMe} </p>
+          <div className="tutor-info-card__details">
+            {
+              <div className="tutor-info-card__name">
+                {tutorName}
+              </div>
+            }
+            <div className="tutor-info-card__description">
+              {description}
             </div>
-            <button
-              className="show-more__button"
-              onClick={() => setShowMore(!showMore)}
-            >
-              {showMore ? "Show Less" : "Show More"}
-            </button>
-          </div>
-        </div>
-        <div className="tutor-info-card__more-info__container">
-          <div>
-            <div className="tutor-info-card__rating">
-              {/* <span className="tutor-info__rating-number"></span>{" "} */}
+            <div className="tutor__courses__container">
+              <img className="tutor-info-card__icon" src="/book.svg" alt="g" />
+              <span className="tutor-info-card__text">Teaches {courses}</span>
             </div>
-            <div className="tutor-info-card__learn-more">
-              <a href={`${frontEndUrl}/viewTutor/${tutorId}`}>
-                {" "}
-                <Button
-                  className="tutor-info__learn-more"
-                  label="Learn More"
-                />
-              </a>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-info-card__icon"
+                src="/language.svg"
+                alt="g"
+              />
+              <span className="tutor-info-card__text">
+                Speaks {tutor.languages}
+              </span>
+            </div>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-info-card__icon"
+                src="/graduation1.svg"
+                alt="g"
+              />
+              <span className="tutor-info-card__text">
+                Studies at {university ? university : sampleData.education}
+              </span>
+            </div>
+            <div className="tutor-info-card__about-me">
+              <div
+                className={clsx(
+                  showMore && "show-more__container--visible",
+                  !showMore && "show-more__container--hidden"
+                )}
+              >
+                <p className="m-0 ">{about ? about : sampleData.aboutMe} </p>
+              </div>
+              <button
+                className="show-more__button"
+                onClick={() => setShowMore(!showMore)}
+              >
+                {showMore ? "Show Less" : "Show More"}
+              </button>
+            </div>
+          </div>
+          <div className="tutor-info-card__more-info__container">
+            <div>
+              <div className="tutor-info-card__rating">
+                {/* <span className="tutor-info__rating-number"></span>{" "} */}
+              </div>
+              <div className="tutor-info-card__learn-more">
+                <a href={`${frontEndUrl}/viewTutor/${tutorId}`}>
+                  {" "}
+                  <Button
+                    className="tutor-info__learn-more"
+                    label="Learn More"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div className="mb" >
+        <div className="tutor-info-card__overview">
+          <div className="tutor-info-card__avatar-container">
+            <Avatar
+              className="tutor-info-card__avatar"
+              image={tutor.image}
+              size="large"
+              shape="circle"
+            />
+          </div>
+          <div className="tutor-info-card__details">
+            {
+              <div className="tutor-info-card__name">
+                <a href={`${frontEndUrl}/viewTutor/${tutorId}`}>
+                  {tutorName}</a>
+              </div>
+            }
+            <div className="tutor-info-card__description">
+              {description}
+            </div>
+            <div className="tutor__courses__container">
+              <img className="tutor-info-card__icon" src="/book.svg" alt="g" />
+              <span className="tutor-info-card__text">Teaches {courses}</span>
+            </div>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-info-card__icon"
+                src="/language.svg"
+                alt="g"
+              />
+              <span className="tutor-info-card__text">
+                Speaks {tutor.languages}
+              </span>
+            </div>
+            <div className="tutor__languages__container">
+              <img
+                className="tutor-info-card__icon"
+                src="/graduation1.svg"
+                alt="g"
+              />
+              <span className="tutor-info-card__text">
+                Studies at {university ? university : sampleData.education}
+              </span>
+            </div>
+            <div className="tutor-info-card__about-me">
+              <div
+                className={clsx(
+                  showMore && "show-more__container--visible",
+                  !showMore && "show-more__container--hidden"
+                )}
+              >
+                <p className="m-0 ">{about ? about : sampleData.aboutMe} </p>
+              </div>
+              <button
+                className="show-more__button"
+                onClick={() => setShowMore(!showMore)}
+              >
+                {showMore ? "Show Less" : "Show More"}
+              </button>
+            </div>
+          </div>
+          <div className="tutor-info-card__more-info__container">
+            <div>
+              <div className="tutor-info-card__rating">
+                {/* <span className="tutor-info__rating-number"></span>{" "} */}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };

@@ -1,15 +1,17 @@
 .tutor-info-card__container {
   width: 100%;
   border-radius: 10px;
-  border: 2px solid black;
   margin: 1rem 1rem 1rem 0rem;
   margin-left: none;
   padding: 2rem;
+  background-color: #e6f0ff; /* Match the background color of the accordion details */
+
 }
 
 .tutor-info-card__overview {
   /* margin-top: 50px; */
   display: flex;
+
   /* align-items: center; */
 }
 
@@ -106,4 +108,66 @@
 
 .tutor-info__learn-more {
   background-color: #103da2;
+}
+
+.mb {
+  .tutor-info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+
+    
+    box-sizing: border-box;
+}
+.tutor-info-card__text {
+  text-align: left;
+}
+.tutor-info-card__overview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    padding-top: 5px;
+    background-color: #e6f0ff; /* Match the background color of the accordion details */
+    transition: box-shadow 0.3s ease; /* Smooth */
+}
+
+.tutor-info-card__avatar-container,
+.tutor-info-card__details,
+.tutor-info-card__more-info__container {
+    width: 80%;
+    margin-bottom: 1rem;
+    align-items: flex-end;
+
+}
+
+
+
+.tutor-info-card__details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tutor-info-card__name,
+.tutor-info-card__description,
+.tutor__courses__container,
+.tutor__languages__container,
+.tutor-info-card__about-me {
+    width: 100%;
+    text-align: center;
+}
+.tutor-info-card__about-me {
+  text-align: left !important;
+}
+
+.show-more__container--visible,
+.show-more__container--hidden {
+    width: 100%;
+}
+
+.show-more__button {
+    margin-top: 0.5rem;
+}
 }
