@@ -84,14 +84,16 @@ const ParentDash = (props) => {
     return (
         <MainContentLayout
             rightColumnContent={
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "20px",
-                    marginRight: "15px"
+                <div
+                    className="pc"
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: "20px",
+                        marginRight: "15px"
 
-                }}>
+                    }}>
                     <button style={{
                         padding: "10px",
                         backgroundColor: "#007BFF", // Change this to match your theme color
@@ -159,7 +161,25 @@ const ParentDash = (props) => {
 
                 </div>
 
-
+                <button
+                    className="mb"
+                    style={{
+                        margin: "20px",
+                        padding: "10px",
+                        backgroundColor: "#007BFF", // Change this to match your theme color
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        fontSize: "16px",
+                        transition: "all 0.3s ease"
+                    }}
+                    onClick={handleReviewClick}
+                    onMouseOver={(e) => e.target.style.backgroundColor = "#0069d9"} // Darker shade on hover
+                    onMouseOut={(e) => e.target.style.backgroundColor = "#007BFF"} // Original color on mouse out
+                >
+                    Add Tutor Review
+                </button>
             </div >
             <div className="mb">
                 <ParentDashCalendar students={students} defaultView="agenda" views={{ day: true, agenda: AgendaView }} ></ParentDashCalendar>
