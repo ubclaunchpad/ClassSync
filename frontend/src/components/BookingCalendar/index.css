@@ -4,10 +4,20 @@
 
 }
 
+.filter {
+    width: 90%;
+}
 .rbc-today {
     background-color: inherit;
 }
-
+@media (max-width: 480px) {
+    .rbc-time-view, .rbc-toolbar, .rbc-events-container {
+        max-width: 100vw !important;
+    }
+    .filter {
+        width: 100%;
+    }
+}
 .rbc-day-slot .available {
     /* background-color: #DFFFD6; */
     background-color: #42a042;
