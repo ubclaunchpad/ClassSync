@@ -10,13 +10,13 @@
     border-style: solid;
     border-color: #b3defc;
     min-height: 200px;
+    align-items: center;
 }
 
 .student-info-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between; 
-    align-items: center; 
 }
 
 .header-button {
@@ -32,6 +32,115 @@
     display: flex;
     flex-direction: row;
 }
+
+.student-container {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr; /* Default to a single column */
+}
+
+@media (min-width: 750px) {
+    .student-container {
+        grid-template-columns: 1fr 1fr; /* Switch to two columns when the container is at least 750px wide */
+    }
+
+    .name-card {
+        width: 100%; /* Make sure each name-card takes full width of its grid cell */
+    }
+}
+
+.name-card {
+    border-radius: 15px;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+
+}
+
+.stripe {
+    width: 12px;
+    height: 300%;
+    background-color: green;
+    border-radius: 0 15px 15px 0;
+    position: absolute;
+    left: 0;
+    top: -10px;
+    bottom: 0;
+}
+
+.content {
+    margin-left: 22px;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 1;
+}
+
+/* General styles for visibility toggling */
+.pc, .mb {
+    visibility: hidden;
+    position: absolute;
+    height: 0;
+    width: 0;
+}
+
+/* Media queries to toggle visibility */
+@media (min-width: 1024px) {
+    .pc {
+        visibility: visible;
+        position: static;
+        height: auto;
+        width: auto;
+    }
+
+    .mb {
+        visibility: hidden;
+        position: absolute;
+        height: 0;
+        width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .pc {
+        visibility: hidden;
+        position: absolute;
+        height: 0;
+        width: 0;
+    }
+
+ 
+    .mb {
+        visibility: visible;
+        position: static;
+        height: auto;
+        width: auto;
+    }
+}
+
+@media (max-width: 749px) {
+    .name-card {
+        width: 70%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 1023px) {
+    .pc {
+        visibility: hidden;
+        position: absolute;
+        height: 0;
+        width: 0;
+    }
+
+    .mb {
+        visibility: visible;
+        position: static;
+        height: auto;
+        width: auto;
+    }
+}
+
 
 .student-tile {
     cursor: pointer;

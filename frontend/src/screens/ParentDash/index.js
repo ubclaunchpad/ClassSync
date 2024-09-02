@@ -89,6 +89,7 @@ const ParentDash = (props) => {
                     alignItems: "center",
                     marginTop: "20px",
                     marginRight: "15px"
+
                 }}>
                     <button style={{
                         padding: "10px",
@@ -112,28 +113,55 @@ const ParentDash = (props) => {
             <div className="student-info-container">
                 <div className="student-info-header">
                     <h2>Student(s)</h2>
-                    <button class="header-button">
+                    <button className="header-button">
 
                         <NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
                 </div>
-                <div className="existing-students-row">
-                    {
-                        students.map((student) => {
-                            const tileColorClass = `student-tile ${student.color}-tile`;
+                <div>
+                    <div className="pc existing-students-row">
+                        {
+                            students.map((student) => {
+                                const tileColorClass = `student-tile ${student.color}-tile`;
+                                return (
+                                    <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
+                                        <div className="rectangle"></div>
+                                        <div className="name">{student.name}</div>
+                                    </div>
+                                )
+                            })
+
+
+                        }
+                    </div>
+                    <div className="mb student-container">
+
+                        {students.map((student) => {
+                            const tileColorClass = `stripe ${student.color}-tile`;
+
                             return (
-                                <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
-                                    <div className="rectangle"></div>
-                                    <div className="name">{student.name}</div>
+
+                                <div className="name-card" onClick={() => handleTileClick(student.student_id)}>
+                                    <div className={tileColorClass}></div>
+                                    <div className="content">
+                                        {student.name}
+                                    </div>
                                 </div>
+
                             )
-                        })
-                    }
+                        })}
+                    </div>
+
                 </div>
+
+
+            </div >
+            <div className="mb">
+                <ParentDashCalendar students={students} defaultView="agenda" views={["day", "agenda"]}></ParentDashCalendar>
             </div>
-            <div className="student-info-container">
+            <div className="pc">
                 <ParentDashCalendar students={students}></ParentDashCalendar>
             </div>
-        </MainContentLayout>
+        </MainContentLayout >
     );
 };
 
