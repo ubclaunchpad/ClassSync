@@ -30,7 +30,9 @@
 
 .existing-students-row {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
+    
 }
 
 .student-container {
@@ -121,7 +123,7 @@
 
 @media (max-width: 749px) {
     .name-card {
-        width: 70%;
+        width: 85%;
     }
 }
 

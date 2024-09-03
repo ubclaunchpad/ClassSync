@@ -9,7 +9,8 @@ import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
 import { AddReviewForm } from "../../components/AddReviewForm";
 import { useAuth } from "../../contexts/AuthContext";
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { AgendaView } from "./agenda";
 const URL = process.env.REACT_APP_API_URL
 
 const ParentDash = (props) => {
@@ -113,12 +114,17 @@ const ParentDash = (props) => {
             <div className="student-info-container">
                 <div className="student-info-header">
                     <h2>Student(s)</h2>
-                    <button className="header-button">
+                    <button className="header-button pc">
 
                         <NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
+
+                    <div className="mb" style={{ marginTop: '10px' }}>
+                        <NavLink to="/addStudent">
+                            <AddCircleIcon style={{ fill: "#103da2", fontSize: "40px" }} />                        </NavLink>
+                    </div>
                 </div>
                 <div>
-                    <div className="pc existing-students-row">
+                    <div className="pc existing-students-row" >
                         {
                             students.map((student) => {
                                 const tileColorClass = `student-tile ${student.color}-tile`;
@@ -156,8 +162,9 @@ const ParentDash = (props) => {
 
             </div >
             <div className="mb">
-                <ParentDashCalendar students={students} defaultView="agenda" views={["day", "agenda"]}></ParentDashCalendar>
+                <ParentDashCalendar students={students} defaultView="agenda" views={{ day: true, agenda: AgendaView }} ></ParentDashCalendar>
             </div>
+
             <div className="pc">
                 <ParentDashCalendar students={students}></ParentDashCalendar>
             </div>
