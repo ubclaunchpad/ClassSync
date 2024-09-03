@@ -9,7 +9,6 @@ import "primeicons/primeicons.css";
 import Course from '../../components/StudentDashboard'; // import the Course component
 import { useNavigate } from "react-router-dom";
 
-
 import { fakeData } from "../../components/StudentLessonTab/fakeData";
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -196,7 +195,8 @@ const StudentDashboard = () => {
               contentLabel="Example Modal"
               style={{
                 content: {
-                  width: '700px',
+                  width: '85%',
+                  maxWidth: '700px',
                   height: '450px',
                   margin: 'auto',
                   zIndex: '1000', // Make the modal appear on top
@@ -227,26 +227,10 @@ const StudentDashboard = () => {
                   &times;
                 </button>
                 <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Manage Classes</h2>
-                <div className="courses-tabs">
-                  <TabView scrollable>
-                    {courses.map((course, index) => {
-                      return (
-                        <TabPanel
-                          key={index}
-                          className="courses__tab-panel"
-                          header={`${course.course_title}`}
+                {courses.map((course, index) => (
 
-                        >
-                          <Course id={course.enrollment_id} title={course.course_title} />
-
-                        </TabPanel>
-                      );
-                    })}
-
-
-
-                  </TabView>
-                </div>
+                  <Course id={course.enrollment_id} title={course.course_title} />
+                ))}
               </div>
             </Modal>
 

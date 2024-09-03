@@ -4,6 +4,11 @@ import { useParams } from 'react-router-dom';
 import { addDays, endOfWeek, startOfWeek } from 'date-fns';
 import { navigate } from 'react-big-calendar/lib/utils/constants';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion } from '@mui/material';
 const URL = process.env.REACT_APP_API_URL
 
 
@@ -104,84 +109,108 @@ const Course = (props) => {
 
     return (
         <div>
-
-            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0px', fontFamily: 'Arial, sans-serif' }}>
-                {/* <h3 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Bookings for {props.title}</h3> */}
-                {loaded && lessons.length < 5 && (
-                    <button
-                        style={{
-                            display: 'block',
-                            width: '200px',
-                            height: '50px',
-                            margin: '20px auto',
-                            backgroundColor: '#007BFF',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
+            <Accordion id={props.id}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    id={`panel${props.id}-header`}
+                >
+                    <Typography style={{ flexGrow: 1 }}>{props.title}</Typography>
+                    {loaded && lessons.length < 5 && (
+                        <button
+                            style={{
+                                display: 'inline-block',
+                                padding: '8px 16px',
+                                margin: '0 10px',
+                                backgroundColor: '#007BFF',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '14px',
+                                fontFamily: 'Arial, sans-serif',
+                                alignSelf: 'center'
+                            }}
+                            onClick={() => window.location.href = `/appointment/${props.id}`}
+                        >
+                            Book
+                        </button>
+                    )}
+                </AccordionSummary>
+                <AccordionDetails>
+                    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0px', fontFamily: 'Arial, sans-serif' }}>
+                        <table style={{
+                            width: '100%',
+                            marginTop: '10px',
+                            textAlign: 'center',
+                            borderCollapse: 'collapse',
                             fontFamily: 'Arial, sans-serif',
-                        }}
-                        onClick={() => window.location.href = `/appointment/${props.id}`}
-                    >
-                        Book a class
-                    </button>
-                )}
-                <table style={{
-                    width: '100%',
-                    marginTop: '10px',
-                    textAlign: 'center',
-                    borderCollapse: 'collapse',
-                    fontFamily: 'Arial, sans-serif',
-                    border: '1px solid #ddd',
-                    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-                }}>
-                    <tbody key={lessons}>
-                        {lessons.map((appointment, index) => (
-                            <tr key={index} style={{
-                                borderBottom: '1px solid #ddd'
-                            }}>
-                                <td style={{
-                                    padding: '10px',
-                                    fontSize: '16px',
-                                    color: '#333'
-                                }}>
-                                    {new Date(appointment.start).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
-                                </td>
-                                <td style={{
-                                    padding: '10px',
-                                    fontSize: '16px',
-                                    color: '#333'
-                                }}>
-                                    {appointment.time}
-                                </td>
-                                <td style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    {!appointment.readOnly &&
-                                        <button
-                                            style={{
-                                                border: 'none',
-                                                borderRadius: '5px',
-                                                cursor: 'pointer',
-                                                fontFamily: 'Arial, sans-serif',
+                            border: '1px solid #ddd',
+                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                        }}>
+                            <tbody>
+                                {lessons.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="3" style={{
+                                            padding: '10px',
+                                            fontSize: '16px',
+                                            color: '#333',
+                                            textAlign: 'center'
+                                        }}>
+                                            No classes booked yet
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    lessons.map((appointment, index) => (
+                                        <tr key={index} style={{
+                                            borderBottom: '1px solid #ddd'
+                                        }}>
+                                            <td style={{
+                                                padding: '10px',
                                                 fontSize: '16px',
-                                                padding: '5px 10px',
-                                                backgroundColor: 'transparent',
-                                                color: '#fff'
-                                            }}
-                                            onClick={() => deleteEvent(appointment)}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg>                                        </button>}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
+                                                color: '#333'
+                                            }}>
+                                                {new Date(appointment.start).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
+                                            </td>
+                                            <td style={{
+                                                padding: '10px',
+                                                fontSize: '16px',
+                                                color: '#333'
+                                            }}>
+                                                {appointment.time}
+                                            </td>
+                                            <td style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                                {!appointment.readOnly &&
+                                                    <button
+                                                        style={{
+                                                            border: 'none',
+                                                            borderRadius: '5px',
+                                                            cursor: 'pointer',
+                                                            fontFamily: 'Arial, sans-serif',
+                                                            fontSize: '16px',
+                                                            padding: '5px 10px',
+                                                            backgroundColor: 'transparent',
+                                                            color: '#fff'
+                                                        }}
+                                                        onClick={() => deleteEvent(appointment)}
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+                                                            <path d="M0 0h24v24H0z" fill="none" />
+                                                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                                                        </svg>
+                                                    </button>}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </AccordionDetails>
+            </Accordion>
         </div >
     )
 }
