@@ -1,0 +1,22 @@
+version: 0.1
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18  # Specify the Node.js version you are using
+    commands:
+      - cd backend  # Navigate to the backend folder
+      - npm install  # Install backend dependencies
+  pre_build:
+    commands:
+      - echo "Dependencies installed on `date`"
+  build:
+    commands:
+      - echo "No build step required for this application"
+  post_build:
+    commands:
+      - echo "Backend is ready for deployment on `date`"
+artifacts:
+  files:
+    - backend/**/*  # Include all files from the backend folder
+  base-directory: backend  # Set the backend folder as the base directory for artifacts

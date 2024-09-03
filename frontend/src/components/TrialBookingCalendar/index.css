@@ -1,0 +1,109 @@
+.rbc-event {
+    background-color: #103da2;
+
+
+}
+
+.rbc-today {
+    background-color: inherit;
+}
+
+.rbc-day-slot .available {
+    /* background-color: #DFFFD6; */
+    background-color: #42a042;
+    background-color: #a3e9b2;
+    background-color: #103da2;
+    background-color: #00b1f19b;
+    background-color: #89CFF0;
+    background-color: #bfefff;
+
+    /* Baby blue */
+    /* background-color: #6b8eae; */
+
+
+
+    /* Forest green */
+    /* background-color: #D6E5FF; */
+    /* Light blue */
+
+}
+
+.disabled-button {
+    cursor: not-allowed;
+    /* Change cursor to not-allowed */
+}
+
+.rbc-day-slot .active {
+    background-color: #ff7f50; /* Pastel yellow */
+}
+.rbc-day-slot .unavailable {
+    background-color: #FFD6D6;
+    background-color: #f6f4f4;
+    background-color: #f6f4f4;
+    /* background-color: #e0e0e0; */
+}
+
+/* .rbc-day-slot .rbc-timeslot-group {
+    background-color: #ddd;
+} */
+
+/* .rbc-time-slot {
+    height: 20px;
+}
+ */
+
+.rbc-event {
+    position: relative;
+}
+
+.rbc-event .delete-button {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rbc-event:hover .delete-button {
+    display: block;
+}
+
+.rbc-timeslot-group,
+.rbc-events-container {
+    max-height: 5vh;
+}
+
+.rbc-time-header-gutter,
+.rbc-time-gutter .rbc-time-slot {
+    padding-right: 10px;
+}
+
+.rbc-calendar {
+    max-height: fit-content;
+    width: 100% !important;
+}
+
+.rbc-time-view,
+.rbc-toolbar,
+.rbc-events-container {
+    max-height: 70vh;
+    max-width: 60vw;
+}
+
+.rbc-event-label {
+    font-size: 60%
+}
+
+.rbc-event-content {
+    padding-top: 1px;
+    font-size: 70%;
+}
+
+.rbc-events-container {
+    margin-right: 0px !important;
+}
+
+.rbc-day-slot,
+.rbc-header {
+    max-width: 150px;
+}

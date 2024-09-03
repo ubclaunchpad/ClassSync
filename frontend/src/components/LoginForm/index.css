@@ -11,6 +11,48 @@
   color: #103da2;
 }
 
+/* Breakpoint: max-width: 480px */
+@media (max-width: 480px) {
+  .login-form-container {
+    width: 90%;
+    padding: 1rem;
+  }
+}
+
+/* Breakpoint: min-width: 481px and max-width: 1024px */
+@media (min-width: 481px) and (max-width: 1023px) {
+  .login-form-container {
+    width: 70%;
+    padding: 1.5rem;
+  }
+}
+
+/* Breakpoint: min-width: 1025px */
+@media (min-width: 1024px) {
+  .login-form-container {
+    width: 40%;
+    padding: 1rem;
+    margin-top: 3%;
+  }
+}
+/*
+
+@media (min-width: 481px) and (max-width: 1024px) {
+  .login-form-container {
+    width: 70%;
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .login-form-container {
+    width: 30%;
+    padding: 2rem;
+  }
+}
+
+*/
+
 .login-form-title {
   font-weight: 700;
   font-size: 2rem;

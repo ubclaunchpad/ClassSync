@@ -42,6 +42,10 @@ const StudentDashboard = () => {
     navigate('/shop');
   };
 
+  const handleTrialClass = () => {
+    navigate('/trial/' + id, { state: { name: name.f_name + " " + name.l_name } });
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,9 +75,7 @@ const StudentDashboard = () => {
   }, [id]);
 
   const getCourseList = async (courses) => {
-    console.log("HUH")
     console.log(courses)
-    console.log("Fiuc")
     // const enrollmentIds = courses.map(course => course.enrollment_id);
     let coursesResult = []
     for (let course of courses) {
@@ -143,7 +145,16 @@ const StudentDashboard = () => {
   // };
 
   return (
-    <MainContentLayout>
+    <MainContentLayout rightColumnContent={<div width="60%">
+      <p>Book a <b>FREE 30-min</b> trial session today!</p>
+
+
+      <Button
+        className="browse-courses__button"
+        size="small"
+        onClick={handleTrialClass}
+        label="Book Trial Class"
+      /></div>}>
       <div className="student-dashboard__page">
         <div className="student-dashboard__student-information">
           <div className="student-information__profile">
@@ -171,6 +182,7 @@ const StudentDashboard = () => {
               onClick={openModal}
               label="Manage Classes"
             />
+
             <Button
               className="browse-courses__button"
               size="small"

@@ -44,6 +44,7 @@ const ClassRecordForm = () => {
       .then((response) => response.json())
       .then((data) => {
         setClassInfo(data);
+        console.log(data)
       })
       .catch((error) => console.error("Error:", error));
 
@@ -170,6 +171,36 @@ const ClassRecordForm = () => {
 
   const [saveText, setSaveText] = useState("Save");
 
+  const handleNoShow = async () => {
+    try {
+      const response = await fetch(URL + `/class/${id}/status/0`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      console.log('No show marked successfully');
+    } catch (error) {
+      console.error('Error marking no show:', error);
+    }
+  };
+  const handleComplete = async () => {
+    try {
+      const response = await fetch(URL + `/class/${id}/status/1`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      console.log('No show marked successfully');
+    } catch (error) {
+      console.error('Error marking no show:', error);
+    }
+  };
   const handleSave = async () => {
     const completedGoalIndices = goals.reduce((indices, goal, index) => {
       if (goal.completed) {
@@ -378,7 +409,7 @@ const ClassRecordForm = () => {
                 <path d="M0 0h24v24H0z" fill="none" />
                 <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
               </svg>
-              <a href={`/course/${classInfo.course_id}`}>Lesson Plan</a>
+              <a href={`/course/${classInfo.course_id}`}>Lesson Plan </a>
             </div>
           </div>
         </div>
@@ -777,17 +808,49 @@ const ClassRecordForm = () => {
                           )
                         )}
                     </div>
-                    <Button
-                      variant="contained"
-                      color={saveText === "Saved" ? "secondary" : "primary"}
-                      style={{ marginTop: "20px" }}
-                      onClick={() => {
-                        setSaveText("Saving..");
-                        handleSave();
-                      }}
-                    >
-                      {saveText}
-                    </Button>
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        disabled={!Object.values(notes).every(note => note.length === 0)}
+                        onClick={handleNoShow}
+                        style={{
+                          marginTop: "20px", marginRight: '20px',
+                          color: 'white',
+                          backgroundColor: Object.values(notes).every(note => note.length === 0) ? 'red' : 'gray',
+
+                        }}
+                      >
+                        No-Show
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color={saveText === "Saved" ? "secondary" : "primary"}
+                        style={{ marginTop: "20px" }}
+                        onClick={() => {
+                          setSaveText("Saving..");
+                          handleSave();
+                        }}
+                      >
+                        {saveText}
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleComplete}
+                        disabled={saveText !== "Saved" || !Object.values(notes).every(note => note.length > 0)}
+                        style={{
+                          marginTop: "20px",
+                          marginLeft: '20px',
+                          backgroundColor: (saveText !== "Saved" || !Object.values(notes).every(note => note.length > 0)) ? 'gray' : 'green',
+                          color: 'white'
+                        }}                      >
+                        Mark as Complete
+                      </Button>
+
+
+                    </div>
                   </form>
                 ) : (
                   <div style={{ width: "45%", maxWidth: "600px" }}>

@@ -13,8 +13,11 @@ export default function RegistrationRow({
   handleChange,
   curExpand,
   setCurExpand,
+  editPayment
 }) {
   const [enrollmentData, setEnrollmentData] = useState([]);
+
+
 
   const expandRow = () => {
     if (curExpand == data.enrollment_id) {
@@ -59,21 +62,22 @@ export default function RegistrationRow({
         <td className="registration__table-row-element">{data.course}</td>
         <td className="registration__table-row-element">{new Date(data.registration_date).toLocaleDateString()}</td>
         <td className="registration__table-row-element">
-          <Switch
-            checked={data.paid}
-            onChange={(val) => handleChange(data.enrollment_id, val)}
-            onColor="#86d3ff"
-            onHandleColor="#2693e6"
-            handleDiameter={20}
-            uncheckedIcon={false}
-            checkedIcon={false}
-            boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-            activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-            height={20}
-            width={48}
-            className="react-switch"
-            id="material-switch"
-          />
+
+          {editPayment ? (
+            <select
+              style={{ alignItems: "center" }}
+              onChange={(e) => handleChange(data.enrollment_id, e.target.value)}
+              defaultValue={data.paid}
+            >
+              <option value="afu">A</option>
+              <option value="scholarship">S</option>
+              <option value="card">C</option>
+            </select>
+          ) : (
+            <div style={{ textAlign: 'center' }}>
+              {data.paid.charAt(0).toUpperCase()}
+            </div>
+          )}
         </td>
         <td className="registration__table-row-element">    <div style={{ display: "flex", alignItems: "center" }}>
           {[...Array(Math.min(data.completed, 5))].map((_, i) => (

@@ -1,11 +1,12 @@
 import { Router } from "express";
 import authorize from "../auth/authentication.js";
 import adminAuthController from "../controllers/adminAuthController.js";
+import adminRoute from "../routes/adminRoute.js";
 const router = Router();
 const admin = new adminAuthController();
 
 router.get("/pingcheck", (_, res) => {
-  res.send("pong");
+  res.send("pingpong");
 });
 
 router.post("/signup", (req, res) => {
@@ -56,4 +57,5 @@ router.post("/testing-auth-middleware", authorize("Admin"), (req, res) => {
     );
 });
 
+router.use("/", adminRoute)
 export default router;

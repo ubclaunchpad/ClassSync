@@ -1,12 +1,16 @@
 import "./index.css";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
 import React, { useState } from "react";
 
 const LoginForm = ({ role }) => {
   const { login, user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/parentDash";
+
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(null); // New state variable for login error
 
@@ -41,6 +45,8 @@ const LoginForm = ({ role }) => {
   });
 
   const parentLogin = async (data) => {
+
+    console.log("URL Is ", url)
     const parentResponse = await fetch(url + "/parent/login", {
       method: "POST", // Specify the method
       headers: {
@@ -61,7 +67,7 @@ const LoginForm = ({ role }) => {
       console.log("Res", res.user);
 
       login(res.user);
-      navigate("/parentDash");
+      navigate(from, { replace: true });
     }
   };
 

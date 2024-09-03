@@ -1,0 +1,49 @@
+.rbc-agenda-view {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 0;
+    overflow: auto;
+    background-color: var(--agenda-bg-color, #fff); /* Default background color */
+    padding: 10px;
+}
+
+.rbc-agenda-event-card {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin: 10px 0; /* Adds spacing between events */
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Slightly rounded corners */
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rbc-agenda-event {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.rbc-agenda-date {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--date-color, #333); /* Default date color */
+}
+
+.rbc-agenda-time {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--time-color, #555); /* Default time color */
+}
+
+.rbc-agenda-event-title {
+    margin-left: 15px;
+    color: var(--event-title-color, #555); /* Default event title color */
+}
+
+.rbc-agenda-no-events {
+    padding: 10px;
+    text-align: center;
+    color: var(--no-events-color, #888); /* Default no events message color */
+}

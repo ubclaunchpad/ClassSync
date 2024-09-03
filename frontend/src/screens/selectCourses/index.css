@@ -11,24 +11,7 @@
     padding: 5px 10px;
     margin-right: 10px;
 }
-li:hover .remove-btn {
-    opacity: 1;
-}
 
-.styled-link {
-    color: #007bff;
-
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-    margin-bottom: 5%;
-  }
-  
-  .styled-link:hover {
-    cursor: pointer;    
-    color: #103da2; /* Bootstrap primary color */
-
-  }
 .course-info {
     flex-grow: 1;
 }

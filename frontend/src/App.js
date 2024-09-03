@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./screens/login";
 import SignUp from "./screens/signup";
 import Confirmation from "./screens/confirmation";
@@ -27,15 +27,23 @@ import ClassRecordForm from "./screens/classRecord";
 import { CourseCurriculumView } from "./screens/courseCurriculum";
 import Layout from "./screens/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
+import TrialBookingCalendar from "./components/TrialBookingCalendar"
 
 import { useAuth } from "./contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import LogPage from "./components/LogPage";
 import { ViewAllCourses } from "./components/BrowseCourses";
+import AdminDash from "./components/AdminDash";
+import SelectCourses from "./screens/selectCourses";
+import ScholarshipRegistration from "./screens/scholarshipRegistration";
+import CompleteRegistration from "./screens/completeRegistration";
 
 function PrivateRoute({ Component, roles }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
+
   let path = "/";
+
 
   if (roles.includes("guardian")) {
     path = "/";
@@ -52,7 +60,7 @@ function PrivateRoute({ Component, roles }) {
   return user && roles.includes(user.role) ? (
     <Component />
   ) : (
-    <Navigate to={path} />
+    <Navigate to={path} state={{ from: location }} />
   );
 }
 
@@ -73,9 +81,20 @@ function App() {
                 path="/registertutor/3f2916a7-02a4-4e7a-942c-402b3e396fa4"
                 element={<RegisterTutor admin={true} />}
               />
+              <Route path="/completeregistration" element={<CompleteRegistration />} />
               <Route
                 path="/registertutor/:token"
                 element={<RegisterTutor admin={false} />}
+              />
+
+
+
+
+              <Route
+                path="/funding/:funding/:id/code/:code"
+                element={
+                  <PrivateRoute Component={ScholarshipRegistration} roles={["guardian"]} />
+                }
               />
 
               <Route
@@ -116,7 +135,15 @@ function App() {
                   />
                 }
               />
-
+              <Route
+                path="/adminDash"
+                element={
+                  <PrivateRoute
+                    Component={AdminDash}
+                    roles={["admin"]}
+                  />
+                }
+              />
 
               <Route
                 path="/course/:id"
@@ -213,6 +240,20 @@ function App() {
                   <PrivateRoute Component={ShopCourses} roles={["guardian"]} />
                 }
               />
+              {/* sid = student id, and cid = course id */}
+              <Route
+                path="book/trial/:sid/course/:cid"
+                element={
+                  <PrivateRoute Component={TrialBookingCalendar} roles={["guardian"]} />
+                }
+              />
+              <Route
+                path="/trial/:id"
+                element={
+                  <PrivateRoute Component={SelectCourses} roles={["guardian"]} />
+                }
+              />
+
               <Route
                 path="/allTutors"
                 element={

@@ -3,6 +3,8 @@ import { MainContentLayout } from "../../components/MainContentLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort } from "@fortawesome/free-solid-svg-icons";
 import RegistrationRow from "../../components/RegistrationRow";
+import Select from "react-select";
+
 import "./index.css";
 
 const URL = process.env.REACT_APP_API_URL
@@ -16,33 +18,53 @@ const Registrations = () => {
   const [sortedByDate, setSortedByDate] = useState(false);
   const [sortedByPaid, setSortedByPaid] = useState(false);
   const [curExpand, setCurExpand] = useState();
+  const [funding, setFunding] = useState(null)
+  const [editPayment, setEditPayment] = useState(false)
+
+  const [students, setStudents] = useState([]);
+  const [studentId, setStudentId] = useState("");
+  const [paymentChanges, setPaymentChanges] = useState([])
 
 
   const fetchRegistrations = async () => {
-    const url = URL + `/registrations`;
+    let url = URL + `/registrations`;
     const response = await fetch(url);
     const registrations = await response.json();
     console.log("Registrations", registrations);
     setRegistrations(registrations);
+
+    url = URL + "/student";
+    const studentsResponse = await fetch(url);
+    const studentsData = await studentsResponse.json();
+    setStudents(studentsData);
   };
 
   useEffect(() => {
     fetchRegistrations();
   }, []);
 
-  const handleChange = async (id, paid) => {
-    const url = URL + `/registrations/${id}/${paid}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ paid: paid }),
-    });
-    if (response.ok) {
-      fetchRegistrations();
-    }
+  const handleChange = async (id, payment) => {
+    setPaymentChanges((prevChanges) => [...prevChanges, { id: id, payment: payment }]);
   };
+
+  const handlePaymentUpdate = async () => {
+
+    if (paymentChanges.length > 0) {
+      const url = URL + `/registrations/payment`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentChanges),
+      });
+      if (response.ok) {
+        fetchRegistrations();
+      }
+    }
+    setEditPayment(false)
+    setPaymentChanges([])
+  }
 
   const resetSort = () => {
     setSortedByGuardian(false);
@@ -116,6 +138,17 @@ const Registrations = () => {
     setRegistrations(sortedRegistrations);
   };
 
+  const copyScholarshipLink = async () => {
+    try {
+      const response = await fetch(URL + '/token/scholarship/new/' + studentId.value + '/' + funding.value,);
+      const data = await response.json();
+
+      // Now you have the token in `data`, you can copy it to clipboard
+      navigator.clipboard.writeText("localhost:3000/funding/" + data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
   const handleSortByDate = () => {
     resetSort();
     const newSortDirection = sortDirection === "asc" ? "desc" : "asc";
@@ -148,71 +181,192 @@ const Registrations = () => {
             View and sort enrollments by clicking on column headers.
           </p>
           <p>
-            The "Paid" column indicates whether the enrollment has been paid
-            for. You can toggle the payment status by clicking on the respective
-            button in each row.
+            The "Paid" column indicates how the enrollment has been paid for. Payment statuses are represented by different letters: "C" for card, "S" for scholarship, "A" for AFU, and "O" for other. You can identify the payment method by looking at the respective letter in each row.
+
+
+
+
+
+
+
           </p>
           <p>
             Additionally, you can track the progress of each course, seeing how
             many classes are completed, booked, and pending respectively.
-          </p>{" "}
-        </div>
+          </p>
+          <h4 style={{ color: "#333", marginBottom: "10px" }}>
+            Select student
+          </h4>
+
+
+          <Select
+            className="basic-single"
+            classNamePrefix="select"
+            isClearable={true}
+            isSearchable={true}
+            name="color"
+            value={studentId}
+            onChange={setStudentId}
+            options={students.map((student) => ({
+              value: student._id,
+              label: student._name,
+              guardian: student._guardian,
+            }))}
+            formatOptionLabel={({ label, guardian }) => (
+              <div>
+                <div>{label}</div>
+                <small
+                  style={{ fontSize: "0.8em", color: "gray" }}
+                >{`Guardian: ${guardian}`}</small>
+              </div>
+            )}
+          />
+
+          <h4 style={{ color: "#333", marginBottom: "10px" }}>
+            Select Funding
+          </h4>
+          <Select
+            className="basic-single"
+            classNamePrefix="select"
+            isClearable={true}
+            isSearchable={true}
+            name="color"
+            styles={{ marginTop: '10px' }}
+            value={funding}
+            onChange={setFunding}
+            options={[
+              { value: 'scholarship', label: 'Scholarship' },
+              { value: 'afu', label: 'AFU' },
+              { value: 'other', label: 'Other' }
+            ]}
+          />
+          <button
+            disabled={!studentId || funding === null}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginTop: '10px',
+              padding: '10px 20px',
+              backgroundColor: (studentId && funding !== null) ? '#007BFF' : '#6c757d', // '#6c757d' is a common grey
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: (studentId && funding !== null) ? 'pointer' : 'default',
+              fontSize: '16px',
+              transition: 'all 0.3s ease'
+            }}
+            onClick={copyScholarshipLink}
+          >          Copy Single-Use Link
+          </button>
+
+
+        </div >
       }
+
     >
-      <div style={{ display: "flex", marginTop: "20px", marginLeft: "60%" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+
+      <div style={{ display: "flex", marginTop: "20px", marginLeft: '10%', alignItems: "left" }}>
+        {editPayment ? (
+          <button
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center', // Center the text horizontally
+              marginTop: '10px',
+              padding: '10px 20px',
+              width: '150px', // Fixed width
+              backgroundColor: '#007BFF', // Primary color
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Box shadow for depth
+            }}
+            onClick={handlePaymentUpdate}
+          >
+            Update
+          </button>
+        ) : (
+          <button
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center', // Center the text horizontally
+              marginTop: '10px',
+              padding: '10px 20px',
+              width: '150px', // Fixed width
+              backgroundColor: '#103da2', // Primary color
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Box shadow for depth
+            }}
+            onClick={() => setEditPayment(true)}
+          >
+            Edit Payment
+          </button>
+        )}
+
+        <div style={{ display: "flex", marginLeft: "40%", }}>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "darkblue",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Completed</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "darkblue",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Completed</div>
+          </div>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "#86d3ff",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Booked</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginRight: "10px",
-          }}
-        >
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#86d3ff",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Booked</div>
+          </div>
           <div
             style={{
-              width: "20px",
-              height: "20px",
-              backgroundColor: "#9E9E9E",
-              marginRight: "5px",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
+              marginRight: "10px",
             }}
-          />
-          <div>Pending</div>
+          >
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#9E9E9E",
+                marginRight: "5px",
+                borderRadius: "3px",
+              }}
+            />
+            <div>Pending</div>
+          </div>
         </div>
       </div>
 
@@ -290,11 +444,12 @@ const Registrations = () => {
               handleChange={handleChange}
               curExpand={curExpand}
               setCurExpand={setCurExpand}
+              editPayment={editPayment}
             />
           ))}
         </tbody>
       </table>
-    </MainContentLayout>
+    </MainContentLayout >
   );
 };
 

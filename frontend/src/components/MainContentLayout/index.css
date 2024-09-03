@@ -10,15 +10,25 @@
 h2 {
     font-size: 1.4rem;
 }
-
 .main-tutor-row {
     display: grid;
     grid-template-columns: 75% 25%;
 }
 
+@media (max-width: 450px) {
+    .main-tutor-row {
+        grid-template-columns: 0% 100% 0% !important; /* Default to a single column */
+    }
+}
+@media (min-width: 451px) {
+    .main-tutor-row {
+        grid-template-columns: 75% 25% ; /* Default to a single column */
+    }
+}
 .left {
     background-color: #103DA2;
 }
+
 
 
 .middle {
@@ -32,11 +42,13 @@ h2 {
 }
 
 
-@media screen and (max-width: 750px) {
+@media screen and (min-width: 1152px) {
     .column {
         width: 100%;
     }
 }
+
+
 
 .header-row {
     display: flex;

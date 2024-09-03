@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { MainContentLayout } from "../../components/MainContentLayout";
 import { NavLink } from 'react-router-dom';
 import { AddReviewForm } from "../../components/AddReviewForm";
-
+import { useAuth } from "../../contexts/AuthContext";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { AgendaView } from "./agenda";
 const URL = process.env.REACT_APP_API_URL
 
 const ParentDash = (props) => {
@@ -16,6 +18,7 @@ const ParentDash = (props) => {
     const guardian_id = localStorage.getItem('userId');
     const [students, setStudents] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const { user, login } = useAuth()
 
 
     const handleTileClick = async (studentId) => {
@@ -52,6 +55,13 @@ const ParentDash = (props) => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+
+
+
+            const updatedUser = user
+            updatedUser.children = data
+
+            login(updatedUser)
             setStudents(data);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
@@ -80,6 +90,7 @@ const ParentDash = (props) => {
                     alignItems: "center",
                     marginTop: "20px",
                     marginRight: "15px"
+
                 }}>
                     <button style={{
                         padding: "10px",
@@ -102,29 +113,62 @@ const ParentDash = (props) => {
             }>
             <div className="student-info-container">
                 <div className="student-info-header">
-                    <h2>Student</h2>
-                    <button class="header-button">
+                    <h2>Student(s)</h2>
+                    <button className="header-button pc">
 
                         <NavLink to="/addStudent" className="header-button">Add a New Student</NavLink>          </button>
+
+                    <div className="mb" style={{ marginTop: '10px' }}>
+                        <NavLink to="/addStudent">
+                            <AddCircleIcon style={{ fill: "#103da2", fontSize: "40px" }} />                        </NavLink>
+                    </div>
                 </div>
-                <div className="existing-students-row">
-                    {
-                        students.map((student) => {
-                            const tileColorClass = `student-tile ${student.color}-tile`;
+                <div>
+                    <div className="pc existing-students-row" >
+                        {
+                            students.map((student) => {
+                                const tileColorClass = `student-tile ${student.color}-tile`;
+                                return (
+                                    <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
+                                        <div className="rectangle"></div>
+                                        <div className="name">{student.name}</div>
+                                    </div>
+                                )
+                            })
+
+
+                        }
+                    </div>
+                    <div className="mb student-container">
+
+                        {students.map((student) => {
+                            const tileColorClass = `stripe ${student.color}-tile`;
+
                             return (
-                                <div className={tileColorClass} onClick={() => handleTileClick(student.student_id)}>
-                                    <div className="rectangle"></div>
-                                    <div className="name">{student.name}</div>
+
+                                <div className="name-card" onClick={() => handleTileClick(student.student_id)}>
+                                    <div className={tileColorClass}></div>
+                                    <div className="content">
+                                        {student.name}
+                                    </div>
                                 </div>
+
                             )
-                        })
-                    }
+                        })}
+                    </div>
+
                 </div>
+
+
+            </div >
+            <div className="mb">
+                <ParentDashCalendar students={students} defaultView="agenda" views={{ day: true, agenda: AgendaView }} ></ParentDashCalendar>
             </div>
-            <div className="student-info-container">
+
+            <div className="pc">
                 <ParentDashCalendar students={students}></ParentDashCalendar>
             </div>
-        </MainContentLayout>
+        </MainContentLayout >
     );
 };
 

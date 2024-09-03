@@ -42,6 +42,7 @@ export const EditCourseModal = ({
       age: formValues.age,
       description: formValues.description,
       color: formValues.color,
+      price: formValues.price,
       prerequisites: formValues.prerequisites,
       image: formValues.image,
       info_page: html,
@@ -250,6 +251,7 @@ export const EditCourseModal = ({
           prerequisites: data.prerequisites,
           description: data.course_description,
           image: data.image,
+          price: data.price,
         });
 
         setFiles(data.files == null ? [] : data.files);
@@ -319,6 +321,7 @@ export const EditCourseModal = ({
     color: "#fff",
     prerequisites: "",
     description: "",
+    price: 0
   });
   useEffect(() => {
     console.log("Checked courses updated");
@@ -664,12 +667,13 @@ export const EditCourseModal = ({
             <div style={{ flex: 1, marginLeft: "10px" }}>
               <label style={{ color: "#103da2", marginBottom: "10px" }}>
                 <span style={{ display: "block", marginBottom: "5px" }}>
-                  Pre-Requisites:
+                  Price (CAD):
                 </span>
                 <input
-                  type="text"
-                  name="prerequisites"
-                  value={formValues.prerequisites}
+                  type="number"
+                  step={1}
+                  name="price"
+                  value={formValues.price}
                   onChange={handleInputChange}
                   style={{
                     padding: "10px",
@@ -682,6 +686,26 @@ export const EditCourseModal = ({
               </label>
             </div>
           </div>
+          <label style={{ color: "#103da2", marginBottom: "10px" }}>
+            <span style={{ display: "block", marginBottom: "5px" }}>
+              Pre-Requisites:
+            </span>
+            <input
+              type="text"
+              name="prerequisites"
+              value={formValues.prerequisites}
+              onChange={handleInputChange}
+              style={{
+                padding: "10px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                marginBottom: "10px",
+                fontSize: "14px",
+                width: "100%",
+
+              }}
+            />
+          </label>
           <label style={{ color: "#103da2", marginBottom: "10px" }}>
             <span style={{ display: "block", marginBottom: "5px" }}>
               Description:

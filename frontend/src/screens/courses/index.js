@@ -284,6 +284,13 @@ const Courses = () => {
                             Tutors
                             {sortedByTutors ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : <FontAwesomeIcon icon={faSort} style={{ paddingLeft: '5px' }} />}
                         </th>
+
+                        <th
+                            style={{ padding: '10px', textAlign: 'center', fontWeight: 'bold', cursor: 'pointer' }}
+
+                        >
+                            Price
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -314,6 +321,8 @@ const Courses = () => {
                                 <td style={{ padding: '10px', textAlign: 'left' }}>{course.prerequisites}</td>
                                 <td style={{ padding: '10px', textAlign: 'center' }}>{course.enrollments}</td>
                                 <td style={{ padding: '10px', textAlign: 'center' }}>{course.tutors}</td>
+                                <td style={{ padding: '10px', textAlign: 'center' }}>${course.price}</td>
+
                             </tr>
                         );
                     })}

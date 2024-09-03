@@ -36,6 +36,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
             description: formValues.description,
             color: formValues.color,
             prerequisites: formValues.prerequisites,
+            price: formValues.price,
             image: formValues.image,
             info_page: html,
             files: uploadedFiles,
@@ -265,6 +266,7 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
         color: '#fff',
         prerequisites: '',
         description: '',
+        price: 0
     });
     useEffect(() => {
         console.log("Checked courses updated")
@@ -503,11 +505,15 @@ export const AddCourseModal = ({ showModal, handleCloseModal, courses }) => {
                         </div>
                         <div style={{ flex: 1, marginLeft: '10px' }}>
                             <label style={{ color: '#103da2', marginBottom: '10px' }}>
-                                <span style={{ display: 'block', marginBottom: '5px' }}>Pre-Requisites:</span>
-                                <input type="text" name="prerequisites" value={formValues.prerequisites} onChange={handleInputChange} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '14px' }} />
+                                <span style={{ display: 'block', marginBottom: '5px' }}>Price</span>
+                                <input type="number" name="price" value={formValues.price} onChange={handleInputChange} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '14px' }} />
                             </label>
                         </div>
                     </div>
+                    <label style={{ color: '#103da2', marginBottom: '10px' }}>
+                        <span style={{ display: 'block', marginBottom: '5px' }}>Pre-Requisites:</span>
+                        <input type="text" name="prerequisites" value={formValues.prerequisites} onChange={handleInputChange} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', width: '100%', marginBottom: '10px', fontSize: '14px' }} />
+                    </label>
                     <label style={{ color: '#103da2', marginBottom: '10px' }}>
                         <span style={{ display: 'block', marginBottom: '5px' }}>Description:</span>
                         <textarea name="description" value={formValues.description} onChange={handleInputChange} rows="4" style={{ padding: '10px', maxHeight: '200px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', fontSize: '14px', width: '100%' }}></textarea>
