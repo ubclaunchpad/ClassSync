@@ -3,6 +3,7 @@ import { FakeTutors } from "./fakeData";
 import { TutorInfoCard } from "../../components/TutorInfoCard";
 import "./index.css";
 import Banner from "../../components/Banner";
+import { MainContentLayout } from "../../components/MainContentLayout";
 
 export const ViewAllTutors = () => {
   const [allTutors, setAllTutors] = useState([]);
@@ -39,28 +40,31 @@ export const ViewAllTutors = () => {
   }, []);
   console.log(allTutors);
   return (
-    <div>
-      <div className="view-tutors__page">
-        <div className="view-tutors__container">
-          <div className="all-tutors__header">
-            <div className="all-tutors__title">View All Tutors</div>
+    <>
+      <MainContentLayout >
+        <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div className="shop-courses-container">
+            <h2 className="shop-courses-heading">
+              View All Tutors</h2>
+
           </div>
-          <div className="tutors-scroll__container">
-            <div className="tutors-scroll__title">
-              {`Showing ${allTutors.length} tutors`}
-            </div>
-            <div className="tutors-scroll__items">
-              {allTutors.map((tutor) => {
-                return (
-                  <div>
-                    <TutorInfoCard tutorId={tutor.tutor_id} tutor={tutor} courses={courses[tutor.tutor_id]} />
-                  </div>
-                );
-              })}
-            </div>
+          <div className="tutors-scroll__title">
+            {`Showing ${allTutors.length} tutors`}
           </div>
+          {allTutors.map((tutor) => {
+            return (
+              <div className='course-container'
+              >
+                <TutorInfoCard tutorId={tutor.tutor_id} tutor={tutor} courses={courses[tutor.tutor_id]} />
+              </div>
+            );
+          })}
         </div>
-      </div>
-    </div>
+
+      </MainContentLayout >
+
+
+    </>
+
   );
 };
