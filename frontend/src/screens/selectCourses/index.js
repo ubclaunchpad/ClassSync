@@ -47,25 +47,13 @@ const SelectCourses = (props) => {
 
         <MainContentLayout>
 
-            <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h2>Select Trial Class for {state.name} </h2>
+            <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '60px' }}>
+                <h2 className='trial-header' style={{ width: '90%' }}>Select Trial Class for {state.name} </h2>
                 {courses && courses.map((course, index) => (
                     <div key={index}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '80%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: '20px',
-                            border: '1px solid #ddd',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            boxSizing: 'border-box',
-                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                            backgroundColor: '#f9f9f9',
-                        }}>
-                        <img src={course.image} alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
+                        className='course-container'
+                    >
+                        <img src={course.image} className="course-image" alt="Course" />
                         <div style={{ flex: 1 }}>
                             <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
                             <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
