@@ -16,7 +16,7 @@ const Modal = ({ selectedSlot, availablePeople, onBook, onClose, duration = 60 }
 
 
 
-                <div style={{ position: 'relative', padding: '10px', paddingRight: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', width: '90%', overflow: 'auto', scrollbarWidth: 'thin' }}>
+                <div style={{ position: 'relative', padding: '10px', paddingRight: '20px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', width: '100%', overflow: 'auto', scrollbarWidth: 'thin' }}>
                     <button onClick={onClose} style={{ position: 'absolute', right: '30px', top: '10px', background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}>x</button>
 
                     <h3 style={{ marginBottom: '20px', color: '#007BFF' }}>{moment(selectedSlot).format('MMMM Do YYYY')}</h3>
