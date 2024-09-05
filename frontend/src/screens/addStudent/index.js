@@ -10,22 +10,21 @@ import "./index.css";
 
 const AddStudent = (props) => {
   return (
-<div className="page-container">
-         
-            <div class="main-row">
-                <div class="column left-student">
-                </div>
-                <div class="column middle">
-                <div className="student-info-container">
-                    <AddStudentForm />
-                    <hr className="line"></hr>
-                </div>
-                <div className="student-info-container"></div>
-                </div>
-                <div class="column right">
-                </div>
-            </div>
+    <div className="page-container">
+
+      <div class="main-tutor-row">
+        <div class="column left-student">
         </div>
+        <div class="column middle">
+          <div className="student-info-container add-student">
+            <AddStudentForm />
+            <hr className="line"></hr>
+          </div>
+        </div>
+        <div class="column right">
+        </div>
+      </div>
+    </div>
   );
 };
 
