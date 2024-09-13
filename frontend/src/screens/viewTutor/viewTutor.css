@@ -29,6 +29,18 @@
   /* align-items: center; */
 }
 
+.mb {
+  .tutor-profile__overview {
+    flex-direction: column  ;
+  }
+  .tutor-overview__name {
+    align-self: center;
+  }
+  .tutor-overview__description {
+    align-self: center;
+  }
+}
+
 .p-avatar-image {
   border-radius: 10px;
 }
@@ -77,7 +89,7 @@
 
 .tutor-profile__tab-view {
   margin-top: 40px;
-  width: 700px;
+  width: 70%;
 }
 .tutor-profile__about-me {
   text-align: left;
