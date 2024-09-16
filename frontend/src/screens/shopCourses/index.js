@@ -3,10 +3,16 @@ import { ParentDashboardLayout } from '../../components/ParentDashboardLayout';
 import Modal from 'react-modal';
 import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { MainContentLayout } from '../../components/MainContentLayout';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
+import Badge from '@mui/material/Badge';
+
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 
 const URL = process.env.REACT_APP_API_URL
 
@@ -18,6 +24,7 @@ const ShopCourses = () => {
     const [courses, setCourses] = useState(null);
     const [students, setStudents] = useState(null);
     const navigate = useNavigate();
+    const [showCourses, setShowCourses] = useState(true)
 
     const [cart, setCart] = useState(() => {
         const cookies = document.cookie.split('; ');
@@ -227,123 +234,125 @@ const ShopCourses = () => {
         // Check hash on initial load and when courses array is updated
         checkHashAndOpenModal();
     }, [courses]);
+    const getCartItemCount = () => {
+        return Object.values(cart).reduce((acc, valueArray) => acc + valueArray.length, 0);
+    };
 
 
-
-
+    const isCartEmpty = () => {
+        return Object.values(cart).every(valueArray => valueArray.length === 0);
+    };
 
     return (
 
-        <MainContentLayout rightColumnContent={
-            <div>
-                <div style={{
-                    backgroundColor: '#fff',
-                    padding: '20px',
-                    borderRadius: '8px',
-                    maxWidth: '600px',
-                    margin: 'auto',
-                    marginTop: '40px',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' // Added shadow
-                }}>
-                    <p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Your Cart</p>
-                    {Object.entries(cart).map(([key, valueArray], index) => (
-                        valueArray.length > 0 && (
-                            <div key={index} style={{ marginBottom: '15px', textAlign: 'left' }}>
-                                <h3 style={{ borderBottom: '2px solid rgb(221, 221, 221)', paddingBottom: '5px', color: '#103da2' }}>{key}</h3>
-                                <ul style={{ listStyleType: 'none', padding: '0' }}>
-                                    {valueArray.map((item, itemIndex) => (
-                                        <li key={itemIndex} style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            padding: '5px 0',
-                                        }}>
-                                            <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer', marginRight: '2px' }}><b>x</b></span>
-                                            <span style={{ textAlign: 'left' }}>{item.course_difficulty} {item.course_name}</span>
-                                            <span>${(Number.parseInt(item.price)).toFixed(2)}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )
-                    ))}
-                    <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
-                        Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) =>
-                            acc + valueArray.reduce((subAcc, course) => subAcc + parseInt(course.price), 0), 0).toFixed(2)}
-                    </p>
-                    <button onClick={() => handleCheckout()} style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
-                        Checkout
-                    </button>
-                </div>
+        <MainContentLayout
+            rightColumnContent={
+                <div>
+                    <div
+                        className='pc'
+                        style={{
+                            backgroundColor: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            maxWidth: '600px',
+                            margin: 'auto',
+                            marginTop: '40px',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' // Added shadow
+                        }}>
+                        <p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Your Cart</p>
+                        {Object.entries(cart).map(([key, valueArray], index) => (
+                            valueArray.length > 0 && (
+                                <div key={index} style={{ marginBottom: '15px', textAlign: 'left' }}>
+                                    <h3 style={{ borderBottom: '2px solid rgb(221, 221, 221)', paddingBottom: '5px', color: '#103da2' }}>{key}</h3>
+                                    <ul style={{ listStyleType: 'none', padding: '0' }}>
+                                        {valueArray.map((item, itemIndex) => (
+                                            <li key={itemIndex} style={{
+                                                display: 'flex',
+                                                flexWrap: 'wrap', // Ensure content wraps
+                                                justifyContent: 'space-between',
+                                                padding: '5px 0',
+                                            }}>
+                                                <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer', marginRight: '5px' }}><b>x</b></span>
+                                                <span style={{ textAlign: 'left', flex: '1 1 auto', marginRight: '10px' }}>{item.course_difficulty} {item.course_name}</span>
+                                                <span style={{ flex: '0 0 auto', color: "#103da2" }}>${(Number.parseInt(item.price)).toFixed(2)}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )
+                        ))}
+                        <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
+                            Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) =>
+                                acc + valueArray.reduce((subAcc, course) => subAcc + parseInt(course.price), 0), 0).toFixed(2)}
+                        </p>
+                        <button onClick={() => handleCheckout()} style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
+                            Checkout
+                        </button>
+                    </div>
 
-            </div>
-        }>
+                </div>
+            }>
 
             <div className="courses-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <h2>Shop Courses</h2>
-                {courses && courses.map((course, index) => (
+                <div className="shop-courses-container">
+                    <h2 className="shop-courses-heading">
+                        Shop Courses
+
+                        <div className='mb' onClick={() => setShowCourses(!showCourses)}>
+                            {showCourses ? (
+                                <Badge badgeContent={getCartItemCount()} color="error">
+                                    {isCartEmpty() ? (
+                                        <AddShoppingCartIcon className="shop-courses-icon" fontSize="large" />
+                                    ) : (
+                                        <ShoppingCartCheckoutIcon className="shop-courses-icon" fontSize="large" />
+                                    )}
+                                </Badge>
+                            ) : (
+                                <InfoIcon className="shop-courses-icon" fontSize="large" />
+                            )}
+                        </div>
+                    </h2>
+                </div>
+
+                {showCourses ? (courses && courses.map((course, index) => (
                     <div key={index}
                         id={course.course_id}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '80%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            marginBottom: '20px',
-                            border: '1px solid #ddd',
-                            borderRadius: '10px',
-                            padding: '20px',
-                            boxSizing: 'border-box',
-                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                            backgroundColor: '#f9f9f9',
-                        }}>
-                        <img src={course.image} alt="Course" style={{ width: '240px', height: '160px', marginRight: '20px', borderRadius: '10px' }} />
-                        <div style={{ flex: 1, maxWidth: '45%' }}>
+                        className='course-container'
+                    >
+                        <img src={course.image} alt="Course" className='course-image' />
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, maxWidth: '45%' }}>
                             <h3 style={{ color: '#103DA2', marginBottom: '10px' }}>{course.course_difficulty} {course.course_name}</h3>
                             <p style={{ color: 'grey', marginBottom: '10px' }}>Target Age: {course.target_age} | Prerequisites: {course.prerequisites}</p>
                             <p style={{ color: '#103DA2', fontWeight: 'bold', marginBottom: '10px' }}>Price: ${(Number.parseFloat(course.price)).toFixed(2)}</p> {/* Display price here */}
-
+                            <button
+                                style={{
+                                    backgroundColor: '#103DA2',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    padding: '10px 20px',
+                                    cursor: 'pointer',
+                                    alignSelf: 'center',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    marginTop: '10px' // Add margin to separate from the content above
+                                }}
+                                value={course}
+                                onClick={() => {
+                                    setCourse(course);
+                                    openModal();
+                                    window.location.hash = course.course_id;
+                                }}
+                            >
+                                Register
+                            </button>
                         </div>
-                        <button
-                            style={{
-                                backgroundColor: '#103DA2',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '5px',
-                                padding: '10px 20px',
-                                cursor: 'pointer',
-                                alignSelf: 'center',
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                            }}
-                            value={course}
-                            onClick={() => {
-                                setCourse(course);
-                                openModal();
-
-                                window.location.hash = course.course_id;
-                            }}>Register</button>
                         <Modal
                             isOpen={modalIsOpen}
+                            className="register-modal"
                             onRequestClose={closeModal}
                             contentLabel="Register Modal"
-                            style={{
-                                content: {
-                                    top: '50%',
-                                    left: '50%',
-                                    right: 'auto',
-                                    bottom: 'auto',
-                                    marginRight: '-50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    backgroundColor: '#f0f0f0',
-                                    borderRadius: '10px',
-                                    padding: '20px',
-                                    width: '400px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                },
-                            }}
+
                         >
                             {selectedCourse && (
                                 <h2 style={{ marginBottom: '20px' }}>
@@ -411,7 +420,50 @@ const ShopCourses = () => {
                         </Modal>
                     </div>
 
-                ))}
+                ))) : (
+                    <div>
+                        <div style={{
+                            backgroundColor: '#fff',
+                            padding: '20px',
+                            borderRadius: '8px',
+                            maxWidth: '600px',
+                            margin: 'auto',
+                            marginTop: '40px',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' // Added shadow
+                        }}>
+                            <p style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>Your Cart</p>
+                            {Object.entries(cart).map(([key, valueArray], index) => (
+                                valueArray.length > 0 && (
+                                    <div key={index} style={{ marginBottom: '15px', textAlign: 'left' }}>
+                                        <h3 style={{ borderBottom: '2px solid rgb(221, 221, 221)', paddingBottom: '5px', color: '#103da2' }}>{key}</h3>
+                                        <ul style={{ listStyleType: 'none', padding: '0' }}>
+                                            {valueArray.map((item, itemIndex) => (
+                                                <li key={itemIndex} style={{
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap', // Ensure content wraps
+                                                    justifyContent: 'space-between',
+                                                    padding: '5px 0',
+                                                }}>
+                                                    <span onClick={() => removeFromCart(key, itemIndex)} title="Remove item" style={{ cursor: 'pointer', marginRight: '5px' }}><b>x</b></span>
+                                                    <span style={{ textAlign: 'left', flex: '1 1 auto', marginRight: '10px' }}>{item.course_difficulty} {item.course_name}</span>
+                                                    <span style={{ flex: '0 0 auto', color: "#103da2" }}>${(Number.parseInt(item.price)).toFixed(2)}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )
+                            ))}
+                            <p style={{ textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
+                                Total: ${Object.entries(cart).reduce((acc, [key, valueArray]) =>
+                                    acc + valueArray.reduce((subAcc, course) => subAcc + parseInt(course.price), 0), 0).toFixed(2)}
+                            </p>
+                            <button onClick={() => handleCheckout()} style={{ display: 'block', width: '100%', padding: '10px', backgroundColor: '#4CAF50', color: 'white', fontSize: '16px', borderRadius: '5px', cursor: 'pointer', border: 'none' }}>
+                                Checkout
+                            </button>
+                        </div>
+
+                    </div>
+                )}
 
             </div>
         </MainContentLayout >

@@ -24,6 +24,84 @@ li:hover .remove-btn {
     margin-bottom: 5%;
   }
   
+  .course-image {
+  width: 240px;
+  height: 160px;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+
+
+.course-container {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  @media (max-width: 480px) {
+    .course-image {
+      width: 120px;
+      height: 80px;
+      margin-right: 10px;
+    }
+    .course-container {
+      flex-direction: column;
+      width: 80%;
+    }
+  }
+
+  .register-modal {
+      position: fixed; /* Ensure the modal is fixed in the viewport */
+      top: 50%;
+      left: 50%;
+      right: auto;
+      bottom: auto;
+      margin-right: -50%;
+      transform: translate(-50%, -50%);
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      padding: 20px;
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+  }
+
+  @media (max-width: 480px) {
+
+    .register-modal {
+      width: 300px;
+    }
+  }
+    .shop-courses-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shop-courses-heading {
+  font-size: 2rem; /* Adjust the font size of the heading if needed */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between text and icon */
+}
+
+.shop-courses-icon {
+  align-self: center; /* Align the icon vertically */
+}
+  
+
   .styled-link:hover {
     cursor: pointer;    
     color: #103da2; /* Bootstrap primary color */

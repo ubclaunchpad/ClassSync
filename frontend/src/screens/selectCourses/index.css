@@ -16,6 +16,13 @@
     flex-grow: 1;
 }
 
+@media (max-width: 480px) {
+    .banner-text-container {
+        width: 100%;
+    }
+    
+}
+
 .register-button {
     background-color: #0000FF;
     /* blue */

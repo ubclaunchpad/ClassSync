@@ -182,7 +182,7 @@ export const StudentLessonTab = ({ course, view = "pc" }) => {
                 </div>
                 <div className="classes__next-lesson__container">
                   <div className="student-dashboard__title">Lesson Links</div>
-                  <div className="next-lesson__container" style={{ width: '80%' }}>
+                  <div className="next-lesson__container" >
                     {!lessons?.length > 0 && (
                       <div className="next-lesson__date-row">
                         <div>No Lessons Scheduled !</div>
@@ -280,7 +280,7 @@ export const StudentLessonTab = ({ course, view = "pc" }) => {
         <div className="student-dashboard__lesson-tab">
           <div className="lesson-information">
 
-            <div className="lesson-information__classes">
+            <div className="lesson-information__classes" style={{ height: 'unset', padding: '1rem' }}>
               <div className="course-progress__container" style={{ width: 'auto' }}>
                 <div className="student-dashboard__title">Course Progress</div>
                 <div className="classes-information">

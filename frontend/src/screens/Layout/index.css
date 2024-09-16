@@ -11,9 +11,17 @@ h2 {
     font-size: 1.4rem;
 }
 
+
+
 .main-tutor-row {
     display: grid;
-    grid-template-columns: 15% 65% 20%;
+    grid-template-columns: 15% 85%;
+}
+
+@media (max-width: 1023px) {
+    .main-tutor-row {
+        grid-template-columns: 0% 100%; /* Adjust the percentages as needed */
+    }
 }
 
 .left {

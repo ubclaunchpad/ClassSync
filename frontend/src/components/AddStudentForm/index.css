@@ -25,6 +25,12 @@
     /* Two inputs per row with spacing */
 }
 
+@media (max-width: 480px) {
+
+    .input-row {
+        width: 100%;
+    }
+}
 .input-row label input {
     width: 100%;
     height: 2.5rem;

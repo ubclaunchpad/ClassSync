@@ -466,6 +466,7 @@ export default function ReactBigCalendar() {
                     selectedSlot != null ? (
                         <div className="modal-container">
                             <Modal
+                                className="pc"
                                 selectedSlot={selectedSlot.start.toString()}
                                 duration={30}
                                 availablePeople={availablePeople}
@@ -488,6 +489,12 @@ export default function ReactBigCalendar() {
             }
         >
             <div className="calendar-container">
+                <div className="mb" style={{ textAlign: 'left' }}>
+                    <h3 style={{ fontSize: '24px', color: '#333' }}>Booking a Class</h3>
+                    <p style={{ fontSize: '16px', color: '#333', marginTop: '20px' }}>
+                        To book a class, please select an available slot from the calendar. After selecting a slot, you will be able to choose from a list of available tutors to book your class with.
+                    </p>
+                </div>
                 {isLoaded && (
                     <div width="100vw">
                         <Select
@@ -541,7 +548,46 @@ export default function ReactBigCalendar() {
                         />
                     </div>
                 )}
+
+
+                {selectedSlot && (
+                    <>
+                        <div className="modal-overlay mb" style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100vw',
+                            height: '100vh',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)', // To dim the background
+                            zIndex: 999, // Make sure it's below the modal itself
+                        }} onClick={() => setSelectedSlot(null)}></div>
+
+                        <div className="modal-container mb" style={{
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '100%',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#fff',
+                            padding: '0px',
+                            borderRadius: '8px',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                            zIndex: 1000, // Ensure modal is on top
+                        }}>
+                            <Modal
+                                selectedSlot={selectedSlot.start.toString()}
+                                availablePeople={availablePeople}
+                                onBook={handleBook}
+                                onClose={() => {
+                                    setSelectedSlot(null);
+                                    setBookingError(null); // Clear the error when closing the modal
+                                }}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
-        </MainContentLayout>
+        </MainContentLayout >
     )
 }

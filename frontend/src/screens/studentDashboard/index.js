@@ -157,16 +157,18 @@ const StudentDashboard = () => {
   return (
     <>
       <div className="pc">
-        <MainContentLayout rightColumnContent={<div width="60%">
-          <p>Book a <b>FREE 30-min</b> trial session today!</p>
+        <MainContentLayout rightColumnContent={
+
+          <div width="60%">
+            <p>Book a <b>FREE 30-min</b> trial session today!</p>
 
 
-          <Button
-            className="browse-courses__button"
-            size="small"
-            onClick={handleTrialClass}
-            label="Book Trial Class"
-          /></div>}>
+            <Button
+              className="browse-courses__button"
+              size="small"
+              onClick={handleTrialClass}
+              label="Book Trial Class"
+            /></div>}>
           <div className="student-dashboard__page">
             <div className="student-dashboard__student-information">
               <div className="student-information__profile">
@@ -201,6 +203,7 @@ const StudentDashboard = () => {
                   onClick={handleBrowseCourse}
                   label="Browse Courses"
                 />
+
 
                 <Modal
                   isOpen={modalIsOpen}
@@ -272,29 +275,21 @@ const StudentDashboard = () => {
       </div>
       <div className="mb">
         <MainContentLayout
-          rightColumnContent={<div width="60%">
-            <p>Book a <b>FREE 30-min</b> trial session today!</p>
-
-
-            <Button
-              className="browse-courses__button"
-              size="small"
-              onClick={handleTrialClass}
-              label="Book Trial Class"
-            /></div>}>
+        >
           <div className="student-dashboard__page">
             <div className="student-dashboard__student-information">
               <div className="student-information__profile">
                 <button
                   className="student-profile__back-button"
                   onClick={(e) => {
-                    console.log("Clicked the back button");
+                    navigate("/parentDash")
                   }}
                 >
                   <i
                     className="pi pi-arrow-left student-profile__icon"
                     style={{ fontSize: "1.5em" }}
                   ></i>
+
                 </button>
 
                 <div className="student-information__profile-name">
@@ -327,7 +322,16 @@ const StudentDashboard = () => {
                   onClick={handleBrowseCourse}
                   label="Browse Courses"
                 />
+                <div width="60%">
+                  <p>Book a <b>FREE 30-min</b> trial session today!</p>
 
+
+                  <Button
+                    className="browse-courses__button"
+                    size="small"
+                    onClick={handleTrialClass}
+                    label="Book Trial Class"
+                  /></div>
                 <Modal
                   isOpen={modalIsOpen}
                   onRequestClose={closeModal}

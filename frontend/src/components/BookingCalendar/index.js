@@ -10,6 +10,8 @@ import { endOfWeek, startOfWeek } from "date-fns";
 import Select from "react-select";
 import { ParentDashboardLayout } from "../ParentDashboardLayout";
 import { MainContentLayout } from "../MainContentLayout";
+import zIndex from "@mui/material/styles/zIndex";
+import { positions } from "@mui/system";
 
 moment.locale("en-GB");
 const localizer = momentLocalizer(moment);
@@ -512,7 +514,7 @@ export default function ReactBigCalendar() {
                     <div style={{ color: 'red', marginTop: '10px' }}>{bookingError}</div>
                 ) : (
                     selectedSlot != null ? (
-                        <div className="modal-container">
+                        <div className="pc modal-container">
                             <Modal
                                 selectedSlot={selectedSlot.start.toString()}
                                 availablePeople={availablePeople}
@@ -524,7 +526,7 @@ export default function ReactBigCalendar() {
                             />
                         </div>
                     ) : (
-                        <div style={{ textAlign: 'left', marginTop: '85px', marginRight: '15px' }}>
+                        <div className="pc" style={{ textAlign: 'left', marginTop: '85px', marginRight: '15px' }}>
                             <h3 style={{ fontSize: '24px', color: '#333' }}>Booking a Class</h3>
                             <p style={{ fontSize: '16px', color: '#333', marginTop: '20px' }}>
                                 To book a class, please select an available slot from the calendar. After selecting a slot, you will be able to choose from a list of available tutors to book your class with.
@@ -537,6 +539,12 @@ export default function ReactBigCalendar() {
             <div className="calendar-container">
                 {isLoaded && (
                     <div width="100vw">
+                        <div className="mb" style={{ textAlign: 'left' }}>
+                            <h3 style={{ fontSize: '24px', color: '#333' }}>Booking a Class</h3>
+                            <p style={{ fontSize: '16px', color: '#333', marginTop: '20px' }}>
+                                To book a class, please select an available slot from the calendar. After selecting a slot, you will be able to choose from a list of available tutors to book your class with.
+                            </p>
+                        </div>
                         <Select
                             value={selectedTutors}
                             onChange={setSelectedTutors}
@@ -553,16 +561,16 @@ export default function ReactBigCalendar() {
                                 menu: (provided) => ({
                                     ...provided,
                                     width: '40%',
-                                    marginLeft: `${selectedTutors.length * 10}%`
+                                    marginLeft: `${selectedTutors.length * 10}%`,
                                 }),
-                                multiValue: (styles) => {
-                                    return {
-                                        ...styles,
-                                        backgroundColor: `hsla(200, 100%, 80%, 1)` // Change 200 to any value between 0 and 360
-                                    };
-                                },
+                                multiValue: (styles) => ({
+                                    ...styles,
+                                    backgroundColor: `hsla(200, 100%, 80%, 1)`,
+                                }),
                             }}
+                            className="filter"
                         />
+
                         <Calendar
                             key={eventsData + availabilityHashmap}
                             views={["week"]}
@@ -572,7 +580,7 @@ export default function ReactBigCalendar() {
                             defaultView="week"
                             components={{
                                 event: EventComponent,
-                                toolbar: CustomToolbar
+                                toolbar: CustomToolbar,
                             }}
                             events={eventsData}
                             min={new Date(2020, 1, 0, 7, 0, 0)}
@@ -582,13 +590,52 @@ export default function ReactBigCalendar() {
                             onSelectSlot={handleSelect}
                             slotPropGetter={slotPropGetter}
                             onNavigate={(date) => {
-                                setSelectedSlot(null)
-                                setStartDate(startOfWeek(date))
+                                setSelectedSlot(null);
+                                setStartDate(startOfWeek(date));
                             }}
                         />
+
+                        {selectedSlot && (
+                            <>
+                                <div className="modal-overlay mb" style={{
+                                    position: 'fixed',
+                                    top: 0,
+                                    left: 0,
+                                    width: '100vw',
+                                    height: '100vh',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)', // To dim the background
+                                    zIndex: 999, // Make sure it's below the modal itself
+                                }} onClick={() => setSelectedSlot(null)}></div>
+
+                                <div className="modal-container mb" style={{
+                                    position: 'fixed',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '100%',
+                                    maxWidth: 'fit-content',
+                                    backgroundColor: '#fff',
+                                    padding: '0px',
+                                    borderRadius: '8px',
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                                    zIndex: 1000, // Ensure modal is on top
+                                }}>
+                                    <Modal
+                                        selectedSlot={selectedSlot.start.toString()}
+                                        availablePeople={availablePeople}
+                                        onBook={handleBook}
+                                        onClose={() => {
+                                            setSelectedSlot(null);
+                                            setBookingError(null); // Clear the error when closing the modal
+                                        }}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
+
         </MainContentLayout>
     )
 }

@@ -116,7 +116,7 @@ export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                 <div className="input-row">
                     <label>
                         Tutor
-                        <select name="tutor_id" type="text" value={formState.tutor_id} onChange={handleFormChange}>
+                        <select name="tutor_id" type="text" value={formState.tutor_id} onChange={handleFormChange} style={{ minWidth: '200px' }}>
                             <option value="">Select a tutor</option>
                             {tutors.map((tutor) => (
                                 <option key={tutor.id} value={tutor.id}>
@@ -127,7 +127,7 @@ export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                     </label>
                     <label>
                         Courses
-                        <select name="course_id" type="text" value={formState.course_id} onChange={handleFormChange}>
+                        <select name="course_id" type="text" value={formState.course_id} onChange={handleFormChange} style={{ minWidth: '200px' }}>
                             <option value="">Select a course</option>
                             {courses.map((course) => (
                                 <option key={course.id} value={course.id} >
@@ -137,7 +137,7 @@ export const AddReviewForm = ({ showModal, handleCloseModal, guardianId }) => {
                         </select>
                     </label>
                 </div>
-                <div className="input-column" style={{ marginRight: "25%" }}>
+                <div className="input-column" style={{ marginRight: "25%", minWidth: '200px' }}>
                     <label>
                         Review
                     </label>
