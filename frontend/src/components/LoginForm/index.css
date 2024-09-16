@@ -1,5 +1,4 @@
 .login-form-container {
-  width: 30%;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -35,23 +34,7 @@
     margin-top: 3%;
   }
 }
-/*
 
-@media (min-width: 481px) and (max-width: 1024px) {
-  .login-form-container {
-    width: 70%;
-    padding: 1.5rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .login-form-container {
-    width: 30%;
-    padding: 2rem;
-  }
-}
-
-*/
 
 .login-form-title {
   font-weight: 700;

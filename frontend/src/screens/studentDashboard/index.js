@@ -9,7 +9,6 @@ import "primeicons/primeicons.css";
 import Course from '../../components/StudentDashboard'; // import the Course component
 import { useNavigate } from "react-router-dom";
 
-
 import { fakeData } from "../../components/StudentLessonTab/fakeData";
 
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -112,6 +111,17 @@ const StudentDashboard = () => {
     return coursesResult
   }
 
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  useEffect(() => {
+    if (courseList.length > 0) {
+      setSelectedCourse(courseList[0]);
+    }
+  }, [courseList]);
+  const handleCourseChange = (event) => {
+    const selectedCourseName = event.target.value;
+    const course = courseList.find((course) => course.name === selectedCourseName);
+    setSelectedCourse(course);
+  };
   const getLessons = async (sortedBookingData) => {
     const sortedBookingsWithFiles = await Promise.all(sortedBookingData.map(async (booking, index) => {
       const startDate = new Date(booking.start_time);
@@ -145,133 +155,238 @@ const StudentDashboard = () => {
   // };
 
   return (
-    <MainContentLayout rightColumnContent={<div width="60%">
-      <p>Book a <b>FREE 30-min</b> trial session today!</p>
+    <>
+      <div className="pc">
+        <MainContentLayout rightColumnContent={<div width="60%">
+          <p>Book a <b>FREE 30-min</b> trial session today!</p>
 
 
-      <Button
-        className="browse-courses__button"
-        size="small"
-        onClick={handleTrialClass}
-        label="Book Trial Class"
-      /></div>}>
-      <div className="student-dashboard__page">
-        <div className="student-dashboard__student-information">
-          <div className="student-information__profile">
-            <button
-              className="student-profile__back-button"
-              onClick={(e) => {
-                console.log("Clicked the back button");
-              }}
-            >
-              {/* <i
+          <Button
+            className="browse-courses__button"
+            size="small"
+            onClick={handleTrialClass}
+            label="Book Trial Class"
+          /></div>}>
+          <div className="student-dashboard__page">
+            <div className="student-dashboard__student-information">
+              <div className="student-information__profile">
+                <button
+                  className="student-profile__back-button"
+                  onClick={(e) => {
+                    console.log("Clicked the back button");
+                  }}
+                >
+                  {/* <i
               className="pi pi-arrow-left student-profile__icon"
               style={{ fontSize: "1.5em" }}
             ></i> */}
-            </button>
-
-            <div className="student-information__profile-name">
-              {name.f_name} {name.l_name}
-            </div>
-          </div>
-          <div className="student-information__browse-courses">
-
-            <Button
-              className="browse-courses__button"
-              size="small"
-              onClick={openModal}
-              label="Manage Classes"
-            />
-
-            <Button
-              className="browse-courses__button"
-              size="small"
-              onClick={handleBrowseCourse}
-              label="Browse Courses"
-            />
-
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              contentLabel="Example Modal"
-              style={{
-                content: {
-                  width: '700px',
-                  height: '450px',
-                  margin: 'auto',
-                  zIndex: '1000', // Make the modal appear on top
-
-                },
-                transition: 'width 0.5s ease-in-out', // Optional: Add smooth transition
-                overlay: {
-                  backgroundColor: 'rgba(0, 0, 0, 0.75)', // Darken the background
-                  zIndex: '2000', // Make the overlay appear on top
-
-                },
-              }}
-            >
-              <div>
-                <button
-                  style={{
-                    position: 'absolute',
-                    top: '1rem',
-                    right: '1rem',
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '1.5rem',
-                    color: '#666',
-                    cursor: 'pointer'
-                  }}
-                  onClick={closeModal}
-                >
-                  &times;
                 </button>
-                <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Manage Classes</h2>
-                <div className="courses-tabs">
-                  <TabView scrollable>
-                    {courses.map((course, index) => {
-                      return (
-                        <TabPanel
-                          key={index}
-                          className="courses__tab-panel"
-                          header={`${course.course_title}`}
 
-                        >
-                          <Course id={course.enrollment_id} title={course.course_title} />
-
-                        </TabPanel>
-                      );
-                    })}
-
-
-
-                  </TabView>
+                <div className="student-information__profile-name">
+                  {name.f_name} {name.l_name}
                 </div>
               </div>
-            </Modal>
+              <div className="student-information__browse-courses">
 
-          </div>
-        </div>
-        <div className="courses-tabs">
-          <TabView>
-            {courseList.map((course, index) => {
-              console.log("dfsfd")
-              console.log(course)
-              return (
-                <TabPanel
-                  key={index}
-                  className="courses__tab-panel"
-                  header={`${course.name}`}
+                <Button
+                  className="browse-courses__button"
+                  size="small"
+                  onClick={openModal}
+                  label="Manage Classes"
+                />
+
+                <Button
+                  className="browse-courses__button"
+                  size="small"
+                  onClick={handleBrowseCourse}
+                  label="Browse Courses"
+                />
+
+                <Modal
+                  isOpen={modalIsOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Example Modal"
+                  style={{
+                    content: {
+                      width: '85%',
+                      maxWidth: '700px',
+                      height: '450px',
+                      margin: 'auto',
+                      zIndex: '1000', // Make the modal appear on top
+
+                    },
+                    transition: 'width 0.5s ease-in-out', // Optional: Add smooth transition
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)', // Darken the background
+                      zIndex: '2000', // Make the overlay appear on top
+
+                    },
+                  }}
                 >
-                  <StudentLessonTab key={index} course={course} />
-                </TabPanel>
-              );
-            })}
-            ;
-          </TabView>
-        </div>
+                  <div>
+                    <button
+                      style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.5rem',
+                        color: '#666',
+                        cursor: 'pointer'
+                      }}
+                      onClick={closeModal}
+                    >
+                      &times;
+                    </button>
+                    <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Manage Classes</h2>
+                    {courses.map((course, index) => (
+
+                      <Course id={course.enrollment_id} title={course.course_title} />
+                    ))}
+                  </div>
+                </Modal>
+
+              </div>
+            </div>
+            <div className="courses-tabs">
+              <TabView>
+                {courseList.map((course, index) => {
+                  console.log("dfsfd")
+                  console.log(course)
+                  return (
+                    <TabPanel
+                      key={index}
+                      className="courses__tab-panel"
+                      header={`${course.name}`}
+                    >
+                      <StudentLessonTab key={index} course={course} />
+                    </TabPanel>
+                  );
+                })}
+                ;
+              </TabView>
+            </div>
+          </div>
+        </MainContentLayout>
       </div>
-    </MainContentLayout>
+      <div className="mb">
+        <MainContentLayout
+          rightColumnContent={<div width="60%">
+            <p>Book a <b>FREE 30-min</b> trial session today!</p>
+
+
+            <Button
+              className="browse-courses__button"
+              size="small"
+              onClick={handleTrialClass}
+              label="Book Trial Class"
+            /></div>}>
+          <div className="student-dashboard__page">
+            <div className="student-dashboard__student-information">
+              <div className="student-information__profile">
+                <button
+                  className="student-profile__back-button"
+                  onClick={(e) => {
+                    console.log("Clicked the back button");
+                  }}
+                >
+                  <i
+                    className="pi pi-arrow-left student-profile__icon"
+                    style={{ fontSize: "1.5em" }}
+                  ></i>
+                </button>
+
+                <div className="student-information__profile-name">
+                  {name.f_name} {name.l_name}
+                </div>
+              </div>
+
+            </div>
+            <div className="courses-dropdown" style={{ textAlign: 'center' }}>
+              <select onChange={handleCourseChange} value={selectedCourse?.name || ''} style={{ marginBottom: '15px' }}>
+                {courseList.map((course, index) => (
+                  <option key={index} value={course.name}>
+                    {course.name}
+                  </option>
+                ))}
+              </select>
+
+              <div className="student-information__browse-courses" style={{ marginBottom: '15px' }}>
+
+                <Button
+                  className="browse-courses__button"
+                  size="small"
+                  onClick={openModal}
+                  label="Manage Classes"
+                />
+
+                <Button
+                  className="browse-courses__button"
+                  size="small"
+                  onClick={handleBrowseCourse}
+                  label="Browse Courses"
+                />
+
+                <Modal
+                  isOpen={modalIsOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="Example Modal"
+                  style={{
+                    content: {
+                      width: '85%',
+                      maxWidth: '700px',
+                      height: '450px',
+                      margin: 'auto',
+                      zIndex: '1000', // Make the modal appear on top
+
+                    },
+                    transition: 'width 0.5s ease-in-out', // Optional: Add smooth transition
+                    overlay: {
+                      backgroundColor: 'rgba(0, 0, 0, 0.75)', // Darken the background
+                      zIndex: '2000', // Make the overlay appear on top
+
+                    },
+                  }}
+                >
+                  <div>
+                    <button
+                      style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.5rem',
+                        color: '#666',
+                        cursor: 'pointer'
+                      }}
+                      onClick={closeModal}
+                    >
+                      &times;
+                    </button>
+                    <h2 style={{ color: '#333', marginTop: '30px', textAlign: 'center' }}>Manage Classes</h2>
+                    {courses.map((course, index) => (
+
+                      <Course id={course.enrollment_id} title={course.course_title} />
+                    ))}
+                  </div>
+                </Modal>
+
+              </div>
+              {selectedCourse && (
+                <div className="courses__tab-panel" style={{
+                  width: '100%'
+                }}>
+                  <StudentLessonTab key={selectedCourse.name} course={selectedCourse} view="mb" />
+                </div>
+              )}
+            </div>
+          </div>
+        </MainContentLayout>
+      </div>
+    </>
+
   );
 };
 
